@@ -13,7 +13,7 @@ async function main() {
       const libretrodb = await Libretrodb.from(rdbPath)
       console.log(item, libretrodb.getEntries().length)
       const rdbJson = path.resolve(distDir, `${item}.json`)
-      await fs.writeFile(rdbJson, JSON.stringify(libretrodb.getEntries(), null, 2), 'utf8')
+      await fs.writeFile(rdbJson, JSON.stringify(libretrodb.getEntries(), undefined, 2), 'utf8')
       const rdbMinJson = path.resolve(distDir, `${item}.min.json`)
       await fs.writeFile(rdbMinJson, JSON.stringify(libretrodb.getEntries()), 'utf8')
     }

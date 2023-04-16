@@ -5,4 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   publicDir: 'retroarch',
   plugins: [react()],
+  server: {
+    host: true,
+  },
 })

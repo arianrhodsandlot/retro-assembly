@@ -1,35 +1,18 @@
-import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
-import { useRef } from 'react'
+import classnames from 'classnames'
+import { useRef, useState } from 'react'
 import { Emulator } from './emulator'
-
-function guessSystem(file: FileWithDirectoryAndFileHandle) {
-  if (file.webkitRelativePath.includes('nes')) {
-    return 'nes'
-  }
-  if (file.webkitRelativePath.includes('n64')) {
-    return 'n64'
-  }
-  if (file.webkitRelativePath.includes('gba')) {
-    return 'gba'
-  }
-  if (file.webkitRelativePath.includes('gbc')) {
-    return 'gbc'
-  }
-  if (file.webkitRelativePath.includes('gb')) {
-    return 'gb'
-  }
-  if (file.webkitRelativePath.includes('megadrive')) {
-    return 'megadrive'
-  }
-}
+import GameEntry from './game-entry'
 
 export default function HomeScreen({ files }: { files: File[] }) {
   const emulatorRef = useRef<Emulator>()
+
+  const [showGameEntries, setShowGameEntries] = useState(true)
 
   async function launchRom(file: File) {
     if (emulatorRef.current) {
       exit()
     }
+    setShowGameEntries(false)
     const emulator = await Emulator.launch({ rom: file })
     emulatorRef.current = emulator
   }
@@ -37,6 +20,7 @@ export default function HomeScreen({ files }: { files: File[] }) {
   function exit() {
     emulatorRef.current?.exit()
     emulatorRef.current = undefined
+    setShowGameEntries(true)
   }
 
   function pause() {
@@ -64,12 +48,16 @@ export default function HomeScreen({ files }: { files: File[] }) {
     return (
       <div>
         {actions}
-        <div>
+        <div
+          className={classnames('items-center', 'justify-center', 'gap-4', 'flex-wrap', 'm-auto', [
+            {
+              flex: showGameEntries,
+              hidden: !showGameEntries,
+            },
+          ])}
+        >
           {files.map((file) => (
-            <button key={file.webkitRelativePath} onClick={() => launchRom(file)} className='flex'>
-              <div className='w-32 text-center'>{guessSystem(file)}</div>
-              <div className='ml-10'>{file.name}</div>
-            </button>
+            <GameEntry file={file} key={file.webkitRelativePath} onClick={() => launchRom(file)}></GameEntry>
           ))}
         </div>
       </div>

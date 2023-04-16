@@ -11,28 +11,12 @@ export default function App() {
     setFiles(selectedFiles)
   }
 
-  async function readRdb(e) {
-    const [file] = e.target.files
-    const fileReader = new FileReader()
-    fileReader.readAsBinaryString(file)
-    await new Promise((resolve) => {
-      fileReader.addEventListener('load', () => {
-        resolve(fileReader.result)
-      })
-    })
-    const { result } = fileReader
-    const match = `${result}`.match(/(?<=\u00BD)(\w+.*?)(?=\u00EF)/g)
-    window.match = match
-    // String.fromCodePoint(charCode)
-  }
-
   return (
     <div style={{ position: 'absolute', zIndex: 1 }}>
-      <input type='file' name='' id='' onChange={readRdb} />
       <p>
         <button onClick={selectDir}>selectDir</button>
       </p>
-      {files ? <HomeScreen files={files} /> : undefined}
+      <div>{files ? <HomeScreen files={files} /> : undefined}</div>
     </div>
   )
 }

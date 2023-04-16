@@ -1,4 +1,4 @@
-import { type FileWithDirectoryAndFileHandle, directoryOpen } from 'browser-fs-access'
+import { type FileWithDirectoryAndFileHandle, directoryOpen, fileOpen } from 'browser-fs-access'
 import { useState } from 'react'
 import HomeScreen from './home-screen'
 import './index.sass'
@@ -11,10 +11,17 @@ export default function App() {
     setFiles(selectedFiles)
   }
 
+  async function selectFile() {
+    const file = await fileOpen()
+    setFiles([file])
+  }
+
   return (
     <div style={{ position: 'absolute', zIndex: 1 }}>
       <p>
-        <button onClick={selectDir}>selectDir</button>
+        <button onClick={selectFile}>select file</button>
+        <br />
+        <button onClick={selectDir}>select dir</button>
       </p>
       <div>{files ? <HomeScreen files={files} /> : undefined}</div>
     </div>

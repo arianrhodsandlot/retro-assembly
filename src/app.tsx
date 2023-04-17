@@ -4,11 +4,11 @@ import HomeScreen from './home-screen'
 import './index.sass'
 
 export default function App() {
-  const [files, setFiles] = useState<FileWithDirectoryAndFileHandle[] | FileSystemDirectoryHandle[]>()
+  const [files, setFiles] = useState<FileWithDirectoryAndFileHandle[]>()
 
   async function selectDir() {
     try {
-      const selectedFiles = await directoryOpen({ recursive: true, id: 'test' })
+      const selectedFiles = (await directoryOpen({ recursive: true, id: 'test' })) as FileWithDirectoryAndFileHandle[]
       setFiles(selectedFiles)
     } catch {}
   }

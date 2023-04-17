@@ -8,6 +8,19 @@ function modifyContent(content) {
   }
   `.trim()
 }
+const enabledCores = [
+  'beetle_vb',
+  'fceumm',
+  'gearboy',
+  'genesis_plus_gx',
+  'gw',
+  'mgba',
+  'mupen64plus_next',
+  'nestopia',
+  'pcsx2',
+  'picodrive',
+  'snes9x',
+]
 
 async function main() {
   const originalCoresDir = 'retroarch'
@@ -15,7 +28,7 @@ async function main() {
   await fs.mkdir(distDir, { recursive: true })
   const items = await fs.readdir(originalCoresDir)
   for (const item of items) {
-    if (item.includes('_libretro.')) {
+    if (item.includes('_libretro.') && enabledCores.some((c) => item.includes(c))) {
       const corePath = path.resolve(originalCoresDir, item)
       const modifiedCorePath = path.resolve(distDir, item)
       await fs.copyFile(corePath, modifiedCorePath)

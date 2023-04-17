@@ -1,9 +1,10 @@
+import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import classnames from 'classnames'
 import { useRef, useState } from 'react'
 import { Emulator } from './emulator'
 import GameEntry from './game-entry'
 
-export default function HomeScreen({ files }: { files: File[] }) {
+export default function HomeScreen({ files }: { files: FileWithDirectoryAndFileHandle[] }) {
   const emulatorRef = useRef<Emulator>()
 
   const [showGameEntries, setShowGameEntries] = useState(true)

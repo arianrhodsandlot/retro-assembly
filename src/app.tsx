@@ -7,13 +7,17 @@ export default function App() {
   const [files, setFiles] = useState<FileWithDirectoryAndFileHandle[] | FileSystemDirectoryHandle[]>()
 
   async function selectDir() {
-    const selectedFiles = await directoryOpen({ recursive: true, id: 'test' })
-    setFiles(selectedFiles)
+    try {
+      const selectedFiles = await directoryOpen({ recursive: true, id: 'test' })
+      setFiles(selectedFiles)
+    } catch {}
   }
 
   async function selectFile() {
-    const file = await fileOpen()
-    setFiles([file])
+    try {
+      const file = await fileOpen()
+      setFiles([file])
+    } catch {}
   }
 
   return (

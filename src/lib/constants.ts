@@ -1,51 +1,80 @@
 export const systems = ['nes', 'megadrive', 'vb', 'gb', 'gbc', 'gba', 'gamegear']
 
-export const systemFullNameMap = {
-  gb: 'Nintendo - GameBoy',
-  gba: 'Nintendo - GameBoy Advance',
+type SystemName =
+  | '32x'
+  | 'gamegear'
+  | 'gb'
+  | 'gba'
+  | 'gbc'
+  | 'gw'
+  | 'megadrive'
+  | 'n64'
+  | 'nes'
+  | 'psx'
+  | 'sms'
+  | 'snes'
+  | 'vb'
+
+type CoreName =
+  | 'beetle_vb'
+  | 'fceumm'
+  | 'gearboy'
+  | 'genesis_plus_gx'
+  | 'gw'
+  | 'mgba'
+  | 'mupen64plus_next'
+  | 'nestopia'
+  | 'pcsx2'
+  | 'picodrive'
+  | 'snes9x'
+
+export const systemFullNameMap: Record<SystemName, string> = {
+  '32x': 'Sega - 32X',
+  gw: 'Handheld Electronic Game',
+  gamegear: 'Sega - Game Gear',
+  gb: 'Nintendo - Game Boy',
+  gba: 'Nintendo - Game Boy Advance',
+  gbc: 'Nintendo - Game Boy Color',
+  megadrive: 'Sega - Mega Drive - Genesis',
   n64: 'Nintendo - Nintendo 64',
   nes: 'Nintendo - Nintendo Entertainment System',
+  psx: 'Sony - PlayStation',
+  sms: 'Sega - Master System - Mark III',
   snes: 'Nintendo - Super Nintendo Entertainment System',
   vb: 'Nintendo - Virtual Boy',
-  gamegear: 'Sega - Game Gear',
-  sms: 'Sega - Master System - Mark III',
-  megadrive: 'Sega - Mega Drive - Genesis',
-  psx: 'Sony - PlayStation',
 }
 
-export const extCoreMap = {
-  nes: 'nestopia',
-  fds: 'nestopia',
-  unf: 'fceumm',
-  unif: 'fceumm',
-  sms: 'genesis_plus_gx',
-  gg: 'genesis_plus_gx',
-  md: 'genesis_plus_gx',
+export const systemCoreMap: Record<SystemName, CoreName> = {
   '32x': 'picodrive',
-  sfc: 'snes9x',
+  gamegear: 'genesis_plus_gx',
   gb: 'gearboy',
-  gbc: 'gearboy',
   gba: 'mgba',
-  mgw: 'gw',
+  gbc: 'gearboy',
+  gw: 'gw',
+  megadrive: 'genesis_plus_gx',
+  n64: 'mupen64plus_next',
+  nes: 'nestopia',
+  psx: 'pcsx2',
+  sms: 'genesis_plus_gx',
+  snes: 'snes9x',
   vb: 'beetle_vb',
-  vboy: 'beetle_vb',
 }
 
-export const extSystemMap = {
-  nes: 'nes',
+export const extSystemMap: Record<string, SystemName> = {
+  '32x': '32x',
   fds: 'nes',
-  unf: 'nes',
-  unif: 'nes',
-  sms: 'sms',
+  gb: 'gb',
+  gba: 'gba',
+  gbc: 'gbc',
   gg: 'gamegear',
   md: 'megadrive',
-  '32x': '32x',
-  sfc: 'snes',
-  snes: 'snes',
-  gb: 'gb',
-  gbc: 'gbc',
-  gba: 'gba',
   mgw: 'gw',
+  nes: 'nes',
+  sfc: 'snes',
+  sms: 'sms',
+  snes: 'snes',
+  unf: 'nes',
+  unif: 'nes',
   vb: 'vb',
   vboy: 'vb',
 }

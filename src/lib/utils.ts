@@ -1,48 +1,14 @@
-import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { parse } from 'goodcodes-parser'
-import { camelCase, isEqual, pick } from 'lodash-es'
-
-export function getGameSystem(file: FileWithDirectoryAndFileHandle) {
-  if (file.webkitRelativePath.includes('nes')) {
-    return 'nes'
-  }
-  if (file.webkitRelativePath.includes('n64')) {
-    return 'n64'
-  }
-  if (file.webkitRelativePath.includes('gba')) {
-    return 'gba'
-  }
-  if (file.webkitRelativePath.includes('gbc')) {
-    return 'gbc'
-  }
-  if (file.webkitRelativePath.includes('gb')) {
-    return 'gb'
-  }
-  if (file.webkitRelativePath.includes('megadrive')) {
-    return 'megadrive'
-  }
-}
-
-const systemFullNameMap = {
-    gb: 'Nintendo - GameBoy',
-    gba: 'Nintendo - GameBoy Advance',
-    n64: 'Nintendo - Nintendo 64',
-    nes: 'Nintendo - Nintendo Entertainment System',
-    snes: 'Nintendo - Super Nintendo Entertainment System',
-    vb: 'Nintendo - Virtual Boy',
-    gamegear: 'Sega - Game Gear',
-    sms: 'Sega - Master System - Mark III',
-    megadrive: 'Sega - Mega Drive - Genesis',
-    psx: 'Sony - PlayStation',
-}
+import { camelCase, capitalize, isEqual, pick } from 'lodash-es'
+import { systemFullNameMap } from './constants'
+import { guessSystem } from './file'
 
 async function getSystemDb(system) {
   const systemFullName = systemFullNameMap[system]
   if (!systemFullName) {
     throw new Error('Invalid system:', system)
   }
-  const { default: db } = await import(`./generated/retroarch-databases/${systemFullName}.rdb.json`
-  )
+  const { default: db } = await import(`../generated/retroarch-databases/${systemFullName}.rdb.json`)
   return db
 }
 
@@ -53,8 +19,18 @@ function isSimilarEntry(entry1, entry2) {
   return isEqual(entry1Props, entry2Props)
 }
 
+function getCover({ system, name, type = system === 'gw' ? 'snap' : 'title' }) {
+  const systemFullName = systemFullNameMap[system]
+  const typeUrlPart = `Named_${capitalize(type)}s`
+  return name
+    ? `https://thumbnails.libretro.com/${encodeURIComponent(systemFullName)}/${encodeURIComponent(
+        typeUrlPart
+      )}/${encodeURIComponent(name)}.png`
+    : ''
+}
+
 export async function guessGameInfo(rom) {
-  const system = getGameSystem(rom)
+  const system = await guessSystem(rom)
   const db = await getSystemDb(system)
 
   const parsedRomName = parse(`0 - ${rom.name}`)
@@ -72,14 +48,23 @@ export async function guessGameInfo(rom) {
     }
   }
 
+  let [detail] = candidates
   if (candidates.length > 1) {
     for (const entry of candidates) {
       const parsedEntryName = parse(`0 - ${entry.name}`)
       if (isSimilarEntry(parsedRomName, parsedEntryName)) {
-        return { goodcodes: parsedRomName, detail: entry }
+        detail = entry
+        break
       }
     }
   }
 
-  return { goodcodes: parsedRomName, detail: candidates[0] }
+  console.log(detail)
+
+  return {
+    system,
+    cover: getCover({ system, name: detail.name }),
+    goodcodes: parsedRomName,
+    detail,
+  }
 }

@@ -1,6 +1,6 @@
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { useEffect, useState } from 'react'
-import { getGameSystem, guessGameInfo } from './lib/utils'
+import { guessGameInfo } from './lib/utils'
 
 export default function GameEntry({
   file,
@@ -32,9 +32,7 @@ export default function GameEntry({
               <img
                 className='w-60 h-60 bg-black'
                 style={{ imageRendering: 'pixelated' }}
-                src={`https://thumbnails.libretro.com/Nintendo%20-%20Nintendo%20Entertainment%20System/Named_Titles/${encodeURIComponent(
-                  gameInfo.detail.name
-                )}.png`}
+                src={gameInfo.cover}
                 alt={gameInfo.goodcodes.rom}
                 onError={onImgError}
               />
@@ -43,7 +41,7 @@ export default function GameEntry({
             )}
           </div>
           <div className='w-60 truncate'>{gameInfo.goodcodes.rom}</div>
-          <div>{getGameSystem(file)}</div>
+          <div>{gameInfo.system}</div>
         </>
       )}
     </button>

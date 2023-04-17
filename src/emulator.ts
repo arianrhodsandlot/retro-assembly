@@ -1,62 +1,11 @@
-import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import ini from 'ini'
-import { createEmscriptenFS } from './emscripten-fs.js'
+import { createEmscriptenFS } from './emscripten-fs'
 import { getEmscriptenModuleOverrides } from './emscripten-module'
+import { guessCore, readFileAsUint8Array } from './lib/file'
 
 const raUserdataDir = '/home/web_user/retroarch/userdata/'
 const raCoreConfigDir = `${raUserdataDir}config/`
 const raConfigPath = `${raUserdataDir}retroarch.cfg`
-
-async function readFileAsUint8Array(file: File) {
-  const fileReader = new FileReader()
-  fileReader.readAsArrayBuffer(file)
-  return await new Promise<ArrayBuffer>((resolve, reject) => {
-    fileReader.addEventListener('load', () => {
-      resolve(new Uint8Array(fileReader.result as ArrayBuffer))
-    })
-  })
-}
-
-function guessCoreByFilename(filename: string) {
-  const extname = filename.split('.').pop()
-  if (!extname) {
-    return ''
-  }
-  const coreMap = {
-    nes: 'nestopia',
-    fds: 'nestopia',
-    unf: 'fceumm',
-    unif: 'fceumm',
-    sms: 'genesis_plus_gx',
-    gg: 'genesis_plus_gx',
-    md: 'genesis_plus_gx',
-    '32x': 'picodrive',
-    sfc: 'snes9x',
-    gb: 'gearboy',
-    gbc: 'gearboy',
-    gba: 'mgba',
-    mgw: 'gw',
-    vb: 'beetle_vb',
-    vboy: 'beetle_vb',
-  }
-  return coreMap[extname] ?? ''
-}
-
-async function guessCoreByExtractedContent(file) {
-  if (!file) {
-    return ''
-  }
-  const blobReader = new BlobReader(file)
-  const zipReader = new ZipReader(blobReader)
-  const entries = await zipReader.getEntries()
-  for (const { filename } of entries) {
-    const core = guessCoreByFilename(filename)
-    if (core) {
-      return core
-    }
-  }
-  return ''
-}
 
 export class Emulator {
   core = ''
@@ -79,7 +28,7 @@ export class Emulator {
   static async launch({ core, rom }: { core?: string; rom?: File }) {
     const emulator = new Emulator({ core, rom })
     if (rom) {
-      emulator.core = await emulator.guessCore()
+      emulator.core = await guessCore(rom)
     }
     if (!emulator.core) {
       throw new Error('Invalid core')
@@ -116,23 +65,8 @@ export class Emulator {
     this.canvas?.parentElement?.removeChild(this.canvas)
   }
 
-  private async guessCore() {
-    if (!this.rom) {
-      return ''
-    }
-    const filename = this.rom.name
-    if (!filename) {
-      return ''
-    }
-    if (filename.endsWith('.zip')) {
-      return await guessCoreByExtractedContent(this.rom)
-    }
-    return guessCoreByFilename(filename)
-  }
-
   private async prepareEmscripten() {
     const { getEmscripten } = await import(`./generated/retroarch-cores/${this.core}_libretro.js`)
-    // const { getEmscripten } = await import(`./retroarch/${this.core}_libretro.dev.mjs`)
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
 

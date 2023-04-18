@@ -1,6 +1,8 @@
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { useEffect, useState } from 'react'
-import { guessGameInfo } from './lib/utils'
+import { useAsync } from 'react-use'
+import { guessGameDetail, guessSystem } from './lib/file'
+import { getCover, parseGoodCode } from './lib/utils'
 
 export default function GameEntry({
   file,
@@ -9,47 +11,36 @@ export default function GameEntry({
   file: FileWithDirectoryAndFileHandle
   onClick: React.MouseEventHandler<HTMLButtonElement>
 }) {
-  const [gameInfo, setGameInfo] = useState<Awaited<ReturnType<typeof guessGameInfo>>>()
-  const [isValidGameImg, setIsValidGameImg] = useState(true)
+  const system = useAsync(() => guessSystem(file), [file])
+  const detail = useAsync(() => guessGameDetail(file), [file])
+  const [isValidGameImg, setIsValidGameImg] = useState(false)
+
+  const goodcode = parseGoodCode(file.name)
+  const cover = getCover({ system: system.value, name: detail.value?.name })
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        const newGameInfo = await guessGameInfo(file)
-        setGameInfo(newGameInfo)
-      } catch (error) {
-        console.warn(error)
-      }
-    })()
-  }, [file])
+    setIsValidGameImg(Boolean(cover))
+  }, [cover])
 
   function onImgError() {
     setIsValidGameImg(false)
   }
 
   return (
-    <button onClick={onClick} className='flex flex-col bg-red overflow-hidden text-left'>
-      {gameInfo ? (
-        <>
-          <div>
-            {isValidGameImg ? (
-              <img
-                className='w-60 h-60 bg-black'
-                style={{ imageRendering: 'pixelated' }}
-                src={gameInfo.cover}
-                alt={gameInfo.goodcode.rom}
-                onError={onImgError}
-              />
-            ) : (
-              <div className='w-60 h-60 bg-black' />
-            )}
-          </div>
-          <div className='w-60 truncate'>{gameInfo.goodcode.rom}</div>
-          <div>{gameInfo.system}</div>
-        </>
-      ) : (
-        <div>{file.name}</div>
-      )}
+    <button onClick={onClick} className='flex flex-col w-60 text-left'>
+      <div>
+        {isValidGameImg ? (
+          <img
+            className='w-60 h-60 bg-gray-400'
+            style={{ imageRendering: 'pixelated' }}
+            src={cover}
+            alt={goodcode.rom}
+            onError={onImgError}
+          />
+        ) : (
+          <div className='w-60 h-60 bg-gray-400 flex items-center justify-center font-bold'>{goodcode.rom}</div>
+        )}
+      </div>
     </button>
   )
 }

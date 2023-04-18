@@ -50,7 +50,7 @@ export default function HomeScreen({ files }: { files: FileWithDirectoryAndFileH
       <div>
         {actions}
         <div
-          className={classnames('items-center', 'justify-center', 'gap-4', 'flex-wrap', 'm-auto', [
+          className={classnames('items-center', 'justify-center', 'flex-wrap', 'm-auto', [
             {
               flex: showGameEntries,
               hidden: !showGameEntries,

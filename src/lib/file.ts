@@ -1,6 +1,7 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { extSystemMap, systemCoreMap } from './constants'
+import { GamesDatabase } from './games-database'
 
 export async function readFileAsUint8Array(file: FileWithDirectoryAndFileHandle) {
   const fileReader = new FileReader()
@@ -74,4 +75,9 @@ export async function guessSystem(file: FileWithDirectoryAndFileHandle) {
 export async function guessCore(file: FileWithDirectoryAndFileHandle) {
   const system = await guessSystem(file)
   return systemCoreMap[system] ?? ''
+}
+
+export async function guessGameDetail(rom: FileWithDirectoryAndFileHandle) {
+  const system = await guessSystem(rom)
+  return await GamesDatabase.queryByFileNameFromSystem({ fileName: rom.name, system })
 }

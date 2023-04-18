@@ -20,24 +20,25 @@ function isSimilarEntry(entry1, entry2) {
 }
 
 function getCover({ system, name, type = system === 'gw' ? 'snap' : 'title' }) {
+  if (!name) {
+    return ''
+  }
   const systemFullName = systemFullNameMap[system]
   const typeUrlPart = `Named_${capitalize(type)}s`
-  return name
-    ? `https://thumbnails.libretro.com/${encodeURIComponent(systemFullName)}/${encodeURIComponent(
-        typeUrlPart
-      )}/${encodeURIComponent(name)}.png`
-    : ''
+  return `https://thumbnails.libretro.com/${encodeURIComponent(systemFullName)}/${encodeURIComponent(
+    typeUrlPart
+  )}/${encodeURIComponent(name)}.png`
 }
 
 export async function guessGameInfo(rom) {
   const system = await guessSystem(rom)
   const db = await getSystemDb(system)
 
+  // workaround for https://github.com/jbdemonte/goodcodes-parser/issues/13
   const parsedRomName = parse(`0 - ${rom.name}`)
   const candidates: any[] = []
   for (const entry of db) {
     if (entry.name) {
-      // workaround for https://github.com/jbdemonte/goodcodes-parser/issues/13
       const fileRomName = parsedRomName.rom
       const entryName = parse(`0 - ${entry.name}`).rom
       const normalizedFileRomName = camelCase(fileRomName).toLowerCase()
@@ -59,11 +60,9 @@ export async function guessGameInfo(rom) {
     }
   }
 
-  console.log(detail)
-
   return {
     system,
-    cover: getCover({ system, name: detail.name }),
+    cover: getCover({ system, name: detail?.name }),
     goodcodes: parsedRomName,
     detail,
   }

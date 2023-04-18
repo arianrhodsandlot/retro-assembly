@@ -14,8 +14,12 @@ export default function GameEntry({
 
   useEffect(() => {
     ;(async () => {
-      const newGameInfo = await guessGameInfo(file)
-      setGameInfo(newGameInfo)
+      try {
+        const newGameInfo = await guessGameInfo(file)
+        setGameInfo(newGameInfo)
+      } catch (error) {
+        console.warn(error)
+      }
     })()
   }, [file])
 
@@ -25,7 +29,7 @@ export default function GameEntry({
 
   return (
     <button onClick={onClick} className='flex flex-col bg-red overflow-hidden text-left'>
-      {gameInfo && (
+      {gameInfo ? (
         <>
           <div>
             {isValidGameImg ? (
@@ -43,6 +47,8 @@ export default function GameEntry({
           <div className='w-60 truncate'>{gameInfo.goodcodes.rom}</div>
           <div>{gameInfo.system}</div>
         </>
+      ) : (
+        <div>{file.name}</div>
       )}
     </button>
   )

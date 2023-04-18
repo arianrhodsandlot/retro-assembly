@@ -26,40 +26,29 @@ async function guessSystemByExtractedContent(file: FileWithDirectoryAndFileHandl
   }
   const blobReader = new BlobReader(file)
   const zipReader = new ZipReader(blobReader)
-  const entries = await zipReader.getEntries()
-  for (const { filename } of entries) {
-    const core = guessSystemByFilename(filename)
-    if (core) {
-      return core
+  try {
+    const entries = await zipReader.getEntries()
+    for (const { filename } of entries) {
+      const core = guessSystemByFilename(filename)
+      if (core) {
+        return core
+      }
     }
+  } catch (error) {
+    console.warn(error)
   }
   return ''
 }
 
+const systems = Object.keys(systemCoreMap).sort((core1, core2) => core2.length - core1.length)
 function guessSystemByPath(file) {
   if (!file?.webkitRelativePath) {
     return
   }
-  if (file.webkitRelativePath.includes('nes')) {
-    return 'nes'
-  }
-  if (file.webkitRelativePath.includes('n64')) {
-    return 'n64'
-  }
-  if (file.webkitRelativePath.includes('gba')) {
-    return 'gba'
-  }
-  if (file.webkitRelativePath.includes('gbc')) {
-    return 'gbc'
-  }
-  if (file.webkitRelativePath.includes('gb')) {
-    return 'gb'
-  }
-  if (file.webkitRelativePath.includes('megadrive')) {
-    return 'megadrive'
-  }
-  if (file.webkitRelativePath.includes('gamegear')) {
-    return 'gamegear'
+  for (const system of systems) {
+    if (file.webkitRelativePath.includes(system)) {
+      return system
+    }
   }
 }
 
@@ -84,6 +73,5 @@ export async function guessSystem(file: FileWithDirectoryAndFileHandle) {
 
 export async function guessCore(file: FileWithDirectoryAndFileHandle) {
   const system = await guessSystem(file)
-  console.log(system)
   return systemCoreMap[system] ?? ''
 }

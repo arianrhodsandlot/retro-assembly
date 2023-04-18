@@ -1,8 +1,8 @@
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import { guessGameDetail, guessSystem } from './lib/file'
-import { getCover, parseGoodCode } from './lib/utils'
+import { guessGameDetail, guessSystem } from '../../core/helpers/file'
+import { getCover, parseGoodCode } from '../../core/helpers/misc'
 
 export default function GameEntry({
   file,

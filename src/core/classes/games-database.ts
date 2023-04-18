@@ -1,6 +1,6 @@
 import { parse } from 'goodcodes-parser'
 import { camelCase, isEqual, pick } from 'lodash-es'
-import { systemFullNameMap } from './constants'
+import { systemFullNameMap } from '../constants/systems'
 
 function normalizeGameName(originalName: string) {
   // workaround for https://github.com/jbdemonte/goodcodes-parser/issues/13

@@ -1,7 +1,7 @@
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import classnames from 'classnames'
 import { useRef, useState } from 'react'
-import { Emulator } from './emulator'
+import { Emulator } from '../../core'
 import GameEntry from './game-entry'
 
 export default function HomeScreen({ files }: { files: FileWithDirectoryAndFileHandle[] }) {

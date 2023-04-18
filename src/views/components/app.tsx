@@ -1,7 +1,7 @@
 import { type FileWithDirectoryAndFileHandle, directoryOpen, fileOpen } from 'browser-fs-access'
 import { useState } from 'react'
 import HomeScreen from './home-screen'
-import './index.sass'
+import '../styles/index.sass'
 
 export default function App() {
   const [files, setFiles] = useState<FileWithDirectoryAndFileHandle[]>()

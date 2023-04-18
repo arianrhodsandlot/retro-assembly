@@ -19,7 +19,7 @@ const enabledSystems = [
 ]
 
 const rdbDir = 'retroarch/assets/frontend/bundle/database/rdb'
-const distDir = 'src/generated/retroarch-databases'
+const distDir = 'src/core/generated/retroarch-databases'
 async function main() {
   await fs.mkdir(distDir, { recursive: true })
   const items = await fs.readdir(rdbDir)

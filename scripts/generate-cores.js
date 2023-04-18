@@ -24,7 +24,7 @@ const enabledCores = [
 
 async function main() {
   const originalCoresDir = 'retroarch'
-  const distDir = 'src/generated/retroarch-cores'
+  const distDir = 'src/core/generated/retroarch-cores'
   await fs.mkdir(distDir, { recursive: true })
   const items = await fs.readdir(originalCoresDir)
   for (const item of items) {

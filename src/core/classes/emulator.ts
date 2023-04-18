@@ -1,11 +1,43 @@
 import ini from 'ini'
-import { createEmscriptenFS } from './emscripten-fs'
-import { getEmscriptenModuleOverrides } from './emscripten-module'
-import { guessCore, readFileAsUint8Array } from './lib/file'
+import { createEmscriptenFS } from '../helpers/emscripten-fs'
+import { guessCore, readFileAsUint8Array } from '../helpers/file'
 
 const raUserdataDir = '/home/web_user/retroarch/userdata/'
 const raCoreConfigDir = `${raUserdataDir}config/`
 const raConfigPath = `${raUserdataDir}retroarch.cfg`
+
+function getEmscriptenModuleOverrides() {
+  let resolveRunDependenciesPromise: () => void
+  const runDependenciesPromise = new Promise<void>((resolve) => {
+    resolveRunDependenciesPromise = resolve
+  })
+
+  return {
+    noInitialRun: true,
+    noExitRuntime: false,
+
+    print(...args: unknown[]) {
+      console.info(...args)
+    },
+
+    printErr(...args: unknown[]) {
+      console.error(...args)
+    },
+
+    quit(status: unknown, toThrow: unknown) {
+      if (status) {
+        console.info(status, toThrow)
+      }
+    },
+
+    async monitorRunDependencies(left: number) {
+      if (left === 0) {
+        resolveRunDependenciesPromise()
+      }
+      return await runDependenciesPromise
+    },
+  }
+}
 
 export class Emulator {
   core = ''
@@ -66,7 +98,7 @@ export class Emulator {
   }
 
   private async prepareEmscripten() {
-    const { getEmscripten } = await import(`./generated/retroarch-cores/${this.core}_libretro.js`)
+    const { getEmscripten } = await import(`../generated/retroarch-cores/${this.core}_libretro.js`)
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
 
@@ -80,7 +112,7 @@ export class Emulator {
     Module.canvas = this.canvas
     Module.preRun = [() => FS.init()]
 
-    const emscriptenFS = await createEmscriptenFS({ FS, PATH, ERRNO_CODES })
+    const emscriptenFS = createEmscriptenFS({ FS, PATH, ERRNO_CODES })
     FS.mount(emscriptenFS, { root: '/home' }, '/home')
 
     if (this.rom) {

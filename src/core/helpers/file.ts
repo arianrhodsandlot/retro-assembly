@@ -1,7 +1,7 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
-import { extSystemMap, systemCoreMap } from './constants'
-import { GamesDatabase } from './games-database'
+import { GamesDatabase } from '../classes/games-database'
+import { extSystemMap, systemCoreMap } from '../constants/systems'
 
 export async function readFileAsUint8Array(file: FileWithDirectoryAndFileHandle) {
   const fileReader = new FileReader()

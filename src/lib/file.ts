@@ -12,8 +12,8 @@ export async function readFileAsUint8Array(file: FileWithDirectoryAndFileHandle)
   })
 }
 
-function guessSystemByFilename(filename: string) {
-  const extname = filename.split('.').pop()
+function guessSystemByFileName(fileName: string) {
+  const extname = fileName.split('.').pop()
   if (!extname) {
     return ''
   }
@@ -29,7 +29,7 @@ async function guessSystemByExtractedContent(file: FileWithDirectoryAndFileHandl
   try {
     const entries = await zipReader.getEntries()
     for (const { filename } of entries) {
-      const core = guessSystemByFilename(filename)
+      const core = guessSystemByFileName(filename)
       if (core) {
         return core
       }
@@ -62,7 +62,7 @@ export async function guessSystem(file: FileWithDirectoryAndFileHandle) {
   }
   const system = file.name.endsWith('.zip')
     ? await guessSystemByExtractedContent(file)
-    : guessSystemByFilename(file.name)
+    : guessSystemByFileName(file.name)
 
   if (!system) {
     throw new Error(`Unknown system for ${file.name}`)

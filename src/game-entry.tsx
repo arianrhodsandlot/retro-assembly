@@ -37,14 +37,14 @@ export default function GameEntry({
                 className='w-60 h-60 bg-black'
                 style={{ imageRendering: 'pixelated' }}
                 src={gameInfo.cover}
-                alt={gameInfo.goodcodes.rom}
+                alt={gameInfo.goodcode.rom}
                 onError={onImgError}
               />
             ) : (
               <div className='w-60 h-60 bg-black' />
             )}
           </div>
-          <div className='w-60 truncate'>{gameInfo.goodcodes.rom}</div>
+          <div className='w-60 truncate'>{gameInfo.goodcode.rom}</div>
           <div>{gameInfo.system}</div>
         </>
       ) : (

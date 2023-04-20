@@ -5,6 +5,10 @@ import { $, fs } from 'zx'
 const rafileUrl = 'https://buildbot.libretro.com/stable/1.15.0/emscripten/RetroArch.7z'
 const rafileName = 'retroarch.7z'
 
+try {
+  await $`mv node_modules/${rafileName} .`
+} catch {}
+
 if (!(await fs.exists('retroarch')) && !(await fs.exists(rafileName))) {
   await $`curl ${rafileUrl} -o ${rafileName}`
 }
@@ -16,9 +20,8 @@ if (await fs.exists(rafileName)) {
   await new Promise((resolve, reject) =>
     node7z.extractFull(rafileName, '.', { $bin: path7za }).on('error', reject).on('end', resolve)
   )
-  await $`mv ${rafileName} retroarch`
+  await $`mv ${rafileName} node_modules`
 }
 
 await $`node scripts/generate-cores`
 await $`node scripts/generate-databases`
-await $`rm -rf retroarch`

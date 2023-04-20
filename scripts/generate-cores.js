@@ -24,18 +24,23 @@ const enabledCores = [
 
 async function main() {
   const originalCoresDir = 'retroarch'
-  const distDir = 'src/core/generated/retroarch-cores'
-  await fs.mkdir(distDir, { recursive: true })
+  const jsDistDir = 'src/generated/retroarch-cores'
+  const wasmDistDir = 'src/generated/public'
+  await fs.mkdir(jsDistDir, { recursive: true })
+  await fs.mkdir(wasmDistDir, { recursive: true })
   const items = await fs.readdir(originalCoresDir)
   for (const item of items) {
-    if (item.includes('_libretro.') && enabledCores.some((c) => item.includes(c))) {
-      const corePath = path.resolve(originalCoresDir, item)
-      const modifiedCorePath = path.resolve(distDir, item)
-      await fs.copyFile(corePath, modifiedCorePath)
-      if (item.endsWith('_libretro.js')) {
-        const content = await fs.readFile(modifiedCorePath, 'utf8')
+    const isJs = item.endsWith('_libretro.js')
+    const isWasm = item.endsWith('_libretro.wasm')
+    const isEnabled = enabledCores.some((c) => item.includes(c))
+    if (isEnabled) {
+      const originalPath = path.resolve(originalCoresDir, item)
+      const distPath = path.resolve(isWasm ? wasmDistDir : jsDistDir, item)
+      await fs.copyFile(originalPath, distPath)
+      if (isJs) {
+        const content = await fs.readFile(distPath, 'utf8')
         const modifiedContent = modifyContent(content)
-        await fs.writeFile(modifiedCorePath, modifiedContent, 'utf8')
+        await fs.writeFile(distPath, modifiedContent, 'utf8')
       }
     }
   }

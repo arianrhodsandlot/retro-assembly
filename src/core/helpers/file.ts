@@ -30,9 +30,9 @@ async function guessSystemByExtractedContent(file: FileWithDirectoryAndFileHandl
   try {
     const entries = await zipReader.getEntries()
     for (const { filename } of entries) {
-      const core = guessSystemByFileName(filename)
-      if (core) {
-        return core
+      const system = guessSystemByFileName(filename)
+      if (system) {
+        return system
       }
     }
   } catch (error) {

@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  publicDir: 'retroarch',
+  publicDir: 'src/generated/public',
   plugins: [react()],
   server: {
     host: true,

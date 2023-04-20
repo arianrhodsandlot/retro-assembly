@@ -42,7 +42,7 @@ export class GamesDatabase {
 
   async load() {
     const systemFullName = systemFullNameMap[this.system]
-    const { default: rows } = await import(`../generated/retroarch-databases/${systemFullName}.rdb.json`)
+    const { default: rows } = await import(`../../generated/retroarch-databases/${systemFullName}.rdb.json`)
 
     const { index } = this
     for (const row of rows) {

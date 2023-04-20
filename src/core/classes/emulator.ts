@@ -30,6 +30,10 @@ function getEmscriptenModuleOverrides() {
       }
     },
 
+    locateFile(path) {
+      return path
+    },
+
     async monitorRunDependencies(left: number) {
       if (left === 0) {
         resolveRunDependenciesPromise()
@@ -145,7 +149,7 @@ export class Emulator {
   }
 
   private async prepareEmscripten() {
-    const { getEmscripten } = await import(`../generated/retroarch-cores/${this.core}_libretro.js`)
+    const { getEmscripten } = await import(`../../generated/retroarch-cores/${this.core}_libretro.js`)
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
 

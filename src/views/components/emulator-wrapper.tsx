@@ -20,7 +20,6 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: (
       return
     }
     if (launchStatus !== 'initial') {
-      exitEmulator()
       return
     }
     setLaunchStatus('pending')

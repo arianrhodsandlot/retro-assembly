@@ -2,7 +2,7 @@ import { parse } from 'goodcodes-parser'
 import { capitalize } from 'lodash-es'
 import { systemFullNameMap } from '../constants/systems'
 
-export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'title' }) {
+export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxart' }) {
   if (!name || !system) {
     return ''
   }

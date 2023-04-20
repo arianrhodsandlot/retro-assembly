@@ -1,73 +1,33 @@
 import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
-import classnames from 'classnames'
-import { useRef, useState } from 'react'
-import { Emulator } from '../../core'
+import { useState } from 'react'
+import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
+import StartButtons from './start-buttons'
 
-export default function HomeScreen({ files }: { files: FileWithDirectoryAndFileHandle[] }) {
-  const emulatorRef = useRef<Emulator>()
+export default function HomeScreen() {
+  const [roms, setRoms] = useState<FileWithDirectoryAndFileHandle[]>()
+  const [currentRom, setCurrentRom] = useState<FileWithDirectoryAndFileHandle | false>(false)
 
-  const [showGameEntries, setShowGameEntries] = useState(true)
-
-  async function launchRom(file: File) {
-    if (emulatorRef.current) {
-      exit()
-    }
-    setShowGameEntries(false)
-    const emulator = await Emulator.launch({ rom: file })
-    emulatorRef.current = emulator
+  function onSelectRoms(files: FileWithDirectoryAndFileHandle[]) {
+    setRoms(files)
   }
 
-  function exit() {
-    emulatorRef.current?.exit()
-    emulatorRef.current = undefined
-    setShowGameEntries(true)
+  function onSelectRom(file: FileWithDirectoryAndFileHandle) {
+    setRoms([file])
+    setCurrentRom(file)
   }
 
-  function pause() {
-    emulatorRef.current?.pause()
-  }
-
-  function start() {
-    emulatorRef.current?.start()
-  }
-
-  function fullscreen() {
-    emulatorRef.current?.emscripten.Module.requestFullscreen()
-  }
-
-  const actions = (
-    <div className='flex w-80 justify-around'>
-      <button onClick={pause}>pause</button>
-      <button onClick={start}>start</button>
-      <button onClick={fullscreen}>fullscreen</button>
-      <button onClick={exit}>exit</button>
-    </div>
-  )
-
-  if (files) {
+  if (roms) {
     return (
-      <div>
-        {actions}
-        <div
-          className={classnames('items-center', 'justify-center', 'flex-wrap', 'm-auto', [
-            {
-              flex: showGameEntries,
-              hidden: !showGameEntries,
-            },
-          ])}
-        >
-          {files.map((file) => (
-            <GameEntry file={file} key={file.webkitRelativePath} onClick={() => launchRom(file)}></GameEntry>
+      <>
+        <div className='min-h-screen flex flex-wrap items-start m-auto'>
+          {roms.map((rom) => (
+            <GameEntry file={rom} key={rom.webkitRelativePath} onClick={() => setCurrentRom(rom)} />
           ))}
         </div>
-      </div>
+        {currentRom && <EmulatorWrapper rom={currentRom} onExit={() => setCurrentRom(false)} />}
+      </>
     )
   }
-  return (
-    <div>
-      {actions}
-      no roms
-    </div>
-  )
+  return <StartButtons onSelectRoms={onSelectRoms} onSelectRom={onSelectRom} />
 }

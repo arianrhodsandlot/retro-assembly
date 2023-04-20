@@ -1,33 +1,17 @@
-import { type FileWithDirectoryAndFileHandle, directoryOpen, fileOpen } from 'browser-fs-access'
-import { useState } from 'react'
 import HomeScreen from './home-screen'
 import '../styles/index.sass'
 
 export default function App() {
-  const [files, setFiles] = useState<FileWithDirectoryAndFileHandle[]>()
-
-  async function selectDir() {
-    try {
-      const selectedFiles = (await directoryOpen({ recursive: true, id: 'test' })) as FileWithDirectoryAndFileHandle[]
-      setFiles(selectedFiles)
-    } catch {}
-  }
-
-  async function selectFile() {
-    try {
-      const file = await fileOpen()
-      setFiles([file])
-    } catch {}
-  }
-
   return (
-    <div style={{ position: 'absolute', zIndex: 1 }}>
-      <p>
-        <button onClick={selectFile}>select file</button>
-        <br />
-        <button onClick={selectDir}>select dir</button>
-      </p>
-      <div>{files ? <HomeScreen files={files} /> : undefined}</div>
+    <div className='min-h-screen'>
+      <div className='bg-[#fe0000] text-white w-[200px] flex flex-col absolute h-screen'>
+        <div className='text-center text-xl pt-10'>Retro Assembly</div>
+        <div className='flex-1'></div>
+        <button className='mb-10'>Settings</button>
+      </div>
+      <div className='ml-[200px] h-screen overflow-x-hidden'>
+        <HomeScreen />
+      </div>
     </div>
   )
 }

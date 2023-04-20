@@ -39,14 +39,20 @@ function getEmscriptenModuleOverrides() {
   }
 }
 
+interface EmulatorConstructorOptions {
+  core?: string
+  rom?: File
+  style?: Partial<CSSStyleDeclaration>
+}
+
 export class Emulator {
   core = ''
   rom?: File
-  status: 'initial' | 'ready' = 'initial'
+  status: 'initial' | 'ready' | 'terminated' = 'initial'
   canvas: HTMLCanvasElement
   emscripten: any
 
-  constructor({ core, rom }: { core?: string; rom?: File }) {
+  constructor({ core, rom, style }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.core = core ?? ''
     this.canvas = document.createElement('canvas')
@@ -54,18 +60,34 @@ export class Emulator {
     this.canvas.hidden = true
     this.canvas.style.display = 'block'
 
+    for (const rule in style) {
+      this.canvas.style[rule] = style[rule]
+    }
+
     this.resizeCanvas = this.resizeCanvas.bind(this)
   }
 
-  static async launch({ core, rom }: { core?: string; rom?: File }) {
-    const emulator = new Emulator({ core, rom })
+  static async launch({ core, rom, style }: EmulatorConstructorOptions) {
+    const emulator = new Emulator({ core, rom, style })
     if (rom) {
       emulator.core = await guessCore(rom)
     }
+
+    if (emulator.isTerminated()) {
+      emulator.forceExit()
+      return
+    }
+
     if (!emulator.core) {
       throw new Error('Invalid core')
     }
     await emulator.prepareEmscripten()
+
+    if (emulator.isTerminated()) {
+      emulator.forceExit()
+      return
+    }
+
     emulator.prepareRaConfigFile()
     emulator.prepareRaCoreConfigFile()
     emulator.runMain()
@@ -89,12 +111,37 @@ export class Emulator {
   }
 
   exit(statusCode = 0) {
+    this.status = 'terminated'
     const { FS, exit, JSEvents } = this.emscripten
     exit(statusCode)
     FS.unmount('/home')
     window.removeEventListener('resize', this.resizeCanvas, false)
     JSEvents.removeAllEventListeners()
     this.canvas?.parentElement?.removeChild(this.canvas)
+  }
+
+  private isTerminated() {
+    return this.status === 'terminated'
+  }
+
+  private forceExit() {
+    this.status = 'terminated'
+    const { FS, exit, JSEvents } = this.emscripten || {}
+    try {
+      exit(0)
+    } catch {}
+    try {
+      FS.unmount('/home')
+    } catch {}
+    try {
+      window.removeEventListener('resize', this.resizeCanvas, false)
+    } catch {}
+    try {
+      JSEvents.removeAllEventListeners()
+    } catch {}
+    try {
+      this.canvas?.parentElement?.removeChild(this.canvas)
+    } catch {}
   }
 
   private async prepareEmscripten() {
@@ -175,7 +222,7 @@ export class Emulator {
       rewind_enable: true,
 
       rgui_menu_color_theme: 4,
-      rgui_particle_effect: 3,
+      // rgui_particle_effect: 3,
       rgui_show_start_screen: false,
 
       input_rewind_btn: 6, // L2

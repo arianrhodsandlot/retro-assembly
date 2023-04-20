@@ -21,3 +21,4 @@ if (await fs.exists(rafileName)) {
 
 await $`node scripts/generate-cores`
 await $`node scripts/generate-databases`
+await $`rm -rf retroarch`

@@ -10,6 +10,9 @@ if (!(await fs.exists('retroarch')) && !(await fs.exists(rafileName))) {
 }
 
 if (await fs.exists(rafileName)) {
+  if (process.platform !== 'win32') {
+    $`chmod +x ${path7za}`
+  }
   await new Promise((resolve, reject) =>
     node7z.extractFull(rafileName, '.', { $bin: path7za }).on('error', reject).on('end', resolve)
   )

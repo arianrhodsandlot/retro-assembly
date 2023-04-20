@@ -10,8 +10,6 @@ const emulatorStyle: Partial<CSSStyleDeclaration> = {
 }
 
 export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: () => void }) {
-  type LaunchStatus = 'initial' | 'pending' | 'complete' | 'error'
-  const [launchStatus, setLaunchStatus] = useState<LaunchStatus>('initial')
   const emulatorRef = useRef<Emulator>()
   const [isPaused, setIsPaused] = useState(false)
 
@@ -19,25 +17,23 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: (
     if (!rom) {
       return
     }
-    if (launchStatus !== 'initial') {
+    if (emulatorRef.current) {
       return
     }
-    setLaunchStatus('pending')
+    const emulator = new Emulator({ rom, style: emulatorStyle })
+    emulatorRef.current = emulator
     ;(async function () {
       try {
-        emulatorRef.current = await Emulator.launch({ rom, style: emulatorStyle })
+        await emulator.launch()
       } catch (error) {
         console.warn(error)
-        setLaunchStatus('error')
-        return
       }
-      setLaunchStatus('complete')
     })()
 
     return function destruct() {
       exitEmulator()
     }
-  }, [rom, launchStatus])
+  }, [rom])
 
   function exitEmulator() {
     if (emulatorRef.current) {

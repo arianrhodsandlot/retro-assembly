@@ -71,37 +71,35 @@ export class Emulator {
     this.resizeCanvas = this.resizeCanvas.bind(this)
   }
 
-  static async launch({ core, rom, style }: EmulatorConstructorOptions) {
-    const emulator = new Emulator({ core, rom, style })
-    if (rom) {
-      emulator.core = await guessCore(rom)
+  async launch() {
+    if (this.rom) {
+      this.core = await guessCore(this.rom)
     }
 
-    if (emulator.isTerminated()) {
-      emulator.forceExit()
+    if (this.isTerminated()) {
+      this.forceExit()
       return
     }
 
-    if (!emulator.core) {
+    if (!this.core) {
       throw new Error('Invalid core')
     }
-    await emulator.prepareEmscripten()
+    await this.prepareEmscripten()
 
-    if (emulator.isTerminated()) {
-      emulator.forceExit()
+    if (this.isTerminated()) {
+      this.forceExit()
       return
     }
 
-    emulator.prepareRaConfigFile()
-    emulator.prepareRaCoreConfigFile()
-    emulator.runMain()
-    emulator.resizeCanvas()
-    window.addEventListener('resize', emulator.resizeCanvas, false)
-    if (emulator.canvas) {
-      emulator.canvas.hidden = false
+    this.prepareRaConfigFile()
+    this.prepareRaCoreConfigFile()
+    this.runMain()
+    this.resizeCanvas()
+    window.addEventListener('resize', this.resizeCanvas, false)
+    if (this.canvas) {
+      this.canvas.hidden = false
     }
-    emulator.status = 'ready'
-    return emulator
+    this.status = 'ready'
   }
 
   start() {
@@ -116,11 +114,13 @@ export class Emulator {
 
   exit(statusCode = 0) {
     this.status = 'terminated'
-    const { FS, exit, JSEvents } = this.emscripten
-    exit(statusCode)
-    FS.unmount('/home')
+    if (this.emscripten) {
+      const { FS, exit, JSEvents } = this.emscripten
+      exit(statusCode)
+      FS.unmount('/home')
+      JSEvents.removeAllEventListeners()
+    }
     window.removeEventListener('resize', this.resizeCanvas, false)
-    JSEvents.removeAllEventListeners()
     this.canvas?.parentElement?.removeChild(this.canvas)
   }
 

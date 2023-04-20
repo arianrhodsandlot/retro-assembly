@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "prepare": "node scripts/prepare",
+    "build-retroarch": "node scripts/build-retroarch",
     "preview": "vite preview"
   },
   "dependencies": {

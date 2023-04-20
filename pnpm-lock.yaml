@@ -45,6 +45,9 @@ dependencies:
     version: 17.4.0(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
+  7zip-bin:
+    specifier: ^5.2.0
+    version: 5.2.0
   '@arianrhodsandlot/eslint-config':
     specifier: 0.5.0
     version: 0.5.0(eslint@8.38.0)(typescript@5.0.4)
@@ -69,6 +72,9 @@ devDependencies:
   autoprefixer:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.21)
+  node-7z:
+    specifier: ^3.0.0
+    version: 3.0.0
   postcss:
     specifier: 8.4.21
     version: 8.4.21
@@ -89,6 +95,10 @@ devDependencies:
     version: 7.2.1
 
 packages:
+
+  /7zip-bin@5.2.0:
+    resolution: {integrity: sha512-ukTPVhqG4jNzMro2qA9HSCSSVJN3aN7tlb+hfqYCt3ER0yWroeA2VR38MNrOHLQ/cVj+DaIMad0kFCtWWowh/A==}
+    dev: true
 
   /@arianrhodsandlot/eslint-config@0.5.0(eslint@8.38.0)(typescript@5.0.4):
     resolution: {integrity: sha512-cRAEetfIBU05q47weL5KALKb9nCB9wbJINJ5eHvdekrxXZwkb7oYhy8tV5oCFVz0DLlbganr8QTptLnSkAJZnw==}
@@ -2641,8 +2651,28 @@ packages:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: false
 
+  /lodash.defaultsdeep@4.6.1:
+    resolution: {integrity: sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==}
+    dev: true
+
+  /lodash.defaultto@4.14.0:
+    resolution: {integrity: sha512-G6tizqH6rg4P5j32Wy4Z3ZIip7OfG8YWWlPFzUFGcYStH1Ld0l1tWs6NevEQNEDnO1M3NZYjuHuraaFSN5WqeQ==}
+    dev: true
+
+  /lodash.flattendeep@4.4.0:
+    resolution: {integrity: sha512-uHaJFihxmJcEX3kT4I23ABqKKalJ/zDrDg0lsFtc1h+3uw49SIJ5beyhx5ExVRti3AvKoOJngIj7xz3oylPdWQ==}
+    dev: true
+
+  /lodash.isempty@4.4.0:
+    resolution: {integrity: sha512-oKMuF3xEeqDltrGMfDxAPGIVMSSRv8tbRSODbrs4KGsRRLEhrW8N8Rd4DRgB2+621hY8A8XwwrTVhXWpxFvMzg==}
+    dev: true
+
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+    dev: true
+
+  /lodash.negate@3.0.2:
+    resolution: {integrity: sha512-JGJYYVslKYC0tRMm/7igfdHulCjoXjoganRNWM8AgS+RXfOvFnPkOveDhPI65F9aAypCX9QEEQoBqWf7Q6uAeA==}
     dev: true
 
   /lodash@4.17.21:
@@ -2768,6 +2798,21 @@ packages:
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
+    dev: true
+
+  /node-7z@3.0.0:
+    resolution: {integrity: sha512-KIznWSxIkOYO/vOgKQfJEaXd7rgoFYKZbaurainCEdMhYc7V7mRHX+qdf2HgbpQFcdJL/Q6/XOPrDLoBeTfuZA==}
+    engines: {node: '>=10'}
+    dependencies:
+      debug: 4.3.4
+      lodash.defaultsdeep: 4.6.1
+      lodash.defaultto: 4.14.0
+      lodash.flattendeep: 4.4.0
+      lodash.isempty: 4.4.0
+      lodash.negate: 3.0.2
+      normalize-path: 3.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /node-domexception@1.0.0:

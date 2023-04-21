@@ -246,6 +246,7 @@ export class Emulator {
     Module.callMain(raArgs)
     // Module.resumeMainLoop()
 
+    // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
       if (gamepad) {
         window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
@@ -254,8 +255,10 @@ export class Emulator {
   }
 
   private resizeCanvas() {
-    const { Module } = this.emscripten
+    requestAnimationFrame(() => {
+      const { Module } = this.emscripten
 
-    Module.setCanvasSize(innerWidth, innerHeight)
+      Module.setCanvasSize(innerWidth, innerHeight)
+    })
   }
 }

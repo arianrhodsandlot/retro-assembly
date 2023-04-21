@@ -1,5 +1,6 @@
+import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import { Emulator } from '../../core'
+import { Emulator, offPressButtons, onPressButtons } from '../../core'
 
 const emulatorStyle: Partial<CSSStyleDeclaration> = {
   position: 'absolute',
@@ -9,9 +10,26 @@ const emulatorStyle: Partial<CSSStyleDeclaration> = {
   zIndex: '20',
 }
 
+const menuHotButtons = ['l3', 'r3']
 export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: () => void }) {
   const emulatorRef = useRef<Emulator>()
   const [isPaused, setIsPaused] = useState(false)
+  const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)
+
+  useEffect(() => {
+    function toggleMenu() {
+      if (showEmulatorControllMenu) {
+        start()
+      } else {
+        pause()
+      }
+      setShowEmulatorControllMenu(!showEmulatorControllMenu)
+    }
+    onPressButtons(menuHotButtons, toggleMenu)
+    return () => {
+      offPressButtons(menuHotButtons, toggleMenu)
+    }
+  }, [showEmulatorControllMenu])
 
   useEffect(() => {
     if (!rom) {
@@ -62,7 +80,11 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: (
   }
 
   return (
-    <div className='w-full h-full z-30 absolute top-0 left-0 flex flex-col'>
+    <div
+      className={classNames('w-full h-full z-30 absolute top-0 left-0 flex flex-col', {
+        hidden: !showEmulatorControllMenu,
+      })}
+    >
       <div className='flex-1 bg-gradient-to-t from-black/90 to-black/0' />
       <div className='flex bottom-0 w-full justify-around h-40 bg-gradient-to-t from-black to-black/90 text-white '>
         {isPaused ? <button onClick={start}>start</button> : <button onClick={pause}>pause</button>}

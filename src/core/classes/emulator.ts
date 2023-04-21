@@ -1,4 +1,5 @@
 import ini from 'ini'
+import { kebabCase } from 'lodash-es'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { guessCore, readFileAsUint8Array } from '../helpers/file'
 
@@ -62,10 +63,19 @@ export class Emulator {
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
     this.canvas.hidden = true
-    this.canvas.style.display = 'block'
+    this.canvas.width = 900
+    this.canvas.height = 900
+    this.updateCanvasStyle({
+      display: 'block',
+      position: 'relative',
+      zIndex: '15',
+      imageRendering: 'pixelated', // this boosts performance!
+      width: '100%',
+      height: '100%',
+    })
 
     for (const rule in style) {
-      this.canvas.style[rule] = style[rule]
+      this.canvas.style.setProperty(rule, style[rule])
     }
 
     this.resizeCanvas = this.resizeCanvas.bind(this)
@@ -122,6 +132,20 @@ export class Emulator {
     }
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas?.parentElement?.removeChild(this.canvas)
+  }
+
+  updateCanvasStyle(style: Partial<CSSStyleDeclaration>) {
+    const { canvas } = this
+    if (!canvas) {
+      return
+    }
+    for (const rule in style) {
+      if (style[rule]) {
+        canvas.style.setProperty(kebabCase(rule), style[rule] as string)
+      } else {
+        canvas.style.removeProperty(rule)
+      }
+    }
   }
 
   private isTerminated() {
@@ -257,7 +281,6 @@ export class Emulator {
   private resizeCanvas() {
     requestAnimationFrame(() => {
       const { Module } = this.emscripten
-
       Module.setCanvasSize(innerWidth, innerHeight)
     })
   }

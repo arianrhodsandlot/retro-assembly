@@ -204,7 +204,8 @@ export class Emulator {
     const { FS } = this.emscripten
     const dir = path.slice(0, path.lastIndexOf('/'))
     FS.mkdirTree(dir)
-    FS.writeFile(path, ini.stringify(config, { whitespace: true }))
+    // @ts-expect-error `platform` option is not listed in @types/ini for now
+    FS.writeFile(path, ini.stringify(config, { whitespace: true, platform: 'linux' }))
   }
 
   private getRaCoreConfig() {

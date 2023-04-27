@@ -20,7 +20,7 @@ export default function HomeScreen() {
   if (roms) {
     return (
       <>
-        <div className='min-h-screen flex flex-wrap items-start m-auto'>
+        <div className='m-auto flex min-h-screen flex-wrap items-start'>
           {roms.map((rom) => (
             <GameEntry file={rom} key={rom.webkitRelativePath} onClick={() => setCurrentRom(rom)} />
           ))}

@@ -22,17 +22,17 @@ export default function GameEntryImage({
       {isLoaded && (
         <>
           <div
-            className='w-full h-full bg-cover absolute top-0 bg-center'
+            className='absolute top-0 h-full w-full bg-cover bg-center'
             style={{
               backgroundImage: `url("${src}")`,
             }}
           />
-          <div className='w-full h-full backdrop-blur-sm absolute top-0' />
+          <div className='absolute top-0 h-full w-full backdrop-blur-sm' />
         </>
       )}
       {src && (
         <img
-          className={classNames('w-full h-full object-contain absolute', loading ? '-top-[9999px]' : 'top-0')}
+          className={classNames('absolute h-full w-full object-contain', loading ? '-top-[9999px]' : 'top-0')}
           style={{ imageRendering: 'pixelated' }}
           src={src}
           alt={alt}

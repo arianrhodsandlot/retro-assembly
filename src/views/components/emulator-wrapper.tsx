@@ -81,12 +81,12 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: (
 
   return (
     <div
-      className={classNames('w-full h-full z-30 absolute top-0 left-0 flex flex-col', {
+      className={classNames('absolute left-0 top-0 z-30 flex h-full w-full flex-col', {
         hidden: !showEmulatorControllMenu,
       })}
     >
       <div className='flex-1 bg-gradient-to-t from-black/90 to-black/0' />
-      <div className='flex bottom-0 w-full justify-around h-40 bg-gradient-to-t from-black to-black/90 text-white '>
+      <div className='bottom-0 flex h-40 w-full justify-around bg-gradient-to-t from-black to-black/90 text-white '>
         {isPaused ? <button onClick={start}>start</button> : <button onClick={pause}>pause</button>}
         <button onClick={fullscreen}>fullscreen</button>
         <button onClick={exit}>exit</button>

@@ -4,8 +4,8 @@ import '../styles/index.sass'
 export default function App() {
   return (
     <div className='min-h-screen'>
-      <div className='bg-[#fe0000] text-white w-[200px] flex flex-col absolute h-screen'>
-        <div className='text-center text-xl pt-10'>Retro Assembly</div>
+      <div className='absolute flex h-screen w-[200px] flex-col bg-[#fe0000] text-white'>
+        <div className='pt-10 text-center text-xl'>Retro Assembly</div>
         <div className='flex-1'></div>
         <button className='mb-10'>Settings</button>
       </div>

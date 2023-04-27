@@ -39,7 +39,7 @@ export default function StartButtons({
   }
 
   return (
-    <div className='min-h-screen flex justify-center items-center gap-10 bg-slate text-3xl text-gray-400'>
+    <div className='bg-slate flex min-h-screen items-center justify-center gap-10 text-3xl text-gray-400'>
       <button onClick={selectFile}>Select File</button>
       <button onClick={selectDir}>Select Directory</button>
     </div>

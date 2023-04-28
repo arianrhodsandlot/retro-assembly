@@ -11,7 +11,7 @@ const emulatorStyle: Partial<CSSStyleDeclaration> = {
 }
 
 const menuHotButtons = ['l3', 'r3']
-export default function EmulatorWrapper({ rom, onExit }: { rom: File; onExit?: () => void }) {
+export default function EmulatorWrapper({ rom, onExit }: { rom: Blob; onExit?: () => void }) {
   const emulatorRef = useRef<Emulator>()
   const [isPaused, setIsPaused] = useState(false)
   const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)

@@ -46,13 +46,13 @@ function getEmscriptenModuleOverrides() {
 
 interface EmulatorConstructorOptions {
   core?: string
-  rom?: File
+  rom?: Blob
   style?: Partial<CSSStyleDeclaration>
 }
 
 export class Emulator {
   core = ''
-  rom?: File
+  rom?: Blob
   status: 'initial' | 'ready' | 'terminated' = 'initial'
   canvas: HTMLCanvasElement
   emscripten: any

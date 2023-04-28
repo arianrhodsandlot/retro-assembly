@@ -1,9 +1,8 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
-import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { GamesDatabase } from '../classes/games-database'
 import { extSystemMap, systemCoreMap } from '../constants/systems'
 
-export async function readFileAsUint8Array(file: FileWithDirectoryAndFileHandle) {
+export async function readFileAsUint8Array(file: Blob) {
   const fileReader = new FileReader()
   fileReader.readAsArrayBuffer(file)
   return await new Promise<ArrayBuffer>((resolve, reject) => {
@@ -21,7 +20,7 @@ function guessSystemByFileName(fileName: string) {
   return extSystemMap[extname] ?? ''
 }
 
-async function guessSystemByExtractedContent(file: FileWithDirectoryAndFileHandle) {
+async function guessSystemByExtractedContent(file: Blob) {
   if (!file) {
     return ''
   }
@@ -42,7 +41,7 @@ async function guessSystemByExtractedContent(file: FileWithDirectoryAndFileHandl
 }
 
 const systems = Object.keys(systemCoreMap).sort((core1, core2) => core2.length - core1.length)
-function guessSystemByPath(file) {
+function guessSystemByPath(file: Blob) {
   if (!file?.webkitRelativePath) {
     return
   }
@@ -53,7 +52,7 @@ function guessSystemByPath(file) {
   }
 }
 
-export async function guessSystem(file: FileWithDirectoryAndFileHandle) {
+export async function guessSystem(file: Blob) {
   if (!file?.name) {
     throw new Error('Invalid file')
   }
@@ -72,12 +71,12 @@ export async function guessSystem(file: FileWithDirectoryAndFileHandle) {
   return system
 }
 
-export async function guessCore(file: FileWithDirectoryAndFileHandle) {
+export async function guessCore(file: Blob) {
   const system = await guessSystem(file)
   return systemCoreMap[system] ?? ''
 }
 
-export async function guessGameDetail(rom: FileWithDirectoryAndFileHandle) {
+export async function guessGameDetail(rom: Blob) {
   const system = await guessSystem(rom)
   return await GamesDatabase.queryByFileNameFromSystem({ fileName: rom.name, system })
 }

@@ -2,6 +2,7 @@ import { Client } from '@microsoft/microsoft-graph-client'
 import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../constants/auth'
+import { getJson, replaceJson, updateJson } from '../helpers/local-storage'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
@@ -14,7 +15,7 @@ export class OneDriveCloudProvider {
   constructor() {
     this.client = Client.init({
       authProvider(done) {
-        done(undefined, localStorage.getItem('access_token'))
+        done(undefined, getJson('onedrive').access_token)
       },
       fetchOptions: {
         redirect: 'manual',
@@ -54,12 +55,11 @@ export class OneDriveCloudProvider {
         }),
       })
       .json<any>()
-    localStorage.setItem('access_token', result.access_token)
-    localStorage.setItem('refresh_token', result.refresh_token)
+    replaceJson('onedrive', result)
   }
 
   static async refreshToken() {
-    const refreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = getJson('onedrive').access_token
     if (!refreshToken) {
       return
     }
@@ -74,8 +74,7 @@ export class OneDriveCloudProvider {
         }),
       })
       .json<any>()
-    localStorage.setItem('access_token', result.access_token)
-    localStorage.setItem('refresh_token', result.refresh_token)
+    updateJson('onedrive', result)
   }
 
   async download(path: string) {

@@ -1,26 +1,12 @@
-import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
-import { guessGameDetail, guessSystem } from '../../core/helpers/file'
-import { getCover, parseGoodCode } from '../../core/helpers/misc'
+import { type Rom, getCover } from '../../core'
 import GameEntryImage from './game-entry-image'
 
-export default function GameEntry({
-  file,
-  onClick,
-}: {
-  file: FileWithDirectoryAndFileHandle
-  onClick: React.MouseEventHandler<HTMLButtonElement>
-}) {
+export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.MouseEventHandler<HTMLButtonElement> }) {
   const [gameImageStatus, setGameImageStatus] = useState({ valid: true, loading: true })
-  const gameInfoPromise = useMemo(() => Promise.all([guessSystem(file), guessGameDetail(file)]), [file])
-  const goodcode = useMemo(() => parseGoodCode(file.name), [file])
 
-  const gameInfoAsyncState = useAsync(() => gameInfoPromise, [file])
-
-  const [system, detail] = gameInfoAsyncState.value ?? []
-  const gameImageSrc = gameInfoAsyncState.value ? getCover({ system, name: detail?.name }) : ''
+  const gameImageSrc = rom.gameInfo ? getCover({ system: rom.system, name: rom.gameInfo.name }) : ''
 
   function onImgError() {
     setGameImageStatus({ valid: false, loading: false })
@@ -35,9 +21,8 @@ export default function GameEntry({
       let valid = true
       let loading = true
       try {
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        const [system, detail] = await gameInfoPromise
-        valid = Boolean(getCover({ system, name: detail?.name }))
+        await rom.ready()
+        valid = Boolean(getCover({ system: rom.system, name: rom.gameInfo?.name }))
       } catch (error) {
         valid = false
         console.warn(error)
@@ -45,7 +30,7 @@ export default function GameEntry({
       loading = valid
       setGameImageStatus({ valid, loading })
     })()
-  }, [gameInfoPromise])
+  }, [rom])
 
   const gameEntryImageWithLoader = (
     <>
@@ -53,7 +38,7 @@ export default function GameEntry({
       <GameEntryImage
         status={gameImageStatus}
         src={gameImageSrc}
-        alt={goodcode.rom}
+        alt={rom.goodCode.rom}
         onLoad={onImageLoad}
         onError={onImgError}
       />
@@ -61,14 +46,14 @@ export default function GameEntry({
   )
 
   const gameEntryText = (
-    <div className='flex h-full w-full items-center justify-center bg-gray-400 font-bold'>{goodcode.rom}</div>
+    <div className='flex h-full w-full items-center justify-center bg-gray-400 font-bold'>{rom.goodCode.rom}</div>
   )
 
   return (
     <button
       onClick={onClick}
       className={classNames(
-        'relative aspect-square w-[10%] transform-gpu overflow-hidden border-white text-left transition-transform',
+        'relative aspect-square w-[12.5%] transform-gpu overflow-hidden border-white text-left transition-transform',
         gameImageStatus.loading
           ? 'scale-[98%]'
           : 'hover:z-10 hover:scale-125 hover:rounded-sm hover:border-4 hover:shadow-md'

@@ -25,6 +25,9 @@ export class GamesDatabase {
   private system: string
   private readyPromise: Promise<void>
   constructor(name: string) {
+    if (!name) {
+      throw new Error('Invalid system name')
+    }
     this.system = name
     this.readyPromise = this.load()
   }

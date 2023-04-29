@@ -1,20 +1,29 @@
-import { type FileWithDirectoryAndFileHandle } from 'browser-fs-access'
 import { useState } from 'react'
+import { Rom } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 import StartButtons from './start-buttons'
 
 export default function HomeScreen() {
-  const [roms, setRoms] = useState<FileWithDirectoryAndFileHandle[]>()
-  const [currentRom, setCurrentRom] = useState<FileWithDirectoryAndFileHandle | false>(false)
+  const [roms, setRoms] = useState<Rom[]>()
+  const [currentRom, setCurrentRom] = useState<Rom | false>(false)
 
-  function onSelectRoms(files: FileWithDirectoryAndFileHandle[]) {
-    setRoms(files)
+  function onSelectFiles(files: File[]) {
+    const roms = Rom.fromFiles(files)
+    setRoms(roms)
   }
 
-  function onSelectRom(file: FileWithDirectoryAndFileHandle) {
-    setRoms([file])
-    setCurrentRom(file)
+  function onSelectFile(file: File) {
+    const rom = Rom.fromFile(file)
+    if (rom) {
+      setRoms([rom])
+      setCurrentRom(rom)
+    }
+  }
+
+  function onSelectOneDriveFile(remoteItems: string[]) {
+    const roms = Rom.fromOneDrivePaths(remoteItems)
+    setRoms(roms)
   }
 
   if (roms) {
@@ -22,12 +31,18 @@ export default function HomeScreen() {
       <>
         <div className='m-auto flex min-h-screen flex-wrap items-start'>
           {roms.map((rom) => (
-            <GameEntry file={rom} key={rom.webkitRelativePath} onClick={() => setCurrentRom(rom)} />
+            <GameEntry rom={rom} key={rom.id ?? rom.path} onClick={() => setCurrentRom(rom)} />
           ))}
         </div>
         {currentRom && <EmulatorWrapper rom={currentRom} onExit={() => setCurrentRom(false)} />}
       </>
     )
   }
-  return <StartButtons onSelectRoms={onSelectRoms} onSelectRom={onSelectRom} />
+  return (
+    <StartButtons
+      onSelectFiles={onSelectFiles}
+      onSelectFile={onSelectFile}
+      onSelectOneDriveFile={onSelectOneDriveFile}
+    />
+  )
 }

@@ -1,58 +1,57 @@
 import { directoryOpen, fileOpen } from 'browser-fs-access'
-import { extSystemMap } from '../../core'
 import '../styles/index.sass'
 import { OneDriveCloudProvider } from '../../core/classes/onedrive-cloud-provider'
 
-const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
-function filterRoms(files: Blob[]) {
-  return (
-    files?.filter((file) => {
-      const ext = file.name.split('.').at(-1)
-      return ext && allowedExtensions.has(ext)
-    }) ?? []
-  )
+const oneDrive = new OneDriveCloudProvider()
+window.O = OneDriveCloudProvider
+window.o = oneDrive
+window.c = oneDrive.client
+
+function loginWithOnedrive() {
+  OneDriveCloudProvider.authorize()
 }
 
-const onedriveCloudProvider = new OneDriveCloudProvider()
-window.O = OneDriveCloudProvider
-window.o = onedriveCloudProvider
-window.c = onedriveCloudProvider.client
-
 export default function StartButtons({
-  onSelectRom,
-  onSelectRoms,
+  onSelectFile,
+  onSelectFiles,
+  onSelectOneDriveFile,
 }: {
-  onSelectRom: (roms: Blob) => void
-  onSelectRoms: (roms: Blob[]) => void
+  onSelectFile: (roms: File) => void
+  onSelectFiles: (roms: File[]) => void
+  onSelectOneDriveFile: (urls: string[]) => void
 }) {
   async function selectDir() {
     try {
-      const selectedFiles = (await directoryOpen({ recursive: true, id: 'test' })) as Blob[]
-      const roms = filterRoms(selectedFiles)
-      onSelectRoms(roms)
+      const selectedFiles = (await directoryOpen({ recursive: true, id: 'test' })) as File[]
+      onSelectFiles(selectedFiles)
     } catch {}
   }
 
   async function selectFile() {
     try {
       const file = await fileOpen()
-      const selectedFiles = [file]
-      const [rom] = filterRoms(selectedFiles)
-      if (rom) {
-        onSelectRom(rom)
+      if (file) {
+        onSelectFile(file)
       }
     } catch {}
   }
 
-  function loginWithOnedrive() {
-    OneDriveCloudProvider.authorize()
-  }
-
   async function loadOnedrive() {
-    const blob = await onedriveCloudProvider.download('/test-roms/snes/Contra III - The Alien Wars (USA).zip')
-    blob.name = 'Contra III - The Alien Wars (USA).zip'
-    blob.webkitRelativePath = '/test-roms/snes/Contra III - The Alien Wars (USA).zip'
-    onSelectRom(blob)
+    const selectedDir = '/test-roms/nes/'
+    const remoteFilePaths = []
+    const { value: children } = await oneDrive.listDir(selectedDir)
+    for (const child of children) {
+      if (child.file) {
+        const dir = child.parentReference.path.replace(/^\/drive\/root:/, '')
+        const path = `${dir}/${child.name}`
+        remoteFilePaths.push({
+          dir,
+          path,
+          fileName: child.name,
+        })
+      }
+    }
+    onSelectOneDriveFile(remoteFilePaths)
   }
 
   return (

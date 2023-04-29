@@ -9,6 +9,7 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
+let onedriveCloudProvider
 export class OneDriveCloudProvider {
   client: Client
 
@@ -21,6 +22,16 @@ export class OneDriveCloudProvider {
         redirect: 'manual',
       },
     })
+
+    this.dectectRedirect()
+  }
+
+  static get() {
+    if (onedriveCloudProvider) {
+      return onedriveCloudProvider as OneDriveCloudProvider
+    }
+    onedriveCloudProvider = new OneDriveCloudProvider()
+    return onedriveCloudProvider as OneDriveCloudProvider
   }
 
   static authorize() {
@@ -82,14 +93,16 @@ export class OneDriveCloudProvider {
     return await ky(downloadUrl).blob()
   }
 
-  async ls(path = '/') {
+  async listDir(path = '/') {
     if (path === '/') {
       return await this.client.api('/me/drive/root/children').get()
     }
     return await this.client.api(`/me/drive/root:${path}:/children`).get()
   }
-}
 
-if (location.search.includes('code')) {
-  OneDriveCloudProvider.getToken()
+  private dectectRedirect() {
+    if (location.search.includes('code')) {
+      OneDriveCloudProvider.getToken()
+    }
+  }
 }

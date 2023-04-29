@@ -18,5 +18,7 @@ export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxa
 }
 
 export function parseGoodCode(name: string) {
-  return parse(`0 - ${name}`)
+  const goodCodeResult = parse(`0 - ${name}`)
+  goodCodeResult.file = goodCodeResult.file.slice(4)
+  return goodCodeResult
 }

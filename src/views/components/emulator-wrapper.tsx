@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import { Emulator, offPressButtons, onPressButtons } from '../../core'
+import { Emulator, type Rom, offPressButtons, onPressButtons } from '../../core'
 
 const emulatorStyle: Partial<CSSStyleDeclaration> = {
   position: 'absolute',
@@ -11,7 +11,7 @@ const emulatorStyle: Partial<CSSStyleDeclaration> = {
 }
 
 const menuHotButtons = ['l3', 'r3']
-export default function EmulatorWrapper({ rom, onExit }: { rom: Blob; onExit?: () => void }) {
+export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: () => void }) {
   const emulatorRef = useRef<Emulator>()
   const [isPaused, setIsPaused] = useState(false)
   const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)

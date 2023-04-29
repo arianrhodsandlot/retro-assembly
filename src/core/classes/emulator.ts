@@ -1,7 +1,9 @@
 import ini from 'ini'
 import { kebabCase } from 'lodash-es'
+import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
-import { guessCore, readFileAsUint8Array } from '../helpers/file'
+import { readBlobAsUint8Array } from '../helpers/file'
+import { type Rom } from './rom'
 
 const raUserdataDir = '/home/web_user/retroarch/userdata/'
 const raCoreConfigDir = `${raUserdataDir}config/`
@@ -46,13 +48,13 @@ function getEmscriptenModuleOverrides() {
 
 interface EmulatorConstructorOptions {
   core?: string
-  rom?: Blob
+  rom?: Rom
   style?: Partial<CSSStyleDeclaration>
 }
 
 export class Emulator {
   core = ''
-  rom?: Blob
+  rom?: Rom
   status: 'initial' | 'ready' | 'terminated' = 'initial'
   canvas: HTMLCanvasElement
   emscripten: any
@@ -83,7 +85,8 @@ export class Emulator {
 
   async launch() {
     if (this.rom) {
-      this.core = await guessCore(this.rom)
+      await this.rom.ready()
+      this.core = systemCoreMap[this.rom.system]
     }
 
     if (this.isTerminated()) {
@@ -191,12 +194,14 @@ export class Emulator {
     FS.mount(emscriptenFS, { root: '/home' }, '/home')
 
     if (this.rom) {
-      const uint8Array = await readFileAsUint8Array(this.rom)
-      FS.createDataFile('/', this.rom.name, uint8Array, true, false)
-      const data = FS.readFile(this.rom.name, { encoding: 'binary' })
+      const blob = await this.rom.getBlob()
+      const { fileName } = this.rom
+      const uint8Array = await readBlobAsUint8Array(blob)
+      FS.createDataFile('/', fileName, uint8Array, true, false)
+      const data = FS.readFile(fileName, { encoding: 'binary' })
       FS.mkdirTree(`${raUserdataDir}content/`)
-      FS.writeFile(`${raUserdataDir}content/${this.rom.name}`, data, { encoding: 'binary' })
-      FS.unlink(this.rom.name)
+      FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })
+      FS.unlink(fileName)
     }
   }
 
@@ -266,7 +271,7 @@ export class Emulator {
     const { Module } = this.emscripten
     const raArgs: string[] = []
     if (this.rom) {
-      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.name}`)
+      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileName}`)
     }
     Module.callMain(raArgs)
     // Module.resumeMainLoop()

@@ -15,6 +15,7 @@
     "browser-fs-access": "0.33.1",
     "browserfs": "1.4.3",
     "classnames": "2.3.2",
+    "delay": "^5.0.0",
     "goodcodes-parser": "2.5.0",
     "ini": "4.1.0",
     "jquery": "3.6.4",

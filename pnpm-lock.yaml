@@ -16,6 +16,9 @@ dependencies:
   classnames:
     specifier: 2.3.2
     version: 2.3.2
+  delay:
+    specifier: ^5.0.0
+    version: 5.0.0
   goodcodes-parser:
     specifier: 2.5.0
     version: 2.5.0
@@ -1371,6 +1374,11 @@ packages:
       has-property-descriptors: 1.0.0
       object-keys: 1.1.1
     dev: true
+
+  /delay@5.0.0:
+    resolution: {integrity: sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==}
+    engines: {node: '>=10'}
+    dev: false
 
   /didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}

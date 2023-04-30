@@ -1,10 +1,10 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type GoodCodeResult } from 'goodcodes-parser'
+import { groupBy } from 'lodash-es'
 import { extSystemMap, systemCoreMap } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
 import { GamesDatabase } from './games-database'
 import { OneDriveCloudProvider } from './onedrive-cloud-provider'
-import { groupBy } from 'lodash-es'
 
 const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 

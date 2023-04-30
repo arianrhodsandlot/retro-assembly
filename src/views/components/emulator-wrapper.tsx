@@ -26,6 +26,11 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
       setShowEmulatorControllMenu(!showEmulatorControllMenu)
     }
     onPressButtons(menuHotButtons, toggleMenu)
+    document.addEventListener('keyup', (event) => {
+      if (event.key === 'Control') {
+        toggleMenu()
+      }
+    })
     return () => {
       offPressButtons(menuHotButtons, toggleMenu)
     }
@@ -43,6 +48,11 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
     ;(async function () {
       try {
         await emulator.launch()
+        window.emu = emulator
+        window.em = emu.emscripten
+        window.RA = em.RA
+        window.Module = em.Module
+        window.FS = em.FS
       } catch (error) {
         console.warn(error)
       }

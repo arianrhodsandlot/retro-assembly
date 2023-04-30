@@ -37,7 +37,7 @@ export default function HomeScreen() {
       const remoteFiles = await oneDrive.listDirFilesRecursely(selectedDir)
       const roms = Rom.fromOneDrivePaths(remoteFiles)
       const grouped = Rom.groupBySystem(roms)
-      const currentSystem = Object.keys(grouped)[0]
+      const currentSystem = Object.keys(grouped)[0] && 'nes'
       setGroupedRoms(grouped)
       setCurrentSystem(currentSystem)
     })()

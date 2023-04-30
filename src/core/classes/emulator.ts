@@ -1,3 +1,4 @@
+import delay from 'delay'
 import ini from 'ini'
 import { kebabCase } from 'lodash-es'
 import { systemCoreMap } from '../constants/systems'
@@ -83,6 +84,15 @@ export class Emulator {
     this.resizeCanvas = this.resizeCanvas.bind(this)
   }
 
+  private get stateFileName() {
+    if (!this.rom) {
+      throw new Error('rom is not ready')
+    }
+    const { name } = this.rom.file
+    const baseName = name.slice(0, name.lastIndexOf('.'))
+    return `${raUserdataDir}states/${baseName}.state`
+  }
+
   async launch() {
     if (this.rom) {
       await this.rom.ready()
@@ -125,6 +135,32 @@ export class Emulator {
     Module.pauseMainLoop()
   }
 
+  async saveState() {
+    this.clearStateFile()
+    if (this.emscripten) {
+      const { Module } = this.emscripten
+      Module._cmd_save_state()
+      const buffer = await this.waitForEmscriptenFile(this.stateFileName)
+      this.clearStateFile()
+      if (buffer) {
+        return new Blob([buffer])
+      }
+    }
+  }
+
+  async loadState(blob: Blob) {
+    this.clearStateFile()
+    if (this.emscripten) {
+      const { FS, Module } = this.emscripten
+      const buffer = await blob.arrayBuffer()
+      const uint8Array = new Uint8Array(buffer)
+      FS.writeFile(this.stateFileName, uint8Array)
+      await this.waitForEmscriptenFile(this.stateFileName)
+      Module._cmd_load_state()
+    }
+    this.clearStateFile()
+  }
+
   exit(statusCode = 0) {
     this.status = 'terminated'
     if (this.emscripten) {
@@ -149,6 +185,30 @@ export class Emulator {
         canvas.style.removeProperty(rule)
       }
     }
+  }
+
+  private clearStateFile() {
+    try {
+      FS.unlink(this.stateFileName)
+    } catch {}
+  }
+
+  private async waitForEmscriptenFile(fileName) {
+    // wait for the state file to be saved
+    let buffer
+    let maxRetries = 100
+    let isFinished = false
+    while ((maxRetries -= 1) && !isFinished) {
+      await delay(3)
+      try {
+        const newBuffer = FS.readFile(fileName).buffer
+        isFinished = buffer?.byteLength > 0 && buffer?.byteLength === newBuffer.byteLength
+        buffer = newBuffer
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    return buffer
   }
 
   private isTerminated() {

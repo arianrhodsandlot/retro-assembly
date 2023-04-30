@@ -138,6 +138,11 @@ export class OneDriveCloudProvider implements CloudProvider {
     return files
   }
 
+  async uploadFile({ file, path }) {
+    const request = this.client.api(`/me/drive/root:${path}:/content`).header('Content-Type', 'text/plain')
+    await OneDriveCloudProvider.wrapRequest(() => request.put(file))
+  }
+
   private async listDir(path = '/') {
     const children: any[] = []
 

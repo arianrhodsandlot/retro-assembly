@@ -9,7 +9,7 @@ export default function App() {
         <div className='flex-1'></div>
         <button className='mb-10'>Settings</button>
       </div>
-      <div className='ml-[200px] h-screen overflow-x-hidden'>
+      <div className='h-screen w-full overflow-x-hidden pl-[200px]'>
         <HomeScreen />
       </div>
     </div>

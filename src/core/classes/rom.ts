@@ -4,6 +4,7 @@ import { extSystemMap, systemCoreMap } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
 import { GamesDatabase } from './games-database'
 import { OneDriveCloudProvider } from './onedrive-cloud-provider'
+import { groupBy } from 'lodash-es'
 
 const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 
@@ -63,6 +64,10 @@ export class Rom {
       }
     }
     return roms
+  }
+
+  static groupBySystem(roms: Rom[]) {
+    return groupBy(roms, 'system')
   }
 
   private static isValidFileName(name: string) {

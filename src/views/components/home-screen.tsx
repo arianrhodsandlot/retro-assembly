@@ -1,49 +1,77 @@
+import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { OneDriveCloudProvider, Rom } from '../../core'
+import { OneDriveCloudProvider, Rom, systemFullNameMap } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 import StartButtons from './start-buttons'
 
 const oneDrive = OneDriveCloudProvider.get()
 
+window.O = OneDriveCloudProvider
+window.o = oneDrive
+window.c = oneDrive.client
+
+const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ name, fullName }))
+
 export default function HomeScreen() {
-  const [roms, setRoms] = useState<Rom[]>()
+  const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
+  const [currentSystem, setCurrentSystem] = useState<string>('')
 
-  function onSelectFiles(files: File[]) {
-    const roms = Rom.fromFiles(files)
-    setRoms(roms)
-  }
+  // function onSelectFiles(files: File[]) {
+  //   const roms = Rom.fromFiles(files)
+  //   setRoms(roms)
+  // }
 
-  function onSelectFile(file: File) {
-    const rom = Rom.fromFile(file)
-    if (rom) {
-      setRoms([rom])
-      setCurrentRom(rom)
-    }
-  }
+  // function onSelectFile(file: File) {
+  //   const rom = Rom.fromFile(file)
+  //   if (rom) {
+  //     setRoms([rom])
+  //     setCurrentRom(rom)
+  //   }
+  // }
 
   useEffect(() => {
     ;(async () => {
       const selectedDir = '/test-roms/'
       const remoteFiles = await oneDrive.listDirFilesRecursely(selectedDir)
       const roms = Rom.fromOneDrivePaths(remoteFiles)
-      console.log(remoteFiles, roms)
-      setRoms(roms)
+      const grouped = Rom.groupBySystem(roms)
+      const currentSystem = Object.keys(grouped)[0]
+      setGroupedRoms(grouped)
+      setCurrentSystem(currentSystem)
     })()
   }, [])
 
-  if (roms) {
-    return (
-      <>
-        <div className='m-auto flex min-h-screen flex-wrap items-start'>
-          {roms.map((rom) => (
-            <GameEntry rom={rom} key={rom.id ?? rom.path} onClick={() => setCurrentRom(rom)} />
-          ))}
+  const roms = groupedRoms[currentSystem]
+
+  return (
+    <>
+      <div className='w-full overflow-auto'>
+        <div className='flex flex-nowrap'>
+          {systems
+            .filter((system) => groupedRoms[system.name]?.length)
+            .map((system) => (
+              <div
+                role='button'
+                className={classNames('flex shrink-0 items-center justify-center border border-red-600 px-3 py-2', {
+                  'bg-red-600 text-white': system.name === currentSystem,
+                })}
+                key={system.name}
+                aria-hidden='true'
+                onClick={() => setCurrentSystem(system.name)}
+              >
+                {system.fullName}
+              </div>
+            ))}
         </div>
-        {currentRom && <EmulatorWrapper rom={currentRom} onExit={() => setCurrentRom(false)} />}
-      </>
-    )
-  }
-  return <StartButtons onSelectFiles={onSelectFiles} onSelectFile={onSelectFile} />
+      </div>
+      <div className='m-auto flex min-h-screen flex-wrap items-start'>
+        {roms?.map((rom) => (
+          <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />
+        ))}
+      </div>
+      {currentRom && <EmulatorWrapper rom={currentRom} onExit={() => setCurrentRom(false)} />}
+    </>
+  )
 }

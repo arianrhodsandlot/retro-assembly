@@ -56,7 +56,7 @@ export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.M
         'relative aspect-square w-[12.5%] transform-gpu overflow-hidden border-white text-left transition-transform',
         gameImageStatus.loading
           ? 'scale-[98%]'
-          : 'hover:z-10 hover:scale-125 hover:rounded-sm hover:border-4 hover:shadow-md'
+          : 'hover:z-10 hover:scale-110 hover:rounded-sm hover:border-4 hover:shadow-md'
       )}
     >
       {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}

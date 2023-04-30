@@ -29,9 +29,6 @@ export class OneDriveCloudProvider implements CloudProvider {
       authProvider(done) {
         done(undefined, getJson('onedrive').access_token)
       },
-      fetchOptions: {
-        redirect: 'manual',
-      },
     })
 
     this.dectectRedirect()
@@ -98,12 +95,28 @@ export class OneDriveCloudProvider implements CloudProvider {
     updateJson('onedrive', result)
   }
 
+  private static async wrapRequest(request: any) {
+    try {
+      return await request()
+    } catch (error: any) {
+      if (error.code === 'InvalidAuthenticationToken') {
+        await OneDriveCloudProvider.refreshToken()
+        return await request()
+      }
+      throw error
+    }
+  }
+
   async downloadFile(path: string) {
-    const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.api(`/me/drive/root:${path}`).get()
+    const request = this.client.api(`/me/drive/root:${path}`)
+    const { '@microsoft.graph.downloadUrl': downloadUrl } = await OneDriveCloudProvider.wrapRequest(() => request.get())
     return await ky(downloadUrl).blob()
   }
 
   async listDirFilesRecursely(path: string) {
+    if (localStorage.remoteFiles) {
+      return JSON.parse(localStorage.remoteFiles)
+    }
     const files: RemoteFile[] = []
 
     const list = async (path: string) => {
@@ -133,7 +146,7 @@ export class OneDriveCloudProvider implements CloudProvider {
     let top = 200
     do {
       const request = this.client.api(apiPath).top(top).skipToken(skipToken)
-      const result = await request.get()
+      const result = await OneDriveCloudProvider.wrapRequest(() => request.get())
       children.push(...result.value)
 
       const nextLink = result['@odata.nextLink']

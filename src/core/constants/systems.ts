@@ -1,5 +1,3 @@
-export const systems = ['nes', 'megadrive', 'vb', 'gb', 'gbc', 'gba', 'gamegear']
-
 type SystemName =
   | '32x'
   | 'gamegear'

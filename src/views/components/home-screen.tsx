@@ -1,8 +1,10 @@
-import { useState } from 'react'
-import { Rom } from '../../core'
+import { useEffect, useState } from 'react'
+import { OneDriveCloudProvider, Rom } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 import StartButtons from './start-buttons'
+
+const oneDrive = OneDriveCloudProvider.get()
 
 export default function HomeScreen() {
   const [roms, setRoms] = useState<Rom[]>()
@@ -21,10 +23,15 @@ export default function HomeScreen() {
     }
   }
 
-  function onSelectOneDriveFile(remoteItems: string[]) {
-    const roms = Rom.fromOneDrivePaths(remoteItems)
-    setRoms(roms)
-  }
+  useEffect(() => {
+    ;(async () => {
+      const selectedDir = '/test-roms/'
+      const remoteFiles = await oneDrive.listDirFilesRecursely(selectedDir)
+      const roms = Rom.fromOneDrivePaths(remoteFiles)
+      console.log(remoteFiles, roms)
+      setRoms(roms)
+    })()
+  }, [])
 
   if (roms) {
     return (
@@ -38,11 +45,5 @@ export default function HomeScreen() {
       </>
     )
   }
-  return (
-    <StartButtons
-      onSelectFiles={onSelectFiles}
-      onSelectFile={onSelectFile}
-      onSelectOneDriveFile={onSelectOneDriveFile}
-    />
-  )
+  return <StartButtons onSelectFiles={onSelectFiles} onSelectFile={onSelectFile} />
 }

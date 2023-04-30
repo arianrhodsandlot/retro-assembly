@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { type Rom, getCover } from '../../core'
 import GameEntryImage from './game-entry-image'
 

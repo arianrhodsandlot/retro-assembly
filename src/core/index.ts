@@ -1,5 +1,6 @@
 export * from './classes/emulator'
 export * from './classes/rom'
+export * from './classes/onedrive-cloud-provider'
 export * from './constants/systems'
 export * from './helpers/gamepad'
 export * from './helpers/file'

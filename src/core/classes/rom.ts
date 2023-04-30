@@ -9,25 +9,26 @@ const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 
 const oneDrive = OneDriveCloudProvider.get()
 
+interface RomFile {
+  name: string
+  path: string
+  isLocal: boolean
+  blob: Blob | undefined
+}
+
 export class Rom {
   id = ''
-  fileName = ''
-  isLocalFile = true
-  path = ''
+  file: RomFile = { name: '', path: '', isLocal: false, blob: undefined }
+
   system = ''
-  blob: Blob
   goodCode: GoodCodeResult
   gameInfo: any
 
   readyPromise: Promise<void>
 
-  private constructor({ fileName, path, blob, isLocalFile }) {
-    this.fileName = fileName
-    this.path = path
-    this.goodCode = parseGoodCode(fileName)
-    this.isLocalFile = isLocalFile
-    this.blob = blob
-
+  private constructor(romFile: RomFile) {
+    this.file = romFile
+    this.goodCode = parseGoodCode(romFile.name)
     this.readyPromise = this.load()
   }
 
@@ -44,35 +45,28 @@ export class Rom {
 
   static fromFile(file: File) {
     if (Rom.isValidFileName(file.name)) {
-      const rom = new Rom({
-        blob: file,
-        fileName: file.name,
-        path: file.webkitRelativePath ?? '',
-        isLocalFile: true,
-      })
-      rom.id = rom.path || rom.fileName
+      const romFile: RomFile = { name: file.name, path: file.webkitRelativePath ?? '', isLocal: true, blob: file }
+      const rom = new Rom(romFile)
+      rom.id = rom.file.path || rom.file.name
       return rom
     }
   }
 
   static fromOneDrivePaths(remoteItems: any[]) {
-    const roms = []
+    const roms: Rom[] = []
     for (const remoteItem of remoteItems) {
-      if (Rom.isValidFileName(remoteItem.fileName)) {
-        const rom = new Rom({
-          fileName: remoteItem.fileName,
-          path: remoteItem.path ?? '',
-          isLocalFile: false,
-        })
-        rom.id = rom.path || rom.fileName
+      if (Rom.isValidFileName(remoteItem.name)) {
+        const romFile: RomFile = { name: remoteItem.name, path: remoteItem.path ?? '', blob: undefined, isLocal: false }
+        const rom = new Rom(romFile)
+        rom.id = rom.file.path || rom.file.name
         roms.push(rom)
       }
     }
     return roms
   }
 
-  private static isValidFileName(fileName: string) {
-    const ext = fileName.split('.').at(-1)
+  private static isValidFileName(name: string) {
+    const ext = name.split('.').at(-1)
     return ext && allowedExtensions.has(ext)
   }
 
@@ -86,14 +80,12 @@ export class Rom {
   }
 
   async getBlob() {
-    if (this.blob) {
-      return this.blob
+    if (this.file.isLocal) {
+      return this.file.blob as Blob
     }
-    if (!this.isLocalFile) {
-      const blob = await oneDrive.download(this.path)
-      this.blob = blob
-      return blob
-    }
+    const blob = await oneDrive.downloadFile(this.file.path)
+    this.file.blob = blob
+    return blob
   }
 
   async updateGameInfo() {
@@ -101,31 +93,31 @@ export class Rom {
       await this.updateSystem()
     }
     const gameInfo = await GamesDatabase.queryByFileNameFromSystem({
-      fileName: this.fileName,
+      fileName: this.file.name,
       system: this.system,
     })
     this.gameInfo = gameInfo
   }
 
   async updateSystem() {
-    if (!this.fileName) {
+    if (!this.file.name) {
       throw new Error('Invalid file')
     }
 
     let system = this.guessSystemByPath() || this.guessSystemByFileName()
-    if (!system && this.isLocalFile && this.fileName.endsWith('.zip')) {
+    if (!system && this.file.isLocal && this.file.name.endsWith('.zip')) {
       system = await this.guessSystemByExtractedContent()
     }
 
     if (!system) {
-      throw new Error(`Unknown system for ${this.fileName}`)
+      throw new Error(`Unknown system for ${this.file.name}`)
     }
 
     this.system = system
   }
 
-  private guessSystemByFileName(fileName: string = this.fileName) {
-    const extname = fileName.split('.').pop()
+  private guessSystemByFileName(name: string = this.file.name) {
+    const extname = name.split('.').pop()
     if (!extname) {
       return ''
     }
@@ -133,10 +125,10 @@ export class Rom {
   }
 
   private async guessSystemByExtractedContent() {
-    if (!this.blob) {
+    if (!this.file.blob) {
       return ''
     }
-    const blobReader = new BlobReader(this.blob)
+    const blobReader = new BlobReader(this.file.blob)
     const zipReader = new ZipReader(blobReader)
     try {
       const entries = await zipReader.getEntries()
@@ -154,11 +146,11 @@ export class Rom {
 
   private guessSystemByPath() {
     const systems = Object.keys(systemCoreMap).sort((core1, core2) => core2.length - core1.length)
-    if (!this.path) {
+    if (!this.file.path) {
       return
     }
     for (const system of systems) {
-      if (this.path.includes(system)) {
+      if (this.file.path.includes(system)) {
         return system
       }
     }

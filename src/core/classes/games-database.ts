@@ -1,18 +1,17 @@
-import { parse } from 'goodcodes-parser'
 import { camelCase, isEqual, pick } from 'lodash-es'
 import { systemFullNameMap } from '../constants/systems'
+import { parseGoodCode } from '../helpers/misc'
 
 function normalizeGameName(originalName: string) {
-  // workaround for https://github.com/jbdemonte/goodcodes-parser/issues/13
-  let name = parse(`0 - ${originalName}`).rom
+  let name = parseGoodCode(originalName).rom
   name = camelCase(name).toLowerCase()
   return name
 }
 
 function isSimilarName(name1: string, name2: string) {
   const comparePropNames = ['contries', 'languages', 'revision', 'versions']
-  const { codes: codes1 } = parse(name1)
-  const { codes: codes2 } = parse(name2)
+  const { codes: codes1 } = parseGoodCode(name1)
+  const { codes: codes2 } = parseGoodCode(name2)
   const props1 = pick(codes1, comparePropNames)
   const props2 = pick(codes2, comparePropNames)
   return isEqual(props1, props2)

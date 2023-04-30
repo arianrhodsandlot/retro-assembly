@@ -9,8 +9,19 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
+interface RemoteFile {
+  name: string
+  dir: string
+  path: string
+}
+
+interface CloudProvider {
+  downloadFile: (path: string) => Promise<Blob>
+  listDirFilesRecursely: (path: string) => Promise<RemoteFile[]>
+}
+
 let onedriveCloudProvider
-export class OneDriveCloudProvider {
+export class OneDriveCloudProvider implements CloudProvider {
   client: Client
 
   constructor() {
@@ -70,7 +81,7 @@ export class OneDriveCloudProvider {
   }
 
   static async refreshToken() {
-    const refreshToken = getJson('onedrive').access_token
+    const refreshToken = getJson('onedrive').refresh_token
     if (!refreshToken) {
       return
     }
@@ -78,26 +89,65 @@ export class OneDriveCloudProvider {
       .post(tokenUrl, {
         body: new URLSearchParams({
           client_id: clientId,
-          redirect_uri: redirectUri,
+          refresh_token: refreshToken,
           grant_type: 'refresh_token',
           code_verifier: codeChallenge,
-          refresh_token: refreshToken,
         }),
       })
       .json<any>()
     updateJson('onedrive', result)
   }
 
-  async download(path: string) {
+  async downloadFile(path: string) {
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.api(`/me/drive/root:${path}`).get()
     return await ky(downloadUrl).blob()
   }
 
-  async listDir(path = '/') {
-    if (path === '/') {
-      return await this.client.api('/me/drive/root/children').get()
+  async listDirFilesRecursely(path: string) {
+    const files: RemoteFile[] = []
+
+    const list = async (path: string) => {
+      const children = await this.listDir(path)
+      for (const child of children) {
+        if (child.folder?.childCount) {
+          const childParentPath = child.parentReference.path.replace(/^\/drive\/root:/, '')
+          const childPath = `${childParentPath}/${child.name}`
+          await list(childPath)
+        } else if (child.file) {
+          const dir = child.parentReference.path.replace(/^\/drive\/root:/, '')
+          files.push({ name: child.name, path: `${dir}/${child.name}`, dir })
+        }
+      }
     }
-    return await this.client.api(`/me/drive/root:${path}:/children`).get()
+
+    await list(path)
+
+    return files
+  }
+
+  private async listDir(path = '/') {
+    const children: any[] = []
+
+    let apiPath = path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
+    let skipToken = ''
+    let top = 200
+    do {
+      const request = this.client.api(apiPath).top(top).skipToken(skipToken)
+      const result = await request.get()
+      children.push(...result.value)
+
+      const nextLink = result['@odata.nextLink']
+      if (nextLink) {
+        const { url, query } = queryString.parseUrl(nextLink)
+        apiPath = new URL(url).pathname.replace('/v1.0', '')
+        skipToken = query.$skipToken ? `${query.$skipToken}` : ''
+        top = Number.parseInt(`${query.$top}`, 10) ?? top
+      } else {
+        apiPath = ''
+      }
+    } while (apiPath)
+
+    return children
   }
 
   private dectectRedirect() {

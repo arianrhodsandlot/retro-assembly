@@ -3,6 +3,10 @@ import path from 'node:path'
 import { Libretrodb } from 'libretrodb'
 
 const enabledSystems = [
+  'Atari - 2600',
+  'Atari - 5200',
+  'Atari - 7800',
+  'Atari - Lynx',
   'Sega - 32X',
   'Handheld Electronic Game',
   'Sega - Game Gear',

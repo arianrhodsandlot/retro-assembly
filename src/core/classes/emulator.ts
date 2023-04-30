@@ -195,7 +195,7 @@ export class Emulator {
 
     if (this.rom) {
       const blob = await this.rom.getBlob()
-      const { fileName } = this.rom
+      const fileName = this.rom.file.name
       const uint8Array = await readBlobAsUint8Array(blob)
       FS.createDataFile('/', fileName, uint8Array, true, false)
       const data = FS.readFile(fileName, { encoding: 'binary' })
@@ -271,7 +271,7 @@ export class Emulator {
     const { Module } = this.emscripten
     const raArgs: string[] = []
     if (this.rom) {
-      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileName}`)
+      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.file.name}`)
     }
     Module.callMain(raArgs)
     // Module.resumeMainLoop()

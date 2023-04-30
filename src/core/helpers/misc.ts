@@ -11,6 +11,8 @@ export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxa
     return ''
   }
 
+  return ''
+
   const typeUrlPart = `Named_${capitalize(type)}s`
   return `https://thumbnails.libretro.com/${encodeURIComponent(systemFullName)}/${encodeURIComponent(
     typeUrlPart

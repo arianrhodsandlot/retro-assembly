@@ -14,6 +14,10 @@ type SystemName =
   | 'sms'
   | 'snes'
   | 'vb'
+  | 'atari2600'
+  | 'atari5200'
+  | 'atari7800'
+  | 'atarilynx'
 
 type CoreName =
   | 'beetle_vb'
@@ -27,6 +31,10 @@ type CoreName =
   | 'pcsx2'
   | 'picodrive'
   | 'snes9x'
+  | 'stella'
+  | 'atari800'
+  | 'prosystem'
+  | 'beetle_lynx'
 
 export const systemFullNameMap: Record<SystemName, string> = {
   '32x': 'Sega - 32X',
@@ -42,6 +50,10 @@ export const systemFullNameMap: Record<SystemName, string> = {
   sms: 'Sega - Master System - Mark III',
   snes: 'Nintendo - Super Nintendo Entertainment System',
   vb: 'Nintendo - Virtual Boy',
+  atari2600: 'Atari - 2600',
+  atari5200: 'Atari - 5200',
+  atari7800: 'Atari - 7800',
+  atarilynx: 'Atari - lynx',
 }
 
 export const systemCoreMap: Record<SystemName, CoreName> = {
@@ -58,6 +70,10 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   sms: 'genesis_plus_gx',
   snes: 'snes9x',
   vb: 'beetle_vb',
+  atari2600: 'stella',
+  atari5200: 'atari800',
+  atari7800: 'prosystem',
+  atarilynx: 'beetle_lynx',
 }
 
 export const extSystemMap: Record<string, SystemName> = {
@@ -77,4 +93,8 @@ export const extSystemMap: Record<string, SystemName> = {
   unif: 'nes',
   vb: 'vb',
   vboy: 'vb',
+  a26: 'atari2600',
+  a52: 'atari5200',
+  a78: 'atari7800',
+  lnx: 'atarilynx',
 }

@@ -7,5 +7,3 @@ export async function readBlobAsUint8Array(file: Blob) {
     })
   })
 }
-
-export function listRemoteRoms() {}

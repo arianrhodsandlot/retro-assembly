@@ -93,6 +93,10 @@ export class Emulator {
     return `${raUserdataDir}states/${baseName}.state`
   }
 
+  private get stateThumbnailFileName() {
+    return `${this.stateFileName}.png`
+  }
+
   async launch() {
     if (this.rom) {
       await this.rom.ready()
@@ -137,14 +141,29 @@ export class Emulator {
 
   async saveState() {
     this.clearStateFile()
-    if (this.emscripten) {
-      const { Module } = this.emscripten
-      Module._cmd_save_state()
-      const buffer = await this.waitForEmscriptenFile(this.stateFileName)
-      this.clearStateFile()
-      if (buffer) {
-        return new Blob([buffer])
-      }
+    if (!this.rom || !this.emscripten) {
+      return
+    }
+    const { Module } = this.emscripten
+    Module._cmd_save_state()
+    const shouldSaveThumbnail = true
+    let stateBuffer: Buffer
+    let stateThumbnailBuffer: Buffer | undefined
+    if (shouldSaveThumbnail) {
+      ;[stateBuffer, stateThumbnailBuffer] = await Promise.all([
+        this.waitForEmscriptenFile(this.stateFileName),
+        this.waitForEmscriptenFile(this.stateThumbnailFileName),
+      ])
+    } else {
+      stateBuffer = await this.waitForEmscriptenFile(this.stateFileName)
+    }
+    this.clearStateFile()
+    return {
+      name: this.rom?.file.name,
+      core: this.core,
+      createTime: Date.now(),
+      blob: new Blob([stateBuffer]),
+      thumbnailBlob: stateThumbnailBuffer ? new Blob([stateThumbnailBuffer]) : undefined,
     }
   }
 
@@ -190,22 +209,22 @@ export class Emulator {
   private clearStateFile() {
     try {
       FS.unlink(this.stateFileName)
+      FS.unlink(this.stateThumbnailFileName)
     } catch {}
   }
 
   private async waitForEmscriptenFile(fileName) {
-    // wait for the state file to be saved
     let buffer
     let maxRetries = 100
     let isFinished = false
     while ((maxRetries -= 1) && !isFinished) {
-      await delay(3)
+      await delay(40)
       try {
         const newBuffer = FS.readFile(fileName).buffer
         isFinished = buffer?.byteLength > 0 && buffer?.byteLength === newBuffer.byteLength
         buffer = newBuffer
       } catch (error) {
-        console.error(error)
+        console.warn(error)
       }
     }
     return buffer
@@ -318,6 +337,9 @@ export class Emulator {
       rgui_menu_color_theme: 4,
       // rgui_particle_effect: 3,
       rgui_show_start_screen: false,
+      savestate_file_compression: true,
+      savestate_thumbnail_enable: true,
+      save_file_compression: true,
 
       input_rewind_btn: 6, // L2
       // input_hold_fast_forward_btn: 7, // R2

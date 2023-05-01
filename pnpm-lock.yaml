@@ -16,8 +16,11 @@ dependencies:
   classnames:
     specifier: 2.3.2
     version: 2.3.2
+  date-fns:
+    specifier: 2.30.0
+    version: 2.30.0
   delay:
-    specifier: ^5.0.0
+    specifier: 5.0.0
     version: 5.0.0
   goodcodes-parser:
     specifier: 2.5.0
@@ -29,11 +32,8 @@ dependencies:
     specifier: 3.6.4
     version: 3.6.4
   ky:
-    specifier: ^0.33.3
+    specifier: 0.33.3
     version: 0.33.3
-  libretrodb:
-    specifier: 1.0.0
-    version: 1.0.0
   lodash-es:
     specifier: 4.17.21
     version: 4.17.21
@@ -41,11 +41,8 @@ dependencies:
     specifier: 6.1.0
     version: 6.1.0
   query-string:
-    specifier: ^8.1.0
+    specifier: 8.1.0
     version: 8.1.0
-  randomstring:
-    specifier: ^1.2.3
-    version: 1.2.3
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -76,7 +73,7 @@ devDependencies:
     specifier: 4.17.7
     version: 4.17.7
   '@types/randomstring':
-    specifier: ^1.1.8
+    specifier: 1.1.8
     version: 1.1.8
   '@types/react':
     specifier: 18.2.0
@@ -90,6 +87,9 @@ devDependencies:
   autoprefixer:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.23)
+  libretrodb:
+    specifier: 1.0.0
+    version: 1.0.0
   node-7z:
     specifier: 3.0.0
     version: 3.0.0
@@ -1009,11 +1009,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /array-uniq@1.0.2:
-    resolution: {integrity: sha512-GVYjmpL05al4dNlKJm53mKE4w9OOLiuVHWorsIA3YVz+Hu0hcn6PtE3Ydl0EqU7v+7ABC4mjjWsnLUxbpno+CA==}
-    engines: {node: '>=0.10.0'}
-    dev: false
-
   /array.prototype.flat@1.3.1:
     resolution: {integrity: sha512-roTU0KWIOmJ4DRLmwKd19Otg0/mT3qPNt0Qb3GWW8iObuZXxrjB/pzn0R3hqpRSWg4HCwqx+0vwOnWnvlOyeIA==}
     engines: {node: '>= 0.4'}
@@ -1306,6 +1301,13 @@ packages:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
     dev: true
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.21.0
+    dev: false
 
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -2731,7 +2733,7 @@ packages:
 
   /libretrodb@1.0.0:
     resolution: {integrity: sha512-o8WJ5iR2nyA7JOVZT/HV0xHp+paHw1jqjLMc875HQrYVEP4GaQS0ZlzGNunOjSth0hdUpV+X8YD8L3/cUsx6Eg==}
-    dev: false
+    dev: true
 
   /lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
@@ -3359,18 +3361,6 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
-
-  /randombytes@2.0.3:
-    resolution: {integrity: sha512-lDVjxQQFoCG1jcrP06LNo2lbWp4QTShEXnhActFBwYuHprllQV6VUpwreApsYqCgD+N1mHoqJ/BI/4eV4R2GYg==}
-    dev: false
-
-  /randomstring@1.2.3:
-    resolution: {integrity: sha512-3dEFySepTzp2CvH6W/ASYGguPPveBuz5MpZ7MuoUkoVehmyNl9+F9c9GFVrz2QPbM9NXTIHGcmJDY/3j4677kQ==}
-    hasBin: true
-    dependencies:
-      array-uniq: 1.0.2
-      randombytes: 2.0.3
-    dev: false
 
   /react-content-loader@6.2.1(react@18.2.0):
     resolution: {integrity: sha512-6ONbFX+Hi3SHuP66JB8CPvJn372pj+qwltJV0J8z/8MFrq98I1cbFdZuhDWeQXu3CFxiiDTXJn7DFxx2ZvrO7g==}

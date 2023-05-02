@@ -1,6 +1,11 @@
 import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import { Emulator, type Rom, offPressButtons, onPressButtons } from '../../core'
+import { OneDriveCloudProvider } from '../../core'
+import { EmulatorContext } from '../lib/contexts'
+import { StatesList } from './states-list'
+
+const onedrive = OneDriveCloudProvider.get()
 
 const emulatorStyle: Partial<CSSStyleDeclaration> = {
   position: 'absolute',
@@ -11,10 +16,13 @@ const emulatorStyle: Partial<CSSStyleDeclaration> = {
 }
 
 const menuHotButtons = ['l3', 'r3']
+
 export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: () => void }) {
   const emulatorRef = useRef<Emulator>()
   const [isPaused, setIsPaused] = useState(false)
   const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)
+
+  const shouldShowStatesList = Boolean(rom.file.name && emulatorRef.current?.core)
 
   useEffect(() => {
     function toggleMenu() {
@@ -89,16 +97,29 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
     onExit?.()
   }
 
+  async function saveState() {
+    const state = await emulatorRef.current?.saveState()
+    if (state) {
+      await onedrive.uploadState(state)
+    }
+  }
+
   return (
     <div
-      className={classNames('absolute left-0 top-0 z-30 flex h-full w-full flex-col', {
+      className={classNames('absolute left-0 top-0 z-30 flex h-full w-full flex-col text-white', {
         hidden: !showEmulatorControllMenu,
       })}
     >
       <div className='flex-1 bg-gradient-to-t from-black/90 to-black/0' />
-      <div className='bottom-0 flex h-40 w-full justify-around bg-gradient-to-t from-black to-black/90 text-white '>
+      {shouldShowStatesList && (
+        <EmulatorContext.Provider value={emulatorRef.current}>
+          <StatesList name={rom.file.name} />
+        </EmulatorContext.Provider>
+      )}
+      <div className='bottom-0 flex h-40 w-full justify-around bg-gradient-to-t from-black to-black/90'>
         {isPaused ? <button onClick={start}>start</button> : <button onClick={pause}>pause</button>}
         <button onClick={fullscreen}>fullscreen</button>
+        <button onClick={saveState}>save state</button>
         <button onClick={exit}>exit</button>
       </div>
     </div>

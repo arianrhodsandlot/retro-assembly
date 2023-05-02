@@ -1,7 +1,6 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { lightFormat, parse, toDate } from 'date-fns'
 import ky from 'ky'
-import { pull } from 'lodash-es'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../constants/auth'
 import { getJson, replaceJson, updateJson } from '../helpers/local-storage'
@@ -26,7 +25,7 @@ interface CloudProvider {
 
 let onedriveCloudProvider
 export class OneDriveCloudProvider implements CloudProvider {
-  client: Client
+  private client: Client
 
   private constructor() {
     this.client = Client.init({
@@ -160,6 +159,14 @@ export class OneDriveCloudProvider implements CloudProvider {
     await OneDriveCloudProvider.wrapRequest(() => request.put(file))
   }
 
+  async deleteFile(path: string) {
+    if (!path) {
+      return
+    }
+    const request = this.client.api(`/me/drive/root:${path}`)
+    await OneDriveCloudProvider.wrapRequest(() => request.delete())
+  }
+
   async uploadState(state) {
     const { core, name, createTime, blob, thumbnailBlob } = state
     const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
@@ -201,6 +208,15 @@ export class OneDriveCloudProvider implements CloudProvider {
     }
 
     return states
+  }
+
+  async deleteState({ core, name, createTime }) {
+    const stateBaseFileName = createTime
+    const stateDirPath = `/test-roms/retro-assembly/states/${core}/${name}/`
+    await Promise.allSettled([
+      this.deleteFile(`${stateDirPath}${stateBaseFileName}.state`),
+      this.deleteFile(`${stateDirPath}${stateBaseFileName}.png`),
+    ])
   }
 
   private async listDir(path = '/') {

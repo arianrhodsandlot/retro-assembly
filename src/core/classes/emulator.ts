@@ -177,7 +177,6 @@ export class Emulator {
       await this.waitForEmscriptenFile(this.stateFileName)
       Module._cmd_load_state()
     }
-    this.clearStateFile()
   }
 
   exit(statusCode = 0) {

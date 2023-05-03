@@ -7,9 +7,9 @@ function loginWithOnedrive() {
 export default function StartButtons({ onSelectFiles }: { onSelectFiles: (roms: File[]) => void }) {
   async function selectDir() {
     try {
-      const local = LocalProvider.getSingleton()
+      const local = await LocalProvider.getSingleton()
       window.l = local
-      console.log(local)
+      onSelectFiles(local.files)
     } catch {}
   }
 

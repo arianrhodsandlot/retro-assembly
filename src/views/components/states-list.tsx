@@ -1,10 +1,8 @@
 import classNames from 'classnames'
 import { isThisYear, isToday, lightFormat } from 'date-fns'
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { OneDriveCloudProvider } from '../../core'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { CoreStateManager } from '../../core'
 import { EmulatorContext } from '../lib/contexts'
-
-const onedrive = OneDriveCloudProvider.get()
 
 function humanizeDate(date: Date) {
   if (isToday(date)) {
@@ -19,24 +17,31 @@ function humanizeDate(date: Date) {
 export function StatesList({ name }) {
   const [states, setStates] = useState<any[]>()
   const [pending, setPending] = useState(false)
+  const coreStateManagerRef = useRef()
 
   const emulator = useContext(EmulatorContext)
+
+  useEffect(() => {
+    coreStateManagerRef.current = new CoreStateManager({
+      core: emulator?.core,
+      name: emulator?.rom?.file.name,
+      directory: 'retro-assembly/states/',
+      fileSystemProvider: window.l,
+    })
+  }, [])
 
   const fetchStates = useCallback(
     async function () {
       if (!emulator) {
         return
       }
-
-      const { core } = emulator
-      const states = await onedrive.getStates({ name, core })
-
+      const states = await coreStateManagerRef.current.getStates()
       setStates(states)
     },
-    [emulator, name]
+    [emulator]
   )
 
-  async function loadState(path) {
+  async function loadState(stateId: string) {
     if (pending) {
       return
     }
@@ -46,7 +51,7 @@ export function StatesList({ name }) {
     setPending(true)
 
     try {
-      const state = await onedrive.getFileContent(path)
+      const state = await coreStateManagerRef.current.getStateContent(stateId)
       await emulator?.loadState(state)
     } catch (error) {
       console.warn(error)
@@ -69,9 +74,9 @@ export function StatesList({ name }) {
         {states?.map((state) => (
           <div
             className='mx-3 overflow-hidden'
-            key={state.createTime}
+            key={state.id}
             role='button'
-            onClick={() => loadState(state.path)}
+            onClick={() => loadState(state.id)}
             aria-hidden
           >
             <div className='h-40 w-40 overflow-hidden rounded-lg border-2 border-white'>
@@ -85,7 +90,7 @@ export function StatesList({ name }) {
                 <div className='flex h-full w-full items-center justify-center'>No Image</div>
               )}
             </div>
-            {humanizeDate(state.createTime)}
+            {state.createTime.humanized}
           </div>
         ))}
       </div>

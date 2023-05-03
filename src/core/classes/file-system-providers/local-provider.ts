@@ -1,4 +1,4 @@
-import { initial, last } from 'lodash-es'
+import { initial, last, tail } from 'lodash-es'
 import { type FileSummary, type FileSystemProvider } from './file-system-provider'
 
 export class LocalProvider implements FileSystemProvider {
@@ -7,22 +7,25 @@ export class LocalProvider implements FileSystemProvider {
 
   private constructor() {
     this.files = []
-    this.load()
   }
 
-  static getSingleton() {
-    return new LocalProvider()
+  static async getSingleton() {
+    const local = new LocalProvider()
+    await local.load()
+    return local
   }
 
   async listDirFilesRecursely(path: string) {
     const files: FileSummary[] = []
     for (const file of this.files) {
-      if (file.webkitRelativePath.startsWith(path)) {
+      const rawRelativePathSegments = file.webkitRelativePath.split('/')
+      const relativePath = tail(rawRelativePathSegments).join('/')
+      if (relativePath.startsWith(path)) {
         const fileSummary: FileSummary = {
           name: file.name,
-          dir: file.webkitRelativePath,
-          path: file.webkitRelativePath,
-          downloadUrl: '',
+          dir: relativePath,
+          path: relativePath,
+          downloadUrl: URL.createObjectURL(file),
         }
         files.push(fileSummary)
       }
@@ -32,7 +35,9 @@ export class LocalProvider implements FileSystemProvider {
 
   async getFileContent(path: string) {
     for (const file of this.files) {
-      if (file.webkitRelativePath === path) {
+      const rawRelativePathSegments = file.webkitRelativePath.split('/')
+      const relativePath = tail(rawRelativePathSegments).join('/')
+      if (relativePath === path) {
         const arrayBuffer = await file.arrayBuffer()
         const blob = new Blob([arrayBuffer])
         if (blob) {
@@ -47,6 +52,7 @@ export class LocalProvider implements FileSystemProvider {
   async createFile({ file, path }: { file: Blob; path: string }) {
     const fileHandle = await this.getFileHandle({ path, create: true })
     if (fileHandle) {
+      // @ts-expect-error "createWritable" is not listed in typescript's declaration files
       const writableStream = await fileHandle.createWritable()
       try {
         await writableStream.write(file)
@@ -58,6 +64,7 @@ export class LocalProvider implements FileSystemProvider {
 
   async deleteFile(path: string) {
     const fileHandle = await this.getFileHandle({ path, create: true })
+    // @ts-expect-error "remove" is not listed in typescript's declaration files
     await fileHandle?.remove()
   }
 

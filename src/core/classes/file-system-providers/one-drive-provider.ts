@@ -1,5 +1,4 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import { lightFormat, parse, toDate } from 'date-fns'
 import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
@@ -10,7 +9,6 @@ const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/autho
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
-const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
 
 let onedriveCloudProvider
 export class OneDriveProvider implements FileSystemProvider {
@@ -154,58 +152,6 @@ export class OneDriveProvider implements FileSystemProvider {
     }
     const request = this.client.api(`/me/drive/root:${path}`)
     await OneDriveProvider.wrapRequest(() => request.delete())
-  }
-
-  async uploadState(state) {
-    const { core, name, createTime, blob, thumbnailBlob } = state
-    const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
-    const stateDirPath = `/test-roms/retro-assembly/states/${core}/${name}/`
-    await Promise.all([
-      this.createFile({ file: blob, path: `${stateDirPath}${stateBaseFileName}.state` }),
-      this.createFile({ file: thumbnailBlob, path: `${stateDirPath}${stateBaseFileName}.png` }),
-    ])
-  }
-
-  async getStates({ name, core }) {
-    const stateDirPath = `/test-roms/retro-assembly/states/${core}/${name}/`
-    const children = await this.listDirFilesRecursely(stateDirPath)
-    const states: any = []
-    const thumbnailMap: Record<string, string> = {}
-
-    for (const child of children) {
-      const [base, ext] = child.name.split('.')
-      const createTime = parse(base, stateCreateTimeFormat, new Date())
-      if (createTime) {
-        if (ext === 'state') {
-          const state = {
-            core,
-            name,
-            createTime,
-            path: child.path,
-            thumbnailUrl: '',
-          }
-          states.push(state)
-        } else if (ext === 'png') {
-          thumbnailMap[base] = child.downloadUrl
-        }
-      }
-    }
-
-    for (const state of states) {
-      const key = lightFormat(state.createTime, stateCreateTimeFormat)
-      state.thumbnailUrl = thumbnailMap[key] ?? state.thumbnailUrl
-    }
-
-    return states
-  }
-
-  async deleteState({ core, name, createTime }) {
-    const stateBaseFileName = createTime
-    const stateDirPath = `/test-roms/retro-assembly/states/${core}/${name}/`
-    await Promise.allSettled([
-      this.deleteFile(`${stateDirPath}${stateBaseFileName}.state`),
-      this.deleteFile(`${stateDirPath}${stateBaseFileName}.png`),
-    ])
   }
 
   private async listDir(path = '/') {

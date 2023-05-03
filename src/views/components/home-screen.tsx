@@ -22,14 +22,6 @@ export default function HomeScreen() {
     setCurrentSystem(currentSystem)
   }
 
-  function onSelectFile(file: File) {
-    const rom = Rom.fromFile(file)
-    if (rom) {
-      setRoms([rom])
-      setCurrentRom(rom)
-    }
-  }
-
   useEffect(() => {
     if (localStorage.getItem('provider') === 'onedrive') {
       ;(async () => {
@@ -67,7 +59,7 @@ export default function HomeScreen() {
             ))}
         </div>
       </div>
-      {!currentSystem && <StartButtons {...{ onSelectFile, onSelectFiles }}></StartButtons>}
+      {!currentSystem && <StartButtons onSelectFiles={onSelectFiles}></StartButtons>}
       <div className='m-auto flex min-h-screen flex-wrap items-start'>
         {roms?.map((rom) => (
           <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />

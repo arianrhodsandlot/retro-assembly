@@ -1,11 +1,8 @@
 import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import { Emulator, type Rom, offPressButtons, onPressButtons } from '../../core'
-import { OneDriveProvider } from '../../core'
+import { CoreStateManager, Emulator, type Rom, offPressButtons, onPressButtons } from '../../core'
 import { EmulatorContext } from '../lib/contexts'
 import { StatesList } from './states-list'
-
-const onedrive = OneDriveProvider.get()
 
 const emulatorStyle: Partial<CSSStyleDeclaration> = {
   position: 'absolute',
@@ -100,7 +97,13 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
   async function saveState() {
     const state = await emulatorRef.current?.saveState()
     if (state) {
-      await onedrive.uploadState(state)
+      const coreStateManager = new CoreStateManager({
+        core: emulatorRef.current?.core,
+        name: emulatorRef.current?.rom?.file.name,
+        directory: 'retro-assembly/states/',
+        fileSystemProvider: window.l,
+      })
+      await coreStateManager.createState(state)
     }
   }
 

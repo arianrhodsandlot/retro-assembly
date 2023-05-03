@@ -1,5 +1,3 @@
-const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
-
 export interface FileSummary {
   name: string
   dir: string

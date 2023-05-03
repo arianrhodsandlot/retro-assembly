@@ -2,8 +2,9 @@ import { Client } from '@microsoft/microsoft-graph-client'
 import { lightFormat, parse, toDate } from 'date-fns'
 import ky from 'ky'
 import queryString from 'query-string'
-import { oneDriveAuth } from '../constants/auth'
-import { getJson, replaceJson, updateJson } from '../helpers/local-storage'
+import { oneDriveAuth } from '../../constants/auth'
+import { getJson, replaceJson, updateJson } from '../../helpers/local-storage'
+import { type FileSummary, type FileSystemProvider } from './file-system-provider'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
@@ -11,20 +12,8 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
 
-interface RemoteFile {
-  name: string
-  dir: string
-  path: string
-  downloadUrl: string
-}
-
-interface CloudProvider {
-  getFileContent: (path: string) => Promise<Blob>
-  listDirFilesRecursely: (path: string) => Promise<RemoteFile[]>
-}
-
 let onedriveCloudProvider
-export class OneDriveCloudProvider implements CloudProvider {
+export class OneDriveProvider implements FileSystemProvider {
   private client: Client
 
   private constructor() {
@@ -37,11 +26,11 @@ export class OneDriveCloudProvider implements CloudProvider {
 
   static get() {
     if (onedriveCloudProvider) {
-      return onedriveCloudProvider as OneDriveCloudProvider
+      return onedriveCloudProvider as OneDriveProvider
     }
-    onedriveCloudProvider = new OneDriveCloudProvider()
-    OneDriveCloudProvider.dectectRedirect()
-    return onedriveCloudProvider as OneDriveCloudProvider
+    onedriveCloudProvider = new OneDriveProvider()
+    OneDriveProvider.dectectRedirect()
+    return onedriveCloudProvider as OneDriveProvider
   }
 
   static authorize() {
@@ -99,7 +88,7 @@ export class OneDriveCloudProvider implements CloudProvider {
 
   private static dectectRedirect() {
     if (location.search.includes('code')) {
-      OneDriveCloudProvider.getToken()
+      OneDriveProvider.getToken()
     }
   }
 
@@ -108,7 +97,7 @@ export class OneDriveCloudProvider implements CloudProvider {
       return await request()
     } catch (error: any) {
       if (error.code === 'InvalidAuthenticationToken') {
-        await OneDriveCloudProvider.refreshToken()
+        await OneDriveProvider.refreshToken()
         return await request()
       }
       throw error
@@ -117,7 +106,7 @@ export class OneDriveCloudProvider implements CloudProvider {
 
   async getFileContent(path: string) {
     const request = this.client.api(`/me/drive/root:${path}`)
-    const { '@microsoft.graph.downloadUrl': downloadUrl } = await OneDriveCloudProvider.wrapRequest(() => request.get())
+    const { '@microsoft.graph.downloadUrl': downloadUrl } = await OneDriveProvider.wrapRequest(() => request.get())
     return await ky(downloadUrl).blob()
   }
 
@@ -125,7 +114,7 @@ export class OneDriveCloudProvider implements CloudProvider {
     if (localStorage.remoteFiles && path === '/test-roms/') {
       return JSON.parse(localStorage.remoteFiles)
     }
-    const files: RemoteFile[] = []
+    const files: FileSummary[] = []
 
     const list = async (path: string) => {
       const children = await this.listDir(path)
@@ -156,7 +145,7 @@ export class OneDriveCloudProvider implements CloudProvider {
       return
     }
     const request = this.client.api(`/me/drive/root:${path}:/content`)
-    await OneDriveCloudProvider.wrapRequest(() => request.put(file))
+    await OneDriveProvider.wrapRequest(() => request.put(file))
   }
 
   async deleteFile(path: string) {
@@ -164,7 +153,7 @@ export class OneDriveCloudProvider implements CloudProvider {
       return
     }
     const request = this.client.api(`/me/drive/root:${path}`)
-    await OneDriveCloudProvider.wrapRequest(() => request.delete())
+    await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
   async uploadState(state) {
@@ -229,7 +218,7 @@ export class OneDriveCloudProvider implements CloudProvider {
     let token = ''
     do {
       const request = this.client.api(apiPath).top(top).skipToken(token)
-      const result = await OneDriveCloudProvider.wrapRequest(() => request.get())
+      const result = await OneDriveProvider.wrapRequest(() => request.get())
       children.push(...result.value)
 
       const nextLink = result['@odata.nextLink']

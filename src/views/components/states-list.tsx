@@ -46,7 +46,7 @@ export function StatesList({ name }) {
     setPending(true)
 
     try {
-      const state = await onedrive.downloadFile(path)
+      const state = await onedrive.getFileContent(path)
       await emulator?.loadState(state)
     } catch (error) {
       console.warn(error)

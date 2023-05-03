@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import { Emulator, type Rom, offPressButtons, onPressButtons } from '../../core'
-import { OneDriveCloudProvider } from '../../core'
+import { OneDriveProvider } from '../../core'
 import { EmulatorContext } from '../lib/contexts'
 import { StatesList } from './states-list'
 
-const onedrive = OneDriveCloudProvider.get()
+const onedrive = OneDriveProvider.get()
 
 const emulatorStyle: Partial<CSSStyleDeclaration> = {
   position: 'absolute',

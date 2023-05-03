@@ -1,15 +1,11 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { OneDriveCloudProvider, Rom, systemFullNameMap } from '../../core'
+import { OneDriveProvider, Rom, systemFullNameMap } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 import StartButtons from './start-buttons'
 
-const oneDrive = OneDriveCloudProvider.get()
-
-window.O = OneDriveCloudProvider
-window.o = oneDrive
-window.c = oneDrive.client
+const oneDrive = OneDriveProvider.get()
 
 const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ name, fullName }))
 
@@ -18,29 +14,34 @@ export default function HomeScreen() {
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
 
-  // function onSelectFiles(files: File[]) {
-  //   const roms = Rom.fromFiles(files)
-  //   setRoms(roms)
-  // }
+  function onSelectFiles(files: File[]) {
+    const roms = Rom.fromFiles(files)
+    const grouped = Rom.groupBySystem(roms)
+    const currentSystem = Object.keys(grouped)[0] && 'nes'
+    setGroupedRoms(grouped)
+    setCurrentSystem(currentSystem)
+  }
 
-  // function onSelectFile(file: File) {
-  //   const rom = Rom.fromFile(file)
-  //   if (rom) {
-  //     setRoms([rom])
-  //     setCurrentRom(rom)
-  //   }
-  // }
+  function onSelectFile(file: File) {
+    const rom = Rom.fromFile(file)
+    if (rom) {
+      setRoms([rom])
+      setCurrentRom(rom)
+    }
+  }
 
   useEffect(() => {
-    ;(async () => {
-      const selectedDir = '/test-roms/'
-      const remoteFiles = await oneDrive.listDirFilesRecursely(selectedDir)
-      const roms = Rom.fromOneDrivePaths(remoteFiles)
-      const grouped = Rom.groupBySystem(roms)
-      const currentSystem = Object.keys(grouped)[0] && 'nes'
-      setGroupedRoms(grouped)
-      setCurrentSystem(currentSystem)
-    })()
+    if (localStorage.getItem('provider') === 'onedrive') {
+      ;(async () => {
+        const selectedDir = '/test-roms/'
+        const remoteFiles = await oneDrive.listDirFilesRecursely(selectedDir)
+        const roms = Rom.fromOneDrivePaths(remoteFiles)
+        const grouped = Rom.groupBySystem(roms)
+        const currentSystem = Object.keys(grouped)[0] && 'nes'
+        setGroupedRoms(grouped)
+        setCurrentSystem(currentSystem)
+      })()
+    }
   }, [])
 
   const roms = groupedRoms[currentSystem]
@@ -66,6 +67,7 @@ export default function HomeScreen() {
             ))}
         </div>
       </div>
+      {!currentSystem && <StartButtons {...{ onSelectFile, onSelectFiles }}></StartButtons>}
       <div className='m-auto flex min-h-screen flex-wrap items-start'>
         {roms?.map((rom) => (
           <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />

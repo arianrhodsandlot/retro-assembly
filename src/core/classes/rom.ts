@@ -3,12 +3,12 @@ import { type GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
 import { extSystemMap, systemCoreMap } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
+import { OneDriveProvider } from './file-system-providers/one-drive-provider'
 import { GamesDatabase } from './games-database'
-import { OneDriveCloudProvider } from './onedrive-cloud-provider'
 
 const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 
-const oneDrive = OneDriveCloudProvider.get()
+const oneDrive = OneDriveProvider.get()
 
 interface RomFile {
   name: string
@@ -88,7 +88,7 @@ export class Rom {
     if (this.file.isLocal) {
       return this.file.blob as Blob
     }
-    const blob = await oneDrive.downloadFile(this.file.path)
+    const blob = await oneDrive.getFileContent(this.file.path)
     this.file.blob = blob
     return blob
   }

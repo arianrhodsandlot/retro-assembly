@@ -55,6 +55,9 @@ dependencies:
   react-use:
     specifier: 17.4.0
     version: 17.4.0(react-dom@18.2.0)(react@18.2.0)
+  store2:
+    specifier: ^2.14.2
+    version: 2.14.2
 
 devDependencies:
   7zip-bin:
@@ -3718,6 +3721,10 @@ packages:
     dependencies:
       internal-slot: 1.0.5
     dev: true
+
+  /store2@2.14.2:
+    resolution: {integrity: sha512-siT1RiqlfQnGqgT/YzXVUNsom9S0H1OX+dpdGN1xkyYATo4I6sep5NmsRD/40s3IIOvlCq6akxkqG82urIZW1w==}
+    dev: false
 
   /stream-combiner@0.0.4:
     resolution: {integrity: sha512-rT00SPnTVyRsaSz5zgSPma/aHSOic5U1prhYdRy5HS2kTZviFpmDgzilbtsJsxiroqACmayynDN/9VzIbX5DOw==}

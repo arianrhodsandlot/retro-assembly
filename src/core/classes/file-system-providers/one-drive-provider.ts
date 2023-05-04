@@ -2,7 +2,7 @@ import { Client } from '@microsoft/microsoft-graph-client'
 import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
-import { getJson, replaceJson, updateJson } from '../../helpers/local-storage'
+import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { type FileSummary, type FileSystemProvider } from './file-system-provider'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
@@ -17,7 +17,7 @@ export class OneDriveProvider implements FileSystemProvider {
   private constructor() {
     this.client = Client.init({
       authProvider(done) {
-        done(undefined, getJson('onedrive').access_token)
+        done(undefined, getStorageByKey('onedrive-token').access_token)
       },
     })
   }
@@ -63,11 +63,11 @@ export class OneDriveProvider implements FileSystemProvider {
         }),
       })
       .json<any>()
-    replaceJson('onedrive', result)
+    setStorageByKey({ key: 'onedrive-token', value: result })
   }
 
   static async refreshToken() {
-    const refreshToken = getJson('onedrive').refresh_token
+    const refreshToken = getStorageByKey('onedrive-token').refresh_token
     if (!refreshToken) {
       return
     }
@@ -81,7 +81,7 @@ export class OneDriveProvider implements FileSystemProvider {
         }),
       })
       .json<any>()
-    updateJson('onedrive', result)
+    setStorageByKey({ key: 'onedrive-token', value: result })
   }
 
   private static dectectRedirect() {

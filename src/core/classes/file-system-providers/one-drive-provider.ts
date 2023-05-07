@@ -11,6 +11,8 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
+const onedriveApiCacheKey = 'onedrive-api-cache'
+
 let onedriveCloudProvider: OneDriveProvider
 export class OneDriveProvider implements FileSystemProvider {
   static tokenRecordStorageKey = 'onedrive-token'
@@ -44,6 +46,7 @@ export class OneDriveProvider implements FileSystemProvider {
       throw error
     }
     onedriveCloudProvider = candidate
+    window.o = candidate
     return candidate
   }
 
@@ -124,22 +127,45 @@ export class OneDriveProvider implements FileSystemProvider {
     }
   }
 
+  private static setDirectoryApiCache({ path, size, lastModified, response }) {
+    const dirCacheKey = JSON.stringify({ path, size, lastModified })
+    const cache = getStorageByKey(onedriveApiCacheKey) || {}
+    cache[dirCacheKey] = response
+    setStorageByKey({ key: onedriveApiCacheKey, value: cache })
+  }
+
+  private static getDirectoryApiCache({ path, size, lastModified }) {
+    const dirCacheKey = JSON.stringify({ path, size, lastModified })
+    const cache = getStorageByKey(onedriveApiCacheKey)
+    const result = cache?.[dirCacheKey]
+    if (result) {
+      return result
+    }
+  }
+
   async getFileContent(path: string) {
     const request = this.client.api(`/me/drive/root:${path}`)
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await OneDriveProvider.wrapRequest(() => request.get())
     return await ky(downloadUrl).blob()
   }
 
-  async listDirFilesRecursely(path: string) {
-    const files: FileSummary[] = []
+  async listDirFilesRecursively(path: string) {
+    const list = async ({ path, size, lastModified }: { path: string; size?: number; lastModified?: string }) => {
+      if (size !== undefined && lastModified !== undefined) {
+        const cache = OneDriveProvider.getDirectoryApiCache({ path, size, lastModified })
+        if (cache) {
+          return cache
+        }
+      }
 
-    const list = async (path: string) => {
+      const response: FileSummary[] = []
       const children = await this.listDir(path)
       for (const child of children) {
         const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
         const path = `${childParentPath}/${child.name}`
         if (child.folder?.childCount) {
-          await list(path)
+          const listResponse = await list({ path, size: child.size, lastModified: child.lastModifiedDateTime })
+          response.push(...listResponse)
         } else if (child.file) {
           const downloadUrl = child['@microsoft.graph.downloadUrl']
           const fileSummary = new FileSummary({
@@ -147,14 +173,16 @@ export class OneDriveProvider implements FileSystemProvider {
             downloadUrl,
             getBlob: async () => await this.getFileContent(path),
           })
-          files.push(fileSummary)
+          response.push(fileSummary)
         }
       }
+
+      OneDriveProvider.setDirectoryApiCache({ path, size, lastModified, response })
+
+      return response
     }
 
-    await list(path)
-
-    return files
+    return await list({ path })
   }
 
   // path should start with a slash
@@ -172,15 +200,6 @@ export class OneDriveProvider implements FileSystemProvider {
     }
     const request = this.client.api(`/me/drive/root:${path}`)
     await OneDriveProvider.wrapRequest(() => request.delete())
-  }
-
-  private async validateAccessToken() {
-    try {
-      await this.client.api('/me/drive').get()
-    } catch (error) {
-      console.warn(error)
-      throw error
-    }
   }
 
   async listDir(path) {
@@ -208,5 +227,14 @@ export class OneDriveProvider implements FileSystemProvider {
     } while (apiPath)
 
     return children
+  }
+
+  private async validateAccessToken() {
+    try {
+      await this.client.api('/me/drive').get()
+    } catch (error) {
+      console.warn(error)
+      throw error
+    }
   }
 }

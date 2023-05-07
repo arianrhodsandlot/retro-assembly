@@ -1,4 +1,5 @@
 import HomeScreen from './home-screen'
+import SetupWizard from './setup-wizard'
 import '../styles/index.sass'
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
       </div>
       <div className='h-screen w-full overflow-x-hidden pl-[200px]'>
         <HomeScreen />
+        <SetupWizard />
       </div>
     </div>
   )

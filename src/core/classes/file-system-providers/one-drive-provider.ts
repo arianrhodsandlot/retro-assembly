@@ -11,7 +11,7 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
-let onedriveCloudProvider
+let onedriveCloudProvider: OneDriveProvider
 export class OneDriveProvider implements FileSystemProvider {
   static tokenRecordStorageKey = 'onedrive-token'
   private client: Client
@@ -25,17 +25,26 @@ export class OneDriveProvider implements FileSystemProvider {
     })
   }
 
-  static getSingleton() {
+  static async getSingleton() {
     const accessToken = OneDriveProvider.getAccessToken()
     if (!accessToken) {
       OneDriveProvider.authorize()
-      return
+      throw new Error('no access token')
     }
+
     if (onedriveCloudProvider) {
       return onedriveCloudProvider as OneDriveProvider
     }
-    onedriveCloudProvider = new OneDriveProvider()
-    return onedriveCloudProvider as OneDriveProvider
+
+    const candidate = new OneDriveProvider()
+    try {
+      await candidate.validateAccessToken()
+    } catch (error) {
+      OneDriveProvider.authorize()
+      throw error
+    }
+    onedriveCloudProvider = candidate
+    return candidate
   }
 
   static dectectRedirect() {
@@ -165,7 +174,16 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  private async listDir(path) {
+  private async validateAccessToken() {
+    try {
+      await this.client.api('/me/drive').get()
+    } catch (error) {
+      console.warn(error)
+      throw error
+    }
+  }
+
+  async listDir(path) {
     const children: any[] = []
 
     let apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`

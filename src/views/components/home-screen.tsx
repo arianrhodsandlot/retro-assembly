@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { type Rom, systemFullNameMap, ui } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
@@ -10,6 +10,10 @@ export default function HomeScreen() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
+
+  useEffect(() => {
+    getStarted()
+  }, [])
 
   async function getStarted() {
     await ui.start()
@@ -47,11 +51,6 @@ export default function HomeScreen() {
             ))}
         </div>
       </div>
-      {!currentSystem && (
-        <div className='bg-slate flex min-h-screen items-center justify-center gap-10 text-3xl text-gray-400'>
-          <button onClick={getStarted}>Get Started</button>
-        </div>
-      )}
       <div className='m-auto flex min-h-screen flex-wrap items-start'>
         {roms?.map((rom) => (
           <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />

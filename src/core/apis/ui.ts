@@ -18,18 +18,18 @@ export const ui = {
   },
 
   async listRoms() {
-    const { fileSystemProvider } = globalInstances
-    // const romDirectory = preference.get('romDirectory')
-    const romDirectory = ''
+    const { fileSystemProvider, preference } = globalInstances
+    const romDirectory = preference.get('romDirectory')
+    // const romDirectory = ''
     const files = await fileSystemProvider.listDirFilesRecursely(romDirectory)
     const roms = Rom.fromFiles(files)
     return Rom.groupBySystem(roms)
   },
 
   async listStates() {
-    const { emulator, preference, fileSystemProvider } = globalInstances
-    // const stateDirectory = preference.get('stateDirectory')
-    const stateDirectory = 'retro-assembly/states/'
+    const { preference, emulator, fileSystemProvider } = globalInstances
+    const stateDirectory = preference.get('stateDirectory')
+    // const stateDirectory = 'retro-assembly/states/'
     const coreStateManager = new CoreStateManager({
       core: emulator.core,
       name: emulator.rom?.fileSummary?.name,
@@ -37,6 +37,12 @@ export const ui = {
       fileSystemProvider,
     })
     return await coreStateManager.getStates()
+  },
+
+  async listDirectory(directory: string) {
+    await ui.start()
+    const { fileSystemProvider } = globalInstances
+    return await fileSystemProvider.listDir(directory)
   },
 
   onPressButtons,

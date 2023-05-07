@@ -1,58 +1,19 @@
 import classNames from 'classnames'
-import { isThisYear, isToday, lightFormat } from 'date-fns'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { CoreStateManager } from '../../core'
-import { EmulatorContext } from '../lib/contexts'
+import { useEffect, useState } from 'react'
+import { game, ui } from '../../core'
 
-function humanizeDate(date: Date) {
-  if (isToday(date)) {
-    return lightFormat(date, 'HH:mm:ss')
-  }
-  if (isThisYear(date)) {
-    return lightFormat(date, 'MM-dd HH:mm')
-  }
-  return lightFormat(date, 'yyyy-MM-dd HH:mm')
-}
-
-export function StatesList({ name }) {
+export function StatesList() {
   const [states, setStates] = useState<any[]>()
   const [pending, setPending] = useState(false)
-  const coreStateManagerRef = useRef()
-
-  const emulator = useContext(EmulatorContext)
-
-  useEffect(() => {
-    coreStateManagerRef.current = new CoreStateManager({
-      core: emulator?.core,
-      name: emulator?.rom?.file.name,
-      directory: 'retro-assembly/states/',
-      fileSystemProvider: window.l,
-    })
-  }, [])
-
-  const fetchStates = useCallback(
-    async function () {
-      if (!emulator) {
-        return
-      }
-      const states = await coreStateManagerRef.current.getStates()
-      setStates(states)
-    },
-    [emulator]
-  )
 
   async function loadState(stateId: string) {
     if (pending) {
       return
     }
-    if (!emulator) {
-      return
-    }
     setPending(true)
 
     try {
-      const state = await coreStateManagerRef.current.getStateContent(stateId)
-      await emulator?.loadState(state)
+      await game.loadState(stateId)
     } catch (error) {
       console.warn(error)
     }
@@ -61,12 +22,11 @@ export function StatesList({ name }) {
   }
 
   useEffect(() => {
-    fetchStates()
-  }, [fetchStates])
-
-  if (!emulator) {
-    return
-  }
+    ;(async () => {
+      const states = await ui.listStates()
+      setStates(states)
+    })()
+  }, [])
 
   return (
     <div className={classNames('bg-black/90 text-center', { pending: 'opacity-90' })}>

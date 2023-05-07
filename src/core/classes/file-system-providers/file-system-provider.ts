@@ -1,9 +1,4 @@
-export interface FileSummary {
-  name: string
-  dir: string
-  path: string
-  downloadUrl: string
-}
+import { type FileSummary } from './file-summary'
 
 export interface FileSystemProvider {
   getFileContent: (path: string) => Promise<Blob | undefined>

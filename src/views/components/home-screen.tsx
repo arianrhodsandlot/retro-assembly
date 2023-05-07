@@ -1,11 +1,8 @@
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
-import { OneDriveProvider, Rom, systemFullNameMap } from '../../core'
+import { useState } from 'react'
+import { type Rom, systemFullNameMap, ui } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
-import StartButtons from './start-buttons'
-
-const oneDrive = OneDriveProvider.get()
 
 const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ name, fullName }))
 
@@ -14,27 +11,18 @@ export default function HomeScreen() {
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
 
-  function onSelectFiles(files: File[]) {
-    const roms = Rom.fromFiles(files)
-    const grouped = Rom.groupBySystem(roms)
-    const currentSystem = Object.keys(grouped)[0] && 'nes'
-    setGroupedRoms(grouped)
+  async function getStarted() {
+    await ui.start()
+    const roms = await ui.listRoms()
+    const systems = Object.keys(roms)
+    if (!systems) {
+      alert('empty dir')
+      return
+    }
+    const [currentSystem] = systems
+    setGroupedRoms(roms)
     setCurrentSystem(currentSystem)
   }
-
-  useEffect(() => {
-    if (localStorage.getItem('provider') === 'onedrive') {
-      ;(async () => {
-        const selectedDir = '/test-roms/'
-        const remoteFiles = await oneDrive.listDirFilesRecursely(selectedDir)
-        const roms = Rom.fromOneDrivePaths(remoteFiles)
-        const grouped = Rom.groupBySystem(roms)
-        const currentSystem = Object.keys(grouped)[0] && 'nes'
-        setGroupedRoms(grouped)
-        setCurrentSystem(currentSystem)
-      })()
-    }
-  }, [])
 
   const roms = groupedRoms[currentSystem]
 
@@ -59,7 +47,11 @@ export default function HomeScreen() {
             ))}
         </div>
       </div>
-      {!currentSystem && <StartButtons onSelectFiles={onSelectFiles}></StartButtons>}
+      {!currentSystem && (
+        <div className='bg-slate flex min-h-screen items-center justify-center gap-10 text-3xl text-gray-400'>
+          <button onClick={getStarted}>Get Started</button>
+        </div>
+      )}
       <div className='m-auto flex min-h-screen flex-wrap items-start'>
         {roms?.map((rom) => (
           <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />

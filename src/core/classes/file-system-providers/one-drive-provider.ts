@@ -3,7 +3,8 @@ import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
-import { type FileSummary, type FileSystemProvider } from './file-system-provider'
+import { FileSummary } from './file-summary'
+import { type FileSystemProvider } from './file-system-provider'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
@@ -12,26 +13,44 @@ const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
 let onedriveCloudProvider
 export class OneDriveProvider implements FileSystemProvider {
+  static tokenRecordStorageKey = 'onedrive-token'
   private client: Client
 
   private constructor() {
     this.client = Client.init({
       authProvider(done) {
-        done(undefined, getStorageByKey('onedrive-token').access_token)
+        const accessToken = OneDriveProvider.getAccessToken()
+        done(undefined, accessToken)
       },
     })
   }
 
-  static get() {
+  static getSingleton() {
+    const accessToken = OneDriveProvider.getAccessToken()
+    if (!accessToken) {
+      OneDriveProvider.authorize()
+      return
+    }
     if (onedriveCloudProvider) {
       return onedriveCloudProvider as OneDriveProvider
     }
     onedriveCloudProvider = new OneDriveProvider()
-    OneDriveProvider.dectectRedirect()
     return onedriveCloudProvider as OneDriveProvider
   }
 
-  static authorize() {
+  static dectectRedirect() {
+    if (location.search.includes('code')) {
+      OneDriveProvider.getAndPersistToken()
+      history.replaceState(undefined, '', '/')
+    }
+  }
+
+  private static getAccessToken() {
+    const tokenRecord = getStorageByKey(OneDriveProvider.tokenRecordStorageKey)
+    return tokenRecord?.access_token
+  }
+
+  private static authorize() {
     const query = {
       client_id: clientId,
       scope,
@@ -43,7 +62,7 @@ export class OneDriveProvider implements FileSystemProvider {
     location.assign(url)
   }
 
-  static async getToken() {
+  private static async getAndPersistToken() {
     const { code, error, error_description: errorDescription } = queryString.parse(location.search)
     if (error) {
       console.error({ error, errorDescription })
@@ -63,11 +82,11 @@ export class OneDriveProvider implements FileSystemProvider {
         }),
       })
       .json<any>()
-    setStorageByKey({ key: 'onedrive-token', value: result })
+    setStorageByKey({ key: OneDriveProvider.tokenRecordStorageKey, value: result })
   }
 
-  static async refreshToken() {
-    const refreshToken = getStorageByKey('onedrive-token').refresh_token
+  private static async refreshToken() {
+    const refreshToken = getStorageByKey(OneDriveProvider.tokenRecordStorageKey).refresh_token
     if (!refreshToken) {
       return
     }
@@ -81,13 +100,7 @@ export class OneDriveProvider implements FileSystemProvider {
         }),
       })
       .json<any>()
-    setStorageByKey({ key: 'onedrive-token', value: result })
-  }
-
-  private static dectectRedirect() {
-    if (location.search.includes('code')) {
-      OneDriveProvider.getToken()
-    }
+    setStorageByKey({ key: OneDriveProvider.tokenRecordStorageKey, value: result })
   }
 
   private static async wrapRequest(request: any) {
@@ -109,25 +122,23 @@ export class OneDriveProvider implements FileSystemProvider {
   }
 
   async listDirFilesRecursely(path: string) {
-    if (localStorage.remoteFiles && path === '/test-roms/') {
-      return JSON.parse(localStorage.remoteFiles)
-    }
     const files: FileSummary[] = []
 
     const list = async (path: string) => {
       const children = await this.listDir(path)
       for (const child of children) {
         const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
+        const path = `${childParentPath}/${child.name}`
         if (child.folder?.childCount) {
-          const childPath = `${childParentPath}/${child.name}`
-          await list(childPath)
+          await list(path)
         } else if (child.file) {
-          files.push({
-            name: child.name,
-            path: `${childParentPath}/${child.name}`,
-            dir: childParentPath,
-            downloadUrl: child['@microsoft.graph.downloadUrl'],
+          const downloadUrl = child['@microsoft.graph.downloadUrl']
+          const fileSummary = new FileSummary({
+            path,
+            downloadUrl,
+            getBlob: async () => await this.getFileContent(path),
           })
+          files.push(fileSummary)
         }
       }
     }
@@ -154,10 +165,10 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  private async listDir(path = '/') {
+  private async listDir(path) {
     const children: any[] = []
 
-    let apiPath = path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
+    let apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
 
     // "top" means page size
     let top = 200

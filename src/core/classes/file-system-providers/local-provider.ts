@@ -1,5 +1,6 @@
 import { initial, last, tail } from 'lodash-es'
-import { type FileSummary, type FileSystemProvider } from './file-system-provider'
+import { FileSummary } from './file-summary'
+import { type FileSystemProvider } from './file-system-provider'
 
 export class LocalProvider implements FileSystemProvider {
   private files: File[]
@@ -15,22 +16,21 @@ export class LocalProvider implements FileSystemProvider {
     return local
   }
 
-  async listDirFilesRecursely(path: string) {
+  async listDirFilesRecursely(path?: string) {
     const files: FileSummary[] = []
     for (const file of this.files) {
       const rawRelativePathSegments = file.webkitRelativePath.split('/')
       const relativePath = tail(rawRelativePathSegments).join('/')
-      if (relativePath.startsWith(path)) {
-        const fileSummary: FileSummary = {
-          name: file.name,
-          dir: relativePath,
+      if (!path || relativePath.startsWith(path)) {
+        const fileSummary = new FileSummary({
           path: relativePath,
           downloadUrl: URL.createObjectURL(file),
-        }
+          blob: file,
+        })
         files.push(fileSummary)
       }
     }
-    return await files
+    return await Promise.resolve(files)
   }
 
   async getFileContent(path: string) {
@@ -69,7 +69,11 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   private async load() {
-    const { handle, files } = await directoryOpen({ recursive: true, mode: 'readwrite' })
+    const { handle, files } = await directoryOpen({
+      id: 'retro-assembly-rom-directory',
+      recursive: true,
+      // mode: 'readwrite',
+    })
     this.files = files
     this.handle = handle
   }
@@ -115,11 +119,13 @@ async function getFiles(dirHandle, recursive, path = dirHandle.name, skipDirecto
 async function directoryOpen(options = {}) {
   options.recursive = options.recursive || false
   options.mode = options.mode || 'read'
+  console.log(options.id)
   const handle = await window.showDirectoryPicker({
     id: options.id,
     startIn: options.startIn,
     mode: options.mode,
   })
+  console.log(handle)
 
   // Else, return an array of File objects.
   const files = await getFiles(handle, options.recursive, undefined, options.skipDirectory)

@@ -1,25 +1,13 @@
 import classNames from 'classnames'
-import { useEffect, useRef, useState } from 'react'
-import { CoreStateManager, Emulator, type Rom, offPressButtons, onPressButtons } from '../../core'
-import { EmulatorContext } from '../lib/contexts'
+import { useEffect, useState } from 'react'
+import { type Rom, game, ui } from '../../core'
 import { StatesList } from './states-list'
-
-const emulatorStyle: Partial<CSSStyleDeclaration> = {
-  position: 'absolute',
-  top: '0',
-  left: '0',
-  background: 'black',
-  zIndex: '20',
-}
 
 const menuHotButtons = ['l3', 'r3']
 
 export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: () => void }) {
-  const emulatorRef = useRef<Emulator>()
   const [isPaused, setIsPaused] = useState(false)
   const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)
-
-  const shouldShowStatesList = Boolean(rom.file.name && emulatorRef.current?.core)
 
   useEffect(() => {
     function toggleMenu() {
@@ -30,14 +18,14 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
       }
       setShowEmulatorControllMenu(!showEmulatorControllMenu)
     }
-    onPressButtons(menuHotButtons, toggleMenu)
+    ui.onPressButtons(menuHotButtons, toggleMenu)
     document.addEventListener('keyup', (event) => {
       if (event.key === 'Control') {
         toggleMenu()
       }
     })
     return () => {
-      offPressButtons(menuHotButtons, toggleMenu)
+      ui.offPressButtons(menuHotButtons, toggleMenu)
     }
   }, [showEmulatorControllMenu])
 
@@ -45,66 +33,28 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
     if (!rom) {
       return
     }
-    if (emulatorRef.current) {
-      return
-    }
-    const emulator = new Emulator({ rom, style: emulatorStyle })
-    emulatorRef.current = emulator
-    ;(async function () {
-      try {
-        await emulator.launch()
-        window.emu = emulator
-        window.em = emu.emscripten
-        window.RA = em.RA
-        window.Module = em.Module
-        window.FS = em.FS
-      } catch (error) {
-        console.warn(error)
-      }
-    })()
-
-    return function destruct() {
-      exitEmulator()
-    }
+    game.launch(rom)
   }, [rom])
 
-  function exitEmulator() {
-    if (emulatorRef.current) {
-      emulatorRef.current.exit()
-      emulatorRef.current = undefined
-    }
+  function saveState() {
+    game.start()
+    game.saveState()
+    setIsPaused(false)
   }
 
   function pause() {
-    emulatorRef.current?.pause()
+    game.pause()
     setIsPaused(true)
   }
 
   function start() {
-    emulatorRef.current?.start()
+    game.start()
     setIsPaused(false)
   }
 
-  function fullscreen() {
-    emulatorRef.current?.emscripten.Module.requestFullscreen()
-  }
-
   function exit() {
-    exitEmulator()
+    game.exit()
     onExit?.()
-  }
-
-  async function saveState() {
-    const state = await emulatorRef.current?.saveState()
-    if (state) {
-      const coreStateManager = new CoreStateManager({
-        core: emulatorRef.current?.core,
-        name: emulatorRef.current?.rom?.file.name,
-        directory: 'retro-assembly/states/',
-        fileSystemProvider: window.l,
-      })
-      await coreStateManager.createState(state)
-    }
   }
 
   return (
@@ -114,14 +64,10 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
       })}
     >
       <div className='flex-1 bg-gradient-to-t from-black/90 to-black/0' />
-      {shouldShowStatesList && (
-        <EmulatorContext.Provider value={emulatorRef.current}>
-          <StatesList name={rom.file.name} />
-        </EmulatorContext.Provider>
-      )}
+      {showEmulatorControllMenu && <StatesList />}
       <div className='bottom-0 flex h-40 w-full justify-around bg-gradient-to-t from-black to-black/90'>
         {isPaused ? <button onClick={start}>start</button> : <button onClick={pause}>pause</button>}
-        <button onClick={fullscreen}>fullscreen</button>
+        <button onClick={game.fullscreen}>fullscreen</button>
         <button onClick={saveState}>save state</button>
         <button onClick={exit}>exit</button>
       </div>

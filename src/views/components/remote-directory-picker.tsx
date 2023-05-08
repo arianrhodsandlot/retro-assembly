@@ -5,11 +5,19 @@ interface TreeNode {
   path: string
   name: string
   expanded: boolean
+  isDirectory: boolean
   hasChildren: boolean
   children: TreeNode[] | undefined
 }
 
-const root: TreeNode = { path: '/', name: 'root', expanded: false, hasChildren: true, children: undefined }
+const root: TreeNode = {
+  path: '/',
+  name: 'root',
+  expanded: false,
+  isDirectory: true,
+  hasChildren: true,
+  children: undefined,
+}
 
 function TreeNodeView({
   node,
@@ -31,12 +39,14 @@ function TreeNodeView({
     } else {
       const children = await ui.listDirectory(node.path)
       node.children = children.map((child) => {
+        const isDirectory = Boolean(child.folder)
         const hasChildren = child.folder?.childCount > 0
-        const path = node.path + child.name + (child.folder ? '/' : '')
+        const path = `${node.path}${child.name}${isDirectory ? '/' : ''}`
         return {
           path,
           name: child.name,
           expanded: false,
+          isDirectory,
           hasChildren,
           children: undefined,
         }
@@ -49,7 +59,7 @@ function TreeNodeView({
   return (
     <div>
       <div className='flex'>
-        {node.hasChildren ? (node.expanded ? '📂' : '📁') : '📄'}
+        {node.isDirectory ? (node.expanded ? '📂' : '📁') : '📄'}
         <div className='flex flex-1'>
           <div className='flex-1 cursor-pointer' aria-hidden onClick={() => toggleNodeExpanded(node)}>
             {node.name}

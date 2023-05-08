@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { type Rom, systemFullNameMap, ui } from '../../core'
+import { type Rom, system, systemFullNameMap, ui } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 
@@ -10,9 +10,13 @@ export default function HomeScreen() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
+  const [hasGrantedPermission, setHasGrantedPermission] = useState(!system.isUsingLocal())
 
   useEffect(() => {
-    getStarted()
+    const type = system.preference.get('romProviderType')
+    if (type !== 'local') {
+      getStarted()
+    }
   }, [])
 
   async function getStarted() {
@@ -28,8 +32,21 @@ export default function HomeScreen() {
     setCurrentSystem(currentSystem)
   }
 
-  const roms = groupedRoms[currentSystem]
+  async function grantPermission() {
+    try {
+      await ui.regrantLocalPermision()
+      setHasGrantedPermission(true)
+      getStarted()
+    } catch (error) {
+      console.warn(error)
+    }
+  }
 
+  if (!hasGrantedPermission) {
+    return <button onClick={grantPermission}>grant permission</button>
+  }
+
+  const roms = groupedRoms[currentSystem]
   return (
     <>
       <div className='w-full overflow-auto'>

@@ -1,11 +1,51 @@
+import { detectLocalHandleExistence, requestLocalHandle } from '..'
 import { CoreStateManager } from '../classes/core-state-manager'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { Rom } from '../classes/rom'
 import { offPressButton, offPressButtons, onPressButton, onPressButtons } from '../helpers/gamepad'
 import { globalInstances } from './global-instances'
+import { system } from './system'
 
 export const ui = {
+  async needsSetup() {
+    if (!system.validatePreference() || !globalInstances.preference) {
+      return true
+    }
+
+    const { preference } = globalInstances
+
+    if (preference.get('romProviderType') === 'local') {
+      const localHandleExist = await detectLocalHandleExistence('rom')
+      return !localHandleExist
+    }
+
+    if (preference.get('romProviderType') === 'onedrive') {
+      const accessToken = OneDriveProvider.getAccessToken()
+      return !accessToken
+    }
+
+    return true
+  },
+
+  // this function should be called when user interacts with the webpage, and all other ui methods should be called after this.
+  async setup() {
+    const { preference } = globalInstances
+    const type = preference.get('romProviderType')
+
+    if (type === 'local') {
+      const handle = await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+      system.setWorkingDirectory('')
+    } else if (type === 'onedrive') {
+      globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
+    }
+  },
+
+  async regrantLocalPermision() {
+    const handle = await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+    console.log(handle)
+  },
+
   async start() {
     const { preference } = globalInstances
     const type = preference.get('romProviderType')
@@ -20,8 +60,7 @@ export const ui = {
   async listRoms() {
     const { fileSystemProvider, preference } = globalInstances
     const romDirectory = preference.get('romDirectory')
-    // const romDirectory = ''
-    const files = await fileSystemProvider.listDirFilesRecursely(romDirectory)
+    const files = await fileSystemProvider.listDirFilesRecursively(romDirectory)
     const roms = Rom.fromFiles(files)
     return Rom.groupBySystem(roms)
   },
@@ -29,7 +68,6 @@ export const ui = {
   async listStates() {
     const { preference, emulator, fileSystemProvider } = globalInstances
     const stateDirectory = preference.get('stateDirectory')
-    // const stateDirectory = 'retro-assembly/states/'
     const coreStateManager = new CoreStateManager({
       core: emulator.core,
       name: emulator.rom?.fileSummary?.name,
@@ -50,3 +88,5 @@ export const ui = {
   offPressButton,
   offPressButtons,
 }
+
+window.ui = ui

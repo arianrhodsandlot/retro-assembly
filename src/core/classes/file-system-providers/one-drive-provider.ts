@@ -46,7 +46,6 @@ export class OneDriveProvider implements FileSystemProvider {
       throw error
     }
     onedriveCloudProvider = candidate
-    window.o = candidate
     return candidate
   }
 
@@ -57,7 +56,7 @@ export class OneDriveProvider implements FileSystemProvider {
     }
   }
 
-  private static getAccessToken() {
+  static getAccessToken() {
     const tokenRecord = getStorageByKey(OneDriveProvider.tokenRecordStorageKey)
     return tokenRecord?.access_token
   }
@@ -154,11 +153,17 @@ export class OneDriveProvider implements FileSystemProvider {
       if (size !== undefined && lastModified !== undefined) {
         const cache = OneDriveProvider.getDirectoryApiCache({ path, size, lastModified })
         if (cache) {
-          return cache
+          return cache.map(
+            (fileSummaryObj) =>
+              new FileSummary({
+                ...fileSummaryObj,
+                getBlob: async () => await this.getFileContent(fileSummaryObj.path),
+              })
+          )
         }
       }
 
-      const response: FileSummary[] = []
+      const response: any[] = []
       const children = await this.listDir(path)
       for (const child of children) {
         const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
@@ -168,18 +173,20 @@ export class OneDriveProvider implements FileSystemProvider {
           response.push(...listResponse)
         } else if (child.file) {
           const downloadUrl = child['@microsoft.graph.downloadUrl']
-          const fileSummary = new FileSummary({
+          const fileSummary = {
             path,
             downloadUrl,
-            getBlob: async () => await this.getFileContent(path),
-          })
+          }
           response.push(fileSummary)
         }
       }
 
       OneDriveProvider.setDirectoryApiCache({ path, size, lastModified, response })
 
-      return response
+      return response.map(
+        (fileSummaryObj) =>
+          new FileSummary({ ...fileSummaryObj, getBlob: async () => await this.getFileContent(fileSummaryObj.path) })
+      )
     }
 
     return await list({ path })
@@ -230,8 +237,9 @@ export class OneDriveProvider implements FileSystemProvider {
   }
 
   private async validateAccessToken() {
+    const request = this.client.api('/me/drive')
     try {
-      await this.client.api('/me/drive').get()
+      await OneDriveProvider.wrapRequest(() => request.get())
     } catch (error) {
       console.warn(error)
       throw error

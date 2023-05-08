@@ -1,7 +1,14 @@
+import { OneDriveProvider, detectLocalHandleExistence } from '..'
 import { globalInstances } from './global-instances'
 
 export const system = {
   preference: globalInstances.preference,
+
+  isUsingLocal() {
+    const { preference } = globalInstances
+    const romProviderType = preference.get('romProviderType')
+    return romProviderType === 'local'
+  },
 
   setFileSystemProviderType(type: 'local' | 'onedrive') {
     const { preference } = globalInstances
@@ -12,8 +19,8 @@ export const system = {
 
   setWorkingDirectory(path: string) {
     const { preference } = globalInstances
-    preference.set({ name: 'configDirectory', value: path })
-    preference.set({ name: 'stateDirectory', value: path })
+    preference.set({ name: 'configDirectory', value: `${path}retro-assembly/` })
+    preference.set({ name: 'stateDirectory', value: `${path}retro-assembly/states/` })
     preference.set({ name: 'romDirectory', value: path })
   },
 
@@ -25,16 +32,18 @@ export const system = {
     const configDirectory = preference.get('configDirectory')
     const stateDirectory = preference.get('stateDirectory')
     const romDirectory = preference.get('romDirectory')
-    const values = [
-      configProviderType,
-      stateProviderType,
-      romProviderType,
-      configDirectory,
-      stateDirectory,
-      romDirectory,
-    ]
 
-    return values.every(Boolean)
+    const values = [configProviderType, stateProviderType, romProviderType, configDirectory, stateDirectory]
+    if (values.some((value) => !value)) {
+      return false
+    }
+
+    const directories = [configDirectory, stateDirectory]
+    if (directories.some((directory) => !directory.endsWith('/'))) {
+      return false
+    }
+
+    return true
   },
 }
 

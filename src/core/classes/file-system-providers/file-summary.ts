@@ -23,9 +23,9 @@ export class FileSummary {
   ) {
     this.path = options.path
     this.downloadUrl = options.downloadUrl
-    if ('blob' in options) {
+    if ('blob' in options && options.blob) {
       this.blob = options.blob
-    } else if ('getBlob' in options) {
+    } else if ('getBlob' in options && options.getBlob) {
       this.getBlobRawMethod = options.getBlob
     }
 

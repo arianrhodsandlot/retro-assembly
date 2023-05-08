@@ -1,4 +1,5 @@
 import { initial, last, tail } from 'lodash-es'
+import { listFilesByHandle, requestLocalHandle } from '../..'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
@@ -16,7 +17,7 @@ export class LocalProvider implements FileSystemProvider {
     return local
   }
 
-  async listDirFilesRecursely(path?: string) {
+  async listDirFilesRecursively(path?: string) {
     const files: FileSummary[] = []
     for (const file of this.files) {
       const rawRelativePathSegments = file.webkitRelativePath.split('/')
@@ -69,13 +70,8 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   private async load() {
-    const { handle, files } = await directoryOpen({
-      id: 'retro-assembly-rom-directory',
-      recursive: true,
-      // mode: 'readwrite',
-    })
-    this.files = files
-    this.handle = handle
+    this.handle = await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+    this.files = await listFilesByHandle({ handle: this.handle })
   }
 
   private async getFileHandle({ path, create }: { path: string; create: boolean }) {
@@ -89,48 +85,5 @@ export class LocalProvider implements FileSystemProvider {
     if (fileName) {
       return await directoryHandle.getFileHandle(fileName, { create })
     }
-  }
-}
-
-async function getFiles(dirHandle, recursive, path = dirHandle.name, skipDirectory) {
-  const dirs = []
-  const files = []
-  for await (const entry of dirHandle.values()) {
-    const nestedPath = `${path}/${entry.name}`
-    if (entry.kind === 'file') {
-      files.push(
-        entry.getFile().then((file) => {
-          file.directoryHandle = dirHandle
-          file.handle = entry
-          return Object.defineProperty(file, 'webkitRelativePath', {
-            configurable: true,
-            enumerable: true,
-            get: () => nestedPath,
-          })
-        })
-      )
-    } else if (entry.kind === 'directory' && recursive && (!skipDirectory || !skipDirectory(entry))) {
-      dirs.push(getFiles(entry, recursive, nestedPath, skipDirectory))
-    }
-  }
-  return [...(await Promise.all(dirs)).flat(), ...(await Promise.all(files))]
-}
-
-async function directoryOpen(options = {}) {
-  options.recursive = options.recursive || false
-  options.mode = options.mode || 'read'
-  console.log(options.id)
-  const handle = await window.showDirectoryPicker({
-    id: options.id,
-    startIn: options.startIn,
-    mode: options.mode,
-  })
-  console.log(handle)
-
-  // Else, return an array of File objects.
-  const files = await getFiles(handle, options.recursive, undefined, options.skipDirectory)
-  return {
-    handle,
-    files,
   }
 }

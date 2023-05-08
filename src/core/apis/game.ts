@@ -25,13 +25,12 @@ export const game = {
   },
 
   async loadState(stateId) {
-    const { emulator, fileSystemProvider } = globalInstances
+    const { emulator, fileSystemProvider, preference } = globalInstances
     if (!emulator) {
       throw new Error('Could not load state. Make sure game.launch has been called.')
     }
 
-    // const stateDirectory = preference.get('stateDirectory')
-    const stateDirectory = 'retro-assembly/states/'
+    const stateDirectory = preference.get('stateDirectory')
     const coreStateManager = new CoreStateManager({
       core: emulator.core,
       name: emulator.rom?.fileSummary?.name,
@@ -59,11 +58,10 @@ export const game = {
   },
 
   async saveState() {
-    const { emulator } = globalInstances
+    const { emulator, preference, fileSystemProvider } = globalInstances
     const state = await emulator.saveState()
     if (state) {
-      // const stateDirectory = preference.get('stateDirectory')
-      const stateDirectory = 'retro-assembly/states/'
+      const stateDirectory = preference.get('stateDirectory')
       const coreStateManager = new CoreStateManager({
         core: emulator.core,
         name: emulator.rom?.fileSummary.name,

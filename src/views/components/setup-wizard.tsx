@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { system, ui } from '../../core'
 import { RemoteDirectoryPicker } from './remote-directory-picker'
 
 export default function SetupWizard() {
-  const [showSetupWizard, setShowSetupWizard] = useState(!system.validatePreference())
+  const [showSetupWizard, setShowSetupWizard] = useState(false)
   const [romDirectoryType, setRomDirectoryType] = useState(system.preference?.get('romProviderType') ?? '')
 
   function onChangeRomDirectoryType(romDirectoryType) {
@@ -14,11 +14,14 @@ export default function SetupWizard() {
   }
 
   async function selectLocalDirectory() {
-    await ui.start()
+    await ui.setup()
+    if (system.validatePreference()) {
+      setShowSetupWizard(false)
+    }
   }
 
   async function loginWithOnedrive() {
-    await ui.start()
+    await ui.setup()
   }
 
   async function selectOnedriveDirectory(path) {
@@ -27,6 +30,14 @@ export default function SetupWizard() {
       setShowSetupWizard(false)
     }
   }
+
+  useEffect(() => {
+    async function init() {
+      const needsSetup = await ui.needsSetup()
+      setShowSetupWizard(needsSetup)
+    }
+    init()
+  }, [])
 
   if (!showSetupWizard) {
     return <></>

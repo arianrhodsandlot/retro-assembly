@@ -62,7 +62,7 @@ export class CoreStateManager {
   async getStates() {
     const { fileSystemProvider, core, directory, name } = this
     const stateDirPath = `${directory}${core}/${name}/`
-    const children = await fileSystemProvider.listDirFilesRecursely(stateDirPath)
+    const children = await fileSystemProvider.listDirFilesRecursively(stateDirPath)
     const states: CoreStateSummary[] = []
     const thumbnailMap: Record<string, string> = {}
 

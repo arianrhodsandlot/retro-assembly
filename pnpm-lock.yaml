@@ -25,6 +25,9 @@ dependencies:
   goodcodes-parser:
     specifier: 2.5.0
     version: 2.5.0
+  idb:
+    specifier: 7.1.1
+    version: 7.1.1
   idb-keyval:
     specifier: 6.2.1
     version: 6.2.1
@@ -2467,6 +2470,10 @@ packages:
 
   /idb-keyval@6.2.1:
     resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
+    dev: false
+
+  /idb@7.1.1:
+    resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
     dev: false
 
   /ignore@5.2.4:

@@ -1,4 +1,5 @@
 import { Client } from '@microsoft/microsoft-graph-client'
+import { openDB } from 'idb'
 import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
@@ -6,16 +7,21 @@ import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
+window.openDB = openDB
+
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
+const cacheDbName = 'cache'
+const cacheDbVersion = 1
 const onedriveApiCacheKey = 'onedrive-api-cache'
 
 let onedriveCloudProvider: OneDriveProvider
 export class OneDriveProvider implements FileSystemProvider {
   static tokenRecordStorageKey = 'onedrive-token'
+  private static cacheIndexedDb: any
   private client: Client
 
   private constructor() {
@@ -133,19 +139,34 @@ export class OneDriveProvider implements FileSystemProvider {
     }
   }
 
-  private static setDirectoryApiCache({ path, size, lastModified, response }) {
-    const dirCacheKey = JSON.stringify({ path, size, lastModified })
-    const cache = getStorageByKey(onedriveApiCacheKey) || {}
-    cache[dirCacheKey] = response
-    setStorageByKey({ key: onedriveApiCacheKey, value: cache })
+  private static async setDirectoryApiCache({ path, size, lastModified, response }) {
+    OneDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
+      upgrade(database) {
+        database
+          .createObjectStore(onedriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
+          .createIndex('path', 'path')
+      },
+    })
+
+    const database = await OneDriveProvider.cacheIndexedDb
+
+    await database.add(onedriveApiCacheKey, { path, size, lastModified, response })
   }
 
-  private static getDirectoryApiCache({ path, size, lastModified }) {
-    const dirCacheKey = JSON.stringify({ path, size, lastModified })
-    const cache = getStorageByKey(onedriveApiCacheKey)
-    const result = cache?.[dirCacheKey]
-    if (result) {
-      return result
+  private static async getDirectoryApiCache({ path, size, lastModified }) {
+    OneDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
+      upgrade(database) {
+        database
+          .createObjectStore(onedriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
+          .createIndex('path', 'path')
+      },
+    })
+    const database = await OneDriveProvider.cacheIndexedDb
+    const rows = await database.getAllFromIndex(onedriveApiCacheKey, 'path', path)
+    for (const row of rows) {
+      if (row && row.size === size && row.lastModified === lastModified) {
+        return row.response
+      }
     }
   }
 
@@ -157,16 +178,12 @@ export class OneDriveProvider implements FileSystemProvider {
 
   async listDirFilesRecursively(path: string) {
     const list = async ({ path, size, lastModified }: { path: string; size?: number; lastModified?: string }) => {
-      if (size !== undefined && lastModified !== undefined) {
-        const cache = OneDriveProvider.getDirectoryApiCache({ path, size, lastModified })
+      const shouldUseCache = size !== undefined && lastModified !== undefined
+
+      if (shouldUseCache) {
+        const cache = await OneDriveProvider.getDirectoryApiCache({ path, size, lastModified })
         if (cache) {
-          return cache.map(
-            (fileSummaryObj) =>
-              new FileSummary({
-                ...fileSummaryObj,
-                getBlob: async () => await this.getFileContent(fileSummaryObj.path),
-              })
-          )
+          return cache
         }
       }
 
@@ -188,15 +205,18 @@ export class OneDriveProvider implements FileSystemProvider {
         }
       }
 
-      OneDriveProvider.setDirectoryApiCache({ path, size, lastModified, response })
-
-      return response.map(
-        (fileSummaryObj) =>
-          new FileSummary({ ...fileSummaryObj, getBlob: async () => await this.getFileContent(fileSummaryObj.path) })
-      )
+      if (shouldUseCache) {
+        await OneDriveProvider.setDirectoryApiCache({ path, size, lastModified, response })
+      }
+      return response
     }
 
-    return await list({ path })
+    const response = await list({ path })
+
+    return response.map(
+      (fileSummaryObj) =>
+        new FileSummary({ ...fileSummaryObj, getBlob: async () => await this.getFileContent(fileSummaryObj.path) })
+    )
   }
 
   // path should start with a slash

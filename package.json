@@ -18,6 +18,7 @@
     "date-fns": "2.30.0",
     "delay": "5.0.0",
     "goodcodes-parser": "2.5.0",
+    "idb": "7.1.1",
     "idb-keyval": "6.2.1",
     "ini": "4.1.0",
     "jquery": "3.6.4",

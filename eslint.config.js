@@ -6,6 +6,7 @@ export default createConfig({
     ts: {
       rules: {
         '@typescript-eslint/no-shadow': 'off',
+        'unicorn/expiring-todo-comments': 'off',
       },
     },
   },

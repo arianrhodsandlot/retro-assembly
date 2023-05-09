@@ -13,10 +13,7 @@ export default function HomeScreen() {
   const [hasGrantedPermission, setHasGrantedPermission] = useState(!system.isUsingLocal())
 
   useEffect(() => {
-    const type = system.preference.get('romProviderType')
-    if (type !== 'local') {
-      getStarted()
-    }
+    getStarted()
   }, [])
 
   async function getStarted() {

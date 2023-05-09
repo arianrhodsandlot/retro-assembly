@@ -8,24 +8,29 @@ import { globalInstances } from './global-instances'
 import { system } from './system'
 
 export const ui = {
-  async needsSetup() {
-    if (!system.validatePreference() || !globalInstances.preference) {
-      return true
-    }
-
+  async getStepsBeforeStart() {
+    const steps: string[] = []
     const { preference } = globalInstances
+
+    if (!system.validatePreference() || !globalInstances.preference) {
+      steps.push('preference')
+    }
 
     if (preference.get('romProviderType') === 'local') {
       const localHandleExist = await detectLocalHandleExistence('rom')
-      return !localHandleExist
+      if (!localHandleExist) {
+        steps.push('local-directory-select')
+      }
     }
 
     if (preference.get('romProviderType') === 'onedrive') {
-      const accessToken = OneDriveProvider.getAccessToken()
-      return !accessToken
+      const isAccessTokenValid = await OneDriveProvider.validateAccessToken()
+      if (!isAccessTokenValid) {
+        steps.push('onedrive-authorize')
+      }
     }
 
-    return true
+    return steps
   },
 
   // this function should be called when user interacts with the webpage, and all other ui methods should be called after this.
@@ -34,10 +39,10 @@ export const ui = {
     const type = preference.get('romProviderType')
 
     if (type === 'local') {
-      const handle = await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+      await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
       system.setWorkingDirectory('')
     } else if (type === 'onedrive') {
-      globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
+      OneDriveProvider.authorize()
     }
   },
 

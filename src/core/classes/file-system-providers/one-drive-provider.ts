@@ -19,34 +19,16 @@ export class OneDriveProvider implements FileSystemProvider {
   private client: Client
 
   private constructor() {
-    this.client = Client.init({
-      authProvider(done) {
-        const accessToken = OneDriveProvider.getAccessToken()
-        done(undefined, accessToken)
-      },
-    })
+    this.client = OneDriveProvider.getClient()
   }
 
-  static async getSingleton() {
-    const accessToken = OneDriveProvider.getAccessToken()
-    if (!accessToken) {
-      OneDriveProvider.authorize()
-      throw new Error('no access token')
-    }
-
+  static getSingleton() {
     if (onedriveCloudProvider) {
       return onedriveCloudProvider as OneDriveProvider
     }
 
-    const candidate = new OneDriveProvider()
-    try {
-      await candidate.validateAccessToken()
-    } catch (error) {
-      OneDriveProvider.authorize()
-      throw error
-    }
-    onedriveCloudProvider = candidate
-    return candidate
+    onedriveCloudProvider = new OneDriveProvider()
+    return onedriveCloudProvider
   }
 
   static dectectRedirect() {
@@ -56,12 +38,23 @@ export class OneDriveProvider implements FileSystemProvider {
     }
   }
 
-  static getAccessToken() {
-    const tokenRecord = getStorageByKey(OneDriveProvider.tokenRecordStorageKey)
-    return tokenRecord?.access_token
+  static async validateAccessToken() {
+    if (!OneDriveProvider.getAccessToken()) {
+      return false
+    }
+
+    const client = OneDriveProvider.getClient()
+    const request = client.api('/me/drive')
+    try {
+      await OneDriveProvider.wrapRequest(() => request.get())
+    } catch (error) {
+      console.warn(error)
+      return false
+    }
+    return true
   }
 
-  private static authorize() {
+  static authorize() {
     const query = {
       client_id: clientId,
       scope,
@@ -71,6 +64,20 @@ export class OneDriveProvider implements FileSystemProvider {
     }
     const url = queryString.stringifyUrl({ url: authorizeUrl, query })
     location.assign(url)
+  }
+
+  private static getAccessToken() {
+    const tokenRecord = getStorageByKey(OneDriveProvider.tokenRecordStorageKey)
+    return tokenRecord?.access_token
+  }
+
+  private static getClient() {
+    return Client.init({
+      authProvider(done) {
+        const accessToken = OneDriveProvider.getAccessToken()
+        done(undefined, accessToken)
+      },
+    })
   }
 
   private static async getAndPersistToken() {
@@ -234,15 +241,5 @@ export class OneDriveProvider implements FileSystemProvider {
     } while (apiPath)
 
     return children
-  }
-
-  private async validateAccessToken() {
-    const request = this.client.api('/me/drive')
-    try {
-      await OneDriveProvider.wrapRequest(() => request.get())
-    } catch (error) {
-      console.warn(error)
-      throw error
-    }
   }
 }

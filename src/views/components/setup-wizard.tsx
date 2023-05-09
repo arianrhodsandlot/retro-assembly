@@ -3,8 +3,8 @@ import { system, ui } from '../../core'
 import { RemoteDirectoryPicker } from './remote-directory-picker'
 
 export default function SetupWizard() {
-  const [showSetupWizard, setShowSetupWizard] = useState(false)
   const [romDirectoryType, setRomDirectoryType] = useState(system.preference?.get('romProviderType') ?? '')
+  const [stepsBeforeSetup, setStepsBeforeSetup] = useState<string[]>([])
 
   function onChangeRomDirectoryType(romDirectoryType) {
     setRomDirectoryType(romDirectoryType)
@@ -16,7 +16,7 @@ export default function SetupWizard() {
   async function selectLocalDirectory() {
     await ui.setup()
     if (system.validatePreference()) {
-      setShowSetupWizard(false)
+      checkStepsBeforeSetup()
     }
   }
 
@@ -27,19 +27,20 @@ export default function SetupWizard() {
   async function selectOnedriveDirectory(path) {
     system.setWorkingDirectory(path)
     if (system.validatePreference()) {
-      setShowSetupWizard(false)
+      checkStepsBeforeSetup()
     }
   }
 
-  useEffect(() => {
-    async function init() {
-      const needsSetup = await ui.needsSetup()
-      setShowSetupWizard(needsSetup)
-    }
-    init()
-  }, [])
+  async function checkStepsBeforeSetup() {
+    const stepsBeforeSetup = await ui.getStepsBeforeStart()
+    setStepsBeforeSetup(stepsBeforeSetup)
+  }
 
-  if (!showSetupWizard) {
+  useEffect(() => {
+    checkStepsBeforeSetup()
+  }, [romDirectoryType])
+
+  if (stepsBeforeSetup.length === 0) {
     return <></>
   }
 
@@ -70,12 +71,19 @@ export default function SetupWizard() {
           {romDirectoryType === 'onedrive' && (
             <div>
               <div>
-                <button onClick={loginWithOnedrive}>2. login with onedrive</button>
+                {stepsBeforeSetup.includes('onedrive-authorize') ? (
+                  <button onClick={loginWithOnedrive}>2. login with onedrive</button>
+                ) : (
+                  <div>2. You have logined into onedrive!</div>
+                )}
               </div>
-              <div>
-                <button>3. Select directory</button>
-                <RemoteDirectoryPicker onSelect={selectOnedriveDirectory} />
-              </div>
+
+              {stepsBeforeSetup.includes('onedrive-authorize') || (
+                <div>
+                  <button>3. Select directory</button>
+                  <RemoteDirectoryPicker onSelect={selectOnedriveDirectory} />
+                </div>
+              )}
             </div>
           )}
         </div>

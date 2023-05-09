@@ -34,6 +34,10 @@ export const system = {
     const romDirectory = preference.get('romDirectory')
 
     const values = [configProviderType, stateProviderType, romProviderType, configDirectory, stateDirectory]
+    if (romProviderType !== 'local') {
+      values.push(romDirectory)
+      console.log(romDirectory)
+    }
     if (values.some((value) => !value)) {
       return false
     }

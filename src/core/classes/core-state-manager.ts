@@ -1,5 +1,6 @@
 import { lightFormat, parse, toDate } from 'date-fns'
 import { humanizeDate } from '../helpers/misc'
+import { type FileSummary } from './file-system-providers/file-summary'
 import { type FileSystemProvider } from './file-system-providers/file-system-provider'
 
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
@@ -62,7 +63,16 @@ export class CoreStateManager {
   async getStates() {
     const { fileSystemProvider, core, directory, name } = this
     const stateDirPath = `${directory}${core}/${name}/`
-    const children = await fileSystemProvider.listDirFilesRecursively(stateDirPath)
+
+    let children: FileSummary[] = []
+    try {
+      children = await fileSystemProvider.listDirFilesRecursively(stateDirPath)
+    } catch (error) {
+      if (error?.code !== 'itemNotFound') {
+        throw error
+      }
+    }
+
     const states: CoreStateSummary[] = []
     const thumbnailMap: Record<string, string> = {}
 

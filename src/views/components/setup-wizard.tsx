@@ -2,7 +2,15 @@ import { useEffect, useState } from 'react'
 import { system, ui } from '../../core'
 import { SetupWizardOnedrive } from './setup-wizard-onedrive'
 
-export default function SetupWizard() {
+export default function SetupWizard({
+  controlled,
+  show,
+  onClose,
+}: {
+  controlled: boolean
+  show?: boolean
+  onClose?: () => void
+}) {
   const [romDirectoryType, setRomDirectoryType] = useState(system.preference?.get('romProviderType') ?? '')
   const [steps, setSteps] = useState<string[]>([])
   const [pending, setPending] = useState(false)
@@ -39,17 +47,26 @@ export default function SetupWizard() {
     setPending(false)
   }
 
+  function onBackdropClick() {
+    if (controlled) {
+      onClose?.()
+    }
+  }
+
   useEffect(() => {
     reloadStepsSiliently()
   }, [romDirectoryType])
 
-  if (steps.length === 0) {
+  const shouldShow = controlled ? show : steps.length
+
+  if (!shouldShow) {
     return <></>
   }
 
   return (
-    <div className='fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-[#000000af]'>
-      <div className='h-96 w-96 bg-white p-4'>
+    <div className='fixed left-0 top-0 flex h-screen w-screen'>
+      <div className='absolute h-full w-full  bg-[#000000af]' onClick={onBackdropClick} aria-hidden></div>
+      <div className='absolute left-[50%] top-[50%] h-96 w-96 -translate-x-1/2 -translate-y-1/2 bg-white p-4'>
         <div>
           <div>1. Would you like to select your roms directory from your local disk or from Onedrive?</div>
           <div>

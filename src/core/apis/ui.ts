@@ -1,4 +1,9 @@
-import { detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
+import {
+  detectLocalHandleExistence,
+  detectLocalHandlePermission,
+  requestFreshLocalHandle,
+  requestLocalHandle,
+} from '..'
 import { CoreStateManager } from '../classes/core-state-manager'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
@@ -36,33 +41,46 @@ async function emitIfReadyToStart() {
   readyToStartEmitted = true
 }
 
+async function getStepsBeforeStart() {
+  const steps: string[] = []
+  const { preference } = globalInstances
+
+  if (!system.isPreferenceValid()) {
+    steps.push('preference')
+  }
+
+  const romProviderType = preference.get('romProviderType')
+
+  if (romProviderType === 'local') {
+    const localHandleExist = await detectLocalHandleExistence('rom')
+    if (!localHandleExist) {
+      steps.push('prepare')
+    }
+  }
+
+  if (romProviderType === 'onedrive') {
+    const isAccessTokenValid = await OneDriveProvider.validateAccessToken()
+    if (!isAccessTokenValid) {
+      steps.push('prepare')
+    }
+  }
+
+  return steps
+}
+
+let getStepsBeforeStartPromise
+async function getStepsBeforeStartWithCache() {
+  if (getStepsBeforeStartPromise) {
+    return await getStepsBeforeStartPromise
+  }
+  getStepsBeforeStartPromise = getStepsBeforeStart()
+  const steps = await getStepsBeforeStartPromise
+  getStepsBeforeStartPromise = undefined
+  return steps
+}
+
 export const ui = {
-  async getStepsBeforeStart() {
-    const steps: string[] = []
-    const { preference } = globalInstances
-
-    if (!system.isPreferenceValid()) {
-      steps.push('preference')
-    }
-
-    const romProviderType = preference.get('romProviderType')
-
-    if (romProviderType === 'local') {
-      const localHandleExist = await detectLocalHandleExistence('rom')
-      if (!localHandleExist) {
-        steps.push('prepare')
-      }
-    }
-
-    if (romProviderType === 'onedrive') {
-      const isAccessTokenValid = await OneDriveProvider.validateAccessToken()
-      if (!isAccessTokenValid) {
-        steps.push('prepare')
-      }
-    }
-
-    return steps
-  },
+  getStepsBeforeStart: getStepsBeforeStartWithCache,
 
   // this function should be called when user interacts with the webpage, and all other ui methods should be called after this.
   async prepare() {
@@ -70,7 +88,7 @@ export const ui = {
     const type = preference.get('romProviderType')
 
     if (type === 'local') {
-      await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+      await requestFreshLocalHandle({ name: 'rom', mode: 'readwrite' })
       system.setWorkingDirectory('')
     } else if (type === 'onedrive') {
       OneDriveProvider.authorize()

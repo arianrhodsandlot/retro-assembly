@@ -32,11 +32,16 @@ export async function requestLocalHandle({ name, mode }: { name: string; mode: s
       return handle
     }
   } else {
-    const handle: FileSystemDirectoryHandle = await showDirectoryPicker({ mode })
-    handles[name] = handle
-    await set('local-file-system-handles', handles)
-    return handle
+    return await requestFreshLocalHandle({ name, mode })
   }
+}
+
+export async function requestFreshLocalHandle({ name, mode }: { name: string; mode: string }) {
+  const handle: FileSystemDirectoryHandle = await showDirectoryPicker({ mode })
+  const handles = (await get('local-file-system-handles')) ?? {}
+  handles[name] = handle
+  await set('local-file-system-handles', handles)
+  return handle
 }
 
 async function getFilePromise({ entry, handle, path }) {

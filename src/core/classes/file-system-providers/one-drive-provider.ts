@@ -37,11 +37,37 @@ export class OneDriveProvider implements FileSystemProvider {
     return onedriveCloudProvider
   }
 
-  static dectectRedirect() {
-    if (location.search.includes('code')) {
-      OneDriveProvider.getAndPersistToken()
-      history.replaceState(undefined, '', '/')
+  static isRetrievingToken() {
+    const { code } = queryString.parse(location.search)
+    return typeof code === 'string'
+  }
+
+  static async dectectRedirect() {
+    const isRetrievingToken = OneDriveProvider.isRetrievingToken()
+    if (!isRetrievingToken) {
+      return
     }
+
+    const { code, error, error_description: errorDescription } = queryString.parse(location.search)
+    if (error) {
+      console.error('Failed to authorize, error:', { error, errorDescription })
+    } else if (typeof code === 'string') {
+      const grantType = 'authorization_code'
+      const params = {
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        code,
+        grant_type: grantType,
+        code_verifier: codeChallenge,
+      }
+      const body = new URLSearchParams(params)
+      const result = await ky.post(tokenUrl, { body }).json<any>()
+      setStorageByKey({ key: OneDriveProvider.tokenRecordStorageKey, value: result })
+    } else {
+      console.error('Invalide code:', code)
+      return
+    }
+    history.replaceState(undefined, '', '/')
   }
 
   static async validateAccessToken() {
@@ -84,29 +110,6 @@ export class OneDriveProvider implements FileSystemProvider {
         done(undefined, accessToken)
       },
     })
-  }
-
-  private static async getAndPersistToken() {
-    const { code, error, error_description: errorDescription } = queryString.parse(location.search)
-    if (error) {
-      console.error({ error, errorDescription })
-      return
-    }
-    if (!code || typeof code !== 'string') {
-      return
-    }
-    const result = await ky
-      .post(tokenUrl, {
-        body: new URLSearchParams({
-          client_id: clientId,
-          redirect_uri: redirectUri,
-          code,
-          grant_type: 'authorization_code',
-          code_verifier: codeChallenge,
-        }),
-      })
-      .json<any>()
-    setStorageByKey({ key: OneDriveProvider.tokenRecordStorageKey, value: result })
   }
 
   private static async refreshToken() {

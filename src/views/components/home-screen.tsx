@@ -10,11 +10,27 @@ export default function HomeScreen() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
-  const [hasGrantedPermission, setHasGrantedPermission] = useState(!system.isUsingLocal())
+  const [showGrantPermission, setShowGrantPermission] = useState(false)
 
   useEffect(() => {
-    getStarted()
+    ;(async () => {
+      const needGrantPermissionManually = await ui.needGrantPermissionManually()
+      if (needGrantPermissionManually) {
+        setShowGrantPermission(true)
+      } else {
+        getStarted()
+      }
+    })()
   }, [])
+
+  async function grantPermission() {
+    await ui.grantPermissionManually()
+    const needGrantPermissionManually = await ui.needGrantPermissionManually()
+    if (!needGrantPermissionManually) {
+      setShowGrantPermission(false)
+      await getStarted()
+    }
+  }
 
   async function getStarted() {
     await ui.start()
@@ -27,20 +43,6 @@ export default function HomeScreen() {
     const [currentSystem] = systems
     setGroupedRoms(roms)
     setCurrentSystem(currentSystem)
-  }
-
-  async function grantPermission() {
-    try {
-      await ui.regrantLocalPermision()
-      setHasGrantedPermission(true)
-      getStarted()
-    } catch (error) {
-      console.warn(error)
-    }
-  }
-
-  if (!hasGrantedPermission) {
-    return <button onClick={grantPermission}>grant permission</button>
   }
 
   const roms = groupedRoms[currentSystem]
@@ -66,6 +68,7 @@ export default function HomeScreen() {
         </div>
       </div>
       <div className='m-auto flex min-h-screen flex-wrap items-start'>
+        {showGrantPermission && <button onClick={grantPermission}>grant permission</button>}
         {roms?.map((rom) => (
           <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />
         ))}

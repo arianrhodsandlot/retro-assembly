@@ -1,4 +1,3 @@
-import { OneDriveProvider, detectLocalHandleExistence } from '..'
 import { globalInstances } from './global-instances'
 
 export const system = {
@@ -24,7 +23,7 @@ export const system = {
     preference.set({ name: 'romDirectory', value: path })
   },
 
-  validatePreference() {
+  isPreferenceValid() {
     const { preference } = globalInstances
     const configProviderType = preference.get('configProviderType')
     const stateProviderType = preference.get('stateProviderType')

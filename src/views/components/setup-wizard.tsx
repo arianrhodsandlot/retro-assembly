@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { system, ui } from '../../core'
-import { RemoteDirectoryPicker } from './remote-directory-picker'
+import { SetupWizardOnedrive } from './setup-wizard-onedrive'
 
 export default function SetupWizard() {
   const [romDirectoryType, setRomDirectoryType] = useState(system.preference?.get('romProviderType') ?? '')
-  const [stepsBeforeSetup, setStepsBeforeSetup] = useState<string[]>([])
+  const [steps, setSteps] = useState<string[]>([])
+  const [pending, setPending] = useState(false)
 
   function onChangeRomDirectoryType(romDirectoryType) {
     setRomDirectoryType(romDirectoryType)
@@ -14,33 +15,35 @@ export default function SetupWizard() {
   }
 
   async function selectLocalDirectory() {
-    await ui.setup()
-    if (system.validatePreference()) {
-      checkStepsBeforeSetup()
+    await ui.prepare()
+    if (system.isPreferenceValid()) {
+      await reloadStepsSiliently()
     }
   }
 
-  async function loginWithOnedrive() {
-    await ui.setup()
-  }
-
-  async function selectOnedriveDirectory(path) {
-    system.setWorkingDirectory(path)
-    if (system.validatePreference()) {
-      checkStepsBeforeSetup()
+  async function selectOnedriveDirectory(path: string) {
+    await ui.setWorkingDirectory(path)
+    if (system.isPreferenceValid()) {
+      await reloadStepsSiliently()
     }
   }
 
-  async function checkStepsBeforeSetup() {
+  async function reloadStepsSiliently() {
     const stepsBeforeSetup = await ui.getStepsBeforeStart()
-    setStepsBeforeSetup(stepsBeforeSetup)
+    setSteps(stepsBeforeSetup)
+  }
+
+  async function reloadSteps() {
+    setPending(true)
+    await reloadStepsSiliently()
+    setPending(false)
   }
 
   useEffect(() => {
-    checkStepsBeforeSetup()
+    reloadStepsSiliently()
   }, [romDirectoryType])
 
-  if (stepsBeforeSetup.length === 0) {
+  if (steps.length === 0) {
     return <></>
   }
 
@@ -69,22 +72,12 @@ export default function SetupWizard() {
           )}
 
           {romDirectoryType === 'onedrive' && (
-            <div>
-              <div>
-                {stepsBeforeSetup.includes('onedrive-authorize') ? (
-                  <button onClick={loginWithOnedrive}>2. login with onedrive</button>
-                ) : (
-                  <div>2. You have logined into onedrive!</div>
-                )}
-              </div>
-
-              {stepsBeforeSetup.includes('onedrive-authorize') || (
-                <div>
-                  <button>3. Select directory</button>
-                  <RemoteDirectoryPicker onSelect={selectOnedriveDirectory} />
-                </div>
-              )}
-            </div>
+            <SetupWizardOnedrive
+              pending={pending}
+              steps={steps}
+              onChange={selectOnedriveDirectory}
+              onError={reloadSteps}
+            />
           )}
         </div>
       </div>

@@ -1,32 +1,63 @@
-import { detectLocalHandleExistence, requestLocalHandle } from '..'
+import { detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
 import { CoreStateManager } from '../classes/core-state-manager'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { Rom } from '../classes/rom'
+import { emitter } from '../helpers/emitter'
 import { offPressButton, offPressButtons, onPressButton, onPressButtons } from '../helpers/gamepad'
 import { globalInstances } from './global-instances'
 import { system } from './system'
+
+async function start() {
+  const { preference } = globalInstances
+  const type = preference.get('romProviderType')
+  if (type === 'local') {
+    globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
+  } else if (type === 'onedrive') {
+    globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
+  }
+
+  emitter.emit('started')
+}
+
+let readyToStartEmitted = false
+async function emitIfReadyToStart() {
+  if (readyToStartEmitted) {
+    return
+  }
+  const steps = await ui.getStepsBeforeStart()
+  if (steps.length > 0) {
+    return
+  }
+  if (!system.isPreferenceValid()) {
+    return
+  }
+  emitter.emit('ready-to-start')
+  readyToStartEmitted = true
+}
 
 export const ui = {
   async getStepsBeforeStart() {
     const steps: string[] = []
     const { preference } = globalInstances
 
-    if (!system.validatePreference() || !globalInstances.preference) {
+    if (!system.isPreferenceValid()) {
       steps.push('preference')
     }
 
-    if (preference.get('romProviderType') === 'local') {
+    const romProviderType = preference.get('romProviderType')
+
+    if (romProviderType === 'local') {
       const localHandleExist = await detectLocalHandleExistence('rom')
       if (!localHandleExist) {
-        steps.push('local-directory-select')
+        steps.push('prepare')
       }
     }
 
-    if (preference.get('romProviderType') === 'onedrive') {
+    if (romProviderType === 'onedrive') {
       const isAccessTokenValid = await OneDriveProvider.validateAccessToken()
       if (!isAccessTokenValid) {
-        steps.push('onedrive-authorize')
+        steps.push('prepare')
       }
     }
 
@@ -34,7 +65,7 @@ export const ui = {
   },
 
   // this function should be called when user interacts with the webpage, and all other ui methods should be called after this.
-  async setup() {
+  async prepare() {
     const { preference } = globalInstances
     const type = preference.get('romProviderType')
 
@@ -44,22 +75,67 @@ export const ui = {
     } else if (type === 'onedrive') {
       OneDriveProvider.authorize()
     }
+
+    await emitIfReadyToStart()
   },
 
-  async regrantLocalPermision() {
-    const handle = await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
-    console.log(handle)
+  async listDirectory(directory: string) {
+    const onedrive = await OneDriveProvider.getSingleton()
+    return await onedrive.listDir(directory)
+  },
+
+  async needGrantPermissionManually() {
+    const { preference } = globalInstances
+    const romProviderType = preference.get('romProviderType')
+    if (romProviderType !== 'local') {
+      return false
+    }
+
+    const steps = await ui.getStepsBeforeStart()
+    if (steps.length > 0) {
+      return false
+    }
+
+    const hasPermission = await detectLocalHandlePermission({ name: 'rom', mode: 'readwrite' })
+    return !hasPermission
+  },
+
+  async grantPermissionManually() {
+    await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+  },
+
+  onOnedriveToken({ start, success, error }) {
+    emitter.on('onedrive-token', (event) => {
+      switch (event) {
+        case 'start':
+          start()
+          break
+        case 'success':
+          success()
+          break
+        case 'error':
+          error()
+          break
+      }
+    })
+  },
+
+  async setWorkingDirectory(path: string) {
+    system.setWorkingDirectory(path)
+    await emitIfReadyToStart()
   },
 
   async start() {
-    const { preference } = globalInstances
-    const type = preference.get('romProviderType')
+    const steps = await ui.getStepsBeforeStart()
 
-    if (type === 'local') {
-      globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
-    } else if (type === 'onedrive') {
-      globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
-    }
+    await (steps.length === 0
+      ? start()
+      : new Promise<void>((resolve) => {
+          emitter.on('ready-to-start', async () => {
+            await start()
+            resolve()
+          })
+        }))
   },
 
   async listRoms() {
@@ -80,12 +156,6 @@ export const ui = {
       fileSystemProvider,
     })
     return await coreStateManager.getStates()
-  },
-
-  async listDirectory(directory: string) {
-    await ui.start()
-    const { fileSystemProvider } = globalInstances
-    return await fileSystemProvider.listDir(directory)
   },
 
   onPressButtons,

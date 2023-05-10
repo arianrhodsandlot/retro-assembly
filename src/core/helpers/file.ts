@@ -39,26 +39,32 @@ export async function requestLocalHandle({ name, mode }: { name: string; mode: s
   }
 }
 
+async function getFilePromise({ entry, handle, path }) {
+  const file = await entry.getFile()
+  file.directoryHandle = handle
+  file.handle = entry
+  return Object.defineProperty(file, 'webkitRelativePath', {
+    configurable: true,
+    enumerable: true,
+    get: () => path,
+  })
+}
+
 export async function listFilesByHandle({ handle, path = handle.name }: { handle: FileSystemHandle; path?: string }) {
-  const dirs = []
-  const files = []
+  const directoryPromises: Promise<File[]>[] = []
+  const filePromises: Promise<File>[] = []
   for await (const entry of handle.values()) {
     const nestedPath = `${path}/${entry.name}`
     if (entry.kind === 'file') {
-      files.push(
-        entry.getFile().then((file) => {
-          file.directoryHandle = handle
-          file.handle = entry
-          return Object.defineProperty(file, 'webkitRelativePath', {
-            configurable: true,
-            enumerable: true,
-            get: () => nestedPath,
-          })
-        })
-      )
+      const filePromise = getFilePromise({ entry, handle, path: nestedPath })
+      filePromises.push(filePromise)
     } else if (entry.kind === 'directory') {
-      dirs.push(listFilesByHandle({ handle: entry, path: nestedPath }))
+      const directoryPromise = listFilesByHandle({ handle: entry, path: nestedPath })
+      directoryPromises.push(directoryPromise)
     }
   }
-  return [...(await Promise.all(dirs)).flat(), ...(await Promise.all(files))]
+  const directory = await Promise.all(directoryPromises)
+  const directryFiles = directory.flat()
+  const files = await Promise.all(filePromises)
+  return [...directryFiles, ...files]
 }

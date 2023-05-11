@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { system, ui } from '../../core'
+import { ui } from '../../../../core'
 
 interface TreeNode {
   path: string
@@ -78,10 +78,10 @@ function TreeNodeView({
   )
 }
 
-export function RemoteDirectoryPicker({ onSelect }: { onSelect: (string) => void }) {
+export function RemoteDirectoryPicker({ onSelect }: { onSelect: (path: string) => void }) {
   const [tree, setTree] = useState(root)
 
-  async function onChange(changed) {
+  function onChange(changed: TreeNode) {
     setTree(changed)
   }
 

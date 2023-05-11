@@ -83,10 +83,7 @@ export const ui = {
   getStepsBeforeStart: getStepsBeforeStartWithCache,
 
   // this function should be called when user interacts with the webpage, and all other ui methods should be called after this.
-  async prepare() {
-    const { preference } = globalInstances
-    const type = preference.get('romProviderType')
-
+  async prepare(type = globalInstances.preference.get('romProviderType')) {
     if (type === 'local') {
       await requestFreshLocalHandle({ name: 'rom', mode: 'readwrite' })
       system.setWorkingDirectory('')

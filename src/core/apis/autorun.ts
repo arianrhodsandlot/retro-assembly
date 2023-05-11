@@ -15,7 +15,7 @@ async function run() {
 }
 
 try {
-  await run()
+  run()
 } catch (error) {
   console.error(error)
 }

@@ -1,3 +1,5 @@
+import { get, set } from 'idb-keyval'
+import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { globalInstances } from './global-instances'
 
 export const system = {
@@ -22,6 +24,34 @@ export const system = {
     preference.set({ name: 'stateDirectory', value: `${path}retro-assembly/states/` })
     preference.set({ name: 'romDirectory', value: path })
   },
+
+  async setLocalFileSystemHandle(handle) {
+    const handles = (await get('local-file-system-handles')) || {}
+    handles.rom = handle
+    await set('local-file-system-handles', handles)
+  },
+
+  async needsSetup() {
+    if (!system.isPreferenceValid()) {
+      return true
+    }
+
+    if (system.isUsingLocal()) {
+      const handles = (await get('local-file-system-handles')) || {}
+      const handle = handles.rom
+      if (!handle) {
+        return true
+      }
+    }
+
+    return false
+  },
+
+  async needsOnedriveLogin() {
+    return !(await OneDriveProvider.validateAccessToken())
+  },
+
+  isRetrievingToken: OneDriveProvider.isRetrievingToken,
 
   isPreferenceValid() {
     const { preference } = globalInstances

@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useAtom } from 'jotai'
+import { useState } from 'react'
 import { system } from '../../core'
+import { isSettingsModalOpen } from '../lib/atoms'
 import { Modal } from './modal'
 import { GeneralSettings } from './settings-forms/general-settings'
 
@@ -10,18 +12,13 @@ function getCurrentGeneralSettings() {
   }
 }
 
-export default function SetupWizard() {
-  const [isOpen, setIsOpen] = useState(false)
+export function Settings() {
+  const [isOpen, setIsOpen] = useAtom(isSettingsModalOpen)
   const [generalSettings, setGeneralSettings] = useState(getCurrentGeneralSettings())
 
-  async function checkNeedsSetup() {
-    const isOpen = await system.needsSetup()
-    setIsOpen(isOpen)
+  function saveSettings() {
+    setIsOpen(false)
   }
-
-  useEffect(() => {
-    checkNeedsSetup()
-  }, [])
 
   async function onChange(value) {
     const { romProviderType, handle, romDirectory } = value
@@ -29,20 +26,24 @@ export default function SetupWizard() {
       system.setFileSystemProviderType(romProviderType)
     }
 
-    if (romProviderType === 'local') {
+    if (romProviderType === 'local' && handle) {
       await system.setLocalFileSystemHandle(handle)
       system.setWorkingDirectory('')
-    } else if (romProviderType === 'onedrive') {
+    }
+
+    if (romProviderType === 'onedrive' && romDirectory) {
       system.setWorkingDirectory(romDirectory)
     }
 
     setGeneralSettings(getCurrentGeneralSettings())
-    await checkNeedsSetup()
   }
 
   return (
-    <Modal isOpen={isOpen}>
-      <GeneralSettings value={generalSettings} onChange={onChange} />
+    <Modal isOpen={isOpen} onClickBackdrop={() => setIsOpen(false)}>
+      <>
+        <GeneralSettings value={generalSettings} onChange={onChange} />
+        <button onClick={saveSettings}>save</button>
+      </>
     </Modal>
   )
 }

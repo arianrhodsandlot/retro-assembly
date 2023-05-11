@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useAtom } from 'jotai'
+import { isSettingsModalOpen } from '../lib/atoms'
 import HomeScreen from './home-screen'
+import { Settings } from './settings'
 import SetupWizard from './setup-wizard'
 import '../styles/index.sass'
 
 export default function App() {
-  const [showSettings, setShowSettings] = useState(false)
+  const [showSettings, setShowSettings] = useAtom(isSettingsModalOpen)
   function openSettings() {
     setShowSettings(true)
   }
@@ -19,8 +21,8 @@ export default function App() {
       </div>
       <div className='h-screen w-full overflow-x-hidden pl-[200px]'>
         <HomeScreen />
-        <SetupWizard controlled show={showSettings} onClose={() => setShowSettings(false)} />
-        <SetupWizard controlled={false} />
+        {showSettings && <Settings />}
+        <SetupWizard />
       </div>
     </div>
   )

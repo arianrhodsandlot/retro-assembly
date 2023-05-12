@@ -1,4 +1,5 @@
 import { get, set } from 'idb-keyval'
+import { isNil } from 'lodash-es'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { globalInstances } from './global-instances'
 
@@ -9,6 +10,26 @@ export const system = {
     const { preference } = globalInstances
     const romProviderType = preference.get('romProviderType')
     return romProviderType === 'local'
+  },
+
+  async updateSettings({
+    fileSystem,
+    directory,
+    handle,
+  }: {
+    fileSystem?: 'local' | 'onedrive'
+    directory?: string
+    handle?: FileSystemHandle
+  }) {
+    if (!isNil(fileSystem)) {
+      system.setFileSystemProviderType(fileSystem)
+    }
+    if (!isNil(directory)) {
+      system.setWorkingDirectory(directory)
+    }
+    if (!isNil(handle)) {
+      await system.setLocalFileSystemHandle(handle)
+    }
   },
 
   setFileSystemProviderType(type: 'local' | 'onedrive') {
@@ -50,6 +71,8 @@ export const system = {
   async needsOnedriveLogin() {
     return !(await OneDriveProvider.validateAccessToken())
   },
+
+  getOnedriveAuthorizeUrl: OneDriveProvider.getAuthorizeUrl,
 
   isRetrievingToken: OneDriveProvider.isRetrievingToken,
 

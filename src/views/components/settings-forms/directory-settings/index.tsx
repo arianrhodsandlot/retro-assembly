@@ -1,14 +1,24 @@
 import { OnedriveSettings } from './onedrive-settings'
 
-export function GeneralSettings({ value, onChange }: { value; onChange?: (value: any) => void }) {
+export function GeneralSettings({
+  value,
+  onChange,
+  onStartRedirect,
+}: {
+  value
+  onChange?: (value: any) => void
+  onStartRedirect?: (type: string) => void
+}) {
   function updateValue(newValue) {
     onChange?.({ ...value, ...newValue })
   }
 
   async function selectLocalDirectory() {
-    // @ts-expect-error `showDirectoryPicker` is not defined in ts's default declaration files
-    const handle = await showDirectoryPicker({ mode: 'readwrite' })
-    updateValue({ handle })
+    try {
+      // @ts-expect-error `showDirectoryPicker` is not defined in ts's default declaration files
+      const handle = await showDirectoryPicker({ mode: 'readwrite' })
+      updateValue({ handle })
+    } catch {}
   }
 
   function onOnedriveSettingsChange(value: { romDirectory: string }) {

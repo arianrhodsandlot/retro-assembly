@@ -76,7 +76,7 @@ export class OneDriveProvider implements FileSystemProvider {
     }
 
     const client = OneDriveProvider.getClient()
-    const request = client.api('/me/drive')
+    const request = client.api('/me')
     try {
       await OneDriveProvider.wrapRequest(() => request.get())
     } catch (error) {
@@ -87,6 +87,10 @@ export class OneDriveProvider implements FileSystemProvider {
   }
 
   static authorize() {
+    location.assign(OneDriveProvider.getAuthorizeUrl())
+  }
+
+  static getAuthorizeUrl() {
     const query = {
       client_id: clientId,
       scope,
@@ -94,8 +98,7 @@ export class OneDriveProvider implements FileSystemProvider {
       redirect_uri: redirectUri,
       code_challenge: codeChallenge,
     }
-    const url = queryString.stringifyUrl({ url: authorizeUrl, query })
-    location.assign(url)
+    return queryString.stringifyUrl({ url: authorizeUrl, query })
   }
 
   private static getAccessToken() {

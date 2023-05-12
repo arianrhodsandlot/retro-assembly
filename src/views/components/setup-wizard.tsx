@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { system } from '../../core'
 import { Modal } from './modal'
-import { GeneralSettings } from './settings-forms/general-settings'
+import { GeneralSettings } from './settings-forms/directory-settings'
 
 function getCurrentGeneralSettings() {
   return {
@@ -30,10 +30,9 @@ export default function SetupWizard() {
     }
 
     if (romProviderType === 'local') {
-      await system.setLocalFileSystemHandle(handle)
-      system.setWorkingDirectory('')
+      await system.updateSettings({ fileSystem: 'local', directory: '', handle })
     } else if (romProviderType === 'onedrive') {
-      system.setWorkingDirectory(romDirectory)
+      await system.updateSettings({ fileSystem: 'onedrive', directory: romDirectory })
     }
 
     setGeneralSettings(getCurrentGeneralSettings())

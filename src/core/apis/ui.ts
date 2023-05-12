@@ -82,18 +82,6 @@ async function getStepsBeforeStartWithCache() {
 export const ui = {
   getStepsBeforeStart: getStepsBeforeStartWithCache,
 
-  // this function should be called when user interacts with the webpage, and all other ui methods should be called after this.
-  async prepare(type = globalInstances.preference.get('romProviderType')) {
-    if (type === 'local') {
-      await requestFreshLocalHandle({ name: 'rom', mode: 'readwrite' })
-      system.setWorkingDirectory('')
-    } else if (type === 'onedrive') {
-      OneDriveProvider.authorize()
-    }
-
-    await emitIfReadyToStart()
-  },
-
   async listDirectory(directory: string) {
     const onedrive = await OneDriveProvider.getSingleton()
     return await onedrive.listDir(directory)

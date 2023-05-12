@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { system, ui } from '../../../../core'
 import { RemoteDirectoryPicker } from './remote-directory-picker'
 
+const authorizeUrl = system.getOnedriveAuthorizeUrl()
 export function OnedriveSettings({ onChange }: { onChange: (value: { romDirectory: string }) => void }) {
   const [pending, setPending] = useState(true)
   const [hasLogin, setHasLogin] = useState(false)
@@ -47,13 +48,11 @@ export function OnedriveSettings({ onChange }: { onChange: (value: { romDirector
 
   return (
     <div>
-      <div>
-        {hasLogin ? <div>2. {loginText}</div> : <button onClick={() => ui.prepare('onedrive')}>2. {loginText}</button>}
-      </div>
+      <div>{hasLogin ? <div>2. {loginText}</div> : <a href={authorizeUrl}>2. {loginText}</a>}</div>
 
       {hasLogin && (
         <div>
-          <button>3. Select directory</button>
+          <div>Select directory</div>
           <RemoteDirectoryPicker onSelect={onSelectDirectory} />
         </div>
       )}

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { type Rom, system, systemFullNameMap, ui } from '../../core'
+import { type Rom, systemFullNameMap, ui } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 
@@ -18,7 +18,7 @@ export default function HomeScreen() {
       if (needGrantPermissionManually) {
         setShowGrantPermission(true)
       } else {
-        getStarted()
+        loadRoms()
       }
     })()
   }, [])
@@ -28,11 +28,11 @@ export default function HomeScreen() {
     const needGrantPermissionManually = await ui.needGrantPermissionManually()
     if (!needGrantPermissionManually) {
       setShowGrantPermission(false)
-      await getStarted()
+      await loadRoms()
     }
   }
 
-  async function getStarted() {
+  async function loadRoms() {
     await ui.start()
     const roms = await ui.listRoms()
     const systems = Object.keys(roms)

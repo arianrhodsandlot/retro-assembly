@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@microsoft/microsoft-graph-client": "3.0.5",
-    "@zip.js/zip.js": "2.7.6",
+    "@zip.js/zip.js": "2.7.11",
     "browser-fs-access": "0.33.1",
     "browserfs": "1.4.3",
     "classnames": "2.3.2",
@@ -22,7 +22,7 @@
     "idb-keyval": "6.2.1",
     "ini": "4.1.0",
     "jotai": "^2.1.0",
-    "jquery": "3.6.4",
+    "jquery": "3.7.0",
     "ky": "0.33.3",
     "lodash-es": "4.17.21",
     "mitt": "3.0.0",
@@ -35,7 +35,6 @@
     "store2": "2.14.2"
   },
   "devDependencies": {
-    "7zip-bin": "5.2.0",
     "@arianrhodsandlot/eslint-config": "0.6.1",
     "@types/emscripten": "1.39.6",
     "@types/ini": "1.3.31",
@@ -43,7 +42,8 @@
     "@types/randomstring": "1.1.8",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
-    "@vitejs/plugin-react-swc": "3.3.0",
+    "@vitejs/plugin-react-swc": "3.3.1",
+    "7zip-bin": "5.2.0",
     "autoprefixer": "10.4.14",
     "eslint": "8.40.0",
     "libretrodb": "1.0.0",

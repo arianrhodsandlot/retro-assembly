@@ -1,6 +1,9 @@
 import { get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
+import { detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
+import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
+import { emitter } from '../helpers/emitter'
 import { globalInstances } from './global-instances'
 
 export const system = {
@@ -10,6 +13,12 @@ export const system = {
     const { preference } = globalInstances
     const romProviderType = preference.get('romProviderType')
     return romProviderType === 'local'
+  },
+
+  isUsingOnedrive() {
+    const { preference } = globalInstances
+    const romProviderType = preference.get('romProviderType')
+    return romProviderType === 'onedrive'
   },
 
   async updateSettings({
@@ -52,7 +61,7 @@ export const system = {
     await set('local-file-system-handles', handles)
   },
 
-  async needsSetup() {
+  async checkNeedsSetup() {
     if (!system.isPreferenceValid()) {
       return true
     }
@@ -99,6 +108,42 @@ export const system = {
     }
 
     return true
+  },
+
+  async start() {
+    const { preference } = globalInstances
+    const type = preference.get('romProviderType')
+    if (type === 'local') {
+      globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
+    } else if (type === 'onedrive') {
+      globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
+    }
+
+    emitter.emit('started')
+  },
+
+  onStarted(callback) {
+    emitter.on('started', callback)
+  },
+
+  async needsGrantPermissionManually() {
+    const { preference } = globalInstances
+    const romProviderType = preference.get('romProviderType')
+    if (romProviderType !== 'local') {
+      return false
+    }
+
+    const exist = await detectLocalHandleExistence('rom')
+    if (!exist) {
+      return false
+    }
+
+    const hasPermission = await detectLocalHandlePermission({ name: 'rom', mode: 'readwrite' })
+    return !hasPermission
+  },
+
+  async grantPermissionManually() {
+    await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
   },
 }
 

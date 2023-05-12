@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { type Rom, systemFullNameMap, ui } from '../../core'
+import { type Rom, system, systemFullNameMap, ui } from '../../core'
 import EmulatorWrapper from './emulator-wrapper'
 import GameEntry from './game-entry'
 
@@ -10,30 +10,14 @@ export default function HomeScreen() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
-  const [showGrantPermission, setShowGrantPermission] = useState(false)
 
   useEffect(() => {
-    ;(async () => {
-      const needGrantPermissionManually = await ui.needGrantPermissionManually()
-      if (needGrantPermissionManually) {
-        setShowGrantPermission(true)
-      } else {
-        loadRoms()
-      }
-    })()
+    system.onStarted(async () => {
+      await loadRoms()
+    })
   }, [])
 
-  async function grantPermission() {
-    await ui.grantPermissionManually()
-    const needGrantPermissionManually = await ui.needGrantPermissionManually()
-    if (!needGrantPermissionManually) {
-      setShowGrantPermission(false)
-      await loadRoms()
-    }
-  }
-
   async function loadRoms() {
-    await ui.start()
     const roms = await ui.listRoms()
     const systems = Object.keys(roms)
     if (!systems) {
@@ -68,7 +52,6 @@ export default function HomeScreen() {
         </div>
       </div>
       <div className='m-auto flex min-h-screen flex-wrap items-start'>
-        {showGrantPermission && <button onClick={grantPermission}>grant permission</button>}
         {roms?.map((rom) => (
           <GameEntry rom={rom} key={rom.id} onClick={() => setCurrentRom(rom)} />
         ))}

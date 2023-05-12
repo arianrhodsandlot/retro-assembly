@@ -87,26 +87,6 @@ export const ui = {
     return await onedrive.listDir(directory)
   },
 
-  async needGrantPermissionManually() {
-    const { preference } = globalInstances
-    const romProviderType = preference.get('romProviderType')
-    if (romProviderType !== 'local') {
-      return false
-    }
-
-    const steps = await ui.getStepsBeforeStart()
-    if (steps.length > 0) {
-      return false
-    }
-
-    const hasPermission = await detectLocalHandlePermission({ name: 'rom', mode: 'readwrite' })
-    return !hasPermission
-  },
-
-  async grantPermissionManually() {
-    await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
-  },
-
   onOnedriveToken({ start, success, error }) {
     emitter.on('onedrive-token', (event) => {
       switch (event) {

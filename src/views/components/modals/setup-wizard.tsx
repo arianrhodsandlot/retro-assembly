@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
-import { system } from '../../core'
+import { useAtom } from 'jotai'
+import { useState } from 'react'
+import { system } from '../../../core'
+import { needsSetupAtom } from '../../lib/atoms'
+import { GeneralSettings } from '../settings-forms/directory-settings'
 import { Modal } from './modal'
-import { GeneralSettings } from './settings-forms/directory-settings'
 
 function getCurrentGeneralSettings() {
   return {
@@ -10,18 +12,9 @@ function getCurrentGeneralSettings() {
   }
 }
 
-export default function SetupWizard() {
-  const [isOpen, setIsOpen] = useState(false)
+export default function SetupWizard({ onSubmit }: { onSubmit: () => void }) {
+  const [needsSetup] = useAtom(needsSetupAtom)
   const [generalSettings, setGeneralSettings] = useState(getCurrentGeneralSettings())
-
-  async function checkNeedsSetup() {
-    const isOpen = await system.needsSetup()
-    setIsOpen(isOpen)
-  }
-
-  useEffect(() => {
-    checkNeedsSetup()
-  }, [])
 
   async function onChange(value) {
     const { romProviderType, handle, romDirectory } = value
@@ -36,11 +29,11 @@ export default function SetupWizard() {
     }
 
     setGeneralSettings(getCurrentGeneralSettings())
-    await checkNeedsSetup()
+    onSubmit()
   }
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={needsSetup}>
       <GeneralSettings value={generalSettings} onChange={onChange} />
     </Modal>
   )

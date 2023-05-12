@@ -1,9 +1,9 @@
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { system } from '../../core'
-import { isSettingsModalOpen } from '../lib/atoms'
+import { system } from '../../../core'
+import { isSettingsModalOpenAtom } from '../../lib/atoms'
+import { GeneralSettings } from '../settings-forms/directory-settings'
 import { Modal } from './modal'
-import { GeneralSettings } from './settings-forms/directory-settings'
 
 function getCurrentGeneralSettings() {
   return {
@@ -14,7 +14,7 @@ function getCurrentGeneralSettings() {
 }
 
 export function Settings() {
-  const [isOpen, setIsOpen] = useAtom(isSettingsModalOpen)
+  const [isOpen, setIsOpen] = useAtom(isSettingsModalOpenAtom)
   const [generalSettings, setGeneralSettings] = useState(getCurrentGeneralSettings())
 
   function closeSettingsModal() {

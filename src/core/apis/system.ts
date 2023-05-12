@@ -111,6 +111,7 @@ export const system = {
   },
 
   async start() {
+    emitter.emit('start')
     const { preference } = globalInstances
     const type = preference.get('romProviderType')
     if (type === 'local') {

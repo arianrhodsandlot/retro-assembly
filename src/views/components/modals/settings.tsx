@@ -29,10 +29,12 @@ export function Settings() {
       system.updateSettings({ fileSystem: romProviderType, directory: '' })
       setGeneralSettings(getCurrentGeneralSettings())
       closeSettingsModal()
+      await system.start()
     } else if (romProviderType === 'onedrive' && romDirectory) {
       system.updateSettings({ fileSystem: romProviderType, directory: romDirectory })
       setGeneralSettings(getCurrentGeneralSettings())
       closeSettingsModal()
+      await system.start()
     } else {
       setGeneralSettings({ ...generalSettings, ...value })
     }
@@ -40,9 +42,7 @@ export function Settings() {
 
   return (
     <Modal isOpen={isOpen} onClickBackdrop={() => setIsOpen(false)}>
-      <>
-        <GeneralSettings value={generalSettings} onChange={onChange} />
-      </>
+      <GeneralSettings value={generalSettings} onChange={onChange} />
     </Modal>
   )
 }

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { game, ui } from '../../core'
+import { game, ui } from '../../../core'
 
 export function StatesList() {
   const [states, setStates] = useState<any[]>()

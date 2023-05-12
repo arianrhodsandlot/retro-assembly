@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { type Rom, game, ui } from '../../core'
+import { type Rom, game, ui } from '../../../core'
 import { StatesList } from './states-list'
 
 const menuHotButtons = ['l3', 'r3']

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { type Rom, getCover } from '../../core'
+import { type Rom, getCover } from '../../../core'
 import GameEntryImage from './game-entry-image'
 
 export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.MouseEventHandler<HTMLButtonElement> }) {

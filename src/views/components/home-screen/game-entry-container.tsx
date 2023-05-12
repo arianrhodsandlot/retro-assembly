@@ -1,12 +1,12 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { type Rom, system, systemFullNameMap, ui } from '../../core'
-import EmulatorWrapper from './emulator-wrapper'
+import { type Rom, system, systemFullNameMap, ui } from '../../../core'
+import EmulatorWrapper from '../emulator/emulator-wrapper'
 import GameEntry from './game-entry'
 
 const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ name, fullName }))
 
-export default function HomeScreen() {
+export function GameEntryContainer() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')

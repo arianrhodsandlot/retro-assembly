@@ -193,23 +193,26 @@ export class OneDriveProvider implements FileSystemProvider {
         }
       }
 
-      const response: any[] = []
       const children = await this.listDir(path)
-      for (const child of children) {
-        const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
-        const path = `${childParentPath}/${child.name}`
-        if (child.folder?.childCount) {
-          const listResponse = await list({ path, size: child.size, lastModified: child.lastModifiedDateTime })
-          response.push(...listResponse)
-        } else if (child.file) {
-          const downloadUrl = child['@microsoft.graph.downloadUrl']
-          const fileSummary = {
-            path,
-            downloadUrl,
-          }
-          response.push(fileSummary)
-        }
-      }
+
+      const files = children
+        .filter((child) => child.file)
+        .map((child) => {
+          const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
+          const path = `${childParentPath}/${child.name}`
+          return { path, downloadUrl: child['@microsoft.graph.downloadUrl'] }
+        })
+
+      const foldersPromises = children
+        .filter((child) => child.folder?.childCount)
+        .map((child) => {
+          const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
+          const path = `${childParentPath}/${child.name}`
+          return list({ path, size: child.size, lastModified: child.lastModifiedDateTime })
+        })
+
+      const folders = await Promise.all(foldersPromises)
+      const response = [...files, ...folders.flat()]
 
       if (shouldUseCache) {
         await OneDriveProvider.setDirectoryApiCache({ path, size, lastModified, response })

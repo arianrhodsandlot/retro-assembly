@@ -127,6 +127,10 @@ export const system = {
     emitter.on('started', callback)
   },
 
+  onRequestAuthError(callback) {
+    emitter.on('request-auth-error', callback)
+  },
+
   async needsGrantPermissionManually() {
     const { preference } = globalInstances
     const romProviderType = preference.get('romProviderType')

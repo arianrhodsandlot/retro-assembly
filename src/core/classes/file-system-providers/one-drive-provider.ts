@@ -3,6 +3,7 @@ import { openDB } from 'idb'
 import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
+import { emitter } from '../../helpers/emitter'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
@@ -138,8 +139,12 @@ export class OneDriveProvider implements FileSystemProvider {
       return await request()
     } catch (error: any) {
       if (error.code === 'InvalidAuthenticationToken') {
-        await OneDriveProvider.refreshToken()
-        return await request()
+        try {
+          await OneDriveProvider.refreshToken()
+          return await request()
+        } catch {
+          emitter.emit('request-auth-error', { type: 'onedrive', error })
+        }
       }
       throw error
     }

@@ -27,6 +27,10 @@ export default function App() {
 
   useEffect(() => {
     checkPreparations()
+
+    system.onRequestAuthError(() => {
+      setNeedsSetup(true)
+    })
   }, [])
 
   return (

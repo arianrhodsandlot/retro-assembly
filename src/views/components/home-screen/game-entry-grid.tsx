@@ -16,7 +16,7 @@ export function GameEntryGrid({
   const { columnCount } = props
 
   return (
-    <FixedSizeGrid className='!overflow-x-hidden' {...props}>
+    <FixedSizeGrid {...props}>
       {({ columnIndex, rowIndex, style }) => {
         const index = rowIndex * columnCount + columnIndex
         const rom = roms[index]

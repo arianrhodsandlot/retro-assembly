@@ -1,45 +1,21 @@
 import classNames from 'classnames'
 
-export default function GameEntryImage({
-  status: { valid, loading },
-  src,
-  alt,
-  onLoad,
-  onError,
-}: {
-  status: {
-    valid: boolean
-    loading: boolean
-  }
-  src: string
-  alt: string
-  onLoad: any
-  onError: any
-}) {
-  const isLoaded = valid && !loading
+export default function GameEntryImage({ src, alt }: { src: string; alt: string }) {
   return (
     <>
-      {isLoaded && (
-        <>
-          <div
-            className='absolute top-0 h-full w-full bg-cover bg-center'
-            style={{
-              backgroundImage: `url("${src}")`,
-            }}
-          />
-          <div className='absolute top-0 h-full w-full backdrop-blur-sm' />
-        </>
-      )}
-      {src && (
-        <img
-          className={classNames('absolute h-full w-full object-contain', loading ? '-top-[9999px]' : 'top-0')}
-          style={{ imageRendering: 'pixelated' }}
-          src={src}
-          alt={alt}
-          onLoad={onLoad}
-          onError={onError}
-        />
-      )}
+      <div
+        className='blur-25px absolute -inset-1/2 bg-cover bg-center blur'
+        style={{
+          imageRendering: 'pixelated',
+          backgroundImage: `url("${src}")`,
+        }}
+      />
+      <img
+        className='absolute top-0 h-full w-full object-contain'
+        style={{ imageRendering: 'pixelated' }}
+        src={src}
+        alt={alt}
+      />
     </>
   )
 }

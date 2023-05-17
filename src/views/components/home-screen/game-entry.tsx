@@ -4,17 +4,9 @@ import { type Rom, getCover } from '../../../core'
 import GameEntryImage from './game-entry-image'
 
 export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.MouseEventHandler<HTMLButtonElement> }) {
-  const [gameImageStatus, setGameImageStatus] = useState({ valid: true, loading: true })
+  const [gameImageStatus, setGameImageStatus] = useState({ valid: true, loading: false })
 
   const gameImageSrc = rom.gameInfo ? getCover({ system: rom.system, name: rom.gameInfo.name }) : ''
-
-  function onImgError() {
-    setGameImageStatus({ valid: false, loading: false })
-  }
-
-  function onImageLoad() {
-    setGameImageStatus({ valid: true, loading: false })
-  }
 
   useEffect(() => {
     ;(async () => {
@@ -22,7 +14,6 @@ export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.M
       let loading = true
       try {
         await rom.ready()
-        valid = Boolean(getCover({ system: rom.system, name: rom.gameInfo?.name }))
       } catch (error) {
         valid = false
         console.warn(error)
@@ -32,16 +23,28 @@ export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.M
     })()
   }, [rom])
 
+  useEffect(() => {
+    if (!gameImageSrc) {
+      if (gameImageStatus.loading) {
+        setGameImageStatus({ valid: false, loading: false })
+      }
+      return
+    }
+    const img = new Image()
+    img.src = gameImageSrc
+    img.addEventListener('load', () => {
+      setGameImageStatus({ valid: true, loading: false })
+    })
+    img.addEventListener('error', (error) => {
+      console.log(error)
+      setGameImageStatus({ valid: false, loading: false })
+    })
+  }, [gameImageStatus.loading, gameImageSrc])
+
   const gameEntryImageWithLoader = (
     <>
       {gameImageStatus.loading && <div className='h-full w-full bg-slate-400' />}
-      <GameEntryImage
-        status={gameImageStatus}
-        src={gameImageSrc}
-        alt={rom.goodCode.rom}
-        onLoad={onImageLoad}
-        onError={onImgError}
-      />
+      {gameImageSrc && <GameEntryImage src={gameImageSrc} alt={rom.goodCode.rom} />}
     </>
   )
 
@@ -53,10 +56,10 @@ export default function GameEntry({ rom, onClick }: { rom: Rom; onClick: React.M
     <button
       onClick={onClick}
       className={classNames(
-        'relative aspect-square w-full transform-gpu overflow-hidden border-white text-left transition-transform',
+        'absolute -inset-[3px] overflow-hidden border-4 border-transparent text-left transition-transform',
         gameImageStatus.loading
-          ? 'scale-[98%]'
-          : 'hover:z-10 hover:scale-110 hover:rounded-sm hover:border-4 hover:shadow-md'
+          ? 'scale-[99%]'
+          : 'hover:z-10 hover:scale-110 hover:rounded hover:border-white hover:shadow-2xl hover:shadow-black'
       )}
     >
       {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}

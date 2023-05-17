@@ -36,6 +36,8 @@ export function GameEntryContainer() {
   const columnCount = 5
   const navSystems = systems.filter((system) => groupedRoms[system.name]?.length)
 
+  const gridWidth = width + 2
+  const gridHeight = height + 2
   return (
     <div className='h-screen w-full overflow-x-hidden pl-[200px]' ref={containerElement}>
       <SystemNavigation
@@ -47,13 +49,14 @@ export function GameEntryContainer() {
 
       {roms?.length && (
         <GameEntryGrid
+          className='-ml-[2px] -mt-[2px] !overflow-x-hidden'
           roms={roms}
           columnCount={columnCount}
-          columnWidth={width / columnCount}
+          columnWidth={gridWidth / columnCount}
           rowCount={Math.ceil(roms.length / columnCount)}
-          rowHeight={width / columnCount}
-          height={height - navHeight}
-          width={width}
+          rowHeight={gridWidth / columnCount}
+          height={gridHeight - navHeight}
+          width={gridWidth}
           onLaunch={setCurrentRom}
         />
       )}

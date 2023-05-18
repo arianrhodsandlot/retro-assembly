@@ -28,7 +28,6 @@ const systemImageMap = {
   gbc,
   gb,
   n64,
-  img,
   nes,
   snes,
   vb,

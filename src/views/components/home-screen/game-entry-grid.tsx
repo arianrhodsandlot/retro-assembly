@@ -1,33 +1,36 @@
-import { FixedSizeGrid } from 'react-window'
+import { useSetAtom } from 'jotai'
+import { FixedSizeGrid, type GridChildComponentProps } from 'react-window'
 import { type Rom } from '../../../core'
+import { currentRomAtom } from '../../lib/atoms'
 import GameEntry from './game-entry'
 
-export function GameEntryGrid({
-  roms,
-  onLaunch,
-  ...props
-}: {
+interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
   roms: Rom[]
-  onLaunch: (rom: Rom) => void
-} & Omit<FixedSizeGrid['props'], 'children'>) {
-  if (roms.length === 0) {
-    return null
-  }
-  const { columnCount } = props
+}
 
-  return (
-    <FixedSizeGrid {...props}>
-      {({ columnIndex, rowIndex, style }) => {
-        const index = rowIndex * columnCount + columnIndex
-        const rom = roms[index]
-        return (
-          rom && (
-            <div style={style}>
-              <GameEntry rom={rom} onClick={() => onLaunch(rom)} />
-            </div>
-          )
-        )
-      }}
-    </FixedSizeGrid>
-  )
+export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
+  const setCurrentRom = useSetAtom(currentRomAtom)
+
+  const { rowCount, columnCount } = props
+
+  function FixedSizeGridItem({ columnIndex, rowIndex, style }: GridChildComponentProps) {
+    const index = rowIndex * columnCount + columnIndex
+    const rom = roms[index]
+    return (
+      rom && (
+        <GameEntry
+          index={index}
+          columnIndex={columnIndex}
+          rowCount={rowCount}
+          columnCount={columnCount}
+          rowIndex={rowIndex}
+          style={style}
+          rom={rom}
+          onClick={() => setCurrentRom(rom)}
+        />
+      )
+    )
+  }
+
+  return roms.length > 0 ? <FixedSizeGrid {...props}>{FixedSizeGridItem}</FixedSizeGrid> : null
 }

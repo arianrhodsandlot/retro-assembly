@@ -50,7 +50,10 @@ export function SystemNavigation({
   elementRef: Ref<HTMLDivElement>
 }) {
   return (
-    <div className='relative z-[1] w-full overflow-auto bg-[#fe0000] text-white' ref={elementRef}>
+    <div
+      className='absolute left-[200px] right-0 top-0 overflow-auto overflow-x-hidden bg-[#fe0000] text-white'
+      ref={elementRef}
+    >
       <div className='flex flex-nowrap'>
         {systems.map((system) => {
           const isCurrent = system.name === currentSystem

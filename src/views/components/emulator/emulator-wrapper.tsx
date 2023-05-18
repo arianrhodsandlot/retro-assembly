@@ -1,11 +1,14 @@
 import classNames from 'classnames'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { type Rom, game, ui } from '../../../core'
+import { game, ui } from '../../../core'
+import { currentRomAtom } from '../../lib/atoms'
 import { StatesList } from './states-list'
 
 const menuHotButtons = ['l3', 'r3']
 
-export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: () => void }) {
+export default function EmulatorWrapper() {
+  const [rom, setCurrentRom] = useAtom(currentRomAtom)
   const [isPaused, setIsPaused] = useState(false)
   const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)
 
@@ -54,7 +57,8 @@ export default function EmulatorWrapper({ rom, onExit }: { rom: Rom; onExit?: ()
 
   function exit() {
     game.exit()
-    onExit?.()
+    setShowEmulatorControllMenu(false)
+    setCurrentRom(undefined)
   }
 
   return (

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useMeasure } from 'react-use'
+import { useMeasure, useWindowSize } from 'react-use'
 import { type Rom, system, systemFullNameMap, ui } from '../../../core'
-import EmulatorWrapper from '../emulator/emulator-wrapper'
 import { GameEntryGrid } from './game-entry-grid'
 import { SystemNavigation } from './system-navigation'
 
@@ -9,10 +8,9 @@ const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ n
 
 export function GameEntryContainer() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
-  const [currentRom, setCurrentRom] = useState<Rom | false>(false)
   const [currentSystem, setCurrentSystem] = useState<string>('')
-  const [containerElement, { width, height }] = useMeasure<HTMLDivElement>()
-  const [navElement, { height: navHeight }] = useMeasure<HTMLDivElement>()
+  const windowSize = useWindowSize()
+  const [navElement, { width, height: navHeight }] = useMeasure<HTMLDivElement>()
 
   useEffect(() => {
     system.onStarted(async () => {
@@ -36,10 +34,10 @@ export function GameEntryContainer() {
   const columnCount = 5
   const navSystems = systems.filter((system) => groupedRoms[system.name]?.length)
 
-  const gridWidth = width + 2
-  const gridHeight = height + 2
+  const gridWidth = width
+  const gridHeight = windowSize.height - navHeight
   return (
-    <div className='h-screen w-full overflow-x-hidden pl-[200px]' ref={containerElement}>
+    <>
       <SystemNavigation
         elementRef={navElement}
         currentSystem={currentSystem}
@@ -49,19 +47,17 @@ export function GameEntryContainer() {
 
       {roms?.length && (
         <GameEntryGrid
-          className='-ml-[2px] -mt-[2px] !overflow-x-hidden'
+          className='absolute bottom-0 left-[200px] !overflow-x-hidden'
           roms={roms}
+          style={{ top: navHeight }}
           columnCount={columnCount}
           columnWidth={gridWidth / columnCount}
           rowCount={Math.ceil(roms.length / columnCount)}
           rowHeight={gridWidth / columnCount}
-          height={gridHeight - navHeight}
+          height={gridHeight}
           width={gridWidth}
-          onLaunch={setCurrentRom}
         />
       )}
-
-      {currentRom && <EmulatorWrapper rom={currentRom} onExit={() => setCurrentRom(false)} />}
-    </div>
+    </>
   )
 }

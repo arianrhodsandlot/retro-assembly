@@ -42,6 +42,11 @@ export const game = {
     emulator.loadState(state)
   },
 
+  isRunning() {
+    const { emulator } = globalInstances
+    return Boolean(emulator)
+  },
+
   start() {
     const { emulator } = globalInstances
     emulator.start()

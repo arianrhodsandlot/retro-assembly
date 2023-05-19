@@ -24,7 +24,7 @@ export default function EmulatorWrapper() {
     }
     ui.onPressButtons(menuHotButtons, toggleMenu)
     document.addEventListener('keyup', (event) => {
-      if (event.key === 'Control') {
+      if (game.isRunning() && event.key === 'Control') {
         toggleMenu()
       }
     })
@@ -58,8 +58,9 @@ export default function EmulatorWrapper() {
 
   function exit() {
     game.exit()
-    setShowEmulatorControllMenu(false)
+    setCurrentRom(undefined)
     emitter.emit('exit')
+    setShowEmulatorControllMenu(false)
   }
 
   return (

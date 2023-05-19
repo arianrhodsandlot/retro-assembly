@@ -1,7 +1,5 @@
-import { useSetAtom } from 'jotai'
 import { FixedSizeGrid, type GridChildComponentProps } from 'react-window'
 import { type Rom } from '../../../core'
-import { currentRomAtom } from '../../lib/atoms'
 import GameEntry from './game-entry'
 
 interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
@@ -9,8 +7,6 @@ interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
 }
 
 export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
-  const setCurrentRom = useSetAtom(currentRomAtom)
-
   const { rowCount, columnCount } = props
 
   function FixedSizeGridItem({ columnIndex, rowIndex, style }: GridChildComponentProps) {
@@ -26,7 +22,6 @@ export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
           rowIndex={rowIndex}
           style={style}
           rom={rom}
-          onClick={() => setCurrentRom(rom)}
         />
       )
     )

@@ -3,6 +3,7 @@ import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { game, ui } from '../../../core'
 import { currentRomAtom } from '../../lib/atoms'
+import { emitter } from '../../lib/emitter'
 import { StatesList } from './states-list'
 
 const menuHotButtons = ['l3', 'r3']
@@ -58,7 +59,7 @@ export default function EmulatorWrapper() {
   function exit() {
     game.exit()
     setShowEmulatorControllMenu(false)
-    setCurrentRom(undefined)
+    emitter.emit('exit')
   }
 
   return (

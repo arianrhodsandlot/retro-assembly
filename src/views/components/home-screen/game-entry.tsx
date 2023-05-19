@@ -1,9 +1,12 @@
 import classNames from 'classnames'
-import delay from 'delay'
-import { type Target, motion } from 'framer-motion'
+import { AnimatePresence, type Target, motion } from 'framer-motion'
+import { useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useLockBodyScroll, useToggle, useWindowSize } from 'react-use'
 import { type Rom, getCover } from '../../../core'
+import { currentRomAtom } from '../../lib/atoms'
+import { emitter } from '../../lib/emitter'
 import GameEntryImage from './game-entry-image'
 
 export default function GameEntry({
@@ -14,7 +17,6 @@ export default function GameEntry({
   rowCount,
   columnCount,
   style,
-  onClick,
 }: {
   rom: Rom
   index: number
@@ -23,17 +25,21 @@ export default function GameEntry({
   rowCount: number
   columnCount: number
   style: React.CSSProperties
-  onClick: () => void
 }) {
+  const setCurrentRom = useSetAtom(currentRomAtom)
   const [gameImageStatus, setGameImageStatus] = useState({ valid: true, loading: false })
   const gameEntryRef = useRef<HTMLButtonElement>(null)
   const [maskPosition, setMaskPosition] = useState<Target>()
   const gameImageSrc = rom.gameInfo ? getCover({ system: rom.system, name: rom.gameInfo.name }) : ''
+  const { width: windowWidth, height: windowHeight } = useWindowSize()
+  const [locked, toggleLocked] = useToggle(false)
+  useLockBodyScroll(locked)
 
   function onGameEntryClick() {
     if (!gameEntryRef.current) {
       return
     }
+    toggleLocked(true)
     const boundingClientRect = gameEntryRef.current.getBoundingClientRect()
     setMaskPosition({
       top: boundingClientRect.y,
@@ -44,8 +50,14 @@ export default function GameEntry({
   }
 
   function onAnimationComplete() {
-    onClick()
-    setMaskPosition(undefined)
+    toggleLocked(false)
+    setCurrentRom(rom)
+
+    emitter.on('exit', () => {
+      setMaskPosition(undefined)
+
+      emitter.off('exit')
+    })
   }
 
   useEffect(() => {
@@ -97,13 +109,23 @@ export default function GameEntry({
   const isLastRow = !isFirstRow && rowIndex === rowCount - 1
   const isLastColumn = !isFirstColumn && columnIndex === columnCount - 1
 
+  const maskInitialStyle = { ...maskPosition, filter: 'brightness(1)' }
+  const maskInitialAnimateStyle = {
+    ...maskPosition,
+    top: 0,
+    left: 0,
+    width: windowWidth,
+    height: windowHeight,
+    filter: 'brightness(0)',
+  }
+
   return (
     <>
       <button
         className={classNames(
           'overflow-hidden bg-white text-left transition-transform',
           gameImageStatus.loading
-            ? 'scale-[99%]'
+            ? 'scale-[100%]'
             : [
                 'hover:z-10 hover:scale-110 hover:rounded hover:border-4 hover:border-white hover:shadow-2xl hover:shadow-black',
                 {
@@ -125,18 +147,23 @@ export default function GameEntry({
         {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
       </button>
 
-      {maskPosition &&
-        createPortal(
-          <motion.div
-            className='fixed z-10 overflow-hidden'
-            initial={maskPosition}
-            animate={{ top: 0, left: 0, width: '100%', height: '100%', filter: 'brightness(0)' }}
-            onAnimationComplete={onAnimationComplete}
-          >
-            {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
-          </motion.div>,
-          document.body
-        )}
+      {createPortal(
+        <AnimatePresence>
+          {maskPosition && (
+            <motion.div
+              className='absolute z-10 overflow-hidden'
+              initial={maskInitialStyle}
+              animate={maskInitialAnimateStyle}
+              exit={maskInitialStyle}
+              transition={{ duration: 0.3 }}
+              onAnimationComplete={onAnimationComplete}
+            >
+              {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   )
 }

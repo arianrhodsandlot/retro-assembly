@@ -137,7 +137,7 @@ export default function GameEntry({
                   'origin-top-left': isFirstRow && isFirstColumn,
                   'right-[4px] origin-top': isFirstRow && !isFirstColumn && !isLastColumn,
                   'right-[4px] origin-top-right': isFirstRow && isLastColumn,
-                  'bottom-[4px] origin-left': !isFirstRow && isFirstColumn,
+                  'bottom-[4px] origin-left': !isFirstRow && isFirstColumn && !isLastRow,
                   'bottom-[4px] right-[4px] origin-center':
                     !isFirstRow && !isLastRow && !isFirstColumn && !isLastColumn,
                   'bottom-[4px] right-[4px] origin-right': !isFirstRow && isLastColumn,

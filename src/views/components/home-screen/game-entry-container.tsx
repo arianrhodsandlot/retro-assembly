@@ -1,3 +1,4 @@
+import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation'
 import { useEffect, useState } from 'react'
 import { useMeasure, useWindowSize } from 'react-use'
 import { type Rom, system, systemFullNameMap, ui } from '../../../core'
@@ -31,13 +32,13 @@ export function GameEntryContainer() {
   }
 
   const roms = groupedRoms[currentSystem]
-  const columnCount = 5
+  const columnCount = 8
   const navSystems = systems.filter((system) => groupedRoms[system.name]?.length)
 
   const gridWidth = width
   const gridHeight = windowSize.height - navHeight
   return (
-    <>
+    <div>
       <SystemNavigation
         elementRef={navElement}
         currentSystem={currentSystem}
@@ -47,7 +48,7 @@ export function GameEntryContainer() {
 
       {roms?.length && (
         <GameEntryGrid
-          className='absolute bottom-0 left-[200px] !overflow-x-hidden'
+          className='absolute bottom-0 left-[200px] !overflow-x-hidden scroll-smooth'
           roms={roms}
           style={{ top: navHeight }}
           columnCount={columnCount}
@@ -58,6 +59,6 @@ export function GameEntryContainer() {
           width={gridWidth}
         />
       )}
-    </>
+    </div>
   )
 }

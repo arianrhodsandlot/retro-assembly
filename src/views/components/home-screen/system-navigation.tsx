@@ -1,3 +1,4 @@
+import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation'
 import classNames from 'classnames'
 import { type Ref } from 'react'
 import atari2600 from '../../assets/consoles/Atari - 2600.png'
@@ -38,6 +39,29 @@ const systemImageMap = {
   psx,
 }
 
+function SystemNavigationItem({ system, isSelected, onChange }: { system: any; isSelected: boolean; onChange: any }) {
+  const { ref, focused } = useFocusable()
+  return (
+    <div
+      ref={ref}
+      role='button'
+      className={classNames(
+        'flex shrink-0 items-center justify-center border-[#fe0000] px-8 py-4 transition-[opacity,background-color] hover:opacity-100',
+        {
+          'opacity-80': !isSelected,
+          'bg-[#ac000d]': isSelected,
+          focused,
+        }
+      )}
+      key={system.name}
+      aria-hidden
+      onClick={() => onChange(system.name)}
+    >
+      <img src={systemImageMap[system.name]} alt='' width={50} height={50} />
+      {isSelected && <div className='ml-2'>{system.fullName}</div>}
+    </div>
+  )
+}
 export function SystemNavigation({
   currentSystem,
   systems,
@@ -49,34 +73,24 @@ export function SystemNavigation({
   onChange: (systemName: string) => void
   elementRef: Ref<HTMLDivElement>
 }) {
+  const { ref, focusKey } = useFocusable()
   return (
     <div
       className='absolute left-[200px] right-0 top-0 overflow-auto overflow-x-hidden bg-[#fe0000] text-white'
       ref={elementRef}
     >
-      <div className='flex flex-nowrap'>
-        {systems.map((system) => {
-          const isCurrent = system.name === currentSystem
-          return (
-            <div
-              role='button'
-              className={classNames(
-                'flex shrink-0 items-center justify-center border-[#fe0000] px-8 py-4 transition-[opacity,background-color] hover:opacity-100',
-                {
-                  'opacity-80': !isCurrent,
-                  'bg-[#ac000d]': isCurrent,
-                }
-              )}
+      <FocusContext.Provider value={focusKey}>
+        <div className='flex flex-nowrap' ref={ref}>
+          {systems.map((system) => (
+            <SystemNavigationItem
               key={system.name}
-              aria-hidden
-              onClick={() => onChange(system.name)}
-            >
-              <img src={systemImageMap[system.name]} alt='' width={50} height={50} />
-              {isCurrent && <div className='ml-2'>{system.fullName}</div>}
-            </div>
-          )
-        })}
-      </div>
+              system={system}
+              isSelected={system.name === currentSystem}
+              onChange={onChange}
+            />
+          ))}
+        </div>
+      </FocusContext.Provider>
     </div>
   )
 }

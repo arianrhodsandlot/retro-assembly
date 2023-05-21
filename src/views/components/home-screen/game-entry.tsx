@@ -1,7 +1,8 @@
+import { useFocusable } from '@noriginmedia/norigin-spatial-navigation'
 import classNames from 'classnames'
 import { AnimatePresence, type Target, motion } from 'framer-motion'
 import { useSetAtom } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useWindowSize } from 'react-use'
 import { type Rom, getCover } from '../../../core'
@@ -29,10 +30,11 @@ export default function GameEntry({
 }) {
   const setCurrentRom = useSetAtom(currentRomAtom)
   const [gameImageStatus, setGameImageStatus] = useState({ valid: true, loading: false })
-  const gameEntryRef = useRef<HTMLButtonElement>(null)
+  // const gameEntryRef = useRef<HTMLButtonElement>(null)
   const [maskPosition, setMaskPosition] = useState<Target>()
   const gameImageSrc = rom.gameInfo ? getCover({ system: rom.system, name: rom.gameInfo.name }) : ''
   const { width: windowWidth, height: windowHeight } = useWindowSize()
+  const { ref, focused } = useFocusable({ onFocus })
 
   const maskInitialStyle = { ...maskPosition, filter: 'brightness(1)' }
   const maskExpandedStyle = {
@@ -44,11 +46,18 @@ export default function GameEntry({
     filter: 'brightness(.1)',
   }
 
+  function onFocus() {
+    const element: HTMLButtonElement = ref.current
+    if (element) {
+      element.scrollIntoView({ block: 'nearest', inline: 'end' })
+    }
+  }
+
   function onGameEntryClick() {
-    if (!gameEntryRef.current) {
+    if (!ref.current) {
       return
     }
-    const boundingClientRect = gameEntryRef.current.getBoundingClientRect()
+    const boundingClientRect = ref.current.getBoundingClientRect()
     setMaskPosition({
       top: boundingClientRect.y,
       left: boundingClientRect.x,
@@ -125,30 +134,39 @@ export default function GameEntry({
   const isLastColumn = !isFirstColumn && columnIndex === columnCount - 1
 
   return (
-    <div style={style} className='border border-black bg-[#d8d8d8]'>
+    <div style={style} className='relative bg-[#d8d8d8]'>
       <button
+        ref={ref}
         className={classNames(
-          'h-full w-full overflow-hidden bg-[#d8d8d8] text-left transition-[transform] hover:relative',
+          { focused },
+          'opacity-1 h-full w-full bg-[#d8d8d8] text-left transition-[transform,box-shadow]',
+          'after:absolute after:-inset-0 after:border after:border-black',
           gameImageStatus.loading
-            ? 'scale-[100%]'
+            ? 'scale-100'
             : [
-                'hover:z-10 hover:box-content hover:scale-110 hover:border-[4px] hover:border-white hover:shadow-2xl hover:shadow-black',
                 {
-                  'origin-top-left': isFirstRow && isFirstColumn,
-                  'right-[4px] origin-top': isFirstRow && !isFirstColumn && !isLastColumn,
-                  'right-[4px] origin-top-right': isFirstRow && isLastColumn,
-                  'bottom-[4px] origin-left': !isFirstRow && isFirstColumn && !isLastRow,
-                  'bottom-[4px] right-[4px] origin-center':
-                    !isFirstRow && !isLastRow && !isFirstColumn && !isLastColumn,
-                  'bottom-[4px] right-[4px] origin-right': !isFirstRow && isLastColumn,
-                  'bottom-[8px] origin-bottom-left': isLastRow && isFirstColumn,
-                  'bottom-[8px] origin-bottom': isLastRow && !isFirstColumn && !isLastColumn,
-                  'bottom-[8px] right-[4px] origin-bottom-right': isLastRow && isLastColumn,
+                  'relative z-10 scale-110 shadow-2xl shadow-black': focused,
                 },
+                focused
+                  ? {
+                      'after:-inset-[4px] after:border-[4px] after:border-white': true,
+
+                      'origin-top-left translate-x-[4px] translate-y-[4px]': isFirstRow && isFirstColumn,
+                      'origin-top translate-y-[4px]': isFirstRow && !isFirstColumn && !isLastColumn,
+                      'origin-top-right -translate-x-[4px] translate-y-[4px]': isFirstRow && isLastColumn,
+
+                      'origin-left translate-x-[4px]': !isFirstRow && isFirstColumn && !isLastRow,
+                      'origin-center': !isFirstRow && !isLastRow && !isFirstColumn && !isLastColumn,
+                      'origin-right -translate-x-[4px]': !isFirstRow && isLastColumn,
+
+                      'origin-bottom-left -translate-y-[4px] translate-x-[4px]': isLastRow && isFirstColumn,
+                      'origin-bottom -translate-y-[4px]': isLastRow && !isFirstColumn && !isLastColumn,
+                      'origin-bottom-right -translate-x-[4px] -translate-y-[4px]': isLastRow && isLastColumn,
+                    }
+                  : {},
               ]
         )}
         onClick={onGameEntryClick}
-        ref={gameEntryRef}
       >
         {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
       </button>

@@ -1,3 +1,4 @@
+import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation'
 import { FixedSizeGrid, type GridChildComponentProps } from 'react-window'
 import { type Rom } from '../../../core'
 import GameEntry from './game-entry'
@@ -7,6 +8,7 @@ interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
 }
 
 export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
+  const { focusKey, ref } = useFocusable()
   const { rowCount, columnCount } = props
 
   function FixedSizeGridItem({ columnIndex, rowIndex, style }: GridChildComponentProps) {
@@ -27,5 +29,11 @@ export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
     )
   }
 
-  return roms.length > 0 ? <FixedSizeGrid {...props}>{FixedSizeGridItem}</FixedSizeGrid> : null
+  return roms.length > 0 ? (
+    <FocusContext.Provider value={focusKey}>
+      <FixedSizeGrid {...props} innerRef={ref}>
+        {FixedSizeGridItem}
+      </FixedSizeGrid>
+    </FocusContext.Provider>
+  ) : null
 }

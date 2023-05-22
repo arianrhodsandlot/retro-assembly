@@ -1,4 +1,3 @@
-import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation'
 import { useEffect, useState } from 'react'
 import { useMeasure, useWindowSize } from 'react-use'
 import { type Rom, system, systemFullNameMap, ui } from '../../../core'
@@ -48,7 +47,7 @@ export function GameEntryContainer() {
 
       {roms?.length && (
         <GameEntryGrid
-          className='absolute bottom-0 left-[200px] !overflow-x-hidden scroll-smooth'
+          className='absolute bottom-0 left-[200px] !overflow-x-hidden'
           roms={roms}
           style={{ top: navHeight }}
           columnCount={columnCount}

@@ -1,5 +1,4 @@
 import '../styles/index.sass'
-import { useFocusable } from '@noriginmedia/norigin-spatial-navigation'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { system, ui } from '../../core'
@@ -13,7 +12,6 @@ import SetupWizard from './modals/setup-wizard'
 export default function App() {
   const [, setNeedsSetup] = useAtom(needsSetupAtom)
   const [, setNeedsGrantLocalPermissionAtom] = useAtom(needsGrantLocalPermissionAtom)
-  const { navigateByDirection } = useFocusable()
 
   async function checkPreparations() {
     const needsSetup = await system.checkNeedsSetup()
@@ -36,16 +34,19 @@ export default function App() {
     })
 
     ui.onPressButton('left', () => {
-      navigateByDirection('left', {})
+      navigate('left')
     })
     ui.onPressButton('right', () => {
-      navigateByDirection('right', {})
+      navigate('right')
     })
     ui.onPressButton('up', () => {
-      navigateByDirection('up', {})
+      navigate('up')
     })
     ui.onPressButton('down', () => {
-      navigateByDirection('down', {})
+      navigate('down')
+    })
+    ui.onPressButton('a', () => {
+      document.activeElement?.click?.()
     })
   }, [])
 

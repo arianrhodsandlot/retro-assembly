@@ -32,13 +32,7 @@ export function StatesList() {
     <div className={classNames('bg-black/90 text-center', { pending: 'opacity-90' })}>
       <div className='flex'>
         {states?.map((state) => (
-          <div
-            className='mx-3 overflow-hidden'
-            key={state.id}
-            role='button'
-            onClick={() => loadState(state.id)}
-            aria-hidden
-          >
+          <button className='mx-3 overflow-hidden' key={state.id} onClick={() => loadState(state.id)} aria-hidden>
             <div className='h-40 w-40 overflow-hidden rounded-lg border-2 border-white'>
               {state.thumbnailUrl ? (
                 <img
@@ -51,7 +45,7 @@ export function StatesList() {
               )}
             </div>
             {state.createTime.humanized}
-          </div>
+          </button>
         ))}
       </div>
     </div>

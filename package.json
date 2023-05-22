@@ -12,7 +12,6 @@
   "dependencies": {
     "@heroicons/react": "2.0.18",
     "@microsoft/microsoft-graph-client": "3.0.5",
-    "@noriginmedia/norigin-spatial-navigation": "^1.3.1",
     "@zip.js/zip.js": "2.7.14",
     "browser-fs-access": "0.34.0",
     "browserfs": "1.4.3",
@@ -36,6 +35,7 @@
     "react-dom": "18.2.0",
     "react-use": "17.4.0",
     "react-window": "1.8.9",
+    "spatial-navigation-polyfill": "WICG/spatial-navigation",
     "store2": "2.14.2"
   },
   "devDependencies": {

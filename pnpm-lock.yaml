@@ -7,9 +7,6 @@ dependencies:
   '@microsoft/microsoft-graph-client':
     specifier: 3.0.5
     version: 3.0.5
-  '@noriginmedia/norigin-spatial-navigation':
-    specifier: ^1.3.1
-    version: 1.3.1(react@18.2.0)
   '@zip.js/zip.js':
     specifier: 2.7.14
     version: 2.7.14
@@ -79,6 +76,9 @@ dependencies:
   react-window:
     specifier: 1.8.9
     version: 1.8.9(react-dom@18.2.0)(react@18.2.0)
+  spatial-navigation-polyfill:
+    specifier: WICG/spatial-navigation
+    version: github.com/WICG/spatial-navigation/11ffdb06637c0f86cb8eb5f430bad0a26b547184
   store2:
     specifier: 2.14.2
     version: 2.14.2
@@ -599,15 +599,6 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
-
-  /@noriginmedia/norigin-spatial-navigation@1.3.1(react@18.2.0):
-    resolution: {integrity: sha512-pjNyeK3VAYH7iTYKyQCuyMhN4KHKVJjzHTV+yvs5T27u+pdaPLCpF+9IwWCt7R2/WMt4h2fEw/C0DMArImN/ew==}
-    peerDependencies:
-      react: '>=16.8.0'
-    dependencies:
-      lodash: 4.17.21
-      react: 18.2.0
-    dev: false
 
   /@pkgr/utils@2.4.0:
     resolution: {integrity: sha512-2OCURAmRtdlL8iUDTypMrrxfwe8frXTeXaxGsVOaYtc/wrUyk8Z/0OBetM7cdlsy7ZFWlMX72VogKeh+A4Xcjw==}
@@ -4477,3 +4468,9 @@ packages:
       which: 3.0.1
       yaml: 2.2.2
     dev: true
+
+  github.com/WICG/spatial-navigation/11ffdb06637c0f86cb8eb5f430bad0a26b547184:
+    resolution: {tarball: https://codeload.github.com/WICG/spatial-navigation/tar.gz/11ffdb06637c0f86cb8eb5f430bad0a26b547184}
+    name: spatial-navigation-polyfill
+    version: 1.3.1
+    dev: false

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { game, ui } from '../../../core'
 import { currentRomAtom } from '../../lib/atoms'
 import { emitter } from '../../lib/emitter'
@@ -11,6 +11,7 @@ const menuHotButtons = ['l3', 'r3']
 export default function EmulatorWrapper() {
   const [rom, setCurrentRom] = useAtom(currentRomAtom)
   const [isPaused, setIsPaused] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
   const [showEmulatorControllMenu, setShowEmulatorControllMenu] = useState(false)
 
   useEffect(() => {
@@ -19,6 +20,10 @@ export default function EmulatorWrapper() {
         start()
       } else {
         pause()
+        setTimeout(() => {
+          const button = ref.current?.querySelector('button')
+          button?.focus()
+        })
       }
       setShowEmulatorControllMenu(!showEmulatorControllMenu)
     }
@@ -65,6 +70,7 @@ export default function EmulatorWrapper() {
 
   return (
     <div
+      ref={ref}
       className={classNames('absolute left-0 top-0 z-30 flex h-full w-full flex-col text-white', {
         hidden: !showEmulatorControllMenu,
       })}

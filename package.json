@@ -13,11 +13,11 @@
     "@heroicons/react": "2.0.18",
     "@microsoft/microsoft-graph-client": "3.0.5",
     "@zip.js/zip.js": "2.7.14",
-    "browser-fs-access": "0.34.0",
+    "browser-fs-access": "0.34.1",
     "browserfs": "1.4.3",
     "classnames": "2.3.2",
     "date-fns": "2.30.0",
-    "delay": "5.0.0",
+    "delay": "6.0.0",
     "framer-motion": "10.12.12",
     "goodcodes-parser": "2.5.0",
     "idb": "7.1.1",
@@ -35,7 +35,7 @@
     "react-dom": "18.2.0",
     "react-use": "17.4.0",
     "react-window": "1.8.9",
-    "spatial-navigation-polyfill": "WICG/spatial-navigation",
+    "spatial-navigation-polyfill": "github:WICG/spatial-navigation",
     "store2": "2.14.2"
   },
   "devDependencies": {

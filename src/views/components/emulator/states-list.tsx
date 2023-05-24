@@ -2,24 +2,9 @@ import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { game, ui } from '../../../core'
 
-export function StatesList() {
+export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }) {
   const [states, setStates] = useState<any[]>()
   const [pending, setPending] = useState(false)
-
-  async function loadState(stateId: string) {
-    if (pending) {
-      return
-    }
-    setPending(true)
-
-    try {
-      await game.loadState(stateId)
-    } catch (error) {
-      console.warn(error)
-    }
-
-    setPending(false)
-  }
 
   useEffect(() => {
     ;(async () => {
@@ -35,7 +20,7 @@ export function StatesList() {
           <button
             className='mt-10 flex max-w-2xl flex-shrink-0 items-center overflow-hidden border-2 border-white bg-black/90 first:mt-0 focus:border-2 focus:bg-white focus:text-red-600'
             key={state.id}
-            onClick={() => loadState(state.id)}
+            onClick={() => onSelect(state.id)}
             aria-hidden
           >
             <div className='h-40 w-40 overflow-hidden'>

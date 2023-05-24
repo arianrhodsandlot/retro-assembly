@@ -335,6 +335,7 @@ export class Emulator {
     const raConfig = {
       menu_driver: 'rgui',
       rewind_enable: true,
+      notification_show_when_menu_is_alive: true,
 
       rgui_menu_color_theme: 4,
       // rgui_particle_effect: 3,

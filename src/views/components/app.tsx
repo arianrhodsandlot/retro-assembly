@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { system, ui } from '../../core'
 import { needsGrantLocalPermissionAtom, needsSetupAtom } from '../lib/atoms'
-import EmulatorWrapper from './emulator/emulator-wrapper'
+import { Emulator } from './emulator'
 import { HomeScreen } from './home-screen'
 import LocalPermission from './modals/local-permission'
 import { Settings } from './modals/settings'
@@ -53,7 +53,7 @@ export default function App() {
   return (
     <>
       <HomeScreen />
-      <EmulatorWrapper />
+      <Emulator />
       <SetupWizard onSubmit={checkPreparations} />
       <LocalPermission onSubmit={checkPreparations} />
       <Settings />

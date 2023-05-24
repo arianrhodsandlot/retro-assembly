@@ -44,8 +44,8 @@ export function MenuOverlay() {
 
   async function saveState() {
     game.start()
-    await game.saveState()
     setShow(false)
+    await game.saveState()
   }
 
   function resume() {
@@ -90,6 +90,7 @@ export function MenuOverlay() {
             >
               Resume
             </button>
+
             <button className={menuButtonClassNames} onClick={saveState} onFocus={() => setShowStateList(false)}>
               Save state
             </button>

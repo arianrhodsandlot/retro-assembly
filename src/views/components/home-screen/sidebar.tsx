@@ -9,7 +9,14 @@ function Setting({ onClick }: { onClick: () => void }) {
   useEffect(() => {}, [])
 
   return (
-    <button className={classNames('mx-auto mb-10')} onClick={onClick}>
+    <button
+      className={classNames(
+        'relative mx-auto mb-10 rounded-md p-2 transition-[color,background-color]',
+        'focus:text-[#fe0000]',
+        'focus:after:absolute focus:after:inset-0 focus:after:-z-10 focus:after:rounded-md focus:after:bg-white'
+      )}
+      onClick={onClick}
+    >
       <Cog6ToothIcon className='h-20 w-20' />
     </button>
   )

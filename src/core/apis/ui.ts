@@ -132,6 +132,7 @@ export const ui = {
   async listStates() {
     const { preference, emulator, fileSystemProvider } = globalInstances
     const stateDirectory = preference.get('stateDirectory')
+
     const coreStateManager = new CoreStateManager({
       core: emulator.core,
       name: emulator.rom?.fileSummary?.name,

@@ -137,9 +137,8 @@ export function GameEntry({
             ? 'scale-100'
             : [
                 'group-focus:relative group-focus:z-10 group-focus:scale-110 group-focus:shadow-2xl group-focus:shadow-black',
+                'group-focus:after:-inset-[4px] group-focus:after:animate-pulse group-focus:after:border-[4px] group-focus:after:border-white',
                 {
-                  'group-focus:after:-inset-[4px] group-focus:after:border-[4px] group-focus:after:border-white': true,
-
                   'group-focus:origin-top-left group-focus:translate-x-[4px] group-focus:translate-y-[4px]':
                     isFirstRow && isFirstColumn,
                   'group-focus:origin-top group-focus:translate-y-[4px]': isFirstRow && !isFirstColumn && !isLastColumn,

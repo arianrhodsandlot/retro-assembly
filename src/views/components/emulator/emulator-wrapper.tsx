@@ -68,21 +68,47 @@ export default function EmulatorWrapper() {
     setShowEmulatorControllMenu(false)
   }
 
+  const menuButtonClassNames = 'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600'
+
   return (
-    <div
-      ref={ref}
-      className={classNames('absolute left-0 top-0 z-30 flex h-full w-full flex-col text-white', {
-        hidden: !showEmulatorControllMenu,
-      })}
-    >
-      <div className='flex-1 bg-gradient-to-t from-black/90 to-black/0' />
-      {showEmulatorControllMenu && <StatesList />}
-      <div className='bottom-0 flex h-40 w-full justify-around bg-gradient-to-t from-black to-black/90'>
-        {isPaused ? <button onClick={start}>start</button> : <button onClick={pause}>pause</button>}
-        <button onClick={game.fullscreen}>fullscreen</button>
-        <button onClick={saveState}>save state</button>
-        <button onClick={exit}>exit</button>
+    showEmulatorControllMenu && (
+      <div
+        ref={ref}
+        className={classNames('absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur', {
+          hidden: !showEmulatorControllMenu,
+        })}
+      >
+        <div className='w-1/2'>
+          <div className='relative h-full w-full py-10 text-xl'>
+            <div className='absolute inset-y-10 flex w-full flex-col justify-center border-r-2 border-r-white'>
+              {isPaused ? (
+                <button className={menuButtonClassNames} onClick={start}>
+                  Start
+                </button>
+              ) : (
+                <button className={menuButtonClassNames} onClick={pause}>
+                  Pause
+                </button>
+              )}
+
+              <button className={menuButtonClassNames} onClick={saveState}>
+                Save state
+              </button>
+
+              <button className={menuButtonClassNames} onClick={saveState}>
+                Load state
+              </button>
+
+              <button className={menuButtonClassNames} onClick={exit}>
+                Exit
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className='w-1/2'>
+          <StatesList />
+        </div>
       </div>
-    </div>
+    )
   )
 }

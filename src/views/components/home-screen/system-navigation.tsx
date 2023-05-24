@@ -42,7 +42,8 @@ function SystemNavigationItem({ system, isSelected, onChange }: { system: any; i
   return (
     <button
       className={classNames(
-        'flex shrink-0 items-center justify-center border-[#fe0000] px-8 py-4 transition-[opacity,background-color] hover:opacity-100',
+        'relative flex shrink-0 items-center justify-center border-[#fe0000] px-8 py-4 transition-[opacity,background-color] hover:opacity-100',
+        'focus:after:absolute focus:after:inset-0 focus:after:animate-pulse focus:after:border-2 focus:after:border-white',
         {
           'opacity-80': !isSelected,
           'bg-[#ac000d]': isSelected,

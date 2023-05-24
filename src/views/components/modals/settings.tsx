@@ -42,7 +42,7 @@ export function Settings() {
 
   return (
     <Modal isOpen={isOpen} onClickBackdrop={() => setIsOpen(false)}>
-      <GeneralSettings value={generalSettings} onChange={onChange} />
+      <GeneralSettings onChange={onChange} value={generalSettings} />
     </Modal>
   )
 }

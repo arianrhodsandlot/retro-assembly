@@ -34,7 +34,7 @@ export default function SetupWizard({ onSubmit }: { onSubmit: () => void }) {
 
   return (
     <Modal isOpen={needsSetup}>
-      <GeneralSettings value={generalSettings} onChange={onChange} />
+      <GeneralSettings onChange={onChange} value={generalSettings} />
     </Modal>
   )
 }

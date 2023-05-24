@@ -39,25 +39,25 @@ export function GameEntryContainer() {
   return (
     <div>
       <SystemNavigation
-        elementRef={navElement}
         currentSystem={currentSystem}
-        systems={navSystems}
+        elementRef={navElement}
         onChange={setCurrentSystem}
+        systems={navSystems}
       />
 
-      {roms?.length && (
+      {roms?.length ? (
         <GameEntryGrid
           className='absolute bottom-0 left-[200px] !overflow-x-hidden'
-          roms={roms}
-          style={{ top: navHeight }}
           columnCount={columnCount}
           columnWidth={gridWidth / columnCount}
+          height={gridHeight}
+          roms={roms}
           rowCount={Math.ceil(roms.length / columnCount)}
           rowHeight={gridWidth / columnCount}
-          height={gridHeight}
+          style={{ top: navHeight }}
           width={gridWidth}
         />
-      )}
+      ) : null}
     </div>
   )
 }

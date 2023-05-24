@@ -50,12 +50,12 @@ export function OnedriveSettings({ onChange }: { onChange: (value: { romDirector
     <div>
       <div>{hasLogin ? <div>2. {loginText}</div> : <a href={authorizeUrl}>2. {loginText}</a>}</div>
 
-      {hasLogin && (
+      {hasLogin ? (
         <div>
           <div>Select directory</div>
           <RemoteDirectoryPicker onSelect={onSelectDirectory} />
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

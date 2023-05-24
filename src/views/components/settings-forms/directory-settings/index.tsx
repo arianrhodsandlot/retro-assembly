@@ -31,7 +31,7 @@ export function GeneralSettings({
     <div>
       <div>1. Would you like to select your roms directory from your local disk or from Onedrive?</div>
       <div>
-        <select value={romProviderType} onChange={(event) => updateValue({ romProviderType: event.target.value })}>
+        <select onChange={(event) => updateValue({ romProviderType: event.target.value })} value={romProviderType}>
           {!romProviderType && <option value=''>Please select</option>}
           <option value='local'>local</option>
           <option value='onedrive'>OneDrive</option>

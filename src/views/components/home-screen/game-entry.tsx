@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import { clsx } from 'clsx'
 import { AnimatePresence, type Target, motion } from 'framer-motion'
 import { useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
@@ -111,8 +111,8 @@ export function GameEntry({
 
   const gameEntryImageWithLoader = (
     <>
-      {gameImageStatus.loading && <div className='h-full w-full' />}
-      {gameImageSrc && <GameEntryImage src={gameImageSrc} alt={rom.goodCode.rom} />}
+      {gameImageStatus.loading ? <div className='h-full w-full' /> : null}
+      {gameImageSrc ? <GameEntryImage alt={rom.goodCode.rom} src={gameImageSrc} /> : null}
     </>
   )
 
@@ -128,9 +128,9 @@ export function GameEntry({
   const isLastColumn = !isFirstColumn && columnIndex === columnCount - 1
 
   return (
-    <button style={style} className='group relative bg-[#d8d8d8]' ref={ref} onFocus={onFocus} onClick={onClick}>
+    <button className='group relative bg-[#d8d8d8]' onClick={onClick} onFocus={onFocus} ref={ref} style={style}>
       <span
-        className={classNames(
+        className={clsx(
           'opacity-1 block h-full w-full bg-[#d8d8d8] text-left transition-[transform] group-focus:transform-gpu',
           'after:absolute after:-inset-0 after:border after:border-black',
           gameImageStatus.loading
@@ -164,18 +164,18 @@ export function GameEntry({
 
       {createPortal(
         <AnimatePresence>
-          {maskPosition && (
+          {maskPosition ? (
             <motion.div
-              className='absolute z-10 overflow-hidden'
-              initial={maskInitialStyle}
               animate={maskExpandedStyle}
+              className='absolute z-10 overflow-hidden'
               exit={maskInitialStyle}
-              transition={{ duration: 0.2 }}
+              initial={maskInitialStyle}
               onAnimationComplete={onAnimationComplete}
+              transition={{ duration: 0.2 }}
             >
               {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>,
         document.body
       )}

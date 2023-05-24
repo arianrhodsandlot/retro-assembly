@@ -28,21 +28,21 @@ export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
     return (
       rom && (
         <GameEntry
-          index={index}
-          columnIndex={columnIndex}
-          rowCount={rowCount}
           columnCount={columnCount}
+          columnIndex={columnIndex}
+          index={index}
+          onFocus={onFocus}
+          rom={rom}
+          rowCount={rowCount}
           rowIndex={rowIndex}
           style={style}
-          rom={rom}
-          onFocus={onFocus}
         />
       )
     )
   }
 
   return roms.length > 0 ? (
-    <FixedSizeGrid {...props} outerRef={outerRef} innerRef={innerRef}>
+    <FixedSizeGrid {...props} innerRef={innerRef} outerRef={outerRef}>
       {FixedSizeGridItem}
     </FixedSizeGrid>
   ) : null

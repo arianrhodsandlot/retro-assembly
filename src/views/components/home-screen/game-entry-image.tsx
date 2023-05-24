@@ -11,10 +11,10 @@ export default function GameEntryImage({ src, alt }: { src: string; alt: string 
         />
       </div>
       <img
-        className='absolute top-0 h-full w-full object-contain'
-        style={{ imageRendering: 'pixelated' }}
-        src={src}
         alt={alt}
+        className='absolute top-0 h-full w-full object-contain'
+        src={src}
+        style={{ imageRendering: 'pixelated' }}
       />
     </>
   )

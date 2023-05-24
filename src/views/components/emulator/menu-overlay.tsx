@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import { clsx } from 'clsx'
 import { useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { game, ui } from '../../../core'
@@ -74,10 +74,10 @@ export function MenuOverlay() {
 
   return (
     <div
-      ref={ref}
-      className={classNames('absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur', {
+      className={clsx('absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur', {
         hidden: !show,
       })}
+      ref={ref}
     >
       <div className='w-1/2'>
         <div className='relative h-full w-full py-10 text-xl'>
@@ -95,7 +95,7 @@ export function MenuOverlay() {
             </button>
 
             <button
-              className={classNames(menuButtonClassNames, { 'bg-white text-red-600': showStateList })}
+              className={clsx(menuButtonClassNames, { 'bg-white text-red-600': showStateList })}
               onFocus={() => setShowStateList(true)}
             >
               Load state
@@ -107,7 +107,7 @@ export function MenuOverlay() {
           </div>
         </div>
       </div>
-      <div className='w-1/2'>{showStateList && <StatesList onSelect={onSelectState} />}</div>
+      <div className='w-1/2'>{showStateList ? <StatesList onSelect={onSelectState} /> : null}</div>
     </div>
   )
 }

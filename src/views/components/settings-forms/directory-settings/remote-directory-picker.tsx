@@ -61,19 +61,19 @@ function TreeNodeView({
       <div className='flex'>
         {node.isDirectory ? (node.expanded ? '📂' : '📁') : '📄'}
         <div className='flex flex-1'>
-          <div className='flex-1 cursor-pointer' aria-hidden onClick={() => toggleNodeExpanded(node)}>
+          <div aria-hidden className='flex-1 cursor-pointer' onClick={() => toggleNodeExpanded(node)}>
             {node.name}
           </div>
-          {node.hasChildren && <button onClick={() => onSelect(node.path)}>select</button>}
+          {node.hasChildren ? <button onClick={() => onSelect(node.path)}>select</button> : null}
         </div>
       </div>
-      {node.expanded && (
+      {node.expanded ? (
         <div className='pl-2'>
           {node.children?.map((node) => (
-            <TreeNodeView root={root} node={node} onChange={onChange} key={node.name} onSelect={onSelect} />
+            <TreeNodeView key={node.name} node={node} onChange={onChange} onSelect={onSelect} root={root} />
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -87,7 +87,7 @@ export function RemoteDirectoryPicker({ onSelect }: { onSelect: (path: string) =
 
   return (
     <div className='max-h-60 overflow-auto p-3'>
-      <TreeNodeView node={tree} root={tree} onChange={onChange} onSelect={onSelect} />
+      <TreeNodeView node={tree} onChange={onChange} onSelect={onSelect} root={tree} />
     </div>
   )
 }

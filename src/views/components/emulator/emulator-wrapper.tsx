@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { game, ui } from '../../../core'
@@ -68,15 +68,16 @@ export default function EmulatorWrapper() {
     setShowEmulatorControllMenu(false)
   }
 
-  const menuButtonClassNames = 'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600'
+  const menuButtonClassNames =
+    'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600'
 
   return (
     showEmulatorControllMenu && (
       <div
-        ref={ref}
-        className={classNames('absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur', {
+        className={clsx('absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur', {
           hidden: !showEmulatorControllMenu,
         })}
+        ref={ref}
       >
         <div className='w-1/2'>
           <div className='relative h-full w-full py-10 text-xl'>

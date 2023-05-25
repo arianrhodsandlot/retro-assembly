@@ -6,9 +6,44 @@ import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { readBlobAsUint8Array } from '../helpers/file'
 import { type Rom } from './rom'
 
+// Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
+type RetroArchCommand =
+  | 'FAST_FORWARD'
+  | 'FAST_FORWARD_HOLD'
+  | 'LOAD_STATE'
+  | 'SAVE_STATE'
+  | 'FULLSCREEN_TOGGLE'
+  | 'QUIT'
+  | 'STATE_SLOT_PLUS'
+  | 'STATE_SLOT_MINUS'
+  | 'REWIND'
+  | 'MOVIE_RECORD_TOGGLE'
+  | 'PAUSE_TOGGLE'
+  | 'FRAMEADVANCE'
+  | 'RESET'
+  | 'SHADER_NEXT'
+  | 'SHADER_PREV'
+  | 'CHEAT_INDEX_PLUS'
+  | 'CHEAT_INDEX_MINUS'
+  | 'CHEAT_TOGGLE'
+  | 'SCREENSHOT'
+  | 'MUTE'
+  | 'NETPLAY_FLIP'
+  | 'SLOWMOTION'
+  | 'VOLUME_UP'
+  | 'VOLUME_DOWN'
+  | 'OVERLAY_NEXT'
+  | 'DISK_EJECT_TOGGLE'
+  | 'DISK_NEXT'
+  | 'DISK_PREV'
+  | 'GRAB_MOUSE_TOGGLE'
+  | 'MENU_TOGGLE'
+
 const raUserdataDir = '/home/web_user/retroarch/userdata/'
 const raCoreConfigDir = `${raUserdataDir}config/`
 const raConfigPath = `${raUserdataDir}retroarch.cfg`
+
+const encoder = new TextEncoder()
 
 function getEmscriptenModuleOverrides() {
   let resolveRunDependenciesPromise: () => void
@@ -59,6 +94,7 @@ export class Emulator {
   status: 'initial' | 'ready' | 'terminated' = 'initial'
   canvas: HTMLCanvasElement
   emscripten: any
+  private messageQueue: [Uint8Array, number][] = []
 
   constructor({ core, rom, style }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
@@ -189,7 +225,7 @@ export class Emulator {
       JSEvents.removeAllEventListeners()
     }
     window.removeEventListener('resize', this.resizeCanvas, false)
-    this.canvas?.parentElement?.removeChild(this.canvas)
+    this.canvas.remove()
   }
 
   updateCanvasStyle(style: Partial<CSSStyleDeclaration>) {
@@ -204,6 +240,28 @@ export class Emulator {
         canvas.style.removeProperty(rule)
       }
     }
+  }
+
+  sendCommand(msg: RetroArchCommand) {
+    const bytes = encoder.encode(`${msg}\n`)
+    this.messageQueue.push([bytes, 0])
+  }
+
+  private stdin() {
+    const { messageQueue } = this
+    // Return ASCII code of character, or null if no input
+    while (messageQueue.length > 0) {
+      const msg = messageQueue[0][0]
+      const index = messageQueue[0][1]
+      if (index >= msg.length) {
+        messageQueue.shift()
+      } else {
+        messageQueue[0][1] = index + 1
+        // assumption: msg is a uint8array
+        return msg[index]
+      }
+    }
+    return null
   }
 
   private clearStateFile() {
@@ -269,7 +327,12 @@ export class Emulator {
     const { Module, FS, PATH, ERRNO_CODES } = this.emscripten
 
     Module.canvas = this.canvas
-    Module.preRun = [() => FS.init()]
+    Module.preRun = [
+      () =>
+        FS.init(() => {
+          return this.stdin()
+        }),
+    ]
 
     const emscriptenFS = createEmscriptenFS({ FS, PATH, ERRNO_CODES })
     FS.mount(emscriptenFS, { root: '/home' }, '/home')
@@ -336,6 +399,8 @@ export class Emulator {
       menu_driver: 'rgui',
       rewind_enable: true,
       notification_show_when_menu_is_alive: true,
+      stdin_cmd_enable: true,
+      quit_press_twice: false,
 
       rgui_menu_color_theme: 4,
       // rgui_particle_effect: 3,

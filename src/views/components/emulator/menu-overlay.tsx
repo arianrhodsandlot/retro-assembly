@@ -14,6 +14,7 @@ export function MenuOverlay() {
   const [show, setShow] = useState(false)
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
+  const previousActiveElementRef = useRef<Element | null>(null)
 
   useEffect(() => {
     function toggleMenu() {
@@ -25,20 +26,26 @@ export function MenuOverlay() {
       setShow(!show)
     }
 
-    ui.onPressButtons(menuHotButtons, toggleMenu)
-
-    document.addEventListener('keyup', (event) => {
+    function onControlKeyup(event: KeyboardEvent) {
       if (game.isRunning() && event.key === 'Control') {
         toggleMenu()
       }
-    })
+    }
+
+    ui.onPressButtons(menuHotButtons, toggleMenu)
+    document.addEventListener('keyup', onControlKeyup)
 
     if (show) {
+      previousActiveElementRef.current = document.activeElement
       firstButtonRef.current?.focus()
+    } else {
+      // @ts-expect-error focus previous active element
+      previousActiveElementRef.current?.focus()
     }
 
     return () => {
       ui.offPressButtons(menuHotButtons, toggleMenu)
+      document.removeEventListener('keyup', onControlKeyup)
     }
   }, [show])
 

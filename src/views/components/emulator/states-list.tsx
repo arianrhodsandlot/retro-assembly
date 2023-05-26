@@ -1,6 +1,7 @@
+import { ArchiveBoxXMarkIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 import { useEffect, useState } from 'react'
-import { game, ui } from '../../../core'
+import { ui } from '../../../core'
 
 export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }) {
   const [states, setStates] = useState<any[]>()
@@ -15,31 +16,40 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
 
   return (
     <div className={clsx('relative h-full py-20', { 'opacity-90': pending })}>
-      <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
-        {states?.map((state) => (
-          <button
-            aria-hidden
-            className='mt-10 flex max-w-2xl flex-shrink-0 items-center overflow-hidden border-2 border-white bg-black/90 first:mt-0 focus:border-2 focus:bg-white focus:text-red-600'
-            key={state.id}
-            onClick={() => onSelect(state.id)}
-          >
-            <div className='h-40 w-40 overflow-hidden'>
-              {state.thumbnailUrl ? (
-                <img
-                  alt={`saved state of ${state.name}`}
-                  className='block h-40 w-40 transform-gpu bg-[#ffffffe6] object-cover transition-transform'
-                  src={state.thumbnailUrl}
-                />
-              ) : (
-                <div className='flex h-40 w-40 items-center justify-center'>No Image</div>
-              )}
-            </div>
-            <div className='flex h-40 items-center border-l-2 border-l-white pl-6'>
-              Saved at {state.createTime.humanized}
-            </div>
-          </button>
-        ))}
-      </div>
+      {states?.length ? (
+        <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
+          {states.map((state) => (
+            <button
+              aria-hidden
+              className='mt-10 flex max-w-2xl flex-shrink-0 items-center overflow-hidden border-2 border-white bg-black/90 first:mt-0 focus:border-2 focus:bg-white focus:text-red-600'
+              key={state.id}
+              onClick={() => onSelect(state.id)}
+            >
+              <div className='h-40 w-40 overflow-hidden'>
+                {state.thumbnailUrl ? (
+                  <img
+                    alt={`saved state of ${state.name}`}
+                    className='block h-40 w-40 transform-gpu bg-[#ffffffe6] object-cover transition-transform'
+                    src={state.thumbnailUrl}
+                  />
+                ) : (
+                  <div className='flex h-40 w-40 items-center justify-center'>No Image</div>
+                )}
+              </div>
+              <div className='flex h-40 items-center border-l-2 border-l-white pl-6'>
+                Saved at {state.createTime.humanized}
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className='flex h-full items-center pl-20 opacity-60'>
+          <div className='flex items-center'>
+            <ArchiveBoxXMarkIcon className='mr-2 w-6' />
+            There are no saved states for current game.
+          </div>
+        </div>
+      )}
     </div>
   )
 }

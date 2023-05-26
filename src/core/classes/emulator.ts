@@ -82,6 +82,19 @@ function getEmscriptenModuleOverrides() {
   }
 }
 
+function updateStyle(element: HTMLElement, style: Partial<CSSStyleDeclaration>) {
+  if (!element) {
+    return
+  }
+  for (const rule in style) {
+    if (style[rule]) {
+      element.style.setProperty(kebabCase(rule), style[rule] as string)
+    } else {
+      element.style.removeProperty(rule)
+    }
+  }
+}
+
 interface EmulatorConstructorOptions {
   core?: string
   rom?: Rom
@@ -93,21 +106,33 @@ export class Emulator {
   rom?: Rom
   status: 'initial' | 'ready' | 'terminated' = 'initial'
   canvas: HTMLCanvasElement
+  canvasContainer: HTMLButtonElement
   emscripten: any
+  private previousActiveElement: Element | null
   private messageQueue: [Uint8Array, number][] = []
 
   constructor({ core, rom, style }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.core = core ?? ''
+    this.canvasContainer = document.createElement('button')
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
     this.canvas.hidden = true
     this.canvas.width = 900
     this.canvas.height = 900
-    this.updateCanvasStyle({
+    this.previousActiveElement = document.activeElement
+    updateStyle(this.canvasContainer, {
       display: 'block',
-      position: 'relative',
+      position: 'absolute',
+      top: '0',
+      left: '0',
       zIndex: '15',
+      width: '100%',
+      height: '100%',
+      cursor: 'default',
+    })
+    updateStyle(this.canvas, {
+      display: 'block',
       imageRendering: 'pixelated', // this boosts performance!
       width: '100%',
       height: '100%',
@@ -162,6 +187,7 @@ export class Emulator {
     window.addEventListener('resize', this.resizeCanvas, false)
     if (this.canvas) {
       this.canvas.hidden = false
+      this.canvasContainer.focus()
     }
     this.status = 'ready'
   }
@@ -226,20 +252,9 @@ export class Emulator {
     }
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas.remove()
-  }
-
-  updateCanvasStyle(style: Partial<CSSStyleDeclaration>) {
-    const { canvas } = this
-    if (!canvas) {
-      return
-    }
-    for (const rule in style) {
-      if (style[rule]) {
-        canvas.style.setProperty(kebabCase(rule), style[rule] as string)
-      } else {
-        canvas.style.removeProperty(rule)
-      }
-    }
+    this.canvasContainer.remove()
+    // @ts-expect-error try to focus on previous active element
+    this.previousActiveElement?.focus?.()
   }
 
   sendCommand(msg: RetroArchCommand) {
@@ -310,14 +325,16 @@ export class Emulator {
       JSEvents.removeAllEventListeners()
     } catch {}
     try {
-      this.canvas?.parentElement?.removeChild(this.canvas)
+      this.canvas.remove()
+      this.canvasContainer.remove()
     } catch {}
   }
 
   private async prepareEmscripten() {
     const { getEmscripten } = await import(`../../generated/retroarch-cores/${this.core}_libretro.js`)
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
-    document.body.append(this.canvas)
+    this.canvasContainer.append(this.canvas)
+    document.body.append(this.canvasContainer)
 
     const { Module } = this.emscripten
     await Promise.all([await this.prepareFileSystem(), await Module.monitorRunDependencies()])
@@ -418,13 +435,33 @@ export class Emulator {
   }
 
   private runMain() {
-    const { Module } = this.emscripten
+    const { Module, JSEvents } = this.emscripten
     const raArgs: string[] = []
     if (this.rom) {
       raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileSummary.name}`)
     }
     Module.callMain(raArgs)
     // Module.resumeMainLoop()
+
+    // Emscripten module register keyboard events to document, which make custome interactions unavilable.
+    // Let's modify the default event liseners
+    const keyboardEvents = new Set(['keyup', 'keydown', 'keypress'])
+    const globalKeyboardEventHandlers = JSEvents.eventHandlers.filter(
+      ({ eventTypeString, target }) => keyboardEvents.has(eventTypeString) && target === document
+    )
+    for (const globalKeyboardEventHandler of globalKeyboardEventHandlers) {
+      const { eventTypeString, target, handlerFunc } = globalKeyboardEventHandler
+      JSEvents.registerOrRemoveHandler({ eventTypeString, target })
+      JSEvents.registerOrRemoveHandler({
+        ...globalKeyboardEventHandler,
+        handlerFunc: (...args) => {
+          const [event] = args
+          if (event?.target === this.canvasContainer) {
+            handlerFunc(...args)
+          }
+        },
+      })
+    }
 
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {

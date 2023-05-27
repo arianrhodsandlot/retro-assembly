@@ -4,8 +4,8 @@ import { Sidebar } from './sidebar'
 export function HomeScreen() {
   return (
     <div className='relative h-screen'>
-      <Sidebar />
       <GameEntryContainer />
+      <Sidebar />
     </div>
   )
 }

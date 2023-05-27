@@ -32,22 +32,6 @@ export default function App() {
     system.onRequestAuthError(() => {
       setNeedsSetup(true)
     })
-
-    ui.onPressButton('left', () => {
-      navigate('left')
-    })
-    ui.onPressButton('right', () => {
-      navigate('right')
-    })
-    ui.onPressButton('up', () => {
-      navigate('up')
-    })
-    ui.onPressButton('down', () => {
-      navigate('down')
-    })
-    ui.onPressButton('a', () => {
-      document.activeElement?.click?.()
-    })
   }, [])
 
   return (

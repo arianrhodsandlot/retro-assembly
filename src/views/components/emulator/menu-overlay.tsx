@@ -81,12 +81,15 @@ export function MenuOverlay() {
 
   return (
     <div
-      className={clsx('absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur', {
-        hidden: !show,
-      })}
+      className={clsx(
+        'menu-overlay absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur',
+        {
+          hidden: !show,
+        }
+      )}
       ref={ref}
     >
-      <div className='w-1/2'>
+      <div className='menu-overlay-buttons w-1/2'>
         <div className='relative h-full w-full py-10 text-xl'>
           <div className='absolute inset-y-10 flex w-full flex-col justify-center border-r-2 border-r-white'>
             <button
@@ -115,7 +118,9 @@ export function MenuOverlay() {
           </div>
         </div>
       </div>
-      <div className='w-1/2'>{showStateList ? <StatesList onSelect={onSelectState} /> : null}</div>
+      <div className='menu-overlay-button-details w-1/2'>
+        {showStateList ? <StatesList onSelect={onSelectState} /> : null}
+      </div>
     </div>
   )
 }

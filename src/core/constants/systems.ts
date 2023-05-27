@@ -63,7 +63,7 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   gw: 'gw',
   megadrive: 'genesis_plus_gx',
   n64: 'mupen64plus_next',
-  nes: 'fceumm',
+  nes: 'nestopia',
   psx: 'pcsx2',
   sms: 'genesis_plus_gx',
   snes: 'snes9x',

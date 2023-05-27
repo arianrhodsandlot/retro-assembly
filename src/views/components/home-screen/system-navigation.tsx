@@ -14,7 +14,7 @@ export function SystemNavigation({
 }) {
   return (
     <div
-      className='absolute left-[200px] right-0 top-0 overflow-auto overflow-x-hidden bg-[#fe0000] text-white'
+      className='system-navigation absolute left-[200px] right-0 top-0 overflow-auto overflow-x-hidden bg-[#fe0000] text-white'
       ref={elementRef}
     >
       <div className='flex flex-nowrap'>

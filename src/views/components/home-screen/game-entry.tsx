@@ -125,15 +125,8 @@ export function GameEntry({
 
   const isFirstRow = rowIndex === 0
   const isFirstColumn = columnIndex === 0
-  const isFirst = isFirstRow && isFirstColumn
   const isLastRow = !isFirstRow && rowIndex === rowCount - 1
   const isLastColumn = !isFirstColumn && columnIndex === columnCount - 1
-
-  useEffect(() => {
-    if (isFirst) {
-      ref.current?.focus()
-    }
-  }, [isFirst])
 
   return (
     <button className='group relative bg-[#d8d8d8]' onClick={onClick} onFocus={onFocus} ref={ref} style={style}>

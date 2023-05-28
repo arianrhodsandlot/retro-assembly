@@ -17,7 +17,7 @@ export function SystemNavigation({
       className='system-navigation absolute left-[200px] right-0 top-0 overflow-auto overflow-x-hidden bg-[#fe0000] text-white'
       ref={elementRef}
     >
-      <div className='flex flex-nowrap'>
+      <div className='flex h-20 flex-nowrap'>
         {systems.map((system) => (
           <SystemNavigationItem
             isSelected={system.name === currentSystem}

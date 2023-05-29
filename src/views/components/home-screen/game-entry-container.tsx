@@ -6,6 +6,17 @@ import { SystemNavigation } from './system-navigation'
 
 const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ name, fullName }))
 
+function getColumnCount(width) {
+  const idealItemWidth = 250
+  const candicates = [10, 8, 5, 4]
+  for (const candicate of candicates) {
+    if (width / candicate > idealItemWidth) {
+      return candicate
+    }
+  }
+  return candicates.at(-1)
+}
+
 export function GameEntryContainer() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
   const [currentSystem, setCurrentSystem] = useState<string>('')
@@ -13,7 +24,7 @@ export function GameEntryContainer() {
   const [navElement, { width, height: navHeight }] = useMeasure<HTMLDivElement>()
 
   const roms = groupedRoms[currentSystem]
-  const columnCount = 8
+  const columnCount = getColumnCount(width)
   const navSystems = systems.filter((system) => groupedRoms[system.name]?.length)
 
   useEffect(() => {
@@ -81,7 +92,7 @@ export function GameEntryContainer() {
 
       {roms?.length ? (
         <GameEntryGrid
-          className='game-entry-grid absolute bottom-0 left-[200px] !overflow-x-hidden'
+          className='game-entry-grid absolute bottom-0 !overflow-x-hidden bg-gray-200 shadow-inner'
           columnCount={columnCount}
           columnWidth={gridWidth / columnCount}
           height={gridHeight}

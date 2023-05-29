@@ -52,7 +52,7 @@
     "eslint": "8.41.0",
     "libretrodb": "1.0.0",
     "node-7z": "3.0.0",
-    "postcss": "8.4.23",
+    "postcss": "8.4.24",
     "sass": "1.62.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.1-rc",

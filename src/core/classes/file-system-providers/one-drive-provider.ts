@@ -21,7 +21,7 @@ const onedriveApiCacheKey = 'onedrive-api-cache'
 
 let onedriveCloudProvider: OneDriveProvider
 export class OneDriveProvider implements FileSystemProvider {
-  static tokenRecordStorageKey = 'onedrive-token'
+  static tokenStorageKey = 'onedrive-token'
   private static cacheIndexedDb: any
   private client: Client
 
@@ -63,12 +63,10 @@ export class OneDriveProvider implements FileSystemProvider {
       }
       const body = new URLSearchParams(params)
       const result = await ky.post(tokenUrl, { body }).json<any>()
-      setStorageByKey({ key: OneDriveProvider.tokenRecordStorageKey, value: result })
+      setStorageByKey({ key: OneDriveProvider.tokenStorageKey, value: result })
     } else {
       console.error('Invalide code:', code)
-      return
     }
-    history.replaceState(undefined, '', '/')
   }
 
   static async validateAccessToken() {
@@ -103,7 +101,7 @@ export class OneDriveProvider implements FileSystemProvider {
   }
 
   private static getAccessToken() {
-    const tokenRecord = getStorageByKey(OneDriveProvider.tokenRecordStorageKey)
+    const tokenRecord = getStorageByKey(OneDriveProvider.tokenStorageKey)
     return tokenRecord?.access_token
   }
 
@@ -117,7 +115,7 @@ export class OneDriveProvider implements FileSystemProvider {
   }
 
   private static async refreshToken() {
-    const refreshToken = getStorageByKey(OneDriveProvider.tokenRecordStorageKey).refresh_token
+    const refreshToken = getStorageByKey(OneDriveProvider.tokenStorageKey).refresh_token
     if (!refreshToken) {
       return
     }
@@ -131,7 +129,7 @@ export class OneDriveProvider implements FileSystemProvider {
         }),
       })
       .json<any>()
-    setStorageByKey({ key: OneDriveProvider.tokenRecordStorageKey, value: result })
+    setStorageByKey({ key: OneDriveProvider.tokenStorageKey, value: result })
   }
 
   private static async wrapRequest(request: any) {

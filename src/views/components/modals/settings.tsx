@@ -2,7 +2,6 @@ import { useAtom } from 'jotai'
 import { useState } from 'react'
 import { system } from '../../../core'
 import { isSettingsModalOpenAtom } from '../../lib/atoms'
-import { GeneralSettings } from '../settings-forms/directory-settings'
 import { Modal } from './modal'
 
 function getCurrentGeneralSettings() {
@@ -42,7 +41,7 @@ export function Settings() {
 
   return (
     <Modal isOpen={isOpen} onClickBackdrop={() => setIsOpen(false)}>
-      <GeneralSettings onChange={onChange} value={generalSettings} />
+      <div>todo</div>
     </Modal>
   )
 }

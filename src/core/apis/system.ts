@@ -131,7 +131,7 @@ export const system = {
     emitter.on('request-auth-error', callback)
   },
 
-  async needsGrantPermissionManually() {
+  async needsRegrantLocalPermission() {
     const { preference } = globalInstances
     const romProviderType = preference.get('romProviderType')
     if (romProviderType !== 'local') {
@@ -148,7 +148,7 @@ export const system = {
   },
 
   async grantPermissionManually() {
-    await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+    return await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
   },
 }
 

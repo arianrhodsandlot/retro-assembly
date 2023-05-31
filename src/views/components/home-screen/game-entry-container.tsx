@@ -82,7 +82,7 @@ export function GameEntryContainer() {
   const gridWidth = width
   const gridHeight = windowSize.height - navHeight
   return (
-    <div>
+    <div className='relative h-screen'>
       <SystemNavigation
         currentSystem={currentSystem}
         elementRef={navElement}

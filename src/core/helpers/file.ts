@@ -25,12 +25,13 @@ export async function detectLocalHandlePermission({ name, mode }: { name: string
 export async function requestLocalHandle({ name, mode }: { name: string; mode: string }) {
   const handles = (await get('local-file-system-handles')) ?? {}
 
-  if (handles[name]) {
-    const handle = handles[name]
+  const handle = handles[name]
+  if (handle) {
     const permission = await handle.requestPermission({ mode })
     if (permission === 'granted') {
       return handle
     }
+    throw new Error('The user abort a request.')
   } else {
     return await requestFreshLocalHandle({ name, mode })
   }

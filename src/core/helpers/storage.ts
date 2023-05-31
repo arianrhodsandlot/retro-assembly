@@ -1,7 +1,7 @@
 import { isAfter } from 'date-fns'
 import store2 from 'store2'
 
-const store = store2.namespace('retro-assembly').local
+const store = store2.local
 
 export function setStorageByKey({ key, value, expireAt }: { key: string; value: unknown; expireAt?: Date }) {
   store.set(key, {

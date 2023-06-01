@@ -1,6 +1,5 @@
-import { Cog6ToothIcon } from '@heroicons/react/24/outline'
-import { clsx } from 'clsx'
 import { type Ref } from 'react'
+import { ClearSiteDataButton } from './clear-site-data-button'
 import { SystemNavigationItem } from './system-navigation-item'
 
 export function SystemNavigation({
@@ -39,15 +38,7 @@ export function SystemNavigation({
         </div>
 
         <div className='px-8'>
-          <button
-            className={clsx(
-              'relative rounded-md p-2 transition-[color,background-color]',
-              'focus:text-[#fe0000]',
-              'focus:after:absolute focus:after:inset-0 focus:after:-z-10 focus:after:rounded-md focus:after:bg-white'
-            )}
-          >
-            <Cog6ToothIcon className='h-8 w-8' />
-          </button>
+          <ClearSiteDataButton />
         </div>
       </div>
     </div>

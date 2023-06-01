@@ -1,4 +1,4 @@
-import { get, set } from 'idb-keyval'
+import { clear, get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
 import { detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
@@ -149,6 +149,11 @@ export const system = {
 
   async grantPermissionManually() {
     return await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+  },
+
+  async clearData() {
+    localStorage.clear()
+    await clear()
   },
 }
 

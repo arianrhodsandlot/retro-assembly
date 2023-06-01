@@ -36,6 +36,14 @@ SpatialNavigation.add({
   leaveFor: { up: '', down: '', left: '@menu-overlay-buttons', right: '' },
 })
 
+SpatialNavigation.add({
+  id: 'modal',
+  selector: '.modal button',
+  enterTo: 'default-element',
+  defaultElement: '.modal button:first-child',
+  leaveFor: { up: '', down: '', left: '', right: '' },
+})
+
 function getCurrentFocusedElement() {
   const { activeElement, body } = document
   if (activeElement && activeElement !== body) {

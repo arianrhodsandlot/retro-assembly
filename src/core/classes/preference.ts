@@ -38,6 +38,7 @@ export class Preference {
   get(): typeof this.value
   get(name: PreferenceName): string
   get(name?: PreferenceName) {
+    this.loadFromStorage()
     if (name === undefined) {
       return this.value
     }

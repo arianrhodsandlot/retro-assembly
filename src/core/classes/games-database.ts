@@ -50,11 +50,9 @@ export class GamesDatabase {
     for (const row of rows) {
       const key = normalizeGameName(row.name)
       if (key) {
-        const candidates = index.get(key)
-        if (candidates) {
-          candidates.push(row)
-        }
-        index.set(key, [row])
+        const candidates = index.get(key) ?? []
+        candidates.push(row)
+        index.set(key, candidates)
       }
     }
   }
@@ -64,7 +62,7 @@ export class GamesDatabase {
     return this
   }
 
-  queryByFileName(fileName) {
+  queryByFileName(fileName: string) {
     const key = normalizeGameName(fileName)
     const candidates = this.index.get(key)
     if (!candidates) {

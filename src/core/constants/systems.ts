@@ -1,4 +1,4 @@
-type SystemName =
+export type SystemName =
   | '32x'
   | 'gamegear'
   | 'gb'
@@ -33,6 +33,27 @@ type CoreName =
   | 'atari800'
   | 'prosystem'
   | 'beetle_lynx'
+
+// systems are currently sorted based upon their popularity, see https://en.wikipedia.org/wiki/List_of_best-selling_game_consoles
+export const systemNamesSorted: SystemName[] = [
+  'gb',
+  'gbc',
+  'gba',
+  'psx',
+  'nes',
+  'snes',
+  'gw',
+  'n64',
+  'megadrive',
+  'atari2600',
+  'sms',
+  'gamegear',
+  'atari7800',
+  'atarilynx',
+  'atari5200',
+  '32x',
+  'vb',
+]
 
 export const systemFullNameMap: Record<SystemName, string> = {
   '32x': 'Sega - 32X',

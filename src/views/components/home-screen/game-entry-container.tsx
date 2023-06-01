@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useMeasure, useWindowSize } from 'react-use'
-import { type Rom, system, systemFullNameMap, ui } from '../../../core'
+import { type Rom, system, systemFullNameMap, systemNamesSorted, ui } from '../../../core'
 import { GameEntryGrid } from './game-entry-grid'
 import { SystemNavigation } from './system-navigation'
 
-const systems = Object.entries(systemFullNameMap).map(([name, fullName]) => ({ name, fullName }))
+const systems = Object.entries(systemFullNameMap).map(
+  ([name, fullName]) =>
+    ({ name, fullName } as {
+      name: keyof typeof systemFullNameMap
+      fullName: string
+    })
+)
 
-function getColumnCount(width) {
+function getColumnCount(width: number) {
   const idealItemWidth = 250
   const candicates = [10, 8, 5, 4]
   for (const candicate of candicates) {
@@ -14,18 +20,51 @@ function getColumnCount(width) {
       return candicate
     }
   }
-  return candicates.at(-1)
+  return candicates.at(-1) as number
 }
+
+const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function GameEntryContainer() {
   const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
-  const [currentSystem, setCurrentSystem] = useState<string>('')
+  const [currentSystemName, setCurrentSystemName] = useState<string>('')
+  const [navSystems, setNavSystems] = useState<
+    {
+      name: string
+      fullName: string
+    }[]
+  >([])
   const windowSize = useWindowSize()
   const [navElement, { width, height: navHeight }] = useMeasure<HTMLDivElement>()
 
-  const roms = groupedRoms[currentSystem]
+  const roms = groupedRoms[currentSystemName]
   const columnCount = getColumnCount(width)
-  const navSystems = systems.filter((system) => groupedRoms[system.name]?.length)
+
+  const gridWidth = width
+  const gridHeight = windowSize.height - navHeight
+  const selectPrevSystem = useCallback(
+    function selectPrevSystem() {
+      const index = navSystems.findIndex((system) => system.name === currentSystemName)
+      if (index > 0) {
+        setCurrentSystemName(navSystems[index - 1].name)
+      } else {
+        setCurrentSystemName(navSystems.at(-1)?.name || '')
+      }
+    },
+    [currentSystemName, navSystems]
+  )
+
+  const selectNextSystem = useCallback(
+    function selectPrevSystem() {
+      const index = navSystems.findIndex((system) => system.name === currentSystemName)
+      if (index < navSystems.length - 1) {
+        setCurrentSystemName(navSystems[index + 1].name)
+      } else {
+        setCurrentSystemName(navSystems[0].name)
+      }
+    },
+    [currentSystemName, navSystems]
+  )
 
   useEffect(() => {
     system.onStarted(async () => {
@@ -33,25 +72,29 @@ export function GameEntryContainer() {
     })
   }, [])
 
-  const selectPrevSystem = useCallback(
-    function selectPrevSystem() {
-      const index = navSystems.findIndex((system) => system.name === currentSystem)
-      if (index > 0) {
-        setCurrentSystem(navSystems[index - 1].name)
-      }
-    },
-    [currentSystem, navSystems]
-  )
+  useEffect(() => {
+    if (currentSystemName) {
+      localStorage.setItem(lastSelectedSystemStorageKey, currentSystemName)
+    }
+  }, [currentSystemName])
 
-  const selectNextSystem = useCallback(
-    function selectPrevSystem() {
-      const index = navSystems.findIndex((system) => system.name === currentSystem)
-      if (index < navSystems.length - 1) {
-        setCurrentSystem(navSystems[index + 1].name)
-      }
-    },
-    [currentSystem, navSystems]
-  )
+  async function loadRoms() {
+    const roms = await ui.listRoms()
+
+    if (!Object.keys(roms)) {
+      // todo: needs better user experience
+      alert('empty dir')
+      return
+    }
+
+    const navSystems = systems
+      .filter((system) => roms[system.name]?.length)
+      .sort((a, b) => (systemNamesSorted.indexOf(a.name) > systemNamesSorted.indexOf(b.name) ? 1 : -1))
+
+    setGroupedRoms(roms)
+    setNavSystems(navSystems)
+    setCurrentSystemName(localStorage.getItem(lastSelectedSystemStorageKey) ?? navSystems[0].name ?? '')
+  }
 
   useEffect(() => {
     ui.onPressButton('l1', selectPrevSystem)
@@ -67,26 +110,12 @@ export function GameEntryContainer() {
     }
   }, [selectNextSystem])
 
-  async function loadRoms() {
-    const roms = await ui.listRoms()
-    const systems = Object.keys(roms)
-    if (!systems) {
-      alert('empty dir')
-      return
-    }
-    const [currentSystem] = systems
-    setGroupedRoms(roms)
-    setCurrentSystem(currentSystem && 'nes')
-  }
-
-  const gridWidth = width
-  const gridHeight = windowSize.height - navHeight
   return (
     <div className='relative h-screen'>
       <SystemNavigation
-        currentSystem={currentSystem}
+        currentSystem={currentSystemName}
         elementRef={navElement}
-        onChange={setCurrentSystem}
+        onChange={setCurrentSystemName}
         systems={navSystems}
       />
 

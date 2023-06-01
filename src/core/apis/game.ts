@@ -38,8 +38,8 @@ export const game = {
       fileSystemProvider,
     })
     const state = await coreStateManager.getStateContent(stateId)
-    game.start()
     emulator.loadState(state)
+    game.start()
   },
 
   isRunning() {
@@ -49,37 +49,39 @@ export const game = {
 
   start() {
     const { emulator } = globalInstances
-    emulator.start()
+    emulator?.start()
   },
 
   pause() {
     const { emulator } = globalInstances
-    emulator.pause()
+    emulator?.pause()
   },
 
   fullscreen() {
     const { emulator } = globalInstances
-    emulator.emscripten.Module.requestFullscreen()
+    emulator?.emscripten.Module.requestFullscreen()
   },
 
   async saveState() {
     const { emulator, preference, fileSystemProvider } = globalInstances
-    const state = await emulator.saveState()
-    if (state) {
+    const state = await emulator?.saveState()
+    if (emulator && state && fileSystemProvider) {
       const stateDirectory = preference.get('stateDirectory')
-      const coreStateManager = new CoreStateManager({
-        core: emulator.core,
-        name: emulator.rom?.fileSummary.name,
-        directory: stateDirectory,
-        fileSystemProvider,
-      })
-      await coreStateManager.createState(state)
+      if (emulator.core && emulator.rom) {
+        const coreStateManager = new CoreStateManager({
+          core: emulator.core,
+          name: emulator.rom.fileSummary.name,
+          directory: stateDirectory,
+          fileSystemProvider,
+        })
+        await coreStateManager.createState(state)
+      }
     }
   },
 
   exit() {
     const { emulator } = globalInstances
-    emulator.exit()
+    emulator?.exit()
     globalInstances.emulator = undefined
   },
 }

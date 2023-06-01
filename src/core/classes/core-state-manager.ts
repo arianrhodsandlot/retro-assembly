@@ -6,7 +6,6 @@ import { type FileSystemProvider } from './file-system-providers/file-system-pro
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
 
 interface CoreState {
-  id: string
   core: string
   name: string
   createTime: number

@@ -193,13 +193,11 @@ export class Emulator {
   }
 
   start() {
-    const { Module } = this.emscripten
-    Module.resumeMainLoop()
+    this.sendCommand('PAUSE_TOGGLE')
   }
 
   pause() {
-    const { Module } = this.emscripten
-    Module.pauseMainLoop()
+    this.sendCommand('PAUSE_TOGGLE')
   }
 
   async saveState() {
@@ -207,8 +205,7 @@ export class Emulator {
     if (!this.rom || !this.emscripten) {
       return
     }
-    const { Module } = this.emscripten
-    Module._cmd_save_state()
+    this.sendCommand('SAVE_STATE')
     const shouldSaveThumbnail = true
     let stateBuffer: Buffer
     let stateThumbnailBuffer: Buffer | undefined
@@ -233,12 +230,12 @@ export class Emulator {
   async loadState(blob: Blob) {
     this.clearStateFile()
     if (this.emscripten) {
-      const { FS, Module } = this.emscripten
+      const { FS } = this.emscripten
       const buffer = await blob.arrayBuffer()
       const uint8Array = new Uint8Array(buffer)
       FS.writeFile(this.stateFileName, uint8Array)
       await this.waitForEmscriptenFile(this.stateFileName)
-      Module._cmd_load_state()
+      this.sendCommand('LOAD_STATE')
     }
   }
 
@@ -262,6 +259,7 @@ export class Emulator {
     this.messageQueue.push([bytes, 0])
   }
 
+  // copied from https://github.com/libretro/RetroArch/pull/15017
   private stdin() {
     const { messageQueue } = this
     // Return ASCII code of character, or null if no input

@@ -50,9 +50,9 @@ export function MenuOverlay() {
   }, [show])
 
   async function saveState() {
+    await game.saveState()
     game.start()
     setShow(false)
-    await game.saveState()
   }
 
   function resume() {

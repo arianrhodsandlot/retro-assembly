@@ -103,11 +103,7 @@ export const system = {
     }
 
     const directories = [configDirectory, stateDirectory]
-    if (directories.some((directory) => !directory.endsWith('/'))) {
-      return false
-    }
-
-    return true
+    return directories.every((directory) => directory.endsWith('/'))
   },
 
   async start() {

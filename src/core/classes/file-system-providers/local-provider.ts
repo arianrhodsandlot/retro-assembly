@@ -60,6 +60,8 @@ export class LocalProvider implements FileSystemProvider {
       } finally {
         await writableStream.close()
       }
+
+      await this.load()
     }
   }
 

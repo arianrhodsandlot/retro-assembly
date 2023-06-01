@@ -1,4 +1,4 @@
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { OneDriveProvider, system } from '../../../core'
 
 const authorizeUrl = system.getOnedriveAuthorizeUrl()
@@ -23,7 +23,7 @@ export function OnedriveLoginEntry({ onFinished }: { onFinished: () => void }) {
   return (
     <div className='flex h-full flex-col'>
       <div className='px-4 pt-6 text-red-600'>
-        <div className='rounded  border border-red-600 bg-red-100 px-4 py-2 text-sm'>
+        <div className='rounded border border-red-600 bg-red-100 px-4 py-2 text-sm'>
           {'To select a roms directory from your Microsoft OneDrive, you need to login to Microsoft first.'}
         </div>
       </div>
@@ -37,7 +37,7 @@ export function OnedriveLoginEntry({ onFinished }: { onFinished: () => void }) {
             rel='noreferrer'
             target='_blank'
           >
-            <LinkIcon className='mr-2 inline-block h-4 w-4' />
+            <ArrowTopRightOnSquareIcon className='mr-2 inline-block h-4 w-4' />
             Login
           </a>
         </div>

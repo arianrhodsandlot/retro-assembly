@@ -1,11 +1,9 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, type Target, motion } from 'framer-motion'
-import { useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useWindowSize } from 'react-use'
-import { type Rom, getCover } from '../../../core'
-import { currentRomAtom } from '../../lib/atoms'
+import { type Rom, game, getCover } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import GameEntryImage from './game-entry-image'
 
@@ -29,12 +27,12 @@ export function GameEntry({
   style: React.CSSProperties
   onFocus: React.FocusEventHandler<HTMLButtonElement>
 }) {
-  const setCurrentRom = useSetAtom(currentRomAtom)
   const [gameImageStatus, setGameImageStatus] = useState({ valid: true, loading: false })
   const ref = useRef<HTMLButtonElement>(null)
   const [maskPosition, setMaskPosition] = useState<Target>()
   const gameImageSrc = rom.gameInfo ? getCover({ system: rom.system, name: rom.gameInfo.name }) : ''
   const { width: windowWidth, height: windowHeight } = useWindowSize()
+  const [isLaunching, setIsLaunching] = useState(false)
 
   const maskInitialStyle = { ...maskPosition, filter: 'brightness(1)' }
   const maskExpandedStyle = {
@@ -43,7 +41,7 @@ export function GameEntry({
     left: 0,
     width: windowWidth,
     height: windowHeight,
-    filter: 'brightness(.1)',
+    filter: 'brightness(.05)',
   }
 
   function onClick() {
@@ -59,20 +57,22 @@ export function GameEntry({
     })
   }
 
-  function onAnimationComplete(definition) {
+  async function onAnimationComplete(definition) {
     if (definition === maskExpandedStyle) {
-      setCurrentRom(rom)
-
       emitter.on('exit', () => {
         setMaskPosition(undefined)
         ref.current?.focus()
 
         emitter.off('exit')
       })
+
+      setIsLaunching(true)
+      await game.launch(rom)
+      setIsLaunching(false)
     }
 
     if (definition === maskInitialStyle) {
-      setCurrentRom(undefined)
+      game.exit()
     }
   }
 
@@ -128,6 +128,7 @@ export function GameEntry({
   const isLastRow = !isFirstRow && rowIndex === rowCount - 1
   const isLastColumn = !isFirstColumn && columnIndex === columnCount - 1
 
+  const gameEntryContent = gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText
   return (
     <button className='group relative bg-[#d8d8d8]' onClick={onClick} onFocus={onFocus} ref={ref} style={style}>
       <span
@@ -160,24 +161,40 @@ export function GameEntry({
               ]
         )}
       >
-        {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
+        {gameEntryContent}
       </span>
 
       {createPortal(
-        <AnimatePresence>
-          {maskPosition ? (
-            <motion.div
-              animate={maskExpandedStyle}
-              className='absolute z-10 overflow-hidden'
-              exit={maskInitialStyle}
-              initial={maskInitialStyle}
-              onAnimationComplete={onAnimationComplete}
-              transition={{ duration: 0.2 }}
-            >
-              {gameImageStatus.valid ? gameEntryImageWithLoader : gameEntryText}
-            </motion.div>
-          ) : null}
-        </AnimatePresence>,
+        <>
+          <AnimatePresence>
+            {maskPosition ? (
+              <motion.div
+                animate={maskExpandedStyle}
+                className='absolute z-10 overflow-hidden'
+                exit={maskInitialStyle}
+                initial={maskInitialStyle}
+                onAnimationComplete={onAnimationComplete}
+                transition={{ duration: 0.2 }}
+              >
+                {gameEntryContent}
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isLaunching ? (
+              <motion.div
+                animate={{ opacity: 1 }}
+                className='absolute inset-0 z-[11] flex items-center justify-center backdrop-blur-xl'
+                exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <span className='loading-xl loading text-white' />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </>,
         document.body
       )}
     </button>

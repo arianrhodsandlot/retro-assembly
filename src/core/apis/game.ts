@@ -10,17 +10,10 @@ function ensureStarted() {
 }
 
 export const game = {
-  launch(rom: Rom) {
+  async launch(rom: Rom) {
     ensureStarted()
-    const emulatorStyle: Partial<CSSStyleDeclaration> = {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      background: 'black',
-      zIndex: '20',
-    }
-    const emulator = new Emulator({ rom, style: emulatorStyle })
-    emulator.launch()
+    const emulator = new Emulator({ rom })
+    await emulator.launch()
     globalInstances.emulator = emulator
   },
 

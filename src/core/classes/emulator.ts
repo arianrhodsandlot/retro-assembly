@@ -106,7 +106,6 @@ export class Emulator {
   rom?: Rom
   status: 'initial' | 'ready' | 'terminated' = 'initial'
   canvas: HTMLCanvasElement
-  canvasContainer: HTMLButtonElement
   emscripten: any
   private previousActiveElement: Element | null
   private messageQueue: [Uint8Array, number][] = []
@@ -114,33 +113,24 @@ export class Emulator {
   constructor({ core, rom, style }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.core = core ?? ''
-    this.canvasContainer = document.createElement('button')
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
     this.canvas.hidden = true
     this.canvas.width = 900
     this.canvas.height = 900
     this.previousActiveElement = document.activeElement
-    updateStyle(this.canvasContainer, {
-      display: 'block',
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      zIndex: '15',
-      width: '100%',
-      height: '100%',
-      cursor: 'default',
-    })
+    this.canvas.tabIndex = 0
     updateStyle(this.canvas, {
       display: 'block',
       imageRendering: 'pixelated', // this boosts performance!
-      width: '100%',
-      height: '100%',
+      position: 'absolute',
+      inset: '0',
+      zIndex: '10',
+      cursor: 'default',
+      visibility: 'hidden',
+      backgroundColor: 'black',
+      ...style,
     })
-
-    for (const rule in style) {
-      this.canvas.style.setProperty(rule, style[rule])
-    }
 
     this.resizeCanvas = this.resizeCanvas.bind(this)
   }
@@ -186,8 +176,8 @@ export class Emulator {
     this.resizeCanvas()
     window.addEventListener('resize', this.resizeCanvas, false)
     if (this.canvas) {
-      this.canvas.hidden = false
-      this.canvasContainer.focus()
+      updateStyle(this.canvas, { visibility: 'visible' })
+      this.canvas.focus()
     }
     this.status = 'ready'
   }
@@ -249,7 +239,6 @@ export class Emulator {
     }
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas.remove()
-    this.canvasContainer.remove()
     // @ts-expect-error try to focus on previous active element
     this.previousActiveElement?.focus?.()
   }
@@ -324,15 +313,13 @@ export class Emulator {
     } catch {}
     try {
       this.canvas.remove()
-      this.canvasContainer.remove()
     } catch {}
   }
 
   private async prepareEmscripten() {
     const { getEmscripten } = await import(`../../generated/retroarch-cores/${this.core}_libretro.js`)
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
-    this.canvasContainer.append(this.canvas)
-    document.body.append(this.canvasContainer)
+    document.body.append(this.canvas)
 
     const { Module } = this.emscripten
     await Promise.all([await this.prepareFileSystem(), await Module.monitorRunDependencies()])

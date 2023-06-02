@@ -1,4 +1,4 @@
-export default function GameEntryImage({ src, alt }: { src: string; alt: string }) {
+export function GameEntryImage({ src, alt }: { src: string; alt: string }) {
   return (
     <>
       <div className='absolute inset-0 overflow-hidden'>

@@ -13,14 +13,6 @@ export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   const innerRef = useRef<HTMLDivElement>()
   const { rowCount, columnCount } = props
 
-  function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
-    const $outer = $(outerRef.current)
-    const $focusedElement = $(e.currentTarget)
-    const offsetTop = $focusedElement.position().top + $outer.scrollTop()
-    const scrollTop = offsetTop - $outer.height() / 2 + $focusedElement.height() / 2
-    $outer.stop().animate({ scrollTop }, 100)
-  }
-
   useEffect(() => {
     innerRef.current?.querySelector('button')?.focus()
   }, [roms])
@@ -36,7 +28,6 @@ export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
               columnCount={columnCount}
               columnIndex={columnIndex}
               index={index}
-              onFocus={onFocus}
               rom={rom}
               rowCount={rowCount}
               rowIndex={rowIndex}

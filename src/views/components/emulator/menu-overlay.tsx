@@ -18,6 +18,10 @@ export function MenuOverlay() {
 
   useEffect(() => {
     function toggleMenu() {
+      if (!game.isRunning()) {
+        return
+      }
+
       if (show) {
         resume()
       } else {

@@ -1,4 +1,3 @@
-import { PowerIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 import { useStore } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
@@ -51,12 +50,12 @@ export function ClearSiteDataButton() {
       <button
         className={clsx(
           'relative rounded-md p-2 transition-[color,background-color]',
-          'focus:text-[#fe0000]',
+          'focus:text-red-600',
           'focus:after:absolute focus:after:inset-0 focus:after:animate-pulse focus:after:rounded-full focus:after:bg-white'
         )}
         onClick={openModal}
       >
-        <PowerIcon className='relative z-[1] h-8 w-8' />
+        <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
       </button>
 
       <Modal isOpen={showConfirmModal} onClickBackdrop={cancel} style={{ width: '400px', height: 'auto' }}>

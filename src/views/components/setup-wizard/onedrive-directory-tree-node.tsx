@@ -1,4 +1,3 @@
-import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 import { ui } from '../../../core'
 
@@ -71,7 +70,7 @@ export function OnedriveDirectoryTreeNode({
               )}
               onClick={() => onSelect(node.path)}
             >
-              <CheckCircleIcon className='mr-1 h-4 w-4' />
+              <span className='icon-[mdi--check] mr-1 h-4 w-4' />
               Proceed
             </button>
           ) : null}

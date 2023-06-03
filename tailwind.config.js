@@ -1,4 +1,4 @@
-import daisyui from 'daisyui'
+import { addDynamicIconSelectors } from '@iconify/tailwind'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -7,5 +7,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [daisyui],
+  plugins: [addDynamicIconSelectors()],
 }

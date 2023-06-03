@@ -73,7 +73,7 @@ export function GameEntryPortals({
             initial={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <span className='loading-xl loading text-white' />
+            <span className='icon-[line-md--loading-twotone-loop] text-white' />
           </motion.div>
         ) : null}
       </AnimatePresence>

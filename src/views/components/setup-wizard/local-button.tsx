@@ -1,4 +1,3 @@
-import { FolderOpenIcon } from '@heroicons/react/24/outline'
 import { useStore } from 'jotai'
 import { system } from '../../../core'
 import { needsValidateSystemConfigAtom } from '../../lib/atoms'
@@ -17,10 +16,10 @@ export function LocalButton() {
 
   return (
     <button
-      className='rounded border-2 border-red-600 bg-white px-4 py-2 text-lg text-red-600'
+      className='flex items-center justify-center rounded border-2 border-red-600 bg-white px-4 py-2 text-lg text-red-600'
       onClick={selectLocalDirectory}
     >
-      <FolderOpenIcon className='mr-2 inline-block h-4 w-4' />
+      <span className='icon-[mdi--folder-open-outline] mr-2 inline-block h-5 w-5' />
       select a local directory
     </button>
   )

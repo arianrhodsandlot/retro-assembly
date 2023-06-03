@@ -1,4 +1,3 @@
-import { ArchiveBoxXMarkIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 import { useEffect, useState } from 'react'
 import { ui } from '../../../core'
@@ -44,10 +43,7 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
         </div>
       ) : (
         <div className='flex h-full items-center pl-20 opacity-60'>
-          <div className='flex items-center'>
-            <ArchiveBoxXMarkIcon className='mr-2 w-6' />
-            There are no saved states for current game.
-          </div>
+          <div className='flex items-center'>There are no saved states for current game.</div>
         </div>
       )}
     </div>

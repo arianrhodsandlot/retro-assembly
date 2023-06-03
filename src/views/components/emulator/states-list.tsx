@@ -43,7 +43,10 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
         </div>
       ) : (
         <div className='flex h-full items-center pl-20 opacity-60'>
-          <div className='flex items-center'>There are no saved states for current game.</div>
+          <div className='flex items-center text-xl'>
+            <span className='icon-[mdi--folder-hidden] mr-2 h-8 w-8' />
+            There are no saved states for current game.
+          </div>
         </div>
       )}
     </div>

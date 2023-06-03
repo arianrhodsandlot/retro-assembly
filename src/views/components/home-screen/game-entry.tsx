@@ -3,6 +3,7 @@ import { type Target } from 'framer-motion'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
 import { type Rom, game, getCover } from '../../../core'
+import { emitter } from '../../lib/emitter'
 import { GameEntryImage } from './game-entry-image'
 import { GameEntryPortals } from './game-entry-portals'
 
@@ -49,6 +50,17 @@ export function GameEntry({
     const scrollTop = offsetTop - $outer.height() / 2 + $focusedElement.height() / 2
     $outer.stop().animate({ scrollTop }, 100)
   }
+
+  useEffect(() => {
+    emitter.on('exit', () => {
+      setMaskPosition(undefined)
+      emitter.off('exit')
+    })
+
+    return () => {
+      emitter.off('exit')
+    }
+  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -144,7 +156,6 @@ export function GameEntry({
       <GameEntryPortals
         maskContent={gameEntryContent}
         maskPosition={maskPosition}
-        onMaskHide={() => game.exit()}
         onMaskShow={() => game.launch(rom)}
       />
     </>

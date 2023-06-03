@@ -1,21 +1,16 @@
-import { clsx } from 'clsx'
-import { AnimatePresence, type Target, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useWindowSize } from 'react-use'
-import { type Rom, game, getCover } from '../../../core'
-import { emitter } from '../../lib/emitter'
 
 export function GameEntryPortals({
   maskContent,
   maskPosition,
   onMaskShow,
-  onMaskHide,
 }: {
   maskContent: any
   maskPosition: any
   onMaskShow: () => Promise<void>
-  onMaskHide: () => void
 }) {
   const { width: windowWidth, height: windowHeight } = useWindowSize()
   const [isLaunching, setIsLaunching] = useState(false)
@@ -31,19 +26,9 @@ export function GameEntryPortals({
 
   async function onAnimationComplete(definition) {
     if (definition === maskExpandedStyle) {
-      emitter.on('exit', () => {
-        onMaskHide()
-
-        emitter.off('exit')
-      })
-
       setIsLaunching(true)
       await onMaskShow()
       setIsLaunching(false)
-    }
-
-    if (definition === maskInitialStyle) {
-      game.exit()
     }
   }
 
@@ -73,7 +58,7 @@ export function GameEntryPortals({
             initial={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <span className='icon-[line-md--loading-twotone-loop] text-white' />
+            <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
           </motion.div>
         ) : null}
       </AnimatePresence>

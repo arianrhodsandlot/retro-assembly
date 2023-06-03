@@ -1,15 +1,12 @@
 import { clsx } from 'clsx'
-import { useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { game, ui } from '../../../core'
-import { currentRomAtom } from '../../lib/atoms'
 import { emitter } from '../../lib/emitter'
 import { StatesList } from './states-list'
 
 const menuHotButtons = ['l3', 'r3']
 
 export function MenuOverlay() {
-  const setCurrentRom = useSetAtom(currentRomAtom)
   const ref = useRef<HTMLDivElement>(null)
   const [show, setShow] = useState(false)
   const [showStateList, setShowStateList] = useState(false)
@@ -66,9 +63,8 @@ export function MenuOverlay() {
 
   function exit() {
     game.exit()
-    setCurrentRom(undefined)
-    emitter.emit('exit')
     setShow(false)
+    emitter.emit('exit')
   }
 
   async function onSelectState(stateId: string) {
@@ -81,7 +77,7 @@ export function MenuOverlay() {
   }
 
   const menuButtonClassNames =
-    'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600'
+    'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600 flex items-center justify-end'
 
   return (
     <div
@@ -102,10 +98,12 @@ export function MenuOverlay() {
               onFocus={() => setShowStateList(false)}
               ref={firstButtonRef}
             >
+              <span className='icon-[material-symbols--resume] mr-2 h-6 w-6' />
               Resume
             </button>
 
             <button className={menuButtonClassNames} onClick={saveState} onFocus={() => setShowStateList(false)}>
+              <span className='icon-[mdi--content-save] mr-2 h-6 w-6' />
               Save state
             </button>
 
@@ -113,10 +111,12 @@ export function MenuOverlay() {
               className={clsx(menuButtonClassNames, { 'bg-white text-red-600': showStateList })}
               onFocus={() => setShowStateList(true)}
             >
+              <span className='icon-[mdi--tray-arrow-down] mr-2 h-6 w-6' />
               Load state
             </button>
 
             <button className={menuButtonClassNames} onClick={exit} onFocus={() => setShowStateList(false)}>
+              <span className='icon-[mdi--exit-to-app] mr-2 h-6 w-6' />
               Exit
             </button>
           </div>

@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
 import { useMeasure, useWindowSize } from 'react-use'
 import { type Rom, system, systemFullNameMap, systemNamesSorted, ui } from '../../../core'
@@ -121,14 +122,21 @@ export function GameEntryContainer() {
 
       {roms?.length ? (
         <GameEntryGrid
-          className='game-entry-grid absolute bottom-0 !overflow-x-hidden bg-gray-200 shadow-inner'
+          className={clsx([
+            'game-entry-grid absolute bottom-0 !overflow-x-hidden bg-gray-300 bg-[length:30px_30px] bg-center shadow-inner',
+          ])}
           columnCount={columnCount}
           columnWidth={gridWidth / columnCount}
           height={gridHeight}
           roms={roms}
           rowCount={Math.ceil(roms.length / columnCount)}
           rowHeight={gridWidth / columnCount}
-          style={{ top: navHeight }}
+          style={{
+            top: navHeight,
+            backgroundImage:
+              'repeating-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd), repeating-linear-gradient(45deg, #ddd 25%, #e5e5f7 25%, #e5e5f7 75%, #ddd 75%, #ddd)',
+            backgroundPosition: '0 0, 15px 15px',
+          }}
           width={gridWidth}
         />
       ) : null}

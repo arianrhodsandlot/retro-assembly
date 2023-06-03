@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import { useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { type Rom } from '../../../core'

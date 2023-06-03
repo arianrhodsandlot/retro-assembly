@@ -15,7 +15,7 @@ export function SystemNavigation({
 }) {
   return (
     <div
-      className='system-navigation absolute w-full overflow-auto overflow-x-hidden bg-red-600 text-white'
+      className='system-navigation absolute z-[1] w-full overflow-auto overflow-x-hidden bg-red-600 text-white shadow-sm shadow-gray-700'
       ref={elementRef}
     >
       <div className='flex items-center'>

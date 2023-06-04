@@ -31,7 +31,7 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
               onClick={() => onSelect(state.id)}
             >
               <div className='h-40 w-40 overflow-hidden'>
-                {state.thumbnailUrl1 ? (
+                {state.thumbnailUrl ? (
                   <img
                     alt={`saved state of ${state.name}`}
                     className='block h-40 w-40 transform-gpu bg-gray-300 object-cover transition-transform'

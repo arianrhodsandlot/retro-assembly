@@ -40,6 +40,8 @@ export function GameEntryContainer() {
 
   const roms = groupedRoms[currentSystemName]
   const columnCount = getColumnCount(width)
+  const backgroundImage =
+    'repeating-linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee), repeating-linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee)'
 
   const gridWidth = width
   const gridHeight = windowSize.height - navHeight
@@ -112,7 +114,7 @@ export function GameEntryContainer() {
   }, [selectNextSystem])
 
   return (
-    <div className='relative h-screen'>
+    <div className='relative h-screen bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
       <SystemNavigation
         currentSystem={currentSystemName}
         elementRef={navElement}
@@ -122,21 +124,14 @@ export function GameEntryContainer() {
 
       {roms?.length ? (
         <GameEntryGrid
-          className={clsx([
-            'game-entry-grid absolute bottom-0 !overflow-x-hidden bg-gray-300 bg-[length:30px_30px] bg-center shadow-inner',
-          ])}
+          className={clsx(['game-entry-grid absolute bottom-0 !overflow-x-hidden'])}
           columnCount={columnCount}
           columnWidth={gridWidth / columnCount}
           height={gridHeight}
           roms={roms}
           rowCount={Math.ceil(roms.length / columnCount)}
           rowHeight={gridWidth / columnCount}
-          style={{
-            top: navHeight,
-            backgroundImage:
-              'repeating-linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%, #ddd), repeating-linear-gradient(45deg, #ddd 25%, #e5e5f7 25%, #e5e5f7 75%, #ddd 75%, #ddd)',
-            backgroundPosition: '0 0, 15px 15px',
-          }}
+          style={{ top: navHeight }}
           width={gridWidth}
         />
       ) : null}

@@ -7,11 +7,11 @@ import { StatesList } from './states-list'
 const menuHotButtons = ['l3', 'r3']
 
 export function MenuOverlay() {
-  const ref = useRef<HTMLDivElement>(null)
   const [show, setShow] = useState(false)
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
   const previousActiveElementRef = useRef<Element | null>(null)
+  const [isLoadingState, setIsLoadingState] = useState(false)
 
   useEffect(() => {
     function toggleMenu() {
@@ -68,7 +68,9 @@ export function MenuOverlay() {
   }
 
   async function onSelectState(stateId: string) {
+    setIsLoadingState(true)
     await game.loadState(stateId)
+    setIsLoadingState(false)
     setShow(false)
   }
 
@@ -76,19 +78,19 @@ export function MenuOverlay() {
     return null
   }
 
+  if (isLoadingState) {
+    return (
+      <div className='absolute inset-0 z-[11] flex items-center justify-center bg-[#00000055] text-white backdrop-blur'>
+        <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
+      </div>
+    )
+  }
+
   const menuButtonClassNames =
     'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600 flex items-center justify-end'
 
   return (
-    <div
-      className={clsx(
-        'menu-overlay absolute inset-0 z-30 flex justify-center bg-[#00000033] text-white backdrop-blur',
-        {
-          hidden: !show,
-        }
-      )}
-      ref={ref}
-    >
+    <div className='menu-overlay absolute inset-0 z-[11] flex justify-center bg-[#00000055] text-white backdrop-blur'>
       <div className='menu-overlay-buttons w-1/2'>
         <div className='relative h-full w-full py-10 text-xl'>
           <div className='absolute inset-y-10 flex w-full flex-col justify-center border-r-2 border-r-white'>

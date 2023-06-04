@@ -1,7 +1,7 @@
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
-import { useMeasure, useWindowSize } from 'react-use'
-import { type Rom, system, systemFullNameMap, systemNamesSorted, ui } from '../../../core'
+import { useMeasure } from 'react-use'
+import { type Rom, systemFullNameMap, systemNamesSorted, ui } from '../../../core'
 import { GameEntryGrid } from './game-entry-grid'
 import { SystemNavigation } from './system-navigation'
 
@@ -26,25 +26,23 @@ function getColumnCount(width: number) {
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
-export function GameEntryContainer() {
-  const [groupedRoms, setGroupedRoms] = useState<Record<string, Rom[]>>({})
-  const [currentSystemName, setCurrentSystemName] = useState<string>('')
-  const [navSystems, setNavSystems] = useState<
-    {
-      name: string
-      fullName: string
-    }[]
-  >([])
-  const windowSize = useWindowSize()
-  const [navElement, { width, height: navHeight }] = useMeasure<HTMLDivElement>()
+interface GameEntryContainerProps {
+  groupedRoms: Record<string, Rom[]> | undefined
+  loading: boolean
+}
 
-  const roms = groupedRoms[currentSystemName]
-  const columnCount = getColumnCount(width)
+export function GameEntryContainer({ groupedRoms, loading }: GameEntryContainerProps) {
+  const navSystems = systems
+    .filter((system) => groupedRoms?.[system.name]?.length)
+    .sort((a, b) => (systemNamesSorted.indexOf(a.name) > systemNamesSorted.indexOf(b.name) ? 1 : -1))
+  const defaultSystemName = localStorage.getItem(lastSelectedSystemStorageKey) ?? navSystems?.[0]?.name ?? ''
+  const [currentSystemName, setCurrentSystemName] = useState<string>(defaultSystemName)
+  const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
+
+  const roms = groupedRoms?.[currentSystemName]
+  const columnCount = getColumnCount(gridWidth)
   const backgroundImage =
-    'repeating-linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee), repeating-linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee)'
-
-  const gridWidth = width
-  const gridHeight = windowSize.height - navHeight
+    'repeating-linear-gradient(45deg, #fafafa 25%, transparent 25%, transparent 75%, #fafafa 75%, #fafafa), repeating-linear-gradient(45deg, #fafafa 25%, white 25%, white 75%, #fafafa 75%, #fafafa)'
   const selectPrevSystem = useCallback(
     function selectPrevSystem() {
       const index = navSystems.findIndex((system) => system.name === currentSystemName)
@@ -70,34 +68,10 @@ export function GameEntryContainer() {
   )
 
   useEffect(() => {
-    system.onStarted(async () => {
-      await loadRoms()
-    })
-  }, [])
-
-  useEffect(() => {
     if (currentSystemName) {
       localStorage.setItem(lastSelectedSystemStorageKey, currentSystemName)
     }
   }, [currentSystemName])
-
-  async function loadRoms() {
-    const roms = await ui.listRoms()
-
-    if (!Object.keys(roms)) {
-      // todo: needs better user experience
-      alert('empty dir')
-      return
-    }
-
-    const navSystems = systems
-      .filter((system) => roms[system.name]?.length)
-      .sort((a, b) => (systemNamesSorted.indexOf(a.name) > systemNamesSorted.indexOf(b.name) ? 1 : -1))
-
-    setGroupedRoms(roms)
-    setNavSystems(navSystems)
-    setCurrentSystemName(localStorage.getItem(lastSelectedSystemStorageKey) ?? navSystems[0].name ?? '')
-  }
 
   useEffect(() => {
     ui.onPressButton('l1', selectPrevSystem)
@@ -114,27 +88,30 @@ export function GameEntryContainer() {
   }, [selectNextSystem])
 
   return (
-    <div className='relative h-screen bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
-      <SystemNavigation
-        currentSystem={currentSystemName}
-        elementRef={navElement}
-        onChange={setCurrentSystemName}
-        systems={navSystems}
-      />
+    <div
+      className='relative flex h-screen flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
+      style={{ backgroundImage }}
+    >
+      <SystemNavigation currentSystem={currentSystemName} onChange={setCurrentSystemName} systems={navSystems} />
 
-      {roms?.length ? (
-        <GameEntryGrid
-          className={clsx(['game-entry-grid absolute bottom-0 !overflow-x-hidden'])}
-          columnCount={columnCount}
-          columnWidth={gridWidth / columnCount}
-          height={gridHeight}
-          roms={roms}
-          rowCount={Math.ceil(roms.length / columnCount)}
-          rowHeight={gridWidth / columnCount}
-          style={{ top: navHeight }}
-          width={gridWidth}
-        />
-      ) : null}
+      <div className='flex-1 overflow-hidden' ref={gridContainerRef}>
+        {loading ? (
+          <div className='flex h-full items-center justify-center'>
+            <span className='icon-[line-md--loading-loop] h-16 w-16 text-red-600' />
+          </div>
+        ) : (
+          <GameEntryGrid
+            className={clsx(['game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'])}
+            columnCount={columnCount}
+            columnWidth={gridWidth / columnCount}
+            height={gridHeight}
+            roms={roms}
+            rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
+            rowHeight={gridWidth / columnCount}
+            width={gridWidth}
+          />
+        )}
+      </div>
     </div>
   )
 }

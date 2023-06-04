@@ -4,11 +4,10 @@ import { type Rom } from '../../../core'
 import { GameEntry } from './game-entry'
 
 interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
-  roms: Rom[]
+  roms: Rom[] | undefined
 }
 
 export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
-  const outerRef = useRef()
   const innerRef = useRef<HTMLDivElement>()
   const { rowCount, columnCount } = props
 
@@ -16,8 +15,8 @@ export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
     innerRef.current?.querySelector('button')?.focus()
   }, [roms])
 
-  return roms.length > 0 ? (
-    <FixedSizeGrid {...props} innerRef={innerRef} outerRef={outerRef}>
+  return roms?.length ? (
+    <FixedSizeGrid {...props} innerRef={innerRef}>
       {({ columnIndex, rowIndex, style }) => {
         const index = rowIndex * columnCount + columnIndex
         const rom = roms[index]

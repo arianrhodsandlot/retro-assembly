@@ -7,6 +7,7 @@ import {
   needsShowSetupWizardAtom,
   needsValidateSystemConfigAtom,
 } from '../lib/atoms'
+import { Emulator } from './emulator'
 import { HomeScreen } from './home-screen'
 import { Settings } from './modals/settings'
 import SetupWizard from './setup-wizard'
@@ -63,6 +64,7 @@ export function Container() {
   return (
     <>
       <HomeScreen />
+      <Emulator />
       <Settings />
     </>
   )

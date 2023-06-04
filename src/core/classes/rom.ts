@@ -128,8 +128,12 @@ export class Rom {
       return
     }
     for (const system of systems) {
-      if (this.fileSummary.path.includes(system)) {
-        return system
+      const segments = this.fileSummary.path.split('/')
+      const directorySegments = segments.slice(0, -1)
+      for (const segment of directorySegments) {
+        if (segment.includes(system)) {
+          return system
+        }
       }
     }
   }

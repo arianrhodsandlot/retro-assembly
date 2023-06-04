@@ -54,7 +54,6 @@ export function GameEntry({
   useEffect(() => {
     emitter.on('exit', () => {
       setMaskPosition(undefined)
-      emitter.off('exit')
     })
 
     return () => {

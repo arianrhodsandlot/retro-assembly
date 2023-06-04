@@ -7,15 +7,21 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
   const [pending, setPending] = useState(false)
 
   useEffect(() => {
+    setPending(true)
     ;(async () => {
       const states = await ui.listStates()
       setStates(states.reverse())
+      setPending(false)
     })()
   }, [])
 
   return (
-    <div className={clsx('relative h-full py-20', { 'opacity-90': pending })}>
-      {states?.length ? (
+    <div className={clsx('relative h-full py-20')}>
+      {pending ? (
+        <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
+          <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
+        </div>
+      ) : states?.length ? (
         <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
           {states.map((state) => (
             <button
@@ -25,14 +31,16 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
               onClick={() => onSelect(state.id)}
             >
               <div className='h-40 w-40 overflow-hidden'>
-                {state.thumbnailUrl ? (
+                {state.thumbnailUrl1 ? (
                   <img
                     alt={`saved state of ${state.name}`}
-                    className='block h-40 w-40 transform-gpu bg-[#ffffffe6] object-cover transition-transform'
+                    className='block h-40 w-40 transform-gpu bg-gray-300 object-cover transition-transform'
                     src={state.thumbnailUrl}
                   />
                 ) : (
-                  <div className='flex h-40 w-40 items-center justify-center'>No Image</div>
+                  <div className='flex h-40 w-40 items-center justify-center bg-gray-600'>
+                    <span className='icon-[mdi--image-broken-variant] h-12 w-12 text-white' />
+                  </div>
                 )}
               </div>
               <div className='flex h-40 items-center border-l-2 border-l-white pl-6'>

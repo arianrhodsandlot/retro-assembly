@@ -11,12 +11,12 @@ export function SystemNavigation({
   onChange: (systemName: string) => void
 }) {
   return (
-    <div className='system-navigation z-[1] flex w-full items-center overflow-auto overflow-x-hidden bg-red-600 text-white shadow-sm shadow-gray-700'>
+    <div className='system-navigation z-[1] flex h-16 w-full items-center overflow-auto overflow-x-hidden bg-red-600 to-red-700 text-white shadow-sm shadow-gray-700'>
       <div className='flex items-center px-6 text-center font-bold' style={{ fontFamily: "'Press Start 2P', cursive" }}>
         RETRO ASSEMBLY
       </div>
 
-      <div className='flex h-16 flex-1 flex-nowrap overflow-x-auto overflow-y-hidden pt-1'>
+      <div className='flex h-full flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
         {systems.map((system) => (
           <SystemNavigationItem
             isSelected={system.name === currentSystem}

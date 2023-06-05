@@ -1,19 +1,20 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { systemImageMap } from '../../lib/constants'
+import { currentSystemNameAtom } from './atoms'
 
-export function SystemNavigationItem({
-  system,
-  isSelected,
-  onChange,
-}: {
-  system: any
-  isSelected: boolean
-  onChange: any
-}) {
-  const shortName = system.fullName.split(' - ')[1]
+export function SystemNavigationItem({ system }: { system: any }) {
   const [duration, setDuration] = useState(0)
+  const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
+
+  const isSelected = system.name === currentSystemName
+  const shortName = system.fullName.split(' - ')[1]
+
+  function onClick() {
+    setCurrentSystemName(system.name)
+  }
 
   useEffect(() => {
     setDuration(0.2)
@@ -30,7 +31,7 @@ export function SystemNavigationItem({
         isSelected ? 'hover:after:bg-white' : 'hover:after:bg-red-800'
       )}
       key={system.name}
-      onClick={() => onChange(system.name)}
+      onClick={onClick}
     >
       <div className={clsx('relative z-[1] flex items-center justify-center')}>
         <div className={clsx('flex items-center justify-center')}>
@@ -53,7 +54,7 @@ export function SystemNavigationItem({
               initial={{ width: 0 }}
               transition={{ duration }}
             >
-              <div className='pl-4 text-red-600'>{shortName}</div>
+              <div className='pl-4 font-bold tracking-wider text-red-600'>{shortName}</div>
             </motion.div>
           ) : null}
         </AnimatePresence>

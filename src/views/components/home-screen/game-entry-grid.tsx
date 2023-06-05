@@ -1,25 +1,23 @@
+import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
-import { type Rom } from '../../../core'
+import { currentSystemRomsAtom } from './atoms'
 import { GameEntry } from './game-entry'
 
-interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
-  roms: Rom[] | undefined
-}
-
-export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
+export function GameEntryGrid(props: Omit<FixedSizeGrid['props'], 'children'>) {
+  const currentSystemRoms = useAtomValue(currentSystemRomsAtom)
   const innerRef = useRef<HTMLDivElement>()
   const { rowCount, columnCount } = props
 
   useEffect(() => {
     innerRef.current?.querySelector('button')?.focus()
-  }, [roms])
+  }, [currentSystemRoms])
 
-  return roms?.length ? (
+  return currentSystemRoms?.length ? (
     <FixedSizeGrid {...props} innerRef={innerRef}>
       {({ columnIndex, rowIndex, style }) => {
         const index = rowIndex * columnCount + columnIndex
-        const rom = roms[index]
+        const rom = currentSystemRoms[index]
         return (
           rom && (
             <GameEntry

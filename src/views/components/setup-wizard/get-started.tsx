@@ -4,9 +4,9 @@ import { OnedriveButton } from './onedrive-button'
 export function GetStarted() {
   return (
     <div className='m-auto w-[800px]'>
-      <div className='mt-10'>To get started, you can:</div>
+      <div>To get started, you can:</div>
 
-      <div className='-ml-10 mt-4 box-content w-full rounded-xl border-2 border-red-600 px-10 py-6'>
+      <div className='-ml-10 mt-4 box-content w-full rounded-xl border-2 border-red-600 bg-white px-10 py-6'>
         <div className='flex flex-col'>
           <div>
             <OnedriveButton />

@@ -1,6 +1,6 @@
 export function Header() {
   return (
-    <div className='bg-red-600 pb-10 pt-80 text-center text-white'>
+    <div className='pb-16 text-center text-white'>
       <div className='m-auto w-[800px]'>
         <h3>
           <span className='text-3xl' style={{ fontFamily: "'Press Start 2P', cursive" }}>

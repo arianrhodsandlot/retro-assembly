@@ -1,20 +1,13 @@
-import { useAtomValue, useStore } from 'jotai'
+import { useStore } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { system } from '../../core'
-import {
-  needsFreshSetupAtom,
-  needsRegrantLocalPermissionAtom,
-  needsShowSetupWizardAtom,
-  needsValidateSystemConfigAtom,
-} from '../lib/atoms'
+import { needsFreshSetupAtom, needsRegrantLocalPermissionAtom, needsValidateSystemConfigAtom } from '../lib/atoms'
 import { Emulator } from './emulator'
 import { HomeScreen } from './home-screen'
-import { Settings } from './modals/settings'
 import SetupWizard from './setup-wizard'
 
 export function Container() {
   const store = useStore()
-  const needsShowSetupWizard = useAtomValue(needsShowSetupWizardAtom)
 
   const checkPreparations = useCallback(async () => {
     let shouldStart = false
@@ -57,15 +50,11 @@ export function Container() {
     return destruct
   }, [checkPreparations, store])
 
-  if (needsShowSetupWizard) {
-    return <SetupWizard onSubmit={checkPreparations} />
-  }
-
   return (
     <>
       <HomeScreen />
       <Emulator />
-      <Settings />
+      <SetupWizard />
     </>
   )
 }

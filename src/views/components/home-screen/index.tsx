@@ -1,8 +1,10 @@
 import { clsx } from 'clsx'
+import delay from 'delay'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAsync, useMeasure } from 'react-use'
 import { system, systemFullNameMap, systemNamesSorted, ui } from '../../../core'
+import { needsShowSetupWizardAtom } from '../../lib/atoms'
 import { currentSystemNameAtom, currentSystemRomsAtom, groupedRomsAtom } from './atoms'
 import { GameEntryGrid } from './game-entry-grid'
 import { SystemNavigation } from './system-navigation'
@@ -34,6 +36,12 @@ export function HomeScreen() {
   const currentSystemRoms = useAtomValue(currentSystemRomsAtom)
   const [navSystems, setNavSystems] = useState<any[]>([])
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
+  const needsShowSetupWizard = useAtomValue(needsShowSetupWizardAtom)
+  const needsWaitSetupClose = useRef(false)
+
+  if (needsShowSetupWizard) {
+    needsWaitSetupClose.current = true
+  }
 
   const columnCount = getColumnCount(gridWidth)
   const backgroundImage =
@@ -41,6 +49,9 @@ export function HomeScreen() {
 
   const state = useAsync(async () => {
     await new Promise((resolve) => system.onStarted(resolve))
+    if (needsWaitSetupClose.current) {
+      await delay(500)
+    }
     const groupedRoms = await ui.listRoms()
 
     if (!Object.keys(groupedRoms)) {
@@ -63,10 +74,18 @@ export function HomeScreen() {
     }
   })
 
+  if (needsShowSetupWizard) {
+    return false
+  }
+
+  if (state.error) {
+    return false
+  }
+
   if (state.loading) {
     return (
       <div
-        className='relative flex h-screen flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
+        className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
         style={{ backgroundImage }}
       >
         <SystemNavigation />
@@ -79,13 +98,9 @@ export function HomeScreen() {
     )
   }
 
-  if (state.error) {
-    return null
-  }
-
   return (
     <div
-      className='relative flex h-screen flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
+      className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
       style={{ backgroundImage }}
     >
       <SystemNavigation systems={navSystems} />

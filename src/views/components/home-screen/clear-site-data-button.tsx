@@ -49,9 +49,9 @@ export function ClearSiteDataButton() {
     <>
       <button
         className={clsx(
-          'relative rounded-md p-2 transition-[color,background-color]',
-          'focus:text-red-600',
-          'focus:after:absolute focus:after:inset-0 focus:after:animate-pulse focus:after:rounded-full focus:after:bg-white'
+          'relative flex aspect-square h-full items-center justify-center transition-[color,background-color]',
+          'hover:bg-red-800',
+          'focus:bg-red-800'
         )}
         onClick={openModal}
       >

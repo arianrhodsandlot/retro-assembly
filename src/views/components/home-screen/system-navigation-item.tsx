@@ -1,12 +1,11 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { systemImageMap } from '../../lib/constants'
 import { currentSystemNameAtom } from './atoms'
 
 export function SystemNavigationItem({ system }: { system: any }) {
-  const [duration, setDuration] = useState(0)
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
 
   const isSelected = system.name === currentSystemName
@@ -15,10 +14,6 @@ export function SystemNavigationItem({ system }: { system: any }) {
   function onClick() {
     setCurrentSystemName(system.name)
   }
-
-  useEffect(() => {
-    setDuration(0.2)
-  }, [])
 
   return (
     <button
@@ -45,14 +40,12 @@ export function SystemNavigationItem({ system }: { system: any }) {
             width={36}
           />
         </div>
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {isSelected ? (
             <motion.div
               animate={{ width: 'auto' }}
               className='box-content overflow-hidden whitespace-nowrap'
               exit={{ width: 0 }}
-              initial={{ width: 0 }}
-              transition={{ duration }}
             >
               <div className='pl-4 font-bold tracking-wider text-red-600'>{shortName}</div>
             </motion.div>

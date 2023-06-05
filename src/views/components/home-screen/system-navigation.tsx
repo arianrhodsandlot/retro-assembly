@@ -54,19 +54,19 @@ export function SystemNavigation({ systems }: { systems?: any[] }) {
   }, [selectNextSystem])
 
   return (
-    <div className='system-navigation z-[1] flex h-16 w-full items-center overflow-auto overflow-x-hidden bg-red-600 to-red-700 text-white shadow-sm shadow-gray-700'>
+    <div className='system-navigation z-[1] flex h-16 w-full items-stretch overflow-auto overflow-x-hidden bg-red-600 to-red-700 text-white shadow-sm shadow-gray-700'>
       <div className='flex items-center px-10 text-center font-bold'>
         <span className='icon-[mdi--controller] mr-2 h-10 w-10' />
         Retro Assembly
       </div>
 
-      <div className='flex h-full flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
+      <div className='flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
         {systems?.map((system) => (
           <SystemNavigationItem key={system.name} system={system} />
         ))}
       </div>
 
-      <div className='px-8'>
+      <div>
         <ClearSiteDataButton />
       </div>
     </div>

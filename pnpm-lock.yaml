@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fontsource/audiowide':
+    specifier: ^5.0.2
+    version: 5.0.2
   '@fontsource/roboto':
     specifier: 5.0.2
     version: 5.0.2
@@ -495,6 +498,10 @@ packages:
     resolution: {integrity: sha512-6SWlXpWU5AvId8Ac7zjzmIOqMOba/JWY8XZ4A7q7Gn1Vlfg/SFFIlrtHXt9nPn4op9ZPAkl91Jao+QQv3r/ukw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@fontsource/audiowide@5.0.2:
+    resolution: {integrity: sha512-vBSGnukhMKBChnDaSzg9T4KRdnTe7kbyJmTlv4x/FQnGtp7khh6w/5SOXG+frn81DfrC4VBZZFjOesTlVvr53Q==}
+    dev: false
 
   /@fontsource/roboto@5.0.2:
     resolution: {integrity: sha512-SLw0o3kWwJ53/Ogyk8GGwSaULNX6Hogs+GsVempDdqpX8wm5hKBLYgUkdUPk+NogiViPp1x++OnkuLA+fAd9Kg==}

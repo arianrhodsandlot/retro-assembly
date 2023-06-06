@@ -48,8 +48,18 @@ export function OnedriveDirectoryTreeNode({
   }
   return (
     <div>
-      <div className='flex rounded p-2 py-1 transition-[background-color,color] hover:bg-red-100 hover:text-red-600'>
-        <div className='mr-1'>{node.isDirectory ? (node.expanded ? '📂' : '📁') : '📄'}</div>
+      <div className='flex items-center rounded p-2 py-1 transition-[background-color,color] hover:bg-red-100 hover:text-red-600'>
+        {node.isDirectory ? (
+          node.expanded ? (
+            <span className='icon-[mdi--folder-open] mr-2 h-6 w-6 text-red-500' />
+          ) : node.hasChildren ? (
+            <span className='icon-[mdi--folder] mr-2 h-6 w-6 text-red-500' />
+          ) : (
+            <span className='icon-[mdi--folder-alert] mr-2 h-6 w-6 text-red-500' />
+          )
+        ) : (
+          <span className='icon-[mdi--file] mr-2 h-6 w-6 text-red-500' />
+        )}
         <div className='group flex min-w-0 flex-1'>
           <div
             aria-hidden
@@ -59,7 +69,7 @@ export function OnedriveDirectoryTreeNode({
           >
             <div>{node.name}</div>
             {!node.hasChildren && node.isDirectory ? (
-              <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>empty</div>
+              <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>an empty directory</div>
             ) : null}
           </div>
           {node.hasChildren ? (

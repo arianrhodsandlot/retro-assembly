@@ -34,7 +34,7 @@ export function OnedriveDirectoryTree({ onSelect }: { onSelect: (path: string) =
   }, [])
 
   return (
-    <div className='p-4 text-lg text-black'>
+    <div className='mt-4 text-lg text-black'>
       <OnedriveDirectoryTreeNode node={tree} onChange={onChange} onSelect={onSelect} root={tree} />
     </div>
   )

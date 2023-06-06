@@ -17,7 +17,7 @@ export function LocalButton() {
 
   return (
     <BaseButton onClick={selectLocalDirectory}>
-      <span className='icon-[mdi--folder-open-outline] h-5 w-5' />
+      <span className='icon-[mdi--desktop-classic] h-5 w-5' />
       select a local directory
     </BaseButton>
   )

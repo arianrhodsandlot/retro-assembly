@@ -35,9 +35,11 @@
     "react-dom": "18.2.0",
     "react-use": "17.4.0",
     "react-window": "1.8.9",
-    "store2": "2.14.2"
+    "store2": "2.14.2",
+    "wouter": "2.11.0"
   },
   "devDependencies": {
+    "7zip-bin": "5.2.0",
     "@arianrhodsandlot/eslint-config": "0.7.0",
     "@iconify/json": "2.2.74",
     "@iconify/tailwind": "0.1.2",
@@ -48,7 +50,6 @@
     "@types/react-dom": "18.2.4",
     "@types/react-window": "1.8.5",
     "@vitejs/plugin-react-swc": "3.3.2",
-    "7zip-bin": "5.2.0",
     "autoprefixer": "10.4.14",
     "eslint": "8.42.0",
     "libretrodb": "1.0.0",

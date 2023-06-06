@@ -1,12 +1,12 @@
 import { useStore } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { system } from '../../core'
-import { needsFreshSetupAtom, needsRegrantLocalPermissionAtom, needsValidateSystemConfigAtom } from '../lib/atoms'
-import { Emulator } from './emulator'
-import { HomeScreen } from './home-screen'
-import SetupWizard from './setup-wizard'
+import { system } from '../../../core'
+import { needsFreshSetupAtom, needsRegrantLocalPermissionAtom, needsValidateSystemConfigAtom } from '../../lib/atoms'
+import { Emulator } from '../emulator'
+import { HomeScreen } from '../home-screen'
+import SetupWizard from '../setup-wizard'
 
-export function Container() {
+export function Home() {
   const store = useStore()
 
   const checkPreparations = useCallback(async () => {

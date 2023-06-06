@@ -1,7 +1,6 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
-import { useState } from 'react'
 import { systemImageMap } from '../../lib/constants'
 import { currentSystemNameAtom } from './atoms'
 
@@ -40,7 +39,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
             width={36}
           />
         </div>
-        <AnimatePresence initial={false}>
+        <AnimatePresence>
           {isSelected ? (
             <motion.div
               animate={{ width: 'auto' }}

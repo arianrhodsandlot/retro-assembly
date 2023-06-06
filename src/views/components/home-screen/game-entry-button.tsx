@@ -19,10 +19,10 @@ export function GameEntryButton({
   ...props
 }: GameEntryButtonProps) {
   return (
-    <button className='group relative bg-[#eee]' {...props}>
+    <button className='group relative' {...props}>
       <span
         className={clsx(
-          'opacity-1 block h-full w-full bg-[#eee] text-left transition-[transform] group-focus:transform-gpu',
+          'opacity-1 block h-full w-full bg-gray-100 text-left transition-[transform] group-focus:transform-gpu',
           'after:absolute after:-inset-0 after:border after:border-black',
           'group-focus:relative group-focus:z-10 group-focus:scale-110 group-focus:shadow-2xl group-focus:shadow-black',
           'group-focus:after:-inset-[4px] group-focus:after:animate-pulse group-focus:after:border-[4px] group-focus:after:border-white',

@@ -39,12 +39,13 @@ export function SystemNavigationItem({ system }: { system: any }) {
             width={36}
           />
         </div>
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {isSelected ? (
             <motion.div
               animate={{ width: 'auto' }}
               className='box-content overflow-hidden whitespace-nowrap'
               exit={{ width: 0 }}
+              initial={{ width: 0 }}
             >
               <div className='pl-4 font-bold tracking-wider text-red-600'>{shortName}</div>
             </motion.div>

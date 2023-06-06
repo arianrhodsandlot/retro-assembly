@@ -2,10 +2,10 @@ import { RegrantButton } from './regrant-button'
 
 export function RegrantLocalPermission() {
   return (
-    <div className='m-auto w-[800px]'>
-      <div>To continue, please:</div>
+    <div className='container m-auto max-w-5xl px-10'>
+      <div className='px-12'>To continue, please:</div>
 
-      <div className='-ml-10 mt-4 box-content w-full rounded-xl border-2 border-red-600 bg-white px-10 py-6'>
+      <div className='mt-4 w-full rounded-xl border-2 border-red-600 bg-white px-10 py-6'>
         <div className='flex flex-col'>
           <div>
             <RegrantButton />

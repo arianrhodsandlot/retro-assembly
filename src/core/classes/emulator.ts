@@ -129,6 +129,10 @@ export class Emulator {
       cursor: 'default',
       visibility: 'hidden',
       backgroundColor: 'black',
+      backgroundPosition: '0 0,15px 15px',
+      backgroundSize: '30px 30px',
+      backgroundImage:
+        'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #222 25%, #222 75%, #000 75%, #000)',
       ...style,
     })
 

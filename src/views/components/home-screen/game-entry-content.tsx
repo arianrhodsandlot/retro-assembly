@@ -1,15 +1,25 @@
 import { useAsync } from 'react-use'
 import { getCover } from '../../../core'
+import { systemContentImageMap } from '../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
 
+const loadedImages = new Map<string, boolean>()
 async function loadImage(src: string) {
+  if (loadedImages.has(src)) {
+    if (loadedImages.get(src)) {
+      return true
+    }
+    throw new Error('invalid src')
+  }
   const img = new Image()
   img.src = src
   return await new Promise<void>((resolve, reject) => {
     img.addEventListener('load', (event) => {
+      loadedImages.set(src, true)
       resolve()
     })
     img.addEventListener('error', (error) => {
+      loadedImages.set(src, false)
       reject(error)
     })
   })
@@ -34,9 +44,9 @@ export function GameEntryContent({ rom }: { rom: any }) {
   if (state.loading) {
     const rotate = pseudoRandomDeg(rom.fileSummary.name)
     return (
-      <div className='m-auto flex h-full items-center justify-center bg-[#eee] text-center font-bold'>
+      <div className='m-auto flex h-full items-center justify-center bg-gray-100 text-center font-bold'>
         <span
-          className='icon-[line-md--loading-loop] h-12 w-12 text-slate-400'
+          className='icon-[line-md--loading-loop] h-4 w-4 text-slate-400'
           style={{ transform: `rotate(${rotate}deg)` }}
         />
       </div>
@@ -45,8 +55,8 @@ export function GameEntryContent({ rom }: { rom: any }) {
 
   if (state.error) {
     return (
-      <div className='m-auto flex h-full items-center justify-center bg-[#eee] text-center font-bold'>
-        <span className='icon-[mdi--image-broken-variant] h-12 w-12 text-slate-400' />
+      <div className='m-auto flex h-full items-center justify-center bg-gray-100 text-center font-bold'>
+        <img alt={rom.fileSummary.name} className='w-3/5 object-contain' src={systemContentImageMap[rom.system]} />
       </div>
     )
   }

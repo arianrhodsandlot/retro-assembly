@@ -1,14 +1,14 @@
+import { DialogClose } from '@radix-ui/react-dialog'
 import { clsx } from 'clsx'
 import { useStore } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { system } from '../../../core'
 import { needsValidateSystemConfigAtom } from '../../lib/atoms'
-import { Modal } from '../modals/modal'
+import { BaseButton } from '../primitives/button'
+import { BaseDialog } from '../primitives/dialog'
 
 export function ClearSiteDataButton() {
   const store = useStore()
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const cancelButtonRef = useRef<HTMLButtonElement>(null)
   const [confirmMessage, setConfirmMessage] = useState('')
 
   function updateSetConfirmMessage() {
@@ -25,62 +25,46 @@ export function ClearSiteDataButton() {
     setConfirmMessage(confirmMessage)
   }
 
-  function openModal() {
-    setShowConfirmModal(true)
-    updateSetConfirmMessage()
-  }
-
-  function cancel() {
-    setShowConfirmModal(false)
-  }
-
-  async function confirm() {
+  async function clearData() {
     await system.clearData()
     store.set(needsValidateSystemConfigAtom, true)
   }
 
-  useEffect(() => {
-    if (showConfirmModal) {
-      cancelButtonRef.current?.focus()
-    }
-  }, [showConfirmModal])
+  const dialogContent = (
+    <>
+      <div>
+        <div className='flex items-center text-lg'>
+          <span className='icon-[mdi--alert] mr-2 h-5 w-5' />
+          Are you sure to clear all data?
+        </div>
+        <div className='mt-4'>{confirmMessage}</div>
+      </div>
+      <div className='mt-8 flex items-center justify-center gap-5'>
+        <BaseButton onClick={clearData} styleType='primary'>
+          <span className='icon-[mdi--check] h-5 w-5' />
+          Confirm
+        </BaseButton>
+        <DialogClose asChild>
+          <BaseButton>
+            <span className='icon-[mdi--close] h-5 w-5' />
+            Cancel
+          </BaseButton>
+        </DialogClose>
+      </div>
+    </>
+  )
 
   return (
-    <>
+    <BaseDialog content={dialogContent} onOpenChange={updateSetConfirmMessage}>
       <button
         className={clsx(
           'relative flex aspect-square h-full items-center justify-center transition-[color,background-color]',
           'hover:bg-red-800',
           'focus:bg-red-800'
         )}
-        onClick={openModal}
       >
         <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
       </button>
-
-      <Modal isOpen={showConfirmModal} onClickBackdrop={cancel} style={{ width: '400px', height: 'auto' }}>
-        <div className='p-6'>
-          <div>
-            <div className='text-lg'>Are you sure to clear all data?</div>
-            <div className='mt-4'>{confirmMessage}</div>
-          </div>
-          <div className='mt-8 flex items-center justify-center gap-5'>
-            <button
-              className='rounded border-2 border-red-600 bg-red-600 px-4 py-2 text-white focus:animate-pulse'
-              onClick={confirm}
-            >
-              Confirm
-            </button>
-            <button
-              className='rounded border-2 border-red-600 bg-white px-4 py-2 text-red-600 focus:animate-pulse'
-              onClick={cancel}
-              ref={cancelButtonRef}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </Modal>
-    </>
+    </BaseDialog>
   )
 }

@@ -51,10 +51,10 @@ export function Home() {
   }, [checkPreparations, store])
 
   return (
-    <>
+    <div className='relative h-screen w-screen'>
       <HomeScreen />
       <Emulator />
       <SetupWizard />
-    </>
+    </div>
   )
 }

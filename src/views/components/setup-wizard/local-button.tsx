@@ -1,6 +1,7 @@
 import { useStore } from 'jotai'
 import { system } from '../../../core'
 import { needsValidateSystemConfigAtom } from '../../lib/atoms'
+import { BaseButton } from '../primitives/button'
 
 export function LocalButton() {
   const store = useStore()
@@ -15,12 +16,9 @@ export function LocalButton() {
   }
 
   return (
-    <button
-      className='flex items-center justify-center rounded border-2 border-red-600 bg-white px-4 py-2 text-lg text-red-600'
-      onClick={selectLocalDirectory}
-    >
-      <span className='icon-[mdi--folder-open-outline] mr-2 inline-block h-5 w-5' />
+    <BaseButton onClick={selectLocalDirectory}>
+      <span className='icon-[mdi--folder-open-outline] h-5 w-5' />
       select a local directory
-    </button>
+    </BaseButton>
   )
 }

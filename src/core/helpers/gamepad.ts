@@ -65,10 +65,12 @@ function updateGamepadsStatus({ index, gamepad: { buttons } }) {
 }
 
 export function gamepadPollLoop() {
-  const gamepads = navigator.getGamepads()
-  for (const [index, gamepad] of gamepads.entries()) {
-    if (gamepad) {
-      updateGamepadsStatus({ index, gamepad })
+  if (document.hasFocus()) {
+    const gamepads = navigator.getGamepads()
+    for (const [index, gamepad] of gamepads.entries()) {
+      if (gamepad) {
+        updateGamepadsStatus({ index, gamepad })
+      }
     }
   }
   requestAnimationFrame(gamepadPollLoop)

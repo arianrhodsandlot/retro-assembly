@@ -33,8 +33,8 @@ export function ClearSiteDataButton() {
   const dialogContent = (
     <div className='w-96'>
       <div>
-        <div className='flex items-center text-lg'>
-          <span className='icon-[mdi--alert] mr-2 h-5 w-5 text-yellow-600' />
+        <div className='flex items-center text-lg font-bold'>
+          <span className='icon-[mdi--alert] mr-2 h-5 w-5 text-yellow-400' />
           Are you sure to clear all data?
         </div>
         <div className='mt-4'>{confirmMessage}</div>

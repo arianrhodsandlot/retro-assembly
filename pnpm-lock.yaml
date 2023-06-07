@@ -5,7 +5,13 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fontsource-variable/roboto-slab':
+    specifier: ^5.0.2
+    version: 5.0.2
   '@fontsource/audiowide':
+    specifier: ^5.0.2
+    version: 5.0.2
+  '@fontsource/press-start-2p':
     specifier: ^5.0.2
     version: 5.0.2
   '@fontsource/roboto':
@@ -499,8 +505,16 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
+  /@fontsource-variable/roboto-slab@5.0.2:
+    resolution: {integrity: sha512-lx43vzDTjehcMpYag6YbsoEeocazBBhFaUVOuxK9ln3VmUGz+6MPqSlWobKyoqq50SHMloLkuWlRAdyfRuPKiQ==}
+    dev: false
+
   /@fontsource/audiowide@5.0.2:
     resolution: {integrity: sha512-vBSGnukhMKBChnDaSzg9T4KRdnTe7kbyJmTlv4x/FQnGtp7khh6w/5SOXG+frn81DfrC4VBZZFjOesTlVvr53Q==}
+    dev: false
+
+  /@fontsource/press-start-2p@5.0.2:
+    resolution: {integrity: sha512-Ek4e6PfhfEnmZeCQHYF1G/PYN4/dyoMDrZ9ixF2spC+WqkZriKu+h/pnsxNFjEhloNDtSl9ZtEo30/P0S/mvIg==}
     dev: false
 
   /@fontsource/roboto@5.0.2:

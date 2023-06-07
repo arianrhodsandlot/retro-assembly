@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/roboto-slab": "^5.0.2",
     "@fontsource/audiowide": "^5.0.2",
+    "@fontsource/press-start-2p": "^5.0.2",
     "@fontsource/roboto": "5.0.2",
     "@microsoft/microsoft-graph-client": "3.0.5",
     "@radix-ui/react-dialog": "1.0.4",

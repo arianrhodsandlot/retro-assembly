@@ -55,7 +55,10 @@ export function SystemNavigation({ systems }: { systems?: any[] }) {
 
   return (
     <div className='system-navigation z-[1] flex h-16 w-full items-stretch overflow-auto overflow-x-hidden bg-red-600 to-red-700 text-white shadow-sm shadow-gray-700'>
-      <div className='flex items-center px-8 text-center font-bold tracking-wider'>
+      <div
+        className='flex items-center px-8 text-center font-bold tracking-wider'
+        style={{ fontFamily: 'audiowide, sans-serif' }}
+      >
         <span className='icon-[mdi--controller-classic] mr-2 h-10 w-10' />
         Retro Assembly
       </div>

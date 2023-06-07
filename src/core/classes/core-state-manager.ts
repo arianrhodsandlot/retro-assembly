@@ -14,6 +14,7 @@ interface CoreState {
 }
 
 interface CoreStateSummary {
+  id: string
   name: string
   createTime: {
     date: Date

@@ -1,6 +1,6 @@
 import { type Target } from 'framer-motion'
 import $ from 'jquery'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { type Rom, game } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { GameEntryButton } from './game-entry-button'
@@ -34,6 +34,11 @@ export function GameEntry({
 }) {
   const [maskPosition, setMaskPosition] = useState<Target>()
 
+  function onExit() {
+    setMaskPosition(undefined)
+    emitter.off('exit', onExit)
+  }
+
   function onClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const boundingClientRect = event.currentTarget.getBoundingClientRect()
     setMaskPosition({
@@ -42,17 +47,9 @@ export function GameEntry({
       width: boundingClientRect.width,
       height: boundingClientRect.height,
     })
+
+    emitter.on('exit', onExit)
   }
-
-  useEffect(() => {
-    emitter.on('exit', () => {
-      setMaskPosition(undefined)
-    })
-
-    return () => {
-      emitter.off('exit')
-    }
-  }, [])
 
   const isFirstRow = rowIndex === 0
   const isFirstColumn = columnIndex === 0

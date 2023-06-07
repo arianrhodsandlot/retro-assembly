@@ -69,9 +69,7 @@ export function SystemNavigation({ systems }: { systems?: any[] }) {
         ))}
       </div>
 
-      <div>
-        <ClearSiteDataButton />
-      </div>
+      <ClearSiteDataButton />
     </div>
   )
 }

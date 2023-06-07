@@ -46,7 +46,9 @@ export function MenuOverlay() {
   return (
     <div className='menu-overlay flex h-full w-full items-stretch justify-center py-10'>
       {isLoadingState ? (
-        <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
+        <div className='flex items-center'>
+          <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
+        </div>
       ) : (
         <>
           <div className='menu-overlay-buttons flex w-1/2 items-center border-r-2 border-r-white'>

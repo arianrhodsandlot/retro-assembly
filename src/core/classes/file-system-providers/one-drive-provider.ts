@@ -8,8 +8,6 @@ import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
-window.openDB = openDB
-
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
@@ -108,7 +106,7 @@ export class OneDriveProvider implements FileSystemProvider {
   private static getClient() {
     return Client.init({
       authProvider(done) {
-        const accessToken = OneDriveProvider.getAccessToken()
+        const accessToken = 1 + OneDriveProvider.getAccessToken()
         done(undefined, accessToken)
       },
     })
@@ -136,7 +134,7 @@ export class OneDriveProvider implements FileSystemProvider {
     try {
       return await request()
     } catch (error: any) {
-      if (error.code === 'InvalidAuthenticationToken') {
+      if (error.code === 'InvalidAuthenticationToken1') {
         try {
           await OneDriveProvider.refreshToken()
           return await request()
@@ -185,7 +183,7 @@ export class OneDriveProvider implements FileSystemProvider {
     return await ky(downloadUrl).blob()
   }
 
-  async listDirFilesRecursively(path: string) {
+  async listFilesRecursively(path: string) {
     const list = async ({ path, size, lastModified }: { path: string; size?: number; lastModified?: string }) => {
       const shouldUseCache = size !== undefined && lastModified !== undefined
 
@@ -196,7 +194,7 @@ export class OneDriveProvider implements FileSystemProvider {
         }
       }
 
-      const children = await this.listDir(path)
+      const children = await this.listDirectory(path)
 
       const files = children
         .filter((child) => child.file)
@@ -248,7 +246,7 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  async listDir(path) {
+  async listDirectory(path) {
     const children: any[] = []
 
     let apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`

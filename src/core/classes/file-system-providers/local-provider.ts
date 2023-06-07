@@ -13,11 +13,14 @@ export class LocalProvider implements FileSystemProvider {
 
   static async getSingleton() {
     const local = new LocalProvider()
-    await local.load()
+    // await local.load()
     return local
   }
 
-  async listDirFilesRecursively(path?: string) {
+  async listFilesRecursively(path?: string) {
+    if (!this.files?.length) {
+      await this.load()
+    }
     const files: FileSummary[] = []
     for (const file of this.files) {
       const rawRelativePathSegments = file.webkitRelativePath.split('/')
@@ -53,7 +56,6 @@ export class LocalProvider implements FileSystemProvider {
   async createFile({ file, path }: { file: Blob; path: string }) {
     const fileHandle = await this.getFileHandle({ path, create: true })
     if (fileHandle) {
-      // @ts-expect-error "createWritable" is not listed in typescript's declaration files
       const writableStream = await fileHandle.createWritable()
       try {
         await writableStream.write(file)

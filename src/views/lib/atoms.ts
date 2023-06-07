@@ -9,7 +9,7 @@ export const canLoadHomeScreenAtom = atom(false)
 export const needsValidateSystemConfigAtom = atom(false)
 
 export const needsShowSetupWizardAtom = atom((get) => {
-  return get(needsFreshSetupAtom) || get(needsRegrantLocalPermissionAtom)
+  return get(needsFreshSetupAtom)
 })
 
 export const needsShowGetStartedAtom = atom((get) => {

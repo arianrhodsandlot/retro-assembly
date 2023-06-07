@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { ui } from '../../../core'
+import { ui } from '../../../../core'
 
 export interface TreeNode {
   path: string

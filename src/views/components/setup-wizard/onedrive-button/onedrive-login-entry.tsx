@@ -1,4 +1,4 @@
-import { OneDriveProvider, system } from '../../../core'
+import { OneDriveProvider, system } from '../../../../core'
 
 const authorizeUrl = system.getOnedriveAuthorizeUrl()
 

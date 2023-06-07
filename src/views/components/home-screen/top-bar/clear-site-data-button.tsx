@@ -2,10 +2,10 @@ import { DialogClose } from '@radix-ui/react-dialog'
 import { clsx } from 'clsx'
 import { useStore } from 'jotai'
 import { useState } from 'react'
-import { system } from '../../../core'
-import { needsValidateSystemConfigAtom } from '../../lib/atoms'
-import { BaseButton } from '../primitives/button'
-import { BaseDialog } from '../primitives/dialog'
+import { system } from '../../../../core'
+import { needsValidateSystemConfigAtom } from '../../../lib/atoms'
+import { BaseButton } from '../../primitives/base-button'
+import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 
 export function ClearSiteDataButton() {
   const store = useStore()
@@ -55,7 +55,7 @@ export function ClearSiteDataButton() {
   )
 
   return (
-    <BaseDialog content={dialogContent} onOpenChange={updateSetConfirmMessage}>
+    <BaseDialogTrigger content={dialogContent} onOpenChange={updateSetConfirmMessage}>
       <button
         className={clsx(
           'relative flex aspect-square h-full items-center justify-center transition-[color,background-color]',
@@ -65,6 +65,6 @@ export function ClearSiteDataButton() {
       >
         <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
       </button>
-    </BaseDialog>
+    </BaseDialogTrigger>
   )
 }

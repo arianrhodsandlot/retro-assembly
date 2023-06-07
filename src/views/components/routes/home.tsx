@@ -1,60 +1,28 @@
-import { useStore } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { system } from '../../../core'
-import { needsFreshSetupAtom, needsRegrantLocalPermissionAtom, needsValidateSystemConfigAtom } from '../../lib/atoms'
-import { Emulator } from '../emulator'
 import { HomeScreen } from '../home-screen'
 import SetupWizard from '../setup-wizard'
 
 export function Home() {
-  const store = useStore()
+  const [startState, start] = useAsyncFn(async () => {
+    await system.start()
+    return true
+  })
 
-  const checkPreparations = useCallback(async () => {
-    let shouldStart = false
-
+  const preparationState = useAsyncRetry(async () => {
     const needsSetup = await system.checkNeedsSetup()
-    store.set(needsFreshSetupAtom, needsSetup)
 
-    if (!needsSetup) {
-      const needsRegrantLocalPermission = await system.needsRegrantLocalPermission()
-      store.set(needsRegrantLocalPermissionAtom, needsRegrantLocalPermission)
-      if (!needsRegrantLocalPermission) {
-        shouldStart = true
-      }
+    if (needsSetup === false) {
+      start()
     }
 
-    store.set(needsValidateSystemConfigAtom, false)
-
-    if (shouldStart) {
-      system.start()
-    }
-  }, [store])
-
-  useEffect(() => {
-    const unsub = store.sub(needsValidateSystemConfigAtom, async () => {
-      if (store.get(needsValidateSystemConfigAtom)) {
-        await checkPreparations()
-      }
-    })
-
-    checkPreparations()
-
-    system.onRequestAuthError(() => {
-      store.set(needsFreshSetupAtom, true)
-    })
-
-    function destruct() {
-      unsub()
-    }
-
-    return destruct
-  }, [checkPreparations, store])
+    return needsSetup
+  })
 
   return (
     <div className='relative h-screen w-screen'>
-      <HomeScreen />
-      <Emulator />
-      <SetupWizard />
+      {startState.value ? <HomeScreen /> : false}
+      {preparationState.value ? <SetupWizard onSetup={() => preparationState.retry()} /> : false}
     </div>
   )
 }

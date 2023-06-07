@@ -1,3 +1,3 @@
 import { atom } from 'jotai'
 
-export const needsOnedriveLoginAtom = atom(true)
+export const onSetupAtom = atom<null | (() => void)>(null)

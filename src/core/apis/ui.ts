@@ -84,7 +84,7 @@ export const ui = {
 
   async listDirectory(directory: string) {
     const onedrive = await OneDriveProvider.getSingleton()
-    return await onedrive.listDir(directory)
+    return await onedrive.listDirectory(directory)
   },
 
   onOnedriveToken({ start, success, error }) {
@@ -124,7 +124,7 @@ export const ui = {
   async listRoms() {
     const { fileSystemProvider, preference } = globalInstances
     const romDirectory = preference.get('romDirectory')
-    const files = await fileSystemProvider.listDirFilesRecursively(romDirectory)
+    const files = await fileSystemProvider.listFilesRecursively(romDirectory)
     const roms = Rom.fromFiles(files)
     return Rom.groupBySystem(roms)
   },

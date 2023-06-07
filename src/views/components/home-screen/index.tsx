@@ -1,21 +1,15 @@
 import { clsx } from 'clsx'
 import delay from 'delay'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { useRef, useState } from 'react'
-import { useAsync, useMeasure } from 'react-use'
-import { system, systemFullNameMap, systemNamesSorted, ui } from '../../../core'
+import { useAtomValue, useSetAtom, useStore } from 'jotai'
+import { useRef } from 'react'
+import { useAsyncRetry, useMeasure } from 'react-use'
+import { ui } from '../../../core'
 import { needsShowSetupWizardAtom } from '../../lib/atoms'
-import { currentSystemNameAtom, currentSystemRomsAtom, groupedRomsAtom } from './atoms'
-import { GameEntryGrid } from './game-entry-grid'
-import { SystemNavigation } from './system-navigation'
-
-const systems = Object.entries(systemFullNameMap).map(
-  ([name, fullName]) =>
-    ({ name, fullName } as {
-      name: keyof typeof systemFullNameMap
-      fullName: string
-    })
-)
+import { Emulator } from '../emulator'
+import { currentSystemNameAtom, currentSystemRomsAtom, groupedRomsAtom, systemsAtom } from './atoms'
+import { ErrorContent } from './error-content'
+import { GameEntryGrid } from './game-entries-grid'
+import { HomeScreenLayout } from './home-screen-layout'
 
 function getColumnCount(width: number) {
   const idealItemWidth = 250
@@ -34,43 +28,36 @@ export function HomeScreen() {
   const setGroupedRoms = useSetAtom(groupedRomsAtom)
   const setCurrentSystemName = useSetAtom(currentSystemNameAtom)
   const currentSystemRoms = useAtomValue(currentSystemRomsAtom)
-  const [navSystems, setNavSystems] = useState<any[]>([])
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
   const needsShowSetupWizard = useAtomValue(needsShowSetupWizardAtom)
-  const needsWaitSetupClose = useRef(false)
-
-  if (needsShowSetupWizard) {
-    needsWaitSetupClose.current = true
-  }
+  const needsWaitSetupClose = useRef(needsShowSetupWizard)
+  const store = useStore()
 
   const columnCount = getColumnCount(gridWidth)
-  const backgroundImage =
-    'repeating-linear-gradient(45deg, #fafafa 25%, transparent 25%, transparent 75%, #fafafa 75%, #fafafa), repeating-linear-gradient(45deg, #fafafa 25%, white 25%, white 75%, #fafafa 75%, #fafafa)'
 
-  const state = useAsync(async () => {
-    await new Promise((resolve) => system.onStarted(resolve))
+  const state = useAsyncRetry(async () => {
     if (needsWaitSetupClose.current) {
       await delay(500)
+      needsWaitSetupClose.current = false
     }
+    console.log('groupedRoms')
     const groupedRoms = await ui.listRoms()
+    console.log(groupedRoms)
 
     if (!Object.keys(groupedRoms)) {
       // todo: needs better user experience
       throw new Error('empty dir')
     }
 
-    const navSystems = systems
-      .filter((system) => groupedRoms?.[system.name]?.length)
-      .sort((a, b) => (systemNamesSorted.indexOf(a.name) > systemNamesSorted.indexOf(b.name) ? 1 : -1))
-
     setGroupedRoms(groupedRoms)
-    setNavSystems(navSystems)
-
     const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-    if (lastSelectedSystem && navSystems.map((system: { name: string }) => system.name).includes(lastSelectedSystem)) {
-      setCurrentSystemName(lastSelectedSystem)
-    } else {
-      setCurrentSystemName(navSystems[0].name)
+    const systems = store.get(systemsAtom)
+    if (systems?.length) {
+      if (lastSelectedSystem && systems.map((system: { name: string }) => system.name).includes(lastSelectedSystem)) {
+        setCurrentSystemName(lastSelectedSystem)
+      } else {
+        setCurrentSystemName(systems[0].name)
+      }
     }
   })
 
@@ -79,33 +66,24 @@ export function HomeScreen() {
   }
 
   if (state.error) {
-    return false
+    return (
+      <HomeScreenLayout>
+        <ErrorContent error={state.error} onSolve={() => state.retry()} />
+      </HomeScreenLayout>
+    )
   }
 
   if (state.loading) {
     return (
-      <div
-        className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
-        style={{ backgroundImage }}
-      >
-        <SystemNavigation />
-        <div className='flex-1 overflow-hidden'>
-          <div className='flex h-full items-center justify-center'>
-            <span className='icon-[line-md--loading-loop] h-16 w-16 text-red-600' />
-          </div>
-        </div>
-      </div>
+      <HomeScreenLayout>
+        <span className='icon-[line-md--loading-loop] h-16 w-16 text-red-600' />
+      </HomeScreenLayout>
     )
   }
 
   return (
-    <div
-      className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
-      style={{ backgroundImage }}
-    >
-      <SystemNavigation systems={navSystems} />
-
-      <div className='flex-1 overflow-hidden' ref={gridContainerRef}>
+    <HomeScreenLayout>
+      <div className='h-full w-full' ref={gridContainerRef}>
         <GameEntryGrid
           className={clsx(['game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'])}
           columnCount={columnCount}
@@ -116,6 +94,8 @@ export function HomeScreen() {
           width={gridWidth}
         />
       </div>
-    </div>
+
+      <Emulator />
+    </HomeScreenLayout>
   )
 }

@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
-import { currentSystemRomsAtom } from './atoms'
+import { currentSystemRomsAtom } from '../atoms'
 import { GameEntry } from './game-entry'
 
 export function GameEntryGrid(props: Omit<FixedSizeGrid['props'], 'children'>) {

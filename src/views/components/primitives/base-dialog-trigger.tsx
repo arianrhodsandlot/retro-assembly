@@ -14,7 +14,7 @@ interface BaseDialogProps {
   content: JSX.Element
 }
 
-export function BaseDialog({ onOpenChange, children, content }: BaseDialogProps) {
+export function BaseDialogTrigger({ onOpenChange, children, content }: BaseDialogProps) {
   return (
     <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>

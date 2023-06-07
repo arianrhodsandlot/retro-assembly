@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
-import { getCover } from '../../../core'
-import { systemContentImageMap } from '../../lib/constants'
+import { getCover } from '../../../../core'
+import { systemContentImageMap } from '../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
 
 const loadedImages = new Map<string, boolean>()

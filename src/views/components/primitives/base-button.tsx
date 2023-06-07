@@ -1,12 +1,15 @@
 import clsx from 'clsx'
-import { type JSX } from 'react'
+import { type JSX, forwardRef } from 'react'
 
 type ButtonProps = JSX.IntrinsicElements['button']
 interface BaseButtonProps extends ButtonProps {
   styleType?: 'primary' | 'normal'
 }
 
-export function BaseButton({ styleType = 'normal', icon, children, className, ...props }: BaseButtonProps) {
+export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(function BaseButton(
+  { styleType = 'normal', children, className, ...props },
+  ref
+) {
   return (
     <button
       className={clsx(
@@ -15,9 +18,10 @@ export function BaseButton({ styleType = 'normal', icon, children, className, ..
         { 'bg-red-600 text-white': styleType === 'primary' },
         className
       )}
+      ref={ref}
       {...props}
     >
       {children}
     </button>
   )
-}
+})

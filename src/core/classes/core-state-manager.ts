@@ -66,7 +66,7 @@ export class CoreStateManager {
 
     let children: FileSummary[] = []
     try {
-      children = await fileSystemProvider.listDirFilesRecursively(stateDirPath)
+      children = await fileSystemProvider.listFilesRecursively(stateDirPath)
     } catch (error) {
       if (error?.code !== 'itemNotFound') {
         throw error

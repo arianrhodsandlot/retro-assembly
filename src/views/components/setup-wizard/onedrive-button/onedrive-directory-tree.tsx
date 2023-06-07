@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ui } from '../../../core'
+import { ui } from '../../../../core'
 import { OnedriveDirectoryTreeNode, type TreeNode } from './onedrive-directory-tree-node'
 
 const root: TreeNode = {

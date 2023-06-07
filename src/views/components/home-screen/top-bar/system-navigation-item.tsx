@@ -1,18 +1,14 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
-import { systemImageMap } from '../../lib/constants'
-import { currentSystemNameAtom } from './atoms'
+import { systemImageMap } from '../../../lib/constants'
+import { currentSystemNameAtom } from '../atoms'
 
 export function SystemNavigationItem({ system }: { system: any }) {
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
 
   const isSelected = system.name === currentSystemName
   const shortName = system.fullName.split(' - ')[1]
-
-  function onClick() {
-    setCurrentSystemName(system.name)
-  }
 
   return (
     <button
@@ -25,7 +21,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
         isSelected ? 'hover:after:bg-white' : 'hover:after:bg-red-800'
       )}
       key={system.name}
-      onClick={onClick}
+      onClick={() => setCurrentSystemName(system.name)}
     >
       <div className={clsx('relative z-[1] flex items-center justify-center')}>
         <div className={clsx('flex items-center justify-center')}>

@@ -7,16 +7,15 @@ import {
   DialogTrigger,
 } from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
+import { type ReactNode } from 'react'
 
-interface BaseDialogProps {
-  onOpenChange?: DialogProps['onOpenChange']
-  children: JSX.Element
-  content: JSX.Element
+interface BaseDialogProps extends DialogProps {
+  content: ReactNode
 }
 
-export function BaseDialogTrigger({ onOpenChange, children, content }: BaseDialogProps) {
+export function BaseDialogTrigger({ children, content, ...props }: BaseDialogProps) {
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog {...props}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogPortal>

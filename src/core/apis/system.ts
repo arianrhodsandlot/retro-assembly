@@ -1,6 +1,6 @@
 import { clear, get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
-import { detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
+import { Preference, detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { emitter } from '../helpers/emitter'
@@ -83,10 +83,10 @@ export const system = {
 
   getOnedriveAuthorizeUrl: OneDriveProvider.getAuthorizeUrl,
 
-  isRetrievingToken: OneDriveProvider.isRetrievingToken,
+  retrieveToken: OneDriveProvider.retrieveToken,
 
   isPreferenceValid() {
-    const { preference } = globalInstances
+    const preference = new Preference()
     const configProviderType = preference.get('configProviderType')
     const stateProviderType = preference.get('stateProviderType')
     const romProviderType = preference.get('romProviderType')
@@ -107,8 +107,8 @@ export const system = {
   },
 
   async start() {
-    emitter.emit('start')
-    const { preference } = globalInstances
+    const preference = new Preference()
+    globalInstances.preference = preference
     const type = preference.get('romProviderType')
     if (type === 'local') {
       globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
@@ -117,14 +117,6 @@ export const system = {
     }
 
     emitter.emit('started')
-  },
-
-  onStarted(callback) {
-    emitter.on('started', callback)
-  },
-
-  onRequestAuthError(callback) {
-    emitter.on('request-auth-error', callback)
   },
 
   async needsRegrantLocalPermission() {
@@ -147,9 +139,10 @@ export const system = {
     return await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
   },
 
-  async clearData() {
+  async teardown() {
     localStorage.clear()
     await clear()
+    globalInstances.fileSystemProvider = undefined
   },
 }
 

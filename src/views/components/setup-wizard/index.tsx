@@ -9,7 +9,7 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
   const setOnSetup = useSetAtom(onSetupAtom)
 
   useEffect(() => {
-    setOnSetup(onSetup)
+    setOnSetup(() => onSetup)
   }, [onSetup, setOnSetup])
 
   return (

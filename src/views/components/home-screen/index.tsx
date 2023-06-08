@@ -1,10 +1,7 @@
 import { clsx } from 'clsx'
-import delay from 'delay'
 import { useAtomValue, useSetAtom, useStore } from 'jotai'
-import { useRef } from 'react'
 import { useAsyncRetry, useMeasure } from 'react-use'
 import { ui } from '../../../core'
-import { needsShowSetupWizardAtom } from '../../lib/atoms'
 import { Emulator } from '../emulator'
 import { currentSystemNameAtom, currentSystemRomsAtom, groupedRomsAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
@@ -29,20 +26,12 @@ export function HomeScreen() {
   const setCurrentSystemName = useSetAtom(currentSystemNameAtom)
   const currentSystemRoms = useAtomValue(currentSystemRomsAtom)
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
-  const needsShowSetupWizard = useAtomValue(needsShowSetupWizardAtom)
-  const needsWaitSetupClose = useRef(needsShowSetupWizard)
   const store = useStore()
 
   const columnCount = getColumnCount(gridWidth)
 
   const state = useAsyncRetry(async () => {
-    if (needsWaitSetupClose.current) {
-      await delay(500)
-      needsWaitSetupClose.current = false
-    }
-    console.log('groupedRoms')
     const groupedRoms = await ui.listRoms()
-    console.log(groupedRoms)
 
     if (!Object.keys(groupedRoms)) {
       // todo: needs better user experience
@@ -60,10 +49,6 @@ export function HomeScreen() {
       }
     }
   })
-
-  if (needsShowSetupWizard) {
-    return false
-  }
 
   if (state.error) {
     return (

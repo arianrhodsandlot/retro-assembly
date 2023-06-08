@@ -16,7 +16,7 @@ export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
         last time.
       </div>
       <div className='mt-4'>
-        <BaseButton onClick={regrant} styleType='primary'>
+        <BaseButton className='mx-auto' onClick={regrant} styleType='primary'>
           <span className='icon-[mdi--folder-open] h-5 w-5' />
           regrant the permission
         </BaseButton>

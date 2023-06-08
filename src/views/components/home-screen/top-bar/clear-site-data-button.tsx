@@ -1,15 +1,25 @@
-import { DialogClose } from '@radix-ui/react-dialog'
 import { clsx } from 'clsx'
-import { useStore } from 'jotai'
 import { useState } from 'react'
 import { system } from '../../../../core'
-import { needsValidateSystemConfigAtom } from '../../../lib/atoms'
-import { BaseButton } from '../../primitives/base-button'
+import { emitter } from '../../../lib/emitter'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
+import { ClearSiteDataDialogContent } from './clear-site-data-dialog-content'
 
 export function ClearSiteDataButton() {
-  const store = useStore()
   const [confirmMessage, setConfirmMessage] = useState('')
+  const [open, setOpen] = useState(false)
+
+  function onConfirm() {
+    emitter.emit('reload')
+    setOpen(false)
+  }
+
+  function onOpenChange(open) {
+    if (open) {
+      updateSetConfirmMessage()
+    }
+    setOpen(open)
+  }
 
   function updateSetConfirmMessage() {
     let confirmMessage = ''
@@ -25,37 +35,12 @@ export function ClearSiteDataButton() {
     setConfirmMessage(confirmMessage)
   }
 
-  async function clearData() {
-    await system.clearData()
-    store.set(needsValidateSystemConfigAtom, true)
-  }
-
-  const dialogContent = (
-    <div className='w-96'>
-      <div>
-        <div className='flex items-center text-lg font-bold'>
-          <span className='icon-[mdi--alert] mr-2 h-5 w-5 text-yellow-400' />
-          Are you sure to clear all data?
-        </div>
-        <div className='mt-4'>{confirmMessage}</div>
-      </div>
-      <div className='mt-8 flex items-center justify-center gap-5'>
-        <BaseButton onClick={clearData} styleType='primary'>
-          <span className='icon-[mdi--check] h-5 w-5' />
-          Confirm
-        </BaseButton>
-        <DialogClose asChild>
-          <BaseButton>
-            <span className='icon-[mdi--close] h-5 w-5' />
-            Cancel
-          </BaseButton>
-        </DialogClose>
-      </div>
-    </div>
-  )
-
   return (
-    <BaseDialogTrigger content={dialogContent} onOpenChange={updateSetConfirmMessage}>
+    <BaseDialogTrigger
+      content={<ClearSiteDataDialogContent onConfirm={onConfirm}>{confirmMessage}</ClearSiteDataDialogContent>}
+      onOpenChange={onOpenChange}
+      open={open}
+    >
       <button
         className={clsx(
           'relative flex aspect-square h-full items-center justify-center transition-[color,background-color]',

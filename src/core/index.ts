@@ -1,5 +1,3 @@
-import './apis/autorun'
-
 export * from './classes/core-state-manager'
 export * from './classes/emulator'
 export * from './classes/file-system-providers/file-system-provider'

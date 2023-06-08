@@ -12,6 +12,10 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   }
 
   if (error.statusCode === 401) {
-    return <OnedriveLogin onSolve={onSolve} />
+    return (
+      <BaseDialogContent>
+        <OnedriveLogin onSolve={onSolve} />
+      </BaseDialogContent>
+    )
   }
 }

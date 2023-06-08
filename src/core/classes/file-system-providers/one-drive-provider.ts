@@ -41,15 +41,15 @@ export class OneDriveProvider implements FileSystemProvider {
     return typeof code === 'string'
   }
 
-  static async dectectRedirect() {
+  static async retrieveToken() {
     const isRetrievingToken = OneDriveProvider.isRetrievingToken()
     if (!isRetrievingToken) {
-      return
+      throw new TypeError('code is empty')
     }
 
     const { code, error, error_description: errorDescription } = queryString.parse(location.search)
     if (error) {
-      console.error('Failed to authorize, error:', { error, errorDescription })
+      throw new Error(`error: ${error}, error description: ${errorDescription}`)
     } else if (typeof code === 'string') {
       const grantType = 'authorization_code'
       const params = {
@@ -63,7 +63,7 @@ export class OneDriveProvider implements FileSystemProvider {
       const result = await ky.post(tokenUrl, { body }).json<any>()
       setStorageByKey({ key: OneDriveProvider.tokenStorageKey, value: result })
     } else {
-      console.error('Invalide code:', code)
+      throw new TypeError(`invalide code. code: ${code}`)
     }
   }
 
@@ -106,7 +106,7 @@ export class OneDriveProvider implements FileSystemProvider {
   private static getClient() {
     return Client.init({
       authProvider(done) {
-        const accessToken = 1 + OneDriveProvider.getAccessToken()
+        const accessToken = OneDriveProvider.getAccessToken()
         done(undefined, accessToken)
       },
     })

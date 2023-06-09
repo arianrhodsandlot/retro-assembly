@@ -56,7 +56,21 @@ async function getFilePromise({ entry, handle, path }) {
   })
 }
 
-export async function listFilesByHandle({ handle, path = handle.name }: { handle: FileSystemHandle; path?: string }) {
+export async function listDirectoryByHandle({ handle, path }: { handle: FileSystemHandle; path?: string }) {
+  const entries: FileSystemHandle[] = []
+  for await (const entry of handle.values()) {
+    entries.push(entry)
+  }
+  return entries
+}
+
+export async function listFilesRecursivelyByHandle({
+  handle,
+  path = handle.name,
+}: {
+  handle: FileSystemHandle
+  path?: string
+}) {
   const directoryPromises: Promise<File[]>[] = []
   const filePromises: Promise<File>[] = []
   for await (const entry of handle.values()) {
@@ -65,7 +79,7 @@ export async function listFilesByHandle({ handle, path = handle.name }: { handle
       const filePromise = getFilePromise({ entry, handle, path: nestedPath })
       filePromises.push(filePromise)
     } else if (entry.kind === 'directory') {
-      const directoryPromise = listFilesByHandle({ handle: entry, path: nestedPath })
+      const directoryPromise = listFilesRecursivelyByHandle({ handle: entry, path: nestedPath })
       directoryPromises.push(directoryPromise)
     }
   }

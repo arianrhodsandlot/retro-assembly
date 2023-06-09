@@ -30,12 +30,12 @@ export function OnedriveDirectoryTreeNode({
     } else {
       const children = await ui.listDirectory(node.path)
       node.children = children.map((child) => {
-        const isDirectory = Boolean(child.folder)
-        const hasChildren = child.folder?.childCount > 0
-        const path = `${node.path}${child.name}${isDirectory ? '/' : ''}`
+        const { name, isDirectory, raw } = child
+        const hasChildren = raw.folder?.childCount > 0
+        const path = `${node.path}${name}${isDirectory ? '/' : ''}`
         return {
           path,
-          name: child.name,
+          name,
           expanded: false,
           isDirectory,
           hasChildren,
@@ -60,6 +60,7 @@ export function OnedriveDirectoryTreeNode({
         ) : (
           <span className='icon-[mdi--file] mr-2 h-6 w-6 text-red-500' />
         )}
+
         <div className='group flex min-w-0 flex-1'>
           <div
             aria-hidden

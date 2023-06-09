@@ -1,5 +1,5 @@
 import { initial, last, tail } from 'lodash-es'
-import { listFilesByHandle, requestLocalHandle } from '../..'
+import { listDirectoryByHandle, listFilesRecursivelyByHandle, requestLocalHandle } from '../..'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
@@ -7,14 +7,15 @@ export class LocalProvider implements FileSystemProvider {
   private files: File[]
   private handle: FileSystemDirectoryHandle | undefined
 
-  private constructor() {
+  private constructor({ handle }: { handle?: FileSystemDirectoryHandle }) {
     this.files = []
+    if (handle) {
+      this.handle = handle
+    }
   }
 
-  static async getSingleton() {
-    const local = new LocalProvider()
-    // await local.load()
-    return local
+  static getSingleton({ handle }: { handle?: FileSystemDirectoryHandle } = {}) {
+    return new LocalProvider({ handle })
   }
 
   async listFilesRecursively(path?: string) {
@@ -73,21 +74,40 @@ export class LocalProvider implements FileSystemProvider {
     await fileHandle?.remove()
   }
 
-  private async load() {
-    this.handle = await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
-    this.files = await listFilesByHandle({ handle: this.handle })
+  async listChildren(path = '') {
+    const handle = await this.getFileHandle({ path })
+    const childrenHandles = await listDirectoryByHandle({ handle })
+    return childrenHandles.map((childHandle) => {
+      return {
+        name: childHandle.name,
+        isDirectory: childHandle.kind === 'directory',
+        isFile: childHandle.kind === 'file',
+        raw: childHandle,
+      }
+    })
   }
 
-  private async getFileHandle({ path, create }: { path: string; create: boolean }) {
+  private async load() {
+    this.handle ??= await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+    this.files = await listFilesRecursivelyByHandle({ handle: this.handle })
+  }
+
+  private async getFileHandle({ path, create = false }: { path: string; create?: boolean }) {
     const segments = path.split('/')
     const directorySegments = segments.length > 1 ? initial(segments) : []
     const fileName = last(segments)
+
     let directoryHandle = this.handle
+    if (!directoryHandle) {
+      throw new Error('invalid file handle')
+    }
+
     for (const segment of directorySegments) {
       directoryHandle = await directoryHandle.getDirectoryHandle(segment, { create })
     }
     if (fileName) {
       return await directoryHandle.getFileHandle(fileName, { create })
     }
+    return directoryHandle
   }
 }

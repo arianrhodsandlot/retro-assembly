@@ -1,45 +1,12 @@
-import {
-  detectLocalHandleExistence,
-  detectLocalHandlePermission,
-  requestFreshLocalHandle,
-  requestLocalHandle,
-} from '..'
+import { filter } from 'lodash-es'
+import { detectLocalHandleExistence, systemNamesSorted } from '..'
 import { CoreStateManager } from '../classes/core-state-manager'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { Rom } from '../classes/rom'
-import { emitter } from '../helpers/emitter'
 import { offPressButton, offPressButtons, onPressButton, onPressButtons } from '../helpers/gamepad'
 import { globalInstances } from './global-instances'
 import { system } from './system'
-
-async function start() {
-  const { preference } = globalInstances
-  const type = preference.get('romProviderType')
-  if (type === 'local') {
-    globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
-  } else if (type === 'onedrive') {
-    globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
-  }
-
-  emitter.emit('started')
-}
-
-let readyToStartEmitted = false
-async function emitIfReadyToStart() {
-  if (readyToStartEmitted) {
-    return
-  }
-  const steps = await ui.getStepsBeforeStart()
-  if (steps.length > 0) {
-    return
-  }
-  if (!system.isPreferenceValid()) {
-    return
-  }
-  emitter.emit('ready-to-start')
-  readyToStartEmitted = true
-}
 
 async function getStepsBeforeStart() {
   const steps: string[] = []
@@ -84,41 +51,7 @@ export const ui = {
 
   async listDirectory(directory: string) {
     const onedrive = await OneDriveProvider.getSingleton()
-    return await onedrive.listDirectory(directory)
-  },
-
-  onOnedriveToken({ start, success, error }) {
-    emitter.on('onedrive-token', (event) => {
-      switch (event) {
-        case 'start':
-          start()
-          break
-        case 'success':
-          success()
-          break
-        case 'error':
-          error()
-          break
-      }
-    })
-  },
-
-  async setWorkingDirectory(path: string) {
-    system.setWorkingDirectory(path)
-    await emitIfReadyToStart()
-  },
-
-  async start() {
-    const steps = await ui.getStepsBeforeStart()
-
-    await (steps.length === 0
-      ? start()
-      : new Promise<void>((resolve) => {
-          emitter.on('ready-to-start', async () => {
-            await start()
-            resolve()
-          })
-        }))
+    return await onedrive.listChildren(directory)
   },
 
   async listRoms() {
@@ -127,6 +60,25 @@ export const ui = {
     const files = await fileSystemProvider.listFilesRecursively(romDirectory)
     const roms = Rom.fromFiles(files)
     return Rom.groupBySystem(roms)
+  },
+
+  async validateRomsDirectory(pathOrHandle: string | FileSystemDirectoryHandle) {
+    let directories
+
+    if (typeof pathOrHandle === 'string') {
+      const onedrive = OneDriveProvider.getSingleton()
+
+      const children = await onedrive.listChildren(pathOrHandle)
+      directories = filter(children, 'isDirectory')
+    }
+
+    if (pathOrHandle instanceof FileSystemDirectoryHandle) {
+      const local = LocalProvider.getSingleton({ handle: pathOrHandle })
+      const children = await local.listChildren()
+      directories = filter(children, 'isDirectory')
+    }
+
+    return directories.some((directory) => systemNamesSorted.includes(directory.name))
   },
 
   async listStates() {

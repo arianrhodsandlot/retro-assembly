@@ -194,22 +194,22 @@ export class OneDriveProvider implements FileSystemProvider {
         }
       }
 
-      const children = await this.listDirectory(path)
+      const children = await this.listChildren(path)
 
       const files = children
-        .filter((child) => child.file)
+        .filter((child) => child.raw.file)
         .map((child) => {
-          const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
+          const childParentPath = decodeURIComponent(child.raw.parentReference.path.replace(/^\/drive\/root:/, ''))
           const path = `${childParentPath}/${child.name}`
           return { path, downloadUrl: child['@microsoft.graph.downloadUrl'] }
         })
 
       const foldersPromises = children
-        .filter((child) => child.folder?.childCount)
+        .filter((child) => child.raw.folder?.childCount)
         .map((child) => {
-          const childParentPath = decodeURIComponent(child.parentReference.path.replace(/^\/drive\/root:/, ''))
+          const childParentPath = decodeURIComponent(child.raw.parentReference.path.replace(/^\/drive\/root:/, ''))
           const path = `${childParentPath}/${child.name}`
-          return list({ path, size: child.size, lastModified: child.lastModifiedDateTime })
+          return list({ path, size: child.raw.size, lastModified: child.raw.lastModifiedDateTime })
         })
 
       const folders = await Promise.all(foldersPromises)
@@ -246,7 +246,7 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  async listDirectory(path) {
+  async listChildren(path = '/') {
     const children: any[] = []
 
     let apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
@@ -257,7 +257,14 @@ export class OneDriveProvider implements FileSystemProvider {
     do {
       const request = this.client.api(apiPath).top(top).skipToken(token)
       const result = await OneDriveProvider.wrapRequest(() => request.get())
-      children.push(...result.value)
+      children.push(
+        ...result.value.map((item) => ({
+          name: item.name,
+          isDirectory: 'folder' in item,
+          isFile: 'file' in item,
+          raw: item,
+        }))
+      )
 
       const nextLink = result['@odata.nextLink']
       if (nextLink) {

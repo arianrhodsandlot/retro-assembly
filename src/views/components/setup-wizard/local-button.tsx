@@ -1,17 +1,24 @@
-import { useAtomValue } from 'jotai'
-import { system } from '../../../core'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { system, ui } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
-import { onSetupAtom } from './atoms'
+import { isInvalidDialogOpenAtom, onSetupAtom } from './atoms'
 
 export function LocalButton() {
   const onSetup = useAtomValue(onSetupAtom)
+  const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
   async function selectLocalDirectory() {
     try {
       // @ts-expect-error `showDirectoryPicker` is not defined in ts's default declaration files
       const handle = await showDirectoryPicker({ mode: 'readwrite' })
-      await system.updateSettings({ fileSystem: 'local', directory: '', handle })
-      onSetup?.()
+
+      const isValid = await ui.validateRomsDirectory(handle)
+      if (isValid) {
+        await system.updateSettings({ fileSystem: 'local', directory: '', handle })
+        onSetup?.()
+      } else {
+        setIsInvalidDialogOpen(true)
+      }
     } catch {}
   }
 

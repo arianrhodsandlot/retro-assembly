@@ -115,8 +115,6 @@ export const system = {
     } else if (type === 'onedrive') {
       globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
     }
-
-    emitter.emit('started')
   },
 
   async needsRegrantLocalPermission() {

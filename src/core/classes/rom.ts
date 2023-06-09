@@ -28,7 +28,7 @@ export class Rom {
     const roms: Rom[] = []
     for (const file of files) {
       const rom = Rom.fromFile(file)
-      if (rom) {
+      if (rom?.system) {
         roms.push(rom)
       }
     }
@@ -130,10 +130,9 @@ export class Rom {
     for (const system of systems) {
       const segments = this.fileSummary.path.split('/')
       const directorySegments = segments.slice(0, -1)
-      for (const segment of directorySegments) {
-        if (segment.includes(system)) {
-          return system
-        }
+      const [segment] = directorySegments
+      if (segment === system) {
+        return system
       }
     }
   }

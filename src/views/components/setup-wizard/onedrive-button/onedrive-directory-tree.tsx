@@ -23,10 +23,10 @@ export function OnedriveDirectoryTree({ onSelect }: { onSelect: (path: string) =
       const node = root
       const children = await ui.listDirectory(node.path)
       node.children = children.map((child) => {
-        const isDirectory = Boolean(child.folder)
-        const hasChildren = child.folder?.childCount > 0
-        const path = `${node.path}${child.name}${isDirectory ? '/' : ''}`
-        return { path, name: child.name, expanded: false, isDirectory, hasChildren, children: undefined }
+        const { name, isDirectory, raw } = child
+        const hasChildren = raw.folder?.childCount > 0
+        const path = `${node.path}${name}${isDirectory ? '/' : ''}`
+        return { path, name, expanded: false, isDirectory, hasChildren, children: undefined }
       })
       node.expanded = true
       setTree({ ...node })

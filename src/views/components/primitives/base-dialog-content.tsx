@@ -1,14 +1,14 @@
 import { Dialog, DialogContent, DialogOverlay, DialogPortal, type DialogProps } from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
+import { type ReactNode } from 'react'
 
-interface BaseDialogProps {
-  onOpenChange?: DialogProps['onOpenChange']
-  children: JSX.Element
+interface BaseDialogProps extends DialogProps {
+  children: ReactNode
 }
 
-export function BaseDialogContent({ children }: BaseDialogProps) {
+export function BaseDialogContent({ children, open = true, ...props }: BaseDialogProps) {
   return (
-    <Dialog open>
+    <Dialog open={open} {...props}>
       <DialogPortal>
         <DialogOverlay asChild>
           <motion.div animate={{ opacity: 1 }} className='fixed inset-0 z-10 bg-[#000000aa]' initial={{ opacity: 0 }} />

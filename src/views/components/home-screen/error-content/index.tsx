@@ -18,4 +18,9 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
       </BaseDialogContent>
     )
   }
+  return (
+    <BaseDialogContent>
+      <div>{JSON.stringify(error)}</div>
+    </BaseDialogContent>
+  )
 }

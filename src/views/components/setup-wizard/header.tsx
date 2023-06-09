@@ -5,16 +5,13 @@ export function Header() {
   return (
     <div className='pb-16 text-center text-white'>
       <div className='container m-auto'>
-        <h3 style={{ fontFamily: 'audiowide, sans-serif' }}>
+        <h3 className='font-[audiowide,ui-sans-serif,sans-serif]'>
           <span className='flex items-center justify-center text-6xl font-bold tracking-widest'>
             <span className='icon-[mdi--controller-classic] mr-6 h-20 w-20' />
             Retro Assembly
           </span>
         </h3>
-        <div
-          className='mt-10 flex items-center justify-center text-sm tracking-wider'
-          style={{ fontFamily: '"Roboto Slab Variable", sans-serif' }}
-        >
+        <div className='mt-10 flex items-center justify-center text-sm tracking-wider'>
           <span>A</span>
           <span className='mx-2 flex items-center justify-center rounded-full border-2 border-white px-4 py-2'>
             <AnimatedIcons>

@@ -134,7 +134,7 @@ export class OneDriveProvider implements FileSystemProvider {
     try {
       return await request()
     } catch (error: any) {
-      if (error.code === 'InvalidAuthenticationToken1') {
+      if (error.code === 'InvalidAuthenticationToken') {
         try {
           await OneDriveProvider.refreshToken()
           return await request()

@@ -32,7 +32,7 @@ export function AuthOnedrive() {
   return (
     <AuthLayout>
       <span className='icon-[mdi--account-check] h-6 w-6' />
-      Login success.
+      You are now authenticated with Retro Assembly.
     </AuthLayout>
   )
 }

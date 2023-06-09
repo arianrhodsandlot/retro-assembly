@@ -7,6 +7,7 @@ import { currentSystemNameAtom, currentSystemRomsAtom, groupedRomsAtom, systemsA
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { HomeScreenLayout } from './home-screen-layout'
+import { InputTips } from './input-tips'
 
 function getColumnCount(width: number) {
   const idealItemWidth = 250
@@ -81,6 +82,8 @@ export function HomeScreen() {
       </div>
 
       <Emulator />
+
+      <InputTips />
     </HomeScreenLayout>
   )
 }

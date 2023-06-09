@@ -30,7 +30,7 @@ export function OnedriveButton() {
     >
       <BaseButton styleType='primary'>
         <span className='icon-[simple-icons--microsoftonedrive] h-5 w-5' />
-        select a cloud Directory
+        select a cloud directory
       </BaseButton>
     </BaseDialogTrigger>
   )

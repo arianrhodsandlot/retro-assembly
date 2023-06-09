@@ -1,7 +1,8 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
-import { extSystemMap, systemCoreMap } from '../constants/systems'
+import { Preference } from '../classes/preference'
+import { extSystemMap, systemCoreMap, systemNamesSorted } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
 import { type FileSummary } from './file-system-providers/file-summary'
 import { GamesDatabase } from './games-database'
@@ -81,7 +82,8 @@ export class Rom {
       throw new Error('Invalid file')
     }
 
-    let system = this.guessSystemByPath() || this.guessSystemByFileName()
+    const preference = new Preference()
+    let system = this.guessSystemByPath({ root: preference.get('romDirectory') }) || this.guessSystemByFileName()
     if (!system && this.fileSummary.isLoaded() && this.fileSummary.name.endsWith('.zip')) {
       system = await this.guessSystemByExtractedContent()
     }
@@ -122,16 +124,12 @@ export class Rom {
     return ''
   }
 
-  private guessSystemByPath() {
-    const systems = Object.keys(systemCoreMap).sort((core1, core2) => core2.length - core1.length)
-    if (!this.fileSummary.path) {
-      return
-    }
-    for (const system of systems) {
-      const segments = this.fileSummary.path.split('/')
-      const directorySegments = segments.slice(0, -1)
-      const [segment] = directorySegments
-      if (segment === system) {
+  private guessSystemByPath({ root }: { root: string }) {
+    if (this.fileSummary.path?.startsWith(root)) {
+      const relativePath = this.fileSummary.path.slice(root.length)
+      const segments = relativePath.split('/')
+      const [system] = segments
+      if (systemNamesSorted.includes(system)) {
         return system
       }
     }

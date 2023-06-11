@@ -201,7 +201,7 @@ export class OneDriveProvider implements FileSystemProvider {
         .map((child) => {
           const childParentPath = decodeURIComponent(child.raw.parentReference.path.replace(/^\/drive\/root:/, ''))
           const path = `${childParentPath}/${child.name}`
-          return { path, downloadUrl: child['@microsoft.graph.downloadUrl'] }
+          return { path, downloadUrl: child.raw['@microsoft.graph.downloadUrl'] }
         })
 
       const foldersPromises = children

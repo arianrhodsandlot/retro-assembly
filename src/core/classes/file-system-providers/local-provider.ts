@@ -29,6 +29,7 @@ export class LocalProvider implements FileSystemProvider {
       if (!path || relativePath.startsWith(path)) {
         const fileSummary = new FileSummary({
           path: relativePath,
+          // todo: will this cause memory leak?
           downloadUrl: URL.createObjectURL(file),
           blob: file,
         })

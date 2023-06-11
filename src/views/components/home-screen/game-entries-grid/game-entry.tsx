@@ -10,9 +10,14 @@ import { GameEntryPortals } from './game-entry-portals'
 function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
   const $focusedElement = $(e.currentTarget)
   const $outer = $focusedElement.offsetParent()
-  const offsetTop = $focusedElement.position().top + $outer.scrollTop()
-  const scrollTop = offsetTop - $outer.height() / 2 + $focusedElement.height() / 2
-  $outer.stop().animate({ scrollTop }, 100)
+  const outerScrollTop = $outer.scrollTop()
+  const outerHeight = $outer.height()
+  const focusedElementHeight = $focusedElement.height()
+  if (outerScrollTop && outerHeight && focusedElementHeight) {
+    const offsetTop = $focusedElement.position().top + outerScrollTop
+    const scrollTop = offsetTop - outerHeight / 2 + focusedElementHeight / 2
+    $outer.stop().animate({ scrollTop }, 100)
+  }
 }
 
 export function GameEntry({

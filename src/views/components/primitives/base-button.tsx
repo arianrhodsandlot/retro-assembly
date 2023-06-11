@@ -13,15 +13,17 @@ export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(functio
   return (
     <button
       className={clsx(
-        ['flex items-center justify-center gap-2 rounded border-2 border-red-600 px-4 py-2 focus:animate-pulse'],
+        ['relative rounded border-2 border-red-600 px-4 py-2'],
         { 'bg-white text-red-600': styleType === 'normal' },
         { 'bg-red-600 text-white': styleType === 'primary' },
+        'focus:rounded-none',
+        'focus:before:absolute focus:before:-inset-2 focus:before:animate-[pulse-red-border_1.5s_ease-in-out_infinite] focus:before:rounded focus:before:border-8',
         className
       )}
       ref={ref}
       {...props}
     >
-      {children}
+      <div className='relative z-[1] flex items-center justify-center gap-2'>{children}</div>
     </button>
   )
 })

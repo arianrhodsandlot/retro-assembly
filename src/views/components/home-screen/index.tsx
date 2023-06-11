@@ -67,16 +67,17 @@ export function HomeScreen() {
     )
   }
 
+  const columnWidth = gridWidth / columnCount
   return (
     <HomeScreenLayout>
       <div className='h-full w-full' ref={gridContainerRef}>
         <GameEntryGrid
           className={clsx(['game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'])}
           columnCount={columnCount}
-          columnWidth={gridWidth / columnCount}
+          columnWidth={columnWidth}
           height={gridHeight}
           rowCount={Math.ceil(currentSystemRoms?.length ? currentSystemRoms.length / columnCount : 0)}
-          rowHeight={gridWidth / columnCount}
+          rowHeight={columnWidth}
           width={gridWidth}
         />
       </div>

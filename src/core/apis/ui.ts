@@ -98,6 +98,22 @@ export const ui = {
   onPressButton,
   offPressButton,
   offPressButtons,
+
+  onConfirm(callback: () => void) {
+    onPressButton('a', callback)
+  },
+
+  offConfirm(callback: () => void) {
+    offPressButton('a', callback)
+  },
+
+  onCancel(callback: () => void) {
+    onPressButton('b', callback)
+  },
+
+  offCancel(callback: () => void) {
+    offPressButton('b', callback)
+  },
 }
 
 window.ui = ui

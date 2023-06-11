@@ -65,6 +65,7 @@ export function InputTips() {
             exit={{ y: '100%' }}
             initial={{ y: '100%' }}
             key={'left'}
+            transition={{ easings: 'linear' }}
           >
             <InputTipsContent />
           </motion.div>
@@ -75,6 +76,7 @@ export function InputTips() {
             exit={{ y: '100%' }}
             initial={{ y: '100%' }}
             key={'right'}
+            transition={{ easings: 'linear' }}
           >
             <InputTipsContent />
           </motion.div>

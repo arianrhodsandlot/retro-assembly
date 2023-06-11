@@ -1,9 +1,9 @@
-import { clsx } from 'clsx'
 import { useState } from 'react'
 import { system } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 import { ClearSiteDataDialogContent } from './clear-site-data-dialog-content'
+import { TopBarButton } from './top-bar-button'
 
 export function ClearSiteDataButton() {
   const [confirmMessage, setConfirmMessage] = useState('')
@@ -41,15 +41,9 @@ export function ClearSiteDataButton() {
       onOpenChange={onOpenChange}
       open={open}
     >
-      <button
-        className={clsx(
-          'relative flex aspect-square h-full items-center justify-center transition-[color,background-color]',
-          'hover:bg-red-800',
-          'focus:bg-red-800'
-        )}
-      >
+      <TopBarButton className='aspect-square border-l'>
         <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
-      </button>
+      </TopBarButton>
     </BaseDialogTrigger>
   )
 }

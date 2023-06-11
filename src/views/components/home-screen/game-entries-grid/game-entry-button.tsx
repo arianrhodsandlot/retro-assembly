@@ -20,33 +20,29 @@ export function GameEntryButton({
 }: GameEntryButtonProps) {
   return (
     <button className='group relative' {...props}>
-      <span
+      <div
         className={clsx(
-          'opacity-1 block h-full w-full bg-gray-100 text-left transition-[transform] group-focus:transform-gpu',
+          'opacity-1 block h-full w-full bg-gray-100 text-left transition-transform group-focus:transform-gpu',
           'after:absolute after:-inset-0 after:border after:border-black',
-          'group-focus:relative group-focus:z-10 group-focus:scale-110 group-focus:shadow-2xl group-focus:shadow-black',
-          'group-focus:after:-inset-[4px] group-focus:after:animate-pulse group-focus:after:border-[4px] group-focus:after:border-white',
+          'relative group-focus:z-10 group-focus:scale-125 group-focus:shadow-2xl group-focus:shadow-black',
+          'group-focus:after:-inset-[4px] group-focus:after:animate-[pulse-white-border_1.5s_ease-in-out_infinite] group-focus:after:border-4',
           {
-            'group-focus:origin-top-left group-focus:translate-x-[4px] group-focus:translate-y-[4px]':
-              isFirstRow && isFirstColumn,
-            'group-focus:origin-top group-focus:translate-y-[4px]': isFirstRow && !isFirstColumn && !isLastColumn,
-            'group-focus:origin-top-right group-focus:-translate-x-[4px] group-focus:translate-y-[4px]':
-              isFirstRow && isLastColumn,
+            'origin-top-left group-focus:left-[4px] group-focus:top-[4px]': isFirstRow && isFirstColumn,
+            'origin-top group-focus:top-[4px]': isFirstRow && !isFirstColumn && !isLastColumn,
+            'origin-top-right group-focus:-left-[4px] group-focus:top-[4px]': isFirstRow && isLastColumn,
 
-            'group-focus:origin-left group-focus:translate-x-[4px]': !isFirstRow && isFirstColumn && !isLastRow,
-            'group-focus:origin-center': !isFirstRow && !isLastRow && !isFirstColumn && !isLastColumn,
-            'group-focus:origin-right group-focus:-translate-x-[4px]': !isFirstRow && isLastColumn,
+            'origin-left group-focus:left-[4px]': !isFirstRow && isFirstColumn && !isLastRow,
+            'origin-center': !isFirstRow && !isLastRow && !isFirstColumn && !isLastColumn,
+            'origin-right group-focus:-left-[4px]': !isFirstRow && !isLastRow && isLastColumn,
 
-            'group-focus:origin-bottom-left group-focus:-translate-y-[4px] group-focus:translate-x-[4px]':
-              isLastRow && isFirstColumn,
-            'group-focus:origin-bottom group-focus:-translate-y-[4px]': isLastRow && !isFirstColumn && !isLastColumn,
-            'group-focus:origin-bottom-right group-focus:-translate-x-[4px] group-focus:-translate-y-[4px]':
-              isLastRow && isLastColumn,
+            'origin-bottom-left group-focus:-top-[5px] group-focus:left-[4px]': isLastRow && isFirstColumn,
+            'origin-bottom group-focus:-top-[5px]': isLastRow && !isFirstColumn && !isLastColumn,
+            'origin-bottom-right group-focus:-left-[4px] group-focus:-top-[5px]': isLastRow && isLastColumn,
           }
         )}
       >
         {children}
-      </span>
+      </div>
     </button>
   )
 }

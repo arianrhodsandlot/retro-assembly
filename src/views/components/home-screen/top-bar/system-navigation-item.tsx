@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { systemImageMap } from '../../../lib/constants'
 import { currentSystemNameAtom } from '../atoms'
+import { TopBarButton } from './top-bar-button'
 
 export function SystemNavigationItem({ system }: { system: any }) {
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
@@ -11,15 +12,9 @@ export function SystemNavigationItem({ system }: { system: any }) {
   const shortName = system.fullName.split(' - ')[1]
 
   return (
-    <button
-      aria-hidden
-      className={clsx(
-        'relative border-r border-red-800 px-8 text-sm transition-[opacity,background-color] first:border-l',
-        'after:absolute after:inset-0 after:z-0 after:shadow-inner after:transition-[background-color]',
-        { 'after:bg-white': isSelected },
-        isSelected ? 'focus:after:bg-white' : 'focus:after:bg-red-800',
-        isSelected ? 'hover:after:bg-white' : 'hover:after:bg-red-800'
-      )}
+    <TopBarButton
+      className='px-8'
+      highlighted={isSelected}
       key={system.name}
       onClick={() => setCurrentSystemName(system.name)}
     >
@@ -27,9 +22,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
         <div className={clsx('flex items-center justify-center')}>
           <img
             alt={shortName}
-            className={clsx('drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)] transition-all', {
-              'scale-110': isSelected,
-            })}
+            className={clsx('drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)]')}
             height={36}
             src={systemImageMap[system.name]}
             width={36}
@@ -48,6 +41,6 @@ export function SystemNavigationItem({ system }: { system: any }) {
           ) : null}
         </AnimatePresence>
       </div>
-    </button>
+    </TopBarButton>
   )
 }

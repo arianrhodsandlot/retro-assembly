@@ -47,7 +47,7 @@ SpatialNavigation.add({
 function getCurrentFocusedElement() {
   const { activeElement, body } = document
   if (activeElement && activeElement !== body) {
-    return activeElement
+    return activeElement as HTMLButtonElement
   }
 }
 
@@ -83,7 +83,7 @@ ui.onPressButton('down', () => {
   }
 })
 
-ui.onPressButton('a', () => {
+ui.onConfirm(() => {
   getCurrentFocusedElement()?.click?.()
 })
 

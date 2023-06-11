@@ -9,12 +9,30 @@
 :focus
   outline: none
 
-canvas
-  pointer-events: none
-
 body
   font-family: 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif
   user-select: none
 
 button
   cursor: default
+
+canvas
+  pointer-events: none
+
+@keyframes pulse-white-border
+  0%, 100%
+    @apply border-white
+  50%
+    @apply border-white/60
+
+@keyframes pulse-red-border
+  0%, 100%
+    @apply border-red-100
+  50%
+    @apply border-red-400
+
+@keyframes pulse-white-bg
+  0%, 100%
+    @apply bg-white
+  50%
+    @apply bg-white/60

@@ -1,12 +1,30 @@
 import { clsx } from 'clsx'
+import { useAtom } from 'jotai'
+import { useEffect, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { ui } from '../../../core'
+import { shouldFocusStatesListAtom } from './atoms'
+import { StateItem } from './state-item'
 
 export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }) {
+  const [shouldFocusStatesList, setShouldFocusStatesList] = useAtom(shouldFocusStatesListAtom)
+  const firstStateRef = useRef<HTMLButtonElement>(null)
   const state = useAsync(async () => {
     const states = await ui.listStates()
     return states.reverse()
   })
+
+  const hasStates = state?.value?.length && state?.value?.length > 0
+
+  useEffect(() => {
+    if (shouldFocusStatesList) {
+      if (hasStates) {
+        firstStateRef.current?.focus()
+      } else {
+        setShouldFocusStatesList(false)
+      }
+    }
+  }, [shouldFocusStatesList, hasStates, setShouldFocusStatesList])
 
   return (
     <div className={clsx('relative h-full py-20')}>
@@ -16,30 +34,8 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
         </div>
       ) : state?.value?.length ? (
         <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
-          {state?.value?.map((state) => (
-            <button
-              aria-hidden
-              className='mt-10 flex max-w-2xl flex-shrink-0 items-center overflow-hidden border-2 border-white bg-black/90 first:mt-0 focus:border-2 focus:bg-white focus:text-red-600'
-              key={state.id}
-              onClick={() => onSelect(state.id)}
-            >
-              <div className='h-40 w-40 overflow-hidden'>
-                {state.thumbnailUrl ? (
-                  <img
-                    alt={`the thumnail of the state saved at ${state.createTime.humanized}`}
-                    className='block h-40 w-40 transform-gpu bg-gray-300 object-cover text-transparent transition-transform'
-                    src={state.thumbnailUrl}
-                  />
-                ) : (
-                  <div className='flex h-40 w-40 items-center justify-center bg-gray-600'>
-                    <span className='icon-[mdi--image-broken-variant] h-12 w-12 text-white' />
-                  </div>
-                )}
-              </div>
-              <div className='flex h-40 items-center border-l-2 border-l-white pl-6'>
-                Saved at {state.createTime.humanized}
-              </div>
-            </button>
+          {state?.value?.map((s, index) => (
+            <StateItem key={s.id} onSelect={onSelect} ref={index === 0 ? firstStateRef : undefined} state={s} />
           ))}
         </div>
       ) : (

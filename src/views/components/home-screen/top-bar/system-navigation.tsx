@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { ui } from '../../../../core'
+import { game, ui } from '../../../../core'
 import { currentSystemNameAtom, systemsAtom } from '../atoms'
 import { SystemNavigationItem } from './system-navigation-item'
 
@@ -10,27 +10,36 @@ export function SystemNavigation() {
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const isValidSystems = systems?.length && systems.length > 0
 
+  const shouldSwitchSystem = useCallback(
+    function shouldSwitchSystem() {
+      return !game.isRunning() && isValidSystems
+    },
+    [isValidSystems]
+  )
+
   const selectPrevSystem = useCallback(() => {
-    if (isValidSystems) {
-      const index = systems.findIndex((system) => system.name === currentSystemName)
-      if (index > 0) {
-        setCurrentSystemName(systems[index - 1].name)
-      } else {
-        setCurrentSystemName(systems.at(-1)?.name || '')
-      }
+    if (!shouldSwitchSystem()) {
+      return
     }
-  }, [isValidSystems, currentSystemName, setCurrentSystemName, systems])
+    const index = systems.findIndex((system) => system.name === currentSystemName)
+    if (index > 0) {
+      setCurrentSystemName(systems[index - 1].name)
+    } else {
+      setCurrentSystemName(systems.at(-1)?.name || '')
+    }
+  }, [currentSystemName, setCurrentSystemName, systems, shouldSwitchSystem])
 
   const selectNextSystem = useCallback(() => {
-    if (isValidSystems) {
-      const index = systems.findIndex((system) => system.name === currentSystemName)
-      if (index < systems.length - 1) {
-        setCurrentSystemName(systems[index + 1].name)
-      } else {
-        setCurrentSystemName(systems[0].name)
-      }
+    if (!shouldSwitchSystem()) {
+      return
     }
-  }, [isValidSystems, currentSystemName, setCurrentSystemName, systems])
+    const index = systems.findIndex((system) => system.name === currentSystemName)
+    if (index < systems.length - 1) {
+      setCurrentSystemName(systems[index + 1].name)
+    } else {
+      setCurrentSystemName(systems[0].name)
+    }
+  }, [currentSystemName, setCurrentSystemName, systems, shouldSwitchSystem])
 
   useEffect(() => {
     if (currentSystemName) {

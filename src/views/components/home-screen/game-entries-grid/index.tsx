@@ -1,5 +1,6 @@
+import delay from 'delay'
 import { useAtomValue } from 'jotai'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { currentSystemRomsAtom } from '../atoms'
 import { GameEntry } from './game-entry'
@@ -9,9 +10,16 @@ export function GameEntryGrid(props: Omit<FixedSizeGrid['props'], 'children'>) {
   const innerRef = useRef<HTMLDivElement>()
   const { rowCount, columnCount } = props
 
-  useEffect(() => {
-    innerRef.current?.querySelector('button')?.focus()
+  const focusFirstButton = useCallback(async () => {
+    if (currentSystemRoms?.length) {
+      await delay(1)
+      innerRef.current?.querySelector('button')?.focus()
+    }
   }, [currentSystemRoms])
+
+  useEffect(() => {
+    focusFirstButton()
+  }, [focusFirstButton])
 
   return currentSystemRoms?.length ? (
     <FixedSizeGrid {...props} innerRef={innerRef}>

@@ -8,12 +8,34 @@ import {
 } from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
 import { type ReactNode } from 'react'
+import { useEffect } from 'react'
+import { ui } from '../../../core'
+import { SpatialNavigation } from '../../lib/spatial-navigation'
 
 interface BaseDialogProps extends DialogProps {
   content: ReactNode
 }
 
 export function BaseDialogTrigger({ children, content, ...props }: BaseDialogProps) {
+  useEffect(() => {
+    SpatialNavigation.focus('modal')
+  }, [])
+
+  useEffect(() => {
+    function onCancel() {
+      ui.offCancel(onCancel)
+      props.onOpenChange?.(false)
+    }
+
+    if (props.open) {
+      ui.onCancel(onCancel)
+    }
+
+    return () => {
+      ui.offCancel(onCancel)
+    }
+  }, [props])
+
   return (
     <Dialog {...props}>
       <DialogTrigger asChild>{children}</DialogTrigger>

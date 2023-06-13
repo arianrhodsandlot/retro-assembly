@@ -4,9 +4,10 @@ import { SpatialNavigation } from './js-spatial-navigation'
 SpatialNavigation.init()
 
 SpatialNavigation.add({
-  id: 'sidebar',
-  selector: '.sidebar button',
-  enterTo: 'last-focused',
+  id: 'get-started',
+  selector: '.get-started button',
+  enterTo: 'default-element',
+  leaveFor: { up: '', down: '', left: '', right: '' },
 })
 
 SpatialNavigation.add({
@@ -40,7 +41,6 @@ SpatialNavigation.add({
   id: 'modal',
   selector: '.modal button',
   enterTo: 'default-element',
-  defaultElement: '.modal button:first-child',
   leaveFor: { up: '', down: '', left: '', right: '' },
 })
 

@@ -1,12 +1,39 @@
 import { Dialog, DialogContent, DialogOverlay, DialogPortal, type DialogProps } from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
+import { useEffect } from 'react'
 import { type ReactNode } from 'react'
+import { ui } from '../../../core'
+import { SpatialNavigation } from '../../lib/spatial-navigation'
 
 interface BaseDialogProps extends DialogProps {
   children: ReactNode
+  closable?: boolean
 }
 
-export function BaseDialogContent({ children, open = true, ...props }: BaseDialogProps) {
+export function BaseDialogContent({ children, open = true, closable = false, ...props }: BaseDialogProps) {
+  useEffect(() => {
+    SpatialNavigation.focus('modal')
+  }, [])
+
+  useEffect(() => {
+    if (!closable) {
+      return
+    }
+
+    function onCancel() {
+      ui.offCancel(onCancel)
+      props.onOpenChange?.(false)
+    }
+
+    if (open) {
+      ui.onCancel(onCancel)
+    }
+
+    return () => {
+      ui.offCancel(onCancel)
+    }
+  }, [props, closable, open])
+
   return (
     <Dialog open={open} {...props}>
       <DialogPortal>

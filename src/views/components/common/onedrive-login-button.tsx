@@ -45,11 +45,11 @@ export function OnedriveLoginButton({ onLogin }: { onLogin: () => void }) {
 
   return (
     <div className='flex h-12 items-center justify-center'>
-      <BaseButton className='m-auto !px-0 !py-0' styleType='primary'>
+      <BaseButton className='m-auto !px-0 !py-0' onClick={login} styleType='primary'>
         <a
           className='flex items-center justify-center self-stretch px-4 py-2'
           href={authorizeUrl}
-          onClick={login}
+          onClick={(e) => e.preventDefault()}
           rel='noreferrer'
           target='_blank'
         >

@@ -13,7 +13,7 @@ export function AnimatedIcons({ wait = 0, children }: { wait?: number; children:
     }
     const nextFrames = frames + 1
     setFrames(nextFrames)
-    if (nextFrames === children.length) {
+    if (nextFrames >= children.length) {
       await delay(300)
       setEnableAnimation(false)
       setFrames(0)

@@ -1,10 +1,18 @@
+import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { system } from '../../../../core'
+import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { OnedriveDirectoryTree } from './onedrive-directory-tree'
 import { OnedriveLoginEntry } from './onedrive-login-entry'
 
 export function OnedriveDirectoryPicker({ onSelect }: { onSelect: (path: string) => void }) {
   const state = useAsyncRetry(async () => await system.needsOnedriveLogin())
+
+  useEffect(() => {
+    if (state.value === true) {
+      SpatialNavigation.focus('modal')
+    }
+  }, [state.value])
 
   if (state.loading) {
     return (

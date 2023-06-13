@@ -1,4 +1,6 @@
 import { useAtom } from 'jotai'
+import { useEffect } from 'react'
+import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
 import { isInvalidDialogOpenAtom } from './atoms'
@@ -7,10 +9,15 @@ import { OnedriveButton } from './onedrive-button'
 
 export function GetStarted() {
   const [isInvalidDialogOpen, setIsInvalidDialogOpenAtom] = useAtom(isInvalidDialogOpenAtom)
+
+  useEffect(() => {
+    SpatialNavigation.focus()
+  }, [])
+
   return (
     <div className='container m-auto max-w-5xl px-10'>
-      <div className='mt-4 w-full rounded-xl border-2 border-red-600 bg-white px-10 py-6'>
-        <div className='flex '>
+      <div className='get-started mt-4 w-full rounded-xl border-2 border-red-600 bg-white px-10 py-6'>
+        <div className='flex'>
           <div className='flex w-1/2 flex-col'>
             <div className='flex justify-center'>
               <OnedriveButton />
@@ -47,7 +54,7 @@ export function GetStarted() {
         </div>
       </div>
 
-      <BaseDialogContent onOpenChange={setIsInvalidDialogOpenAtom} open={isInvalidDialogOpen}>
+      <BaseDialogContent closable onOpenChange={setIsInvalidDialogOpenAtom} open={isInvalidDialogOpen}>
         <div className='max-w-xl'>
           <div className='flex items-center text-lg font-bold'>
             <span className='icon-[mdi--alert] mr-2 h-5 w-5 text-yellow-400' />
@@ -55,7 +62,7 @@ export function GetStarted() {
           </div>
           <div className='mt-4'>The directory you choose should match a certain structure. Here is an example:</div>
 
-          <div className='mt-4'>
+          <div className='mt-4 text-center'>
             <BaseButton className='m-auto' onClick={() => setIsInvalidDialogOpenAtom(false)} styleType='primary'>
               <span className='icon-[mdi--hand-okay] h-5 w-5' />
               OK

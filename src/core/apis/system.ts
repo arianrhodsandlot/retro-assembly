@@ -9,7 +9,6 @@ import {
 } from '..'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
-import { emitter } from '../helpers/emitter'
 import { globalInstances } from './global-instances'
 
 export const system = {
@@ -32,7 +31,7 @@ export const system = {
     directory,
     handle,
   }: {
-    fileSystem?: 'local' | 'onedrive'
+    fileSystem?: 'local' | 'onedrive' | 'google-drive'
     directory?: string
     handle?: FileSystemHandle
   }) {
@@ -47,7 +46,7 @@ export const system = {
     }
   },
 
-  setFileSystemProviderType(type: 'local' | 'onedrive') {
+  setFileSystemProviderType(type: 'local' | 'onedrive' | 'google-drive') {
     const { preference } = globalInstances
     preference.set({ name: 'configProviderType', value: type })
     preference.set({ name: 'stateProviderType', value: type })
@@ -83,11 +82,42 @@ export const system = {
     return false
   },
 
-  async needsOnedriveLogin() {
-    return !(await OneDriveProvider.validateAccessToken())
+  async needsLogin(type: 'onedrive' | 'google-drive') {
+    switch (type) {
+      case 'onedrive':
+        return !(await OneDriveProvider.validateAccessToken())
+      case 'google-drive':
+        return !(await GoogleDriveProvider.validateAccessToken())
+      default:
+        throw new Error('invalid token type')
+    }
   },
 
-  getOnedriveAuthorizeUrl: OneDriveProvider.getAuthorizeUrl,
+  getTokenStorageKey(type: 'onedrive' | 'google-drive') {
+    switch (type) {
+      case 'onedrive':
+        return OneDriveProvider.tokenStorageKey
+      case 'google-drive':
+        return GoogleDriveProvider.tokenStorageKey
+      default:
+        throw new Error('invalid token type')
+    }
+  },
+
+  getAuthorizeUrl(type: 'onedrive' | 'google-drive') {
+    switch (type) {
+      case 'onedrive':
+        return OneDriveProvider.getAuthorizeUrl()
+      case 'google-drive':
+        return GoogleDriveProvider.getAuthorizeUrl()
+      default:
+        throw new Error('invalid token type')
+    }
+  },
+
+  authorize(type: 'onedrive' | 'google-drive') {
+    return open(system.getAuthorizeUrl(type))
+  },
 
   async retrieveToken(type: 'onedrive' | 'google-drive') {
     switch (type) {

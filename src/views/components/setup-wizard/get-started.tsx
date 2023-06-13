@@ -4,6 +4,7 @@ import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
 import { isInvalidDialogOpenAtom } from './atoms'
+import { GoogleDriveButton } from './google-drive-button'
 import { LocalButton } from './local-button'
 import { OnedriveButton } from './onedrive-button'
 
@@ -17,22 +18,35 @@ export function GetStarted() {
   return (
     <div className='container m-auto max-w-5xl px-10'>
       <div className='get-started mt-4 w-full rounded-xl border-2 border-red-600 bg-white px-10 py-6'>
-        <div className='flex'>
-          <div className='flex w-1/2 flex-col'>
-            <div className='flex justify-center'>
-              <OnedriveButton />
+        <div className='flex flex-col items-center gap-10'>
+          <div className='flex flex-col'>
+            <div className='flex items-center justify-center gap-2 text-center font-bold'>
+              <span className='icon-[mdi--cube-outline] h-6 w-6' />
+              Select a cloud directory
             </div>
-            <div className='mt-2 flex items-center justify-center text-xs'>
-              <span className='icon-[mdi--thumb-up] mr-1 h-3 w-3' />
-              <div>Recommended. Seamlessly sync your games and progress.</div>
+            <div className='mt-2 flex items-start justify-center text-xs'>
+              <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
+              <div>Sync your games and progress between multiple devices.</div>
+            </div>
+            <div className='mt-4 flex flex-col justify-center gap-4'>
+              <div className='text-center'>
+                <OnedriveButton />
+              </div>
+              <div className='text-center'>
+                <GoogleDriveButton />
+              </div>
             </div>
           </div>
 
-          <div className='w-1/2'>
-            <div className='flex justify-center'>
-              <LocalButton />
+          <div>
+            <div className='flex items-center justify-center gap-2 text-center font-bold'>
+              <span className='icon-[mdi--cube-outline] h-6 w-6' />
+              Select a local directory
             </div>
             <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try Retro Assembly.</div>
+            <div className='mt-4 flex justify-center'>
+              <LocalButton />
+            </div>
           </div>
         </div>
 

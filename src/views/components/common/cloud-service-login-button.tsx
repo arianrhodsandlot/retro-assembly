@@ -1,17 +1,23 @@
+import clsx from 'clsx'
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import { OneDriveProvider, system } from '../../../core'
+import { system } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 
-const authorizeUrl = system.getOnedriveAuthorizeUrl()
-
-export function OnedriveLoginButton({ onLogin }: { onLogin: () => void }) {
+export function CloudServiceLoginButton({
+  cloudService,
+  onLogin,
+}: {
+  cloudService: 'onedrive' | 'google-drive'
+  onLogin: () => void
+}) {
+  const authorizeUrl = system.getAuthorizeUrl(cloudService)
   const authorizeWindow = useRef<Window | null>(null)
 
   const [state, checkLoginStatus] = useAsyncFn(async () => {
     await new Promise<void>((resolve, reject) => {
       function onStorage(event: StorageEvent) {
-        if (event.key === OneDriveProvider.tokenStorageKey) {
+        if (event.key === system.getTokenStorageKey(cloudService)) {
           authorizeWindow.current?.close()
           removeEventListener('storage', onStorage)
           resolve()
@@ -19,7 +25,7 @@ export function OnedriveLoginButton({ onLogin }: { onLogin: () => void }) {
       }
       addEventListener('storage', onStorage)
     })
-    const needsOnedriveLogin = await system.needsOnedriveLogin()
+    const needsOnedriveLogin = await system.needsLogin(cloudService)
     if (!needsOnedriveLogin) {
       return true
     }
@@ -28,7 +34,7 @@ export function OnedriveLoginButton({ onLogin }: { onLogin: () => void }) {
 
   async function login(event) {
     event.preventDefault()
-    authorizeWindow.current = open(authorizeUrl)
+    authorizeWindow.current = system.authorize(cloudService)
     const isLogin = await checkLoginStatus()
     if (isLogin) {
       onLogin()
@@ -53,7 +59,12 @@ export function OnedriveLoginButton({ onLogin }: { onLogin: () => void }) {
           rel='noreferrer'
           target='_blank'
         >
-          <span className='icon-[logos--microsoft-icon] mr-2 inline-block h-5 w-5' />
+          <span
+            className={clsx('mr-2 inline-block h-5 w-5', {
+              'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
+              'icon-[logos--google-icon]': cloudService === 'google-drive',
+            })}
+          />
           Login
         </a>
       </BaseButton>

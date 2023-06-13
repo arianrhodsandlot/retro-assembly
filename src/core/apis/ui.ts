@@ -49,9 +49,19 @@ async function getStepsBeforeStartWithCache() {
 export const ui = {
   getStepsBeforeStart: getStepsBeforeStartWithCache,
 
-  async listDirectory(directory: string) {
-    const onedrive = await OneDriveProvider.getSingleton()
-    return await onedrive.listChildren(directory)
+  async listDirectory({ path, type }: { path: string; type: 'onedrive' | 'google-drive' }) {
+    switch (type) {
+      case 'onedrive': {
+        const onedrive = await OneDriveProvider.getSingleton()
+        return await onedrive.listChildren(path)
+      }
+      case 'google-drive': {
+        const googleDrive = await GoogleDriveProvider.getSingleton()
+        return await googleDrive.listChildren(path)
+      }
+      default:
+        throw new Error('invalid token type:', type)
+    }
   },
 
   async listRoms() {

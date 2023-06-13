@@ -83,10 +83,6 @@ export class OneDriveProvider implements FileSystemProvider {
     return true
   }
 
-  static authorize() {
-    location.assign(OneDriveProvider.getAuthorizeUrl())
-  }
-
   static getAuthorizeUrl() {
     const query = {
       client_id: clientId,

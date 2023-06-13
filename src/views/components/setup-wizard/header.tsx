@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { AnimatedIcons } from './animated-icons'
 
 export function Header() {

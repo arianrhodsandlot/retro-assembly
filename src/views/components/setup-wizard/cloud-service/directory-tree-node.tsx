@@ -10,14 +10,16 @@ export interface TreeNode {
   children: TreeNode[] | undefined
 }
 
-export function OnedriveDirectoryTreeNode({
+export function DirectoryTreeNode({
   node,
   root,
+  cloudService,
   onChange,
   onSelect,
 }: {
   root: TreeNode
   node: TreeNode
+  cloudService: 'onedrive' | 'google-drive'
   onChange: (tree: TreeNode) => void
   onSelect: (path: string) => void
 }) {
@@ -28,10 +30,10 @@ export function OnedriveDirectoryTreeNode({
     if (node.expanded) {
       node.expanded = false
     } else {
-      const children = await ui.listDirectory(node.path)
+      const children = await ui.listDirectory({ path: node.path, type: cloudService })
       node.children = children.map((child) => {
         const { name, isDirectory, raw } = child
-        const hasChildren = raw.folder?.childCount > 0
+        const hasChildren = cloudService === 'onedrive' ? raw.folder?.childCount > 0 : isDirectory
         const path = `${node.path}${name}${isDirectory ? '/' : ''}`
         return {
           path,
@@ -91,7 +93,8 @@ export function OnedriveDirectoryTreeNode({
       {node.expanded ? (
         <div className='pl-6'>
           {node.children?.map((node) => (
-            <OnedriveDirectoryTreeNode
+            <DirectoryTreeNode
+              cloudService={cloudService}
               key={node.name}
               node={node}
               onChange={onChange}

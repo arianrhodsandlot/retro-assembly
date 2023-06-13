@@ -37,10 +37,6 @@ export class GoogleDriveProvider implements FileSystemProvider {
     return new GoogleDriveProvider({ client: gapi.client.drive.files })
   }
 
-  static authorize() {
-    open(GoogleDriveProvider.getAuthorizeUrl())
-  }
-
   static getAuthorizeUrl() {
     const query = {
       client_id: clientId,
@@ -66,7 +62,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     if (error) {
       throw new Error(`error: ${error}, error description: ${errorDescription}`)
     } else if (typeof accessToken === 'string') {
-      setStorageByKey({ key: GoogleDriveProvider.tokenStorageKey, value: accessToken })
+      setStorageByKey({ key: GoogleDriveProvider.tokenStorageKey, value: { access_token: accessToken } })
     } else {
       throw new TypeError(`invalide code. code: ${accessToken}`)
     }
@@ -75,12 +71,32 @@ export class GoogleDriveProvider implements FileSystemProvider {
   static async loadGapi() {
     await new Promise((resolve) => gapi.load('client', resolve))
     const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
-    const accessToken = getStorageByKey(GoogleDriveProvider.tokenStorageKey)
+    const accessToken = GoogleDriveProvider.getAccessToken()
     await gapi.client.init({
       apiKey: 'AIzaSyDPqjP2pwqA_ZgYcGwm3P336qEMUNssmsY',
       discoveryDocs: [DISCOVERY_DOC],
     })
     gapi.client.setToken({ access_token: accessToken })
+  }
+
+  static getAccessToken() {
+    const tokenRecord = getStorageByKey(GoogleDriveProvider.tokenStorageKey)
+    return tokenRecord?.access_token
+  }
+
+  static async validateAccessToken() {
+    if (!GoogleDriveProvider.getAccessToken()) {
+      return false
+    }
+
+    await GoogleDriveProvider.loadGapi()
+    try {
+      await gapi.client.drive.files.list({ pageSize: 1, fields: 'files(id)' })
+    } catch (error) {
+      console.warn(error)
+      return false
+    }
+    return true
   }
 
   async getFileContent(path: string) {
@@ -117,7 +133,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
         .filter((child) => child.isFile)
         .map((child) => {
           const childParentPath = path
-          const childPath = `${childParentPath}/${child.name}`
+          const childPath = `${childParentPath}${child.name}`
           return { path: childPath, downloadUrl: child.raw }
         })
 
@@ -125,7 +141,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
         .filter((child) => child.isDirectory)
         .map((child) => {
           const childParentPath = path
-          const childPath = `${childParentPath}/${child.name}`
+          const childPath = `${childParentPath}${child.name}/`
           return list({ path: childPath, size: child.raw.size, lastModified: child.raw.lastModifiedDateTime })
         })
 
@@ -145,7 +161,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const { client } = this
     let result
     if (path === '/') {
-      result = this.getRoot()
+      result = await this.getRoot()
     } else {
       const directory = await this.getDirectory(path)
       const conditions = ['trashed=false', `parents in '${directory.id}'`]

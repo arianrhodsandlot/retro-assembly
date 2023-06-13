@@ -1,7 +1,7 @@
 import { CloudServiceLoginButton } from '../../common/cloud-service-login-button'
 import { BaseCallout } from '../../primitives/base-callout'
 
-export function OnedriveLoginEntry({ onFinished }: { onFinished: () => void }) {
+export function GoogleDriveLoginEntry({ onFinished }: { onFinished: () => void }) {
   return (
     <div className='flex h-full flex-col'>
       <BaseCallout>
@@ -9,12 +9,12 @@ export function OnedriveLoginEntry({ onFinished }: { onFinished: () => void }) {
           <div>
             <span className='icon-[mdi--bell] mr-2 mt-[2px] h-4 w-4' />
           </div>
-          <div>To select a roms directory from your Microsoft OneDrive, you need to login to Microsoft first.</div>
+          <div>To select a roms directory from your Google Drive, you need to login to Google first.</div>
         </div>
       </BaseCallout>
 
       <div className='mt-4'>
-        <CloudServiceLoginButton cloudService='onedrive' onLogin={onFinished} />
+        <CloudServiceLoginButton cloudService='google-drive' onLogin={onFinished} />
       </div>
     </div>
   )

@@ -3,10 +3,10 @@ import { useAsyncRetry } from 'react-use'
 import { system } from '../../../../core'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { DirectoryTree } from '../cloud-service/directory-tree'
-import { OnedriveLoginEntry } from './onedrive-login-entry'
+import { GoogleDriveLoginEntry } from './google-drive-login-entry'
 
-export function OnedriveDirectoryPicker({ onSelect }: { onSelect: (path: string) => void }) {
-  const state = useAsyncRetry(async () => await system.needsLogin('onedrive'))
+export function GoogleDriveDirectoryPicker({ onSelect }: { onSelect: (path: string) => void }) {
+  const state = useAsyncRetry(async () => await system.needsLogin('google-drive'))
 
   useEffect(() => {
     if (state.value === true) {
@@ -23,7 +23,7 @@ export function OnedriveDirectoryPicker({ onSelect }: { onSelect: (path: string)
   }
 
   if (state.value === true) {
-    return <OnedriveLoginEntry onFinished={state.retry} />
+    return <GoogleDriveLoginEntry onFinished={state.retry} />
   }
 
   if (state.value === false) {
@@ -36,7 +36,7 @@ export function OnedriveDirectoryPicker({ onSelect }: { onSelect: (path: string)
           </div>
         </div>
         <div className='flex-1 overflow-auto'>
-          <DirectoryTree cloudService='onedrive' onSelect={onSelect} />
+          <DirectoryTree cloudService='google-drive' onSelect={onSelect} />
         </div>
       </div>
     )

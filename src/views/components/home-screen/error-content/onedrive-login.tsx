@@ -1,4 +1,4 @@
-import { OnedriveLoginButton } from '../../common/onedrive-login-button'
+import { CloudServiceLoginButton } from '../../common/cloud-service-login-button'
 import { BaseCallout } from '../../primitives/base-callout'
 
 export function OnedriveLogin({ onSolve }: { onSolve: () => void }) {
@@ -7,7 +7,7 @@ export function OnedriveLogin({ onSolve }: { onSolve: () => void }) {
       <BaseCallout>Your OneDrive login status is expired. Please login again.</BaseCallout>
 
       <div className='mt-4'>
-        <OnedriveLoginButton onLogin={onSolve} />
+        <CloudServiceLoginButton onLogin={onSolve} />
       </div>
     </div>
   )

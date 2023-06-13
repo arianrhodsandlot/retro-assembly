@@ -3,9 +3,9 @@ import { system, ui } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 import { isInvalidDialogOpenAtom, onSetupAtom } from '../atoms'
-import { OnedriveDirectoryPicker } from './onedrive-directory-picker'
+import { GoogleDriveDirectoryPicker } from './google-drive-directory-picker'
 
-export function OnedriveButton() {
+export function GoogleDriveButton() {
   const onSetup = useAtomValue(onSetupAtom)
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
@@ -13,7 +13,7 @@ export function OnedriveButton() {
     const isValid = await ui.validateRomsDirectory(romDirectory)
 
     if (isValid) {
-      await system.updateSettings({ fileSystem: 'onedrive', directory: romDirectory })
+      await system.updateSettings({ fileSystem: 'google-drive', directory: romDirectory })
       onSetup?.()
     } else {
       setIsInvalidDialogOpen(true)
@@ -24,13 +24,13 @@ export function OnedriveButton() {
     <BaseDialogTrigger
       content={
         <div className='w-96 max-w-full'>
-          <OnedriveDirectoryPicker onSelect={onSelect} />
+          <GoogleDriveDirectoryPicker onSelect={onSelect} />
         </div>
       }
     >
       <BaseButton className='w-60' styleType='primary'>
-        <span className='icon-[logos--microsoft-onedrive] h-5 w-5' />
-        OneDrive
+        <span className='icon-[logos--google-drive] h-5 w-5' />
+        Google Drive
       </BaseButton>
     </BaseDialogTrigger>
   )

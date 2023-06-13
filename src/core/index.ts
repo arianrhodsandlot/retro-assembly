@@ -3,6 +3,7 @@ export * from './classes/emulator'
 export * from './classes/file-system-providers/file-system-provider'
 export * from './classes/file-system-providers/local-provider'
 export * from './classes/file-system-providers/one-drive-provider'
+export * from './classes/file-system-providers/google-drive-provider'
 export * from './classes/rom'
 export * from './classes/preference'
 

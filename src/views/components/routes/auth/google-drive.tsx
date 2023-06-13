@@ -3,8 +3,10 @@ import { useAsync } from 'react-use'
 import { system } from '../../../../core'
 import { AuthLayout } from './auth-layout'
 
-export function AuthOnedrive() {
-  const state = useAsync(async () => await system.retrieveToken('onedrive'))
+export function AuthGoogleDrive() {
+  const state = useAsync(async () => {
+    await system.retrieveToken('google-drive')
+  })
 
   useEffect(() => {
     if (!state.loading && !state.error) {

@@ -1,5 +1,5 @@
 import { filter } from 'lodash-es'
-import { detectLocalHandleExistence, systemNamesSorted } from '..'
+import { GoogleDriveProvider, detectLocalHandleExistence, systemNamesSorted } from '..'
 import { CoreStateManager } from '../classes/core-state-manager'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'

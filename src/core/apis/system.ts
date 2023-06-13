@@ -1,6 +1,12 @@
 import { clear, get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
-import { Preference, detectLocalHandleExistence, detectLocalHandlePermission, requestLocalHandle } from '..'
+import {
+  GoogleDriveProvider,
+  Preference,
+  detectLocalHandleExistence,
+  detectLocalHandlePermission,
+  requestLocalHandle,
+} from '..'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
 import { emitter } from '../helpers/emitter'
@@ -83,7 +89,18 @@ export const system = {
 
   getOnedriveAuthorizeUrl: OneDriveProvider.getAuthorizeUrl,
 
-  retrieveToken: OneDriveProvider.retrieveToken,
+  async retrieveToken(type: 'onedrive' | 'google-drive') {
+    switch (type) {
+      case 'onedrive':
+        await OneDriveProvider.retrieveToken()
+        break
+      case 'google-drive':
+        await GoogleDriveProvider.retrieveToken()
+        break
+      default:
+        throw new Error('invalid token type')
+    }
+  },
 
   isPreferenceValid() {
     const preference = new Preference()
@@ -110,10 +127,18 @@ export const system = {
     const preference = new Preference()
     globalInstances.preference = preference
     const type = preference.get('romProviderType')
-    if (type === 'local') {
-      globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
-    } else if (type === 'onedrive') {
-      globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
+    switch (type) {
+      case 'local':
+        globalInstances.fileSystemProvider = await LocalProvider.getSingleton()
+        break
+      case 'onedrive':
+        globalInstances.fileSystemProvider = await OneDriveProvider.getSingleton()
+        break
+      case 'google-drive':
+        globalInstances.fileSystemProvider = await GoogleDriveProvider.getSingleton()
+        break
+      default:
+        throw new Error('unknown rom provider type')
     }
   },
 

@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -112,6 +112,9 @@ devDependencies:
   '@types/emscripten':
     specifier: 1.39.6
     version: 1.39.6
+  '@types/gapi':
+    specifier: ^0.0.44
+    version: 0.0.44
   '@types/ini':
     specifier: 1.3.31
     version: 1.3.31
@@ -1059,6 +1062,10 @@ packages:
     dependencies:
       '@types/jsonfile': 6.1.1
       '@types/node': 18.16.17
+    dev: true
+
+  /@types/gapi@0.0.44:
+    resolution: {integrity: sha512-hsgJMfZ/pMwI15UlAYHMNwj8DRoigo1odhbPwEXdp19ZQwQAXbcRrpzaDsfc+9XM6RtGpvl4Ja7uW8A+KPCa7w==}
     dev: true
 
   /@types/ini@1.3.31:

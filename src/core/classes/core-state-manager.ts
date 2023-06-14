@@ -52,12 +52,10 @@ export class CoreStateManager {
     const { core, name, createTime, blob, thumbnailBlob } = state
     const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
     const stateDirPath = `${directory}${core}/${name}/`
-    await Promise.all([
-      fileSystemProvider.createFile({ file: blob, path: `${stateDirPath}${stateBaseFileName}.state` }),
-      ...(thumbnailBlob
-        ? [fileSystemProvider.createFile({ file: thumbnailBlob, path: `${stateDirPath}${stateBaseFileName}.png` })]
-        : []),
-    ])
+    await fileSystemProvider.createFile({ file: blob, path: `${stateDirPath}${stateBaseFileName}.state` })
+    if (thumbnailBlob) {
+      fileSystemProvider.createFile({ file: thumbnailBlob, path: `${stateDirPath}${stateBaseFileName}.png` })
+    }
   }
 
   async getStates() {

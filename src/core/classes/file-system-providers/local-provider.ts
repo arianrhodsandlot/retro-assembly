@@ -54,7 +54,7 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   // path should not start with a slash
-  // todo: should make it be the same as the onedrive provider
+  // todo: maybe needs to make it be the same as the onedrive provider
   async createFile({ file, path }: { file: Blob; path: string }) {
     const fileHandle = await this.getFileHandle({ path, create: true })
     if (fileHandle) {

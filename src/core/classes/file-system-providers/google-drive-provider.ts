@@ -21,8 +21,7 @@ const googleDriveAuth = {
 
 const { clientId, scope, redirectUri } = googleDriveAuth
 
-// const fields = 'files(name,id,mimeType,modifiedTime,version)'
-const fields = 'files(*)'
+const fields = 'files(name,id,mimeType,modifiedTime,version,webContentLink)'
 
 const cacheDbName = 'google-drive-directory-children'
 const cacheDbVersion = 1
@@ -159,7 +158,30 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   async createFile({ file, path }) {
-    throw new Error('not implemented')
+    const segments = path.split('/')
+
+    const [fileName] = segments.slice(-1)
+
+    const directoryPath = segments.slice(0, -1).join('/')
+    const directory = await this.ensureDirectory(directoryPath)
+    const directoryId = directory.id
+
+    const form = new FormData()
+
+    const metadata = { name: fileName, parents: [directoryId], mimeType: file.type }
+    const metadataJson = JSON.stringify(metadata)
+    const metadataBlob = new Blob([metadataJson], { type: 'application/json' })
+
+    const { access_token: accessToken } = gapi.client.getToken()
+
+    form.append('metadata', metadataBlob)
+    form.append('file', file)
+
+    await ky.post('https://www.googleapis.com/upload/drive/v3/files', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      searchParams: { uploadType: 'multipart', fields: 'id' },
+      body: form,
+    })
   }
 
   async deleteFile(path) {
@@ -238,7 +260,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
 
   private async getRoot() {
     const { client } = this
-    const conditions = ['trashed=false', '"root" in parents']
+    const conditions = ['trashed=false', "parents in 'root'"]
     const q = conditions.join(' and ')
     return await client.list({ q, fields })
   }
@@ -256,23 +278,48 @@ export class GoogleDriveProvider implements FileSystemProvider {
       return this.getRoot()
     }
 
-    let currentDirectory
+    let directory
     for (const segment of segments) {
-      const conditions = ['trashed=false']
-      if (currentDirectory) {
-        const directoryId = currentDirectory.id
-        conditions.push(`parents in '${directoryId}'`, `name='${segment}'`)
-        const q = conditions.join(' and ')
-        const response = await client.list({ q, fields })
-        currentDirectory = response.result.files[0]
-      } else {
-        conditions.push('"root" in parents', `name='${segment}'`)
-        const q = conditions.join(' and ')
-        const response = await client.list({ q, fields })
-        currentDirectory = response.result.files[0]
+      const directoryId = directory ? directory.id : 'root'
+      const conditions = ['trashed=false', `parents in '${directoryId}'`, `name='${segment}'`]
+      const q = conditions.join(' and ')
+      const response = await client.list({ q, fields })
+      directory = response.result.files[0]
+    }
+
+    return directory
+  }
+
+  private async ensureDirectory(path: string) {
+    if (!path.startsWith('/')) {
+      throw new Error(`invalid path: ${path}`)
+    }
+    if (path.endsWith('/')) {
+      path = path.slice(0, -1)
+    }
+    const { client } = this
+    const segments = compact(path.slice(1).split('/'))
+    if (segments.length === 0) {
+      return this.getRoot()
+    }
+
+    let directory
+    for (const segment of segments) {
+      const directoryId = directory?.id || 'root'
+      const conditions = ['trashed=false', `parents in '${directoryId}'`, `name='${segment}'`]
+      const q = conditions.join(' and ')
+      const response = await client.list({ q, fields })
+
+      directory = response.result.files[0]
+      if (!directory) {
+        const response = await client.create({
+          resource: { name: segment, mimeType: 'application/vnd.google-apps.folder', parents: [directoryId] },
+          fields: 'name,id,mimeType,modifiedTime,version',
+        })
+        directory ||= response.result
       }
     }
 
-    return currentDirectory
+    return directory
   }
 }

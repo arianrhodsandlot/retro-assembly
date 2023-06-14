@@ -218,8 +218,8 @@ export class Emulator {
       name: this.rom?.fileSummary.name,
       core: this.core,
       createTime: Date.now(),
-      blob: new Blob([stateBuffer]),
-      thumbnailBlob: stateThumbnailBuffer ? new Blob([stateThumbnailBuffer]) : undefined,
+      blob: new Blob([stateBuffer], { type: 'application/octet-stream' }),
+      thumbnailBlob: stateThumbnailBuffer ? new Blob([stateThumbnailBuffer], { type: 'image/png' }) : undefined,
     }
   }
 

@@ -3,7 +3,6 @@ import { openDB } from 'idb'
 import ky from 'ky'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
-import { emitter } from '../../helpers/emitter'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
@@ -13,9 +12,9 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
-const cacheDbName = 'cache'
+const cacheDbName = 'onedrive-api-directory-children'
 const cacheDbVersion = 1
-const onedriveApiCacheKey = 'onedrive-api-cache'
+const onedriveApiCacheKey = 'responses'
 
 let onedriveCloudProvider: OneDriveProvider
 export class OneDriveProvider implements FileSystemProvider {
@@ -131,12 +130,8 @@ export class OneDriveProvider implements FileSystemProvider {
       return await request()
     } catch (error: any) {
       if (error.code === 'InvalidAuthenticationToken') {
-        try {
-          await OneDriveProvider.refreshToken()
-          return await request()
-        } catch {
-          emitter.emit('request-auth-error', { type: 'onedrive', error })
-        }
+        await OneDriveProvider.refreshToken()
+        return await request()
       }
       throw error
     }
@@ -153,7 +148,7 @@ export class OneDriveProvider implements FileSystemProvider {
 
     const database = await OneDriveProvider.cacheIndexedDb
 
-    await database.add(onedriveApiCacheKey, { path, size, lastModified, response })
+    await database.add(onedriveApiCacheKey, { path, cacheIdentifier: { size, lastModified }, response })
   }
 
   private static async getDirectoryApiCache({ path, size, lastModified }) {
@@ -167,7 +162,7 @@ export class OneDriveProvider implements FileSystemProvider {
     const database = await OneDriveProvider.cacheIndexedDb
     const rows = await database.getAllFromIndex(onedriveApiCacheKey, 'path', path)
     for (const row of rows) {
-      if (row && row.size === size && row.lastModified === lastModified) {
+      if (row && row.cacheIdentifier.size === size && row.cacheIdentifier.lastModified === lastModified) {
         return row.response
       }
     }

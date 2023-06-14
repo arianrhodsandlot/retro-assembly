@@ -10,7 +10,7 @@ export function OnedriveButton() {
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
   async function onSelect(romDirectory: string) {
-    const isValid = await ui.validateRomsDirectory(romDirectory)
+    const isValid = await ui.validateRomsDirectory({ directory: romDirectory, type: 'onedrive' })
 
     if (isValid) {
       await system.updateSettings({ fileSystem: 'onedrive', directory: romDirectory })

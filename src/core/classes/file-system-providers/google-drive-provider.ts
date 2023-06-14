@@ -1,3 +1,4 @@
+import { openDB } from 'idb'
 import ky from 'ky'
 import { compact, initial, last } from 'lodash-es'
 import queryString from 'query-string'
@@ -20,11 +21,16 @@ const googleDriveAuth = {
 
 const { clientId, scope, redirectUri } = googleDriveAuth
 
-// const fields = 'files(name,id,mimeType,modifiedTime)'
+// const fields = 'files(name,id,mimeType,modifiedTime,version)'
 const fields = 'files(*)'
+
+const cacheDbName = 'google-drive-directory-children'
+const cacheDbVersion = 1
+const googleDriveApiCacheKey = 'responses'
 
 export class GoogleDriveProvider implements FileSystemProvider {
   static tokenStorageKey = 'google-drive-token'
+  private static cacheIndexedDb: any
 
   private client
 
@@ -99,6 +105,41 @@ export class GoogleDriveProvider implements FileSystemProvider {
     return true
   }
 
+  private static async setDirectoryApiCache({ path, cacheIdentifier, response }) {
+    GoogleDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
+      upgrade(database) {
+        database
+          .createObjectStore(googleDriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
+          .createIndex('path', 'path')
+      },
+    })
+
+    const database = await GoogleDriveProvider.cacheIndexedDb
+
+    await database.add(googleDriveApiCacheKey, { path, response, cacheIdentifier })
+  }
+
+  private static async getDirectoryApiCache({ path, cacheIdentifier }) {
+    GoogleDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
+      upgrade(database) {
+        database
+          .createObjectStore(googleDriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
+          .createIndex('path', 'path')
+      },
+    })
+    const database = await GoogleDriveProvider.cacheIndexedDb
+    const rows = await database.getAllFromIndex(googleDriveApiCacheKey, 'path', path)
+    for (const row of rows) {
+      if (
+        row &&
+        row.cacheIdentifier.version === cacheIdentifier.version &&
+        row.cacheIdentifier.modifiedTime === cacheIdentifier.modifiedTime
+      ) {
+        return row.response
+      }
+    }
+  }
+
   async getFileContent(path: string) {
     const { client } = this
     const segments = path.split('/')
@@ -126,7 +167,16 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   async listFilesRecursively(path) {
-    const list = async ({ path, size, lastModified }: { path: string; size?: number; lastModified?: string }) => {
+    const list = async ({ path, cacheIdentifier }: { path: string; cacheIdentifier?: Record<string, string> }) => {
+      const shouldUseCache = cacheIdentifier !== undefined
+
+      if (shouldUseCache) {
+        const cache = await GoogleDriveProvider.getDirectoryApiCache({ path, cacheIdentifier })
+        if (cache) {
+          return cache
+        }
+      }
+
       const children = await this.listChildren(path)
 
       const files = children
@@ -134,7 +184,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
         .map((child) => {
           const childParentPath = path
           const childPath = `${childParentPath}${child.name}`
-          return { path: childPath, downloadUrl: child.raw }
+          return { path: childPath, downloadUrl: child.raw.webContentLink }
         })
 
       const foldersPromises = children
@@ -142,11 +192,19 @@ export class GoogleDriveProvider implements FileSystemProvider {
         .map((child) => {
           const childParentPath = path
           const childPath = `${childParentPath}${child.name}/`
-          return list({ path: childPath, size: child.raw.size, lastModified: child.raw.lastModifiedDateTime })
+          return list({
+            path: childPath,
+            cacheIdentifier: { version: child.raw.version, modifiedTime: child.raw.modifiedTime },
+          })
         })
-
       const folders = await Promise.all(foldersPromises)
-      return [...files, ...folders.flat()]
+      const response = [...files, ...folders.flat()]
+
+      if (shouldUseCache) {
+        await GoogleDriveProvider.setDirectoryApiCache({ path, response, cacheIdentifier })
+      }
+
+      return response
     }
 
     const response = await list({ path })

@@ -1,5 +1,5 @@
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
-import { CloudServiceLogin } from './google-drive-login'
+import { CloudServiceLogin } from './cloud-service-login'
 import { LocalFilePermision } from './local-file-permision'
 
 export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => void }) {
@@ -28,6 +28,8 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   }
 
   // todo: needs better error text
+  console.warn(error)
+  window.error = error
   return (
     <BaseDialogContent>
       <div>{JSON.stringify(error)}</div>

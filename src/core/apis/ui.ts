@@ -72,20 +72,44 @@ export const ui = {
     return Rom.groupBySystem(roms)
   },
 
-  async validateRomsDirectory(pathOrHandle: string | FileSystemDirectoryHandle) {
+  async validateRomsDirectory(
+    params:
+      | {
+          type: 'local'
+          handle: FileSystemDirectoryHandle
+        }
+      | {
+          type: 'onedrive' | 'google-drive'
+          directory: string
+        }
+  ) {
+    const { type } = params
     let directories
 
-    if (typeof pathOrHandle === 'string') {
-      const onedrive = OneDriveProvider.getSingleton()
-
-      const children = await onedrive.listChildren(pathOrHandle)
-      directories = filter(children, 'isDirectory')
-    }
-
-    if (pathOrHandle instanceof FileSystemDirectoryHandle) {
-      const local = LocalProvider.getSingleton({ handle: pathOrHandle })
-      const children = await local.listChildren()
-      directories = filter(children, 'isDirectory')
+    switch (type) {
+      case 'onedrive': {
+        const { directory } = params
+        const onedrive = OneDriveProvider.getSingleton()
+        const children = await onedrive.listChildren(directory)
+        directories = filter(children, 'isDirectory')
+        break
+      }
+      case 'google-drive': {
+        const { directory } = params
+        const googleDrive = await GoogleDriveProvider.getSingleton()
+        const children = await googleDrive.listChildren(directory)
+        directories = filter(children, 'isDirectory')
+        break
+      }
+      case 'local': {
+        const { handle } = params
+        const local = LocalProvider.getSingleton({ handle })
+        const children = await local.listChildren()
+        directories = filter(children, 'isDirectory')
+        break
+      }
+      default:
+        throw new Error('invalid type:', type)
     }
 
     return directories.some((directory) => systemNamesSorted.includes(directory.name))

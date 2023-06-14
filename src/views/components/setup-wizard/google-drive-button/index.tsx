@@ -10,7 +10,10 @@ export function GoogleDriveButton() {
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
   async function onSelect(romDirectory: string) {
-    const isValid = await ui.validateRomsDirectory(romDirectory)
+    const isValid = await ui.validateRomsDirectory({
+      directory: romDirectory,
+      type: 'google-drive',
+    })
 
     if (isValid) {
       await system.updateSettings({ fileSystem: 'google-drive', directory: romDirectory })

@@ -184,7 +184,9 @@ export class GoogleDriveProvider implements FileSystemProvider {
     })
   }
 
+  // todo: not implemented yet
   async deleteFile(path) {
+    await this
     throw new Error('not implemented')
   }
 
@@ -239,23 +241,39 @@ export class GoogleDriveProvider implements FileSystemProvider {
 
   async listChildren(path = '/') {
     const { client } = this
-    let result
-    if (path === '/') {
-      result = await this.getRoot()
-    } else {
+    let directoryId = 'root'
+    if (path !== '/') {
       const directory = await this.getDirectory(path)
-      const conditions = ['trashed=false', `parents in '${directory.id}'`]
-      const q = conditions.join(' and ')
-      result = await client.list({ q, fields })
+      directoryId = directory.id
     }
 
+    const conditions = ['trashed=false', `parents in '${directoryId}'`]
+    const q = conditions.join(' and ')
+
     const folderMimeType = 'application/vnd.google-apps.folder'
-    return result.result.files.map((item) => ({
-      name: item.name,
-      isDirectory: item.mimeType === folderMimeType,
-      isFile: item.mimeType !== folderMimeType,
-      raw: item,
-    }))
+    const children: any[] = []
+    const pageSize = 200
+    let pageToken = ''
+    do {
+      const response = await client.list({
+        q,
+        fields: `${fields},nextPageToken`,
+        pageSize,
+        pageToken,
+      })
+      const { result } = response
+      children.push(
+        ...result.files.map((item) => ({
+          name: item.name,
+          isDirectory: item.mimeType === folderMimeType,
+          isFile: item.mimeType !== folderMimeType,
+          raw: item,
+        }))
+      )
+      pageToken = result.nextPageToken ?? ''
+    } while (pageToken)
+
+    return children
   }
 
   private async getRoot() {

@@ -1,6 +1,6 @@
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
+import { CloudServiceLogin } from './google-drive-login'
 import { LocalFilePermision } from './local-file-permision'
-import { OnedriveLogin } from './onedrive-login'
 
 export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => void }) {
   if (error instanceof DOMException && error.name === 'SecurityError') {
@@ -14,10 +14,20 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.statusCode === 401) {
     return (
       <BaseDialogContent>
-        <OnedriveLogin onSolve={onSolve} />
+        <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
       </BaseDialogContent>
     )
   }
+
+  if (error.status === 401) {
+    return (
+      <BaseDialogContent>
+        <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} />
+      </BaseDialogContent>
+    )
+  }
+
+  // todo: needs better error text
   return (
     <BaseDialogContent>
       <div>{JSON.stringify(error)}</div>

@@ -1,11 +1,13 @@
 import { openDB } from 'idb'
 import ky from 'ky'
-import { compact, initial, last } from 'lodash-es'
+import { compact, identity, initial, last } from 'lodash-es'
 import queryString from 'query-string'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
+import { RequestCache } from '../request-cache'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
+window.RequestCache = RequestCache
 const authorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
 
 const googleDriveAuth = {
@@ -21,15 +23,11 @@ const googleDriveAuth = {
 
 const { clientId, scope, redirectUri } = googleDriveAuth
 
-const fields = 'files(name,id,mimeType,modifiedTime,version,webContentLink)'
-
-const cacheDbName = 'google-drive-directory-children'
-const cacheDbVersion = 1
-const googleDriveApiCacheKey = 'responses'
+const defaultFileFields = 'name,id,mimeType,modifiedTime,version,webContentLink'
+const defaultFileNestedFields = `files(${defaultFileFields})`
 
 export class GoogleDriveProvider implements FileSystemProvider {
   static tokenStorageKey = 'google-drive-token'
-  private static cacheIndexedDb: any
 
   private client
 
@@ -104,50 +102,14 @@ export class GoogleDriveProvider implements FileSystemProvider {
     return true
   }
 
-  private static async setDirectoryApiCache({ path, cacheIdentifier, response }) {
-    GoogleDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
-      upgrade(database) {
-        database
-          .createObjectStore(googleDriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
-          .createIndex('path', 'path')
-      },
-    })
-
-    const database = await GoogleDriveProvider.cacheIndexedDb
-
-    await database.add(googleDriveApiCacheKey, { path, response, cacheIdentifier })
-  }
-
-  private static async getDirectoryApiCache({ path, cacheIdentifier }) {
-    GoogleDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
-      upgrade(database) {
-        database
-          .createObjectStore(googleDriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
-          .createIndex('path', 'path')
-      },
-    })
-    const database = await GoogleDriveProvider.cacheIndexedDb
-    const rows = await database.getAllFromIndex(googleDriveApiCacheKey, 'path', path)
-    for (const row of rows) {
-      if (
-        row &&
-        row.cacheIdentifier.version === cacheIdentifier.version &&
-        row.cacheIdentifier.modifiedTime === cacheIdentifier.modifiedTime
-      ) {
-        return row.response
-      }
-    }
-  }
-
   async getFileContent(path: string) {
-    const { client } = this
     const segments = path.split('/')
     const fileDirectory = initial(segments).join('/')
     const fileName = last(segments)
     const directory = await this.getDirectory(fileDirectory)
     const conditions = ['trashed=false', `parents in '${directory.id}'`, `name='${fileName}'`]
     const q = conditions.join(' and ')
-    const response = await client.list({ q, fields })
+    const response = await this.client.list({ q, fields: defaultFileNestedFields })
     const [file] = response.result.files
     const fileId = file.id
     const { access_token: accessToken } = gapi.client.getToken()
@@ -191,47 +153,36 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   async listFilesRecursively(path) {
-    const list = async ({ path, cacheIdentifier }: { path: string; cacheIdentifier?: Record<string, string> }) => {
-      const shouldUseCache = cacheIdentifier !== undefined
-
-      if (shouldUseCache) {
-        const cache = await GoogleDriveProvider.getDirectoryApiCache({ path, cacheIdentifier })
-        if (cache) {
-          return cache
+    const list = async (path?) => {
+      const children = await this.listChildren(path)
+      const files: any[] = []
+      const directoriesPromises: Promise<any[]>[] = []
+      for (const child of children) {
+        const childParentPath = path
+        if (child.isFile) {
+          const childPath = `${childParentPath}${child.name}`
+          const file = { path: childPath, downloadUrl: child.raw.webContentLink }
+          files.push(file)
+        } else if (child.isDirectory) {
+          const childPath = `${childParentPath}${child.name}/`
+          const cachableList = await RequestCache.makeCacheable({
+            func: list,
+            identifier: (...args) => ({
+              functionName: 'GoogleDriveProvider.listFilesRecursively',
+              args,
+              version: child.raw.version,
+              modifiedTime: child.raw.modifiedTime,
+            }),
+          })
+          const foldersPromise = await cachableList(childPath)
+          directoriesPromises.push(foldersPromise)
         }
       }
-
-      const children = await this.listChildren(path)
-
-      const files = children
-        .filter((child) => child.isFile)
-        .map((child) => {
-          const childParentPath = path
-          const childPath = `${childParentPath}${child.name}`
-          return { path: childPath, downloadUrl: child.raw.webContentLink }
-        })
-
-      const foldersPromises = children
-        .filter((child) => child.isDirectory)
-        .map((child) => {
-          const childParentPath = path
-          const childPath = `${childParentPath}${child.name}/`
-          return list({
-            path: childPath,
-            cacheIdentifier: { version: child.raw.version, modifiedTime: child.raw.modifiedTime },
-          })
-        })
-      const folders = await Promise.all(foldersPromises)
-      const response = [...files, ...folders.flat()]
-
-      if (shouldUseCache) {
-        await GoogleDriveProvider.setDirectoryApiCache({ path, response, cacheIdentifier })
-      }
-
-      return response
+      const directories = await Promise.all(directoriesPromises)
+      return [...files, ...directories.flat()]
     }
 
-    const response = await list({ path })
+    const response = await list(path)
 
     return response.map(
       (fileSummaryObj) =>
@@ -240,14 +191,13 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   async listChildren(path = '/') {
-    const { client } = this
     let directoryId = 'root'
     if (path !== '/') {
       const directory = await this.getDirectory(path)
       directoryId = directory.id
     }
 
-    const conditions = ['trashed=false', `parents in '${directoryId}'`]
+    const conditions = [`parents in '${directoryId}'`, 'trashed=false']
     const q = conditions.join(' and ')
 
     const folderMimeType = 'application/vnd.google-apps.folder'
@@ -255,32 +205,26 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const pageSize = 200
     let pageToken = ''
     do {
-      const response = await client.list({
-        q,
-        fields: `${fields},nextPageToken`,
-        pageSize,
-        pageToken,
-      })
-      const { result } = response
-      children.push(
-        ...result.files.map((item) => ({
-          name: item.name,
-          isDirectory: item.mimeType === folderMimeType,
-          isFile: item.mimeType !== folderMimeType,
-          raw: item,
-        }))
-      )
+      const fields = `${defaultFileNestedFields},nextPageToken`
+      const { result } = await this.client.list({ q, fields, pageSize, pageToken })
+      const pageChildren = result.files.map((item) => ({
+        name: item.name,
+        isDirectory: item.mimeType === folderMimeType,
+        isFile: item.mimeType !== folderMimeType,
+        raw: item,
+      }))
+      children.push(...pageChildren)
       pageToken = result.nextPageToken ?? ''
     } while (pageToken)
 
     return children
   }
 
-  private async getRoot() {
+  private async getRootChildren() {
     const { client } = this
-    const conditions = ['trashed=false', "parents in 'root'"]
+    const conditions = ["parents in 'root'", 'trashed=false']
     const q = conditions.join(' and ')
-    return await client.list({ q, fields })
+    return await client.list({ q, fields: defaultFileNestedFields })
   }
 
   private async getDirectory(path) {
@@ -290,19 +234,29 @@ export class GoogleDriveProvider implements FileSystemProvider {
     if (path.endsWith('/')) {
       path = path.slice(0, -1)
     }
-    const { client } = this
     const segments = compact(path.slice(1).split('/'))
     if (segments.length === 0) {
-      return this.getRoot()
+      return this.getRootChildren()
     }
 
     let directory
     for (const segment of segments) {
-      const directoryId = directory ? directory.id : 'root'
-      const conditions = ['trashed=false', `parents in '${directoryId}'`, `name='${segment}'`]
+      const directoryId = directory?.id ?? 'root'
+      const conditions = [`name='${segment}'`, `parents in '${directoryId}'`, 'trashed=false']
       const q = conditions.join(' and ')
-      const response = await client.list({ q, fields })
-      directory = response.result.files[0]
+
+      if (directory) {
+        const cacheIdentifier = { directory }
+        const response = await this.listWithCache({ q, fields: defaultFileNestedFields }, cacheIdentifier)
+        directory = response.result.files[0]
+      } else {
+        const response = await this.client.list({ q, fields: defaultFileNestedFields })
+        directory = response.result.files[0]
+      }
+
+      if (!directory) {
+        throw new Error(`directory not found: ${path}`)
+      }
     }
 
     return directory
@@ -318,26 +272,38 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const { client } = this
     const segments = compact(path.slice(1).split('/'))
     if (segments.length === 0) {
-      return this.getRoot()
+      return this.getRootChildren()
     }
 
     let directory
     for (const segment of segments) {
       const directoryId = directory?.id || 'root'
-      const conditions = ['trashed=false', `parents in '${directoryId}'`, `name='${segment}'`]
+      const conditions = [`name='${segment}'`, `parents in '${directoryId}'`, 'trashed=false']
       const q = conditions.join(' and ')
-      const response = await client.list({ q, fields })
+      const response = await client.list({ q, fields: defaultFileNestedFields })
 
       directory = response.result.files[0]
       if (!directory) {
         const response = await client.create({
           resource: { name: segment, mimeType: 'application/vnd.google-apps.folder', parents: [directoryId] },
-          fields: 'name,id,mimeType,modifiedTime,version',
+          fields: defaultFileFields,
         })
         directory ||= response.result
       }
     }
 
     return directory
+  }
+
+  private async listWithCache(gapiListParams, identifier) {
+    const cachedList = await RequestCache.makeCacheable({
+      func: async () => await this.client.list(gapiListParams),
+      identifier: (...args) => ({
+        functionName: 'GoogleDriveProvider.listWithCache',
+        args,
+        ...identifier,
+      }),
+    })
+    return await cachedList(gapiListParams)
   }
 }

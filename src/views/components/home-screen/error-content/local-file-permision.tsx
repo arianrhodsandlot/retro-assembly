@@ -18,7 +18,7 @@ export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
       <div className='mt-4'>
         We have to ask you to grant the permission to read your ROMs again, though you have done this last time.
       </div>
-      <div className='mt-4'>
+      <div className='mt-4 text-center'>
         <BaseButton className='mx-auto' onClick={grant} styleType='primary'>
           <span className='icon-[mdi--folder-open] h-5 w-5' />
           grant the permission

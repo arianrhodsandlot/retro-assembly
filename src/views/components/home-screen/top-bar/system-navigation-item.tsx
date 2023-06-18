@@ -10,6 +10,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
 
   const isSelected = system.name === currentSystemName
   const shortName = system.fullName.split(' - ')[1]
+  const displayName = /^\d+$/.test(shortName) ? system.fullName : shortName
 
   return (
     <TopBarButton
@@ -21,7 +22,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
       <div className={clsx('relative z-[1] flex items-center justify-center')}>
         <div className={clsx('flex items-center justify-center')}>
           <img
-            alt={shortName}
+            alt={system.fullName}
             className={clsx('drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)]')}
             height={36}
             src={systemImageMap[system.name]}
@@ -36,7 +37,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
               exit={{ width: 0 }}
               initial={{ width: 0 }}
             >
-              <div className='pl-4 font-bold tracking-wider text-red-600'>{shortName}</div>
+              <div className='pl-4 font-bold tracking-wider text-red-600'>{displayName}</div>
             </motion.div>
           ) : null}
         </AnimatePresence>

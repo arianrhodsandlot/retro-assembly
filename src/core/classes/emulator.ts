@@ -335,8 +335,7 @@ export class Emulator {
       type: 'application/javascript',
     })
     const jsUrl = URL.createObjectURL(jsBlob)
-    /* @vite-ignore */
-    const { getEmscripten } = await import(jsUrl)
+    const { getEmscripten } = await import(/* @vite-ignore */ jsUrl)
     URL.revokeObjectURL(jsUrl)
 
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
@@ -393,7 +392,6 @@ export class Emulator {
       snes9x: {},
       gearboy: {},
       genesis_plus_gx: {},
-      genesis_plus_gx_wide: {},
     }
     return map[this.core]
   }
@@ -405,7 +403,6 @@ export class Emulator {
       gearboy: 'Gearboy/Gearboy.opt',
       picodrive: 'PicoDrive/PicoDrive.opt',
       genesis_plus_gx: 'Genesis Plus GX/Genesis Plus GX.opt',
-      genesis_plus_gx_wide: 'Genesis Plus GX Wide/Genesis Plus GX Wide.opt',
     }
     const raCoreConfigPath = raCoreConfigPathMap[this.core] ?? ''
     const raCoreConfig = this.getRaCoreConfig()

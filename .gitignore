@@ -1,6 +1,3 @@
 dist
-vendor
-generated
 node_modules
-retroarch
-src/views/assets
+vendor

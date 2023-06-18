@@ -1,20 +1,7 @@
-export type SystemName =
-  | 'gamegear'
-  | 'gb'
-  | 'gba'
-  | 'gbc'
-  | 'megadrive'
-  | 'nes'
-  | 'sms'
-  | 'snes'
-  | 'vb'
-  | 'atari2600'
-  | 'atari5200'
-  | 'atari7800'
-  | 'atarilynx'
+export type SystemName = 'gamegear' | 'gb' | 'gba' | 'gbc' | 'megadrive' | 'nes' | 'sms' | 'snes' | 'vb' | 'atari2600'
 
 type CoreName =
-  | 'beetle_vb'
+  | 'mednafen_vb'
   | 'fceumm'
   | 'gearboy'
   | 'genesis_plus_gx'
@@ -41,26 +28,20 @@ export const systemNamesSorted: SystemName[] = [
   'atari2600',
   'sms',
   'gamegear',
-  'atari7800',
-  'atarilynx',
-  'atari5200',
   'vb',
 ]
 
 export const systemFullNameMap: Record<SystemName, string> = {
-  gamegear: 'Sega - Game Gear',
-  gb: 'Nintendo - Game Boy',
-  gba: 'Nintendo - Game Boy Advance',
-  gbc: 'Nintendo - Game Boy Color',
-  megadrive: 'Sega - Mega Drive - Genesis',
-  nes: 'Nintendo - Nintendo Entertainment System',
-  sms: 'Sega - Master System - Mark III',
-  snes: 'Nintendo - Super Nintendo Entertainment System',
-  vb: 'Nintendo - Virtual Boy',
-  atari2600: 'Atari - 2600',
-  atari5200: 'Atari - 5200',
-  atari7800: 'Atari - 7800',
-  atarilynx: 'Atari - lynx',
+  gamegear: 'Sega - Game Gear', // good
+  gb: 'Nintendo - Game Boy', // good
+  gba: 'Nintendo - Game Boy Advance', // good
+  gbc: 'Nintendo - Game Boy Color', // good
+  megadrive: 'Sega - Mega Drive - Genesis', // good
+  nes: 'Nintendo - Nintendo Entertainment System', // good
+  sms: 'Sega - Master System - Mark III', // good
+  snes: 'Nintendo - Super Nintendo Entertainment System', // good
+  vb: 'Nintendo - Virtual Boy', // good
+  atari2600: 'Atari - 2600', // good
 }
 
 export const systemCoreMap: Record<SystemName, CoreName> = {
@@ -72,11 +53,8 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   nes: 'nestopia',
   sms: 'genesis_plus_gx',
   snes: 'snes9x',
-  vb: 'beetle_vb',
+  vb: 'mednafen_vb',
   atari2600: 'stella2014',
-  atari5200: 'atari800',
-  atari7800: 'prosystem',
-  atarilynx: 'mednafen_lynx',
 }
 
 export const extSystemMap: Record<string, SystemName> = {
@@ -95,7 +73,4 @@ export const extSystemMap: Record<string, SystemName> = {
   vb: 'vb',
   vboy: 'vb',
   a26: 'atari2600',
-  a52: 'atari5200',
-  a78: 'atari7800',
-  lnx: 'atarilynx',
 }

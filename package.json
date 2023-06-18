@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "prepare": "scripts/prepare.js",
+    "prepare": "zx scripts/prepare.js",
     "preview": "vite preview"
   },
   "dependencies": {

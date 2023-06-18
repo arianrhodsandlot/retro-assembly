@@ -1,0 +1,35 @@
+export const MAGIC_NUMBER = 'RARCHDB'
+
+export enum MPF {
+  FIXMAP = 0x80,
+  MAP16 = 0xde,
+  MAP32 = 0xdf,
+
+  FIXARRAY = 0x90,
+  ARRAY16 = 0xdc,
+  ARRAY32 = 0xdd,
+
+  FIXSTR = 0xa0,
+  STR8 = 0xd9,
+  STR16 = 0xda,
+  STR32 = 0xdb,
+
+  BIN8 = 0xc4,
+  BIN16 = 0xc5,
+  BIN32 = 0xc6,
+
+  FALSE = 0xc2,
+  TRUE = 0xc3,
+
+  INT8 = 0xd0,
+  INT16 = 0xd1,
+  INT32 = 0xd2,
+  INT64 = 0xd3,
+
+  UINT8 = 0xcc,
+  UINT16 = 0xcd,
+  UINT32 = 0xce,
+  UINT64 = 0xcf,
+
+  NIL = 0xc0,
+}

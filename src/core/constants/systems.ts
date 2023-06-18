@@ -29,10 +29,10 @@ type CoreName =
   | 'pcsx2'
   | 'picodrive'
   | 'snes9x'
-  | 'stella'
+  | 'stella2014'
   | 'atari800'
   | 'prosystem'
-  | 'beetle_lynx'
+  | 'mednafen_lynx'
 
 // systems are currently sorted based upon their popularity, see https://en.wikipedia.org/wiki/List_of_best-selling_game_consoles
 export const systemNamesSorted: SystemName[] = [
@@ -89,10 +89,10 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   sms: 'genesis_plus_gx',
   snes: 'snes9x',
   vb: 'beetle_vb',
-  atari2600: 'stella',
+  atari2600: 'stella2014',
   atari5200: 'atari800',
   atari7800: 'prosystem',
-  atarilynx: 'beetle_lynx',
+  atarilynx: 'mednafen_lynx',
 }
 
 export const extSystemMap: Record<string, SystemName> = {

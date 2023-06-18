@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  publicDir: 'src/generated/public',
+  publicDir: 'src/vendor',
   plugins: [react()],
   server: {
     host: true,

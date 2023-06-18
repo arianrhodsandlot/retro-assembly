@@ -1,5 +1,6 @@
 import delay from 'delay'
 import ini from 'ini'
+import ky from 'ky'
 import { kebabCase } from 'lodash-es'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
@@ -70,7 +71,7 @@ function getEmscriptenModuleOverrides() {
     },
 
     locateFile(path) {
-      return path
+      return `/cores/${path}`
     },
 
     async monitorRunDependencies(left: number) {
@@ -323,7 +324,21 @@ export class Emulator {
   }
 
   private async prepareEmscripten() {
-    const { getEmscripten } = await import(`../../generated/retroarch-cores/${this.core}_libretro.js`)
+    const jsContentBody = await ky(`/cores/${this.core}_libretro.js`).text()
+    const jsContent = `
+    export function getEmscripten({ Module }) {
+      ${jsContentBody}
+      return { RA, RWC, GL, PATH, PATH_FS, TTY, MEMFS, FS, SYSCALLS, ERRNO_CODES, EGL, JSEvents, ENV, Module, Browser, exit: _emscripten_force_exit }
+    }
+    `
+    const jsBlob = new Blob([jsContent], {
+      type: 'application/javascript',
+    })
+    const jsUrl = URL.createObjectURL(jsBlob)
+    /* @vite-ignore */
+    const { getEmscripten } = await import(jsUrl)
+    URL.revokeObjectURL(jsUrl)
+
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
 

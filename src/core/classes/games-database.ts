@@ -1,6 +1,9 @@
+import blobToBuffer from 'blob-to-buffer'
+import ky from 'ky'
 import { camelCase, isEqual, pick } from 'lodash-es'
 import { systemFullNameMap } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
+import { Libretrodb } from './libretrodb/libretrodb'
 
 function normalizeGameName(originalName: string) {
   let name = parseGoodCode(originalName).rom
@@ -44,15 +47,22 @@ export class GamesDatabase {
 
   async load() {
     const systemFullName = systemFullNameMap[this.system]
-    const { default: rows } = await import(`../../generated/retroarch-databases/${systemFullName}.rdb.json`)
+
+    const blob = await ky(`/databases/${systemFullName}.rdb`).blob()
+    const buffer = await new Promise((resolve, reject) =>
+      blobToBuffer(blob, (error, buffer) => (buffer ? resolve(buffer) : reject(error)))
+    )
+    const db = await Libretrodb.from(buffer, { indexHashes: false })
 
     const { index } = this
-    for (const row of rows) {
-      const key = normalizeGameName(row.name)
-      if (key) {
-        const candidates = index.get(key) ?? []
-        candidates.push(row)
-        index.set(key, candidates)
+    for (const entry of db.getEntries()) {
+      if (entry.name) {
+        const key = normalizeGameName(entry.name)
+        if (key) {
+          const candidates = index.get(key) ?? []
+          candidates.push(entry)
+          index.set(key, candidates)
+        }
       }
     }
   }

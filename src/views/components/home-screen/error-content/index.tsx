@@ -11,7 +11,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     )
   }
 
-  if (error.statusCode === 401) {
+  if (error.statusCode === 401 || error.response?.status === 400) {
     return (
       <BaseDialogContent>
         <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
@@ -29,7 +29,6 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
 
   // todo: needs better error text
   console.warn(error)
-  window.error = error
   return (
     <BaseDialogContent>
       <div>{JSON.stringify(error)}</div>

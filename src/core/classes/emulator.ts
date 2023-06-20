@@ -146,7 +146,7 @@ export class Emulator {
     if (!this.rom) {
       throw new Error('rom is not ready')
     }
-    const { name } = this.rom.fileSummary
+    const { name } = this.rom.fileAccessor
     const baseName = name.slice(0, name.lastIndexOf('.'))
     return `${raUserdataDir}states/${baseName}.state`
   }
@@ -216,7 +216,7 @@ export class Emulator {
     }
     this.clearStateFile()
     return {
-      name: this.rom?.fileSummary.name,
+      name: this.rom?.fileAccessor.name,
       core: this.core,
       createTime: Date.now(),
       blob: new Blob([stateBuffer], { type: 'application/octet-stream' }),
@@ -361,7 +361,7 @@ export class Emulator {
 
     if (this.rom) {
       const blob = await this.rom.getBlob()
-      const fileName = this.rom.fileSummary.name
+      const fileName = this.rom.fileAccessor.name
       const uint8Array = await readBlobAsUint8Array(blob)
       FS.createDataFile('/', fileName, uint8Array, true, false)
       const data = FS.readFile(fileName, { encoding: 'binary' })
@@ -441,7 +441,7 @@ export class Emulator {
     const { Module, JSEvents } = this.emscripten
     const raArgs: string[] = []
     if (this.rom) {
-      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileSummary.name}`)
+      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileAccessor.name}`)
     }
     Module.callMain(raArgs)
     // Module.resumeMainLoop()

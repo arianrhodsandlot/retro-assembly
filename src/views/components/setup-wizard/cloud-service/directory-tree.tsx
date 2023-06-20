@@ -35,15 +35,15 @@ export function DirectoryTree({
         type: cloudService,
       })
       node.children = children.map((child) => {
-        const { name, isDirectory, raw } = child
-        const hasChildren = cloudService === 'onedrive' ? raw.folder?.childCount > 0 : isDirectory
+        const { name, isDirectory } = child
+        const hasChildren = isDirectory
         const path = `${node.path}${name}${isDirectory ? '/' : ''}`
         return { path, name, expanded: false, isDirectory, hasChildren, children: undefined }
       })
       node.expanded = true
       setTree({ ...node })
     })()
-  }, [cloudService])
+  })
 
   return (
     <div className='mt-4 text-lg text-black'>

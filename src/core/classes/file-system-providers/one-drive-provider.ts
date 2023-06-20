@@ -6,6 +6,7 @@ import { oneDriveAuth } from '../../constants/auth'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
+import { FileAccessor } from './file-accessor'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
@@ -237,8 +238,8 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  async listChildren(path = '/') {
-    const children: any[] = []
+  async listChildren(path) {
+    const fileAccessors: FileAccessor[] = []
 
     let apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
 
@@ -248,13 +249,16 @@ export class OneDriveProvider implements FileSystemProvider {
     do {
       const request = this.client.api(apiPath).top(top).skipToken(token)
       const result = await OneDriveProvider.wrapRequest(() => request.get())
-      children.push(
-        ...result.value.map((item) => ({
-          name: item.name,
-          isDirectory: 'folder' in item,
-          isFile: 'file' in item,
-          raw: item,
-        }))
+      fileAccessors.push(
+        ...result.value.map(
+          (item) =>
+            new FileAccessor({
+              name: item.name,
+              directory: path,
+              type: 'folder' in item ? 'directory' : 'file',
+              fileSystemProvider: this,
+            })
+        )
       )
 
       const nextLink = result['@odata.nextLink']
@@ -268,6 +272,6 @@ export class OneDriveProvider implements FileSystemProvider {
       }
     } while (apiPath)
 
-    return children
+    return fileAccessors
   }
 }

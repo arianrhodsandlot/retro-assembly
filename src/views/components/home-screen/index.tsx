@@ -1,9 +1,9 @@
 import { clsx } from 'clsx'
-import { useAtomValue, useSetAtom, useStore } from 'jotai'
+import { useAtom } from 'jotai'
 import { useAsyncRetry, useMeasure } from 'react-use'
 import { ui } from '../../../core'
 import { Emulator } from '../emulator'
-import { currentSystemNameAtom, currentSystemRomsAtom, groupedRomsAtom, systemsAtom } from './atoms'
+import { currentRomsAtom, currentSystemNameAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { HomeScreenLayout } from './home-screen-layout'
@@ -23,33 +23,25 @@ function getColumnCount(width: number) {
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function HomeScreen() {
-  const setGroupedRoms = useSetAtom(groupedRomsAtom)
-  const setCurrentSystemName = useSetAtom(currentSystemNameAtom)
-  const currentSystemRoms = useAtomValue(currentSystemRomsAtom)
+  const [currentRoms, setCurrentRoms] = useAtom(currentRomsAtom)
+  const [systems, setSystems] = useAtom(systemsAtom)
+  const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
-  const store = useStore()
 
   const columnCount = getColumnCount(gridWidth)
 
   const state = useAsyncRetry(async () => {
-    const groupedRoms = await ui.listRoms()
-
-    if (!Object.keys(groupedRoms)) {
-      // todo: needs better user experience
-      throw new Error('empty dir')
-    }
-
-    setGroupedRoms(groupedRoms)
+    const systems = await ui.listSystems()
+    setSystems(systems)
     const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-    const systems = store.get(systemsAtom)
-    if (systems?.length) {
-      if (lastSelectedSystem && systems.map((system: { name: string }) => system.name).includes(lastSelectedSystem)) {
-        setCurrentSystemName(lastSelectedSystem)
-      } else {
-        setCurrentSystemName(systems[0].name)
-      }
+    if (lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)) {
+      setCurrentSystemName(lastSelectedSystem)
+    } else {
+      setCurrentSystemName(systems.at(-1).name)
     }
-  })
+    const roms = await ui.listRomsBySystem(lastSelectedSystem)
+    setCurrentRoms(roms)
+  }, [currentSystemName])
 
   if (state.error) {
     return (
@@ -76,7 +68,7 @@ export function HomeScreen() {
           columnCount={columnCount}
           columnWidth={columnWidth}
           height={gridHeight}
-          rowCount={Math.ceil(currentSystemRoms?.length ? currentSystemRoms.length / columnCount : 0)}
+          rowCount={Math.ceil(currentRoms?.length ? currentRoms.length / columnCount : 0)}
           rowHeight={columnWidth}
           width={gridWidth}
         />

@@ -27,6 +27,8 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     )
   }
 
+  console.log(error)
+
   // todo: needs better error text
   return (
     <BaseDialogContent>

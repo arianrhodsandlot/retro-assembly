@@ -32,8 +32,8 @@ export function DirectoryTreeNode({
     } else {
       const children = await ui.listDirectory({ path: node.path, type: cloudService })
       node.children = children.map((child) => {
-        const { name, isDirectory, raw } = child
-        const hasChildren = cloudService === 'onedrive' ? raw.folder?.childCount > 0 : isDirectory
+        const { name, isDirectory } = child
+        const hasChildren = isDirectory
         const path = `${node.path}${name}${isDirectory ? '/' : ''}`
         return {
           path,

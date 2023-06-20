@@ -4,14 +4,15 @@ import { groupBy } from 'lodash-es'
 import { Preference } from '../classes/preference'
 import { extSystemMap, systemNamesSorted } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
-import { type FileSummary } from './file-system-providers/file-summary'
+import { type FileAccessor } from './file-system-providers/file-accessor'
 import { GamesDatabase } from './games-database'
 
 const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 
 export class Rom {
   id = ''
-  fileSummary: FileSummary
+  name = ''
+  fileAccessor: FileAccessor
 
   system = ''
   goodCode: GoodCodeResult
@@ -19,16 +20,17 @@ export class Rom {
 
   readyPromise: Promise<void>
 
-  private constructor(romFileSummary: FileSummary) {
-    this.fileSummary = romFileSummary
-    this.goodCode = parseGoodCode(romFileSummary.name)
+  private constructor(romFileAccessor: FileAccessor) {
+    this.name = romFileAccessor.name
+    this.fileAccessor = romFileAccessor
+    this.goodCode = parseGoodCode(romFileAccessor.name)
     this.readyPromise = this.load()
   }
 
-  static fromFiles(files: FileSummary[]) {
+  static fromFileAccessors(files: FileAccessor[]) {
     const roms: Rom[] = []
     for (const file of files) {
-      const rom = Rom.fromFile(file)
+      const rom = Rom.fromFileAccessor(file)
       if (rom?.system) {
         roms.push(rom)
       }
@@ -36,10 +38,18 @@ export class Rom {
     return roms
   }
 
-  static fromFile(romFile: FileSummary) {
+  static fromFile(romFile: FileAccessor) {
     if (Rom.isValidFileName(romFile.name)) {
       const rom = new Rom(romFile)
-      rom.id = rom.fileSummary.path || rom.fileSummary.name
+      rom.id = rom.fileAccessor.path || rom.fileAccessor.name
+      return rom
+    }
+  }
+
+  static fromFileAccessor(romFileAccessor: FileAccessor) {
+    if (Rom.isValidFileName(romFileAccessor.name)) {
+      const rom = new Rom(romFileAccessor)
+      rom.id = rom.fileAccessor.path || rom.fileAccessor.name
       return rom
     }
   }
@@ -63,7 +73,7 @@ export class Rom {
   }
 
   async getBlob() {
-    return await this.fileSummary.getBlob()
+    return await this.fileAccessor.getBlob()
   }
 
   async updateGameInfo() {
@@ -71,31 +81,31 @@ export class Rom {
       await this.updateSystem()
     }
     const gameInfo = await GamesDatabase.queryByFileNameFromSystem({
-      fileName: this.fileSummary.name,
+      fileName: this.fileAccessor.name,
       system: this.system,
     })
     this.gameInfo = gameInfo
   }
 
   async updateSystem() {
-    if (!this.fileSummary.name) {
+    if (!this.fileAccessor.name) {
       throw new Error('Invalid file')
     }
 
     const preference = new Preference()
     let system = this.guessSystemByPath({ root: preference.get('romDirectory') }) || this.guessSystemByFileName()
-    if (!system && this.fileSummary.isLoaded() && this.fileSummary.name.endsWith('.zip')) {
+    if (!system && this.fileAccessor.isLoaded() && this.fileAccessor.name.endsWith('.zip')) {
       system = await this.guessSystemByExtractedContent()
     }
 
     if (!system) {
-      throw new Error(`Unknown system for ${this.fileSummary.name}`)
+      throw new Error(`Unknown system for ${this.fileAccessor.name}`)
     }
 
     this.system = system
   }
 
-  private guessSystemByFileName(name: string = this.fileSummary.name) {
+  private guessSystemByFileName(name: string = this.fileAccessor.name) {
     const extname = name.split('.').pop()
     if (!extname) {
       return ''
@@ -104,10 +114,10 @@ export class Rom {
   }
 
   private async guessSystemByExtractedContent() {
-    if (!this.fileSummary.isLoaded()) {
+    if (!this.fileAccessor.isLoaded()) {
       return ''
     }
-    const blob = await this.fileSummary.getBlob()
+    const blob = await this.fileAccessor.getBlob()
     const blobReader = new BlobReader(blob)
     const zipReader = new ZipReader(blobReader)
     try {
@@ -125,8 +135,8 @@ export class Rom {
   }
 
   private guessSystemByPath({ root }: { root: string }) {
-    if (this.fileSummary.path?.startsWith(root)) {
-      const relativePath = this.fileSummary.path.slice(root.length)
+    if (this.fileAccessor.path?.startsWith(root)) {
+      const relativePath = this.fileAccessor.path.slice(root.length)
       const segments = relativePath.split('/')
       const [system] = segments
       if (systemNamesSorted.includes(system)) {

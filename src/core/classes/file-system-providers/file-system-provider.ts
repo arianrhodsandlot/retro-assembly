@@ -1,9 +1,10 @@
-import { type FileSummary } from './file-summary'
+import { type FileAccessor } from './file-accessor'
 
 export interface FileSystemProvider {
-  getFileContent: (path: string) => Promise<Blob | undefined>
+  getFileContent: (path: string) => Promise<Blob>
+
   createFile: ({ file, path }: { file: Blob; path: string }) => Promise<void>
   deleteFile: (path: string) => Promise<void>
-  listFilesRecursively: (path: string) => Promise<FileSummary[]>
-  listChildren: (path: string) => Promise<any[]>
+
+  listChildren: (path: string) => Promise<FileAccessor[]>
 }

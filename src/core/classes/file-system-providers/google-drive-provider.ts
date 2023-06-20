@@ -4,6 +4,7 @@ import { compact, identity, initial, last } from 'lodash-es'
 import queryString from 'query-string'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { RequestCache } from '../request-cache'
+import { FileAccessor } from './file-accessor'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
@@ -201,23 +202,27 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const q = conditions.join(' and ')
 
     const folderMimeType = 'application/vnd.google-apps.folder'
-    const children: any[] = []
+    const fileAccessors: FileAccessor[] = []
     const pageSize = 200
     let pageToken = ''
     do {
       const fields = `${defaultFileNestedFields},nextPageToken`
       const { result } = await this.client.list({ q, fields, pageSize, pageToken })
-      const pageChildren = result.files.map((item) => ({
-        name: item.name,
-        isDirectory: item.mimeType === folderMimeType,
-        isFile: item.mimeType !== folderMimeType,
-        raw: item,
-      }))
-      children.push(...pageChildren)
+      fileAccessors.push(
+        ...result.files.map(
+          (file) =>
+            new FileAccessor({
+              name: file.name,
+              directory: path,
+              type: file.mimeType === folderMimeType ? 'directory' : 'file',
+              fileSystemProvider: this,
+            })
+        )
+      )
       pageToken = result.nextPageToken ?? ''
     } while (pageToken)
 
-    return children
+    return fileAccessors
   }
 
   private async getRootChildren() {

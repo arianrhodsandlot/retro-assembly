@@ -26,7 +26,7 @@ export const game = {
     const stateDirectory = preference.get('stateDirectory')
     const coreStateManager = new CoreStateManager({
       core: emulator.core,
-      name: emulator.rom?.fileSummary?.name,
+      name: emulator.rom?.fileAccessor?.name,
       directory: stateDirectory,
       fileSystemProvider,
     })
@@ -63,7 +63,7 @@ export const game = {
       if (emulator.core && emulator.rom) {
         const coreStateManager = new CoreStateManager({
           core: emulator.core,
-          name: emulator.rom.fileSummary.name,
+          name: emulator.rom.fileAccessor.name,
           directory: stateDirectory,
           fileSystemProvider,
         })

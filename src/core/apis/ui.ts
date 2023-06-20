@@ -1,5 +1,5 @@
-import { filter } from 'lodash-es'
-import { GoogleDriveProvider, detectLocalHandleExistence, systemNamesSorted } from '..'
+import { filter, intersection } from 'lodash-es'
+import { GoogleDriveProvider, detectLocalHandleExistence, systemFullNameMap, systemNamesSorted } from '..'
 import { CoreStateManager } from '../classes/core-state-manager'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
@@ -72,6 +72,25 @@ export const ui = {
     return Rom.groupBySystem(roms)
   },
 
+  async listRomsBySystem(system) {
+    const { fileSystemProvider, preference } = globalInstances
+    const romDirectory = preference.get('romDirectory')
+    const files = await fileSystemProvider.listChildren(`${romDirectory}${system}/`)
+    return Rom.fromFileAccessors(files)
+  },
+
+  async listSystems() {
+    const { fileSystemProvider, preference } = globalInstances
+    const romDirectory = preference.get('romDirectory')
+    const directories = await fileSystemProvider.listChildren(romDirectory)
+    const directoryNames = directories.map(({ name }) => name)
+    const systemNames = intersection(systemNamesSorted, directoryNames)
+    return systemNames.map((systemName) => ({
+      name: systemName,
+      fullName: systemFullNameMap[systemName],
+    }))
+  },
+
   async validateRomsDirectory(
     params:
       | {
@@ -121,7 +140,7 @@ export const ui = {
 
     const coreStateManager = new CoreStateManager({
       core: emulator.core,
-      name: emulator.rom?.fileSummary?.name,
+      name: emulator.rom?.fileAccessor?.name,
       directory: stateDirectory,
       fileSystemProvider,
     })

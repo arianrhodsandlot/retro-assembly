@@ -1,3 +1,4 @@
+import { join } from 'path-browserify'
 import { type FileSystemProvider } from './file-system-provider'
 
 interface FileAccessorOptions {
@@ -22,8 +23,7 @@ export class FileAccessor {
     this.directory = directory
     this.type = type
     this.fileSystemProvider = fileSystemProvider
-    // todo: eliminate multiple slashes outside instead of here
-    this.path = `${directory}/${name}`.replaceAll(/\/+/g, '/')
+    this.path = join(directory, name)
   }
 
   get isDirectory() {

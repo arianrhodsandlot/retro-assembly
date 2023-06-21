@@ -2,6 +2,7 @@ import delay from 'delay'
 import ini from 'ini'
 import ky from 'ky'
 import { kebabCase } from 'lodash-es'
+import { join } from 'path-browserify'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { readBlobAsUint8Array } from '../helpers/file'
@@ -408,7 +409,7 @@ export class Emulator {
     const raCoreConfig = this.getRaCoreConfig()
     if (raCoreConfigPath && raCoreConfig) {
       this.writeConfig({
-        path: `${raCoreConfigDir}${raCoreConfigPath}`,
+        path: join(raCoreConfigDir, raCoreConfigPath),
         config: raCoreConfig,
       })
     }

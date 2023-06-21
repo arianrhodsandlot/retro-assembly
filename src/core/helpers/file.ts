@@ -1,4 +1,5 @@
 import { get, set } from 'idb-keyval'
+import { join } from 'path-browserify'
 
 export async function readBlobAsUint8Array(file: Blob) {
   const fileReader = new FileReader()
@@ -74,7 +75,7 @@ export async function listFilesRecursivelyByHandle({
   const directoryPromises: Promise<File[]>[] = []
   const filePromises: Promise<File>[] = []
   for await (const entry of handle.values()) {
-    const nestedPath = `${path}/${entry.name}`
+    const nestedPath = join(path, entry.name)
     if (entry.kind === 'file') {
       const filePromise = getFilePromise({ entry, handle, path: nestedPath })
       filePromises.push(filePromise)

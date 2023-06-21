@@ -1,6 +1,7 @@
 import { lightFormat, parse, toDate } from 'date-fns'
+import { join } from 'path-browserify'
 import { humanizeDate } from '../helpers/misc'
-import { type FileSummary } from './file-system-providers/file-summary'
+import { type FileAccessor } from './file-system-providers/file-accessor'
 import { type FileSystemProvider } from './file-system-providers/file-system-provider'
 
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
@@ -51,20 +52,20 @@ export class CoreStateManager {
     const { fileSystemProvider, directory } = this
     const { core, name, createTime, blob, thumbnailBlob } = state
     const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
-    const stateDirPath = `${directory}${core}/${name}/`
-    await fileSystemProvider.createFile({ file: blob, path: `${stateDirPath}${stateBaseFileName}.state` })
+    const stateDirPath = join(directory, core, name)
+    await fileSystemProvider.createFile({ file: blob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
     if (thumbnailBlob) {
-      fileSystemProvider.createFile({ file: thumbnailBlob, path: `${stateDirPath}${stateBaseFileName}.png` })
+      fileSystemProvider.createFile({ file: thumbnailBlob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
     }
   }
 
   async getStates() {
     const { fileSystemProvider, core, directory, name } = this
-    const stateDirPath = `${directory}${core}/${name}/`
+    const stateDirPath = join(directory, core, name)
 
-    let children: FileSummary[] = []
+    let children: FileAccessor[] = []
     try {
-      children = await fileSystemProvider.listFilesRecursively(stateDirPath)
+      children = await fileSystemProvider.listChildren(stateDirPath)
     } catch (error) {
       if (error?.code !== 'itemNotFound') {
         throw error
@@ -104,17 +105,17 @@ export class CoreStateManager {
 
   async deleteState(stateId: string) {
     const { fileSystemProvider, directory, core, name } = this
-    const stateDirPath = `${directory}${core}/${name}/`
+    const stateDirPath = join(directory, core, name)
     await Promise.allSettled([
-      fileSystemProvider.deleteFile(`${stateDirPath}${stateId}.state`),
-      fileSystemProvider.deleteFile(`${stateDirPath}${stateId}.png`),
+      fileSystemProvider.deleteFile(join(stateDirPath, `${stateId}.state`)),
+      fileSystemProvider.deleteFile(join(stateDirPath, `${stateId}.png`)),
     ])
   }
 
   async getStateContent(stateId: string) {
     const { fileSystemProvider, directory, core, name } = this
-    const stateDirPath = `${directory}${core}/${name}/`
-    const statePath = `${stateDirPath}${stateId}.state`
+    const stateDirPath = join(directory, core, name)
+    const statePath = join(stateDirPath, `${stateId}.state`)
     return await fileSystemProvider.getFileContent(statePath)
   }
 }

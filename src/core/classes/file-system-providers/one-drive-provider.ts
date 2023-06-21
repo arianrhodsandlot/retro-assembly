@@ -1,12 +1,13 @@
 import { Client } from '@microsoft/microsoft-graph-client'
 import { openDB } from 'idb'
 import ky from 'ky'
+import { join } from 'path-browserify'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
+import { FileAccessor } from './file-accessor'
 import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
-import { FileAccessor } from './file-accessor'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
@@ -173,52 +174,6 @@ export class OneDriveProvider implements FileSystemProvider {
     const request = this.client.api(`/me/drive/root:${path}`)
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await OneDriveProvider.wrapRequest(() => request.get())
     return await ky(downloadUrl).blob()
-  }
-
-  async listFilesRecursively(path: string) {
-    const list = async ({ path, size, lastModified }: { path: string; size?: number; lastModified?: string }) => {
-      const shouldUseCache = size !== undefined && lastModified !== undefined
-
-      if (shouldUseCache) {
-        const cache = await OneDriveProvider.getDirectoryApiCache({ path, size, lastModified })
-        if (cache) {
-          return cache
-        }
-      }
-
-      const children = await this.listChildren(path)
-
-      const files = children
-        .filter((child) => child.raw.file)
-        .map((child) => {
-          const childParentPath = decodeURIComponent(child.raw.parentReference.path.replace(/^\/drive\/root:/, ''))
-          const path = `${childParentPath}/${child.name}`
-          return { path, downloadUrl: child.raw['@microsoft.graph.downloadUrl'] }
-        })
-
-      const foldersPromises = children
-        .filter((child) => child.raw.folder?.childCount)
-        .map((child) => {
-          const childParentPath = decodeURIComponent(child.raw.parentReference.path.replace(/^\/drive\/root:/, ''))
-          const path = `${childParentPath}/${child.name}`
-          return list({ path, size: child.raw.size, lastModified: child.raw.lastModifiedDateTime })
-        })
-
-      const folders = await Promise.all(foldersPromises)
-      const response = [...files, ...folders.flat()]
-
-      if (shouldUseCache) {
-        await OneDriveProvider.setDirectoryApiCache({ path, size, lastModified, response })
-      }
-      return response
-    }
-
-    const response = await list({ path })
-
-    return response.map(
-      (fileSummaryObj) =>
-        new FileSummary({ ...fileSummaryObj, getBlob: async () => await this.getFileContent(fileSummaryObj.path) })
-    )
   }
 
   // path should start with a slash

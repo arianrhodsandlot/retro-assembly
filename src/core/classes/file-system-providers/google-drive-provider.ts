@@ -153,44 +153,6 @@ export class GoogleDriveProvider implements FileSystemProvider {
     throw new Error('not implemented')
   }
 
-  async listFilesRecursively(path) {
-    const list = async (path?) => {
-      const children = await this.listChildren(path)
-      const files: any[] = []
-      const directoriesPromises: Promise<any[]>[] = []
-      for (const child of children) {
-        const childParentPath = path
-        if (child.isFile) {
-          const childPath = `${childParentPath}${child.name}`
-          const file = { path: childPath, downloadUrl: child.raw.webContentLink }
-          files.push(file)
-        } else if (child.isDirectory) {
-          const childPath = `${childParentPath}${child.name}/`
-          const cachableList = await RequestCache.makeCacheable({
-            func: list,
-            identifier: (...args) => ({
-              functionName: 'GoogleDriveProvider.listFilesRecursively',
-              args,
-              version: child.raw.version,
-              modifiedTime: child.raw.modifiedTime,
-            }),
-          })
-          const foldersPromise = await cachableList(childPath)
-          directoriesPromises.push(foldersPromise)
-        }
-      }
-      const directories = await Promise.all(directoriesPromises)
-      return [...files, ...directories.flat()]
-    }
-
-    const response = await list(path)
-
-    return response.map(
-      (fileSummaryObj) =>
-        new FileSummary({ ...fileSummaryObj, getBlob: async () => await this.getFileContent(fileSummaryObj.path) })
-    )
-  }
-
   async listChildren(path = '/') {
     let directoryId = 'root'
     if (path !== '/') {

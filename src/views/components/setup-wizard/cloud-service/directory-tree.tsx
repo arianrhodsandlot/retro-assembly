@@ -1,3 +1,4 @@
+import { join } from 'path-browserify'
 import { useEffect, useState } from 'react'
 import { listDirectory } from '../../../../core'
 import { DirectoryTreeNode, type TreeNode } from './directory-tree-node'
@@ -37,7 +38,7 @@ export function DirectoryTree({
       node.children = children.map((child) => {
         const { name, isDirectory } = child
         const hasChildren = isDirectory
-        const path = `${node.path}${name}${isDirectory ? '/' : ''}`
+        const path = join(node.path, name)
         return { path, name, expanded: false, isDirectory, hasChildren, children: undefined }
       })
       node.expanded = true

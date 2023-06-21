@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import { join } from 'path-browserify'
 import { listDirectory } from '../../../../core'
 
 export interface TreeNode {
@@ -34,7 +35,7 @@ export function DirectoryTreeNode({
       node.children = children.map((child) => {
         const { name, isDirectory } = child
         const hasChildren = isDirectory
-        const path = `${node.path}${name}${isDirectory ? '/' : ''}`
+        const path = join(node.path, name)
         return {
           path,
           name,

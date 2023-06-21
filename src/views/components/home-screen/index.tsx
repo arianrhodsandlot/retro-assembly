@@ -31,16 +31,22 @@ export function HomeScreen() {
   const columnCount = getColumnCount(gridWidth)
 
   const state = useAsyncRetry(async () => {
-    const systems = await ui.listSystems()
-    setSystems(systems)
-    const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-    if (lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)) {
-      setCurrentSystemName(lastSelectedSystem)
+    if (currentSystemName) {
+      const roms = await ui.listRomsBySystem(currentSystemName)
+      setCurrentRoms(roms)
     } else {
-      setCurrentSystemName(systems.at(-1).name)
+      const systems = await ui.listSystems()
+      setSystems(systems)
+      const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
+      if (lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)) {
+        setCurrentSystemName(lastSelectedSystem)
+      } else {
+        setCurrentSystemName(systems.at(-1).name)
+      }
+
+      const roms = await ui.listRomsBySystem(lastSelectedSystem)
+      setCurrentRoms(roms)
     }
-    const roms = await ui.listRomsBySystem(lastSelectedSystem)
-    setCurrentRoms(roms)
   }, [currentSystemName])
 
   if (state.error) {

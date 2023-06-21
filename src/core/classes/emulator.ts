@@ -189,7 +189,7 @@ export class Emulator {
     this.status = 'ready'
   }
 
-  start() {
+  resume() {
     this.sendCommand('PAUSE_TOGGLE')
   }
 
@@ -250,7 +250,7 @@ export class Emulator {
     this.previousActiveElement?.focus?.()
   }
 
-  sendCommand(msg: RetroArchCommand) {
+  private sendCommand(msg: RetroArchCommand) {
     const bytes = encoder.encode(`${msg}\n`)
     this.messageQueue.push([bytes, 0])
   }

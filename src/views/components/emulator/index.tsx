@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { game, ui } from '../../../core'
+import { detectHasRunningGame, onPress, pauseGame, resumeGame } from '../../../core'
 import { showMenuOverlayAtom } from './atoms'
 import { MenuOverlay } from './menu-overlay'
 
@@ -13,27 +13,27 @@ export function Emulator() {
   const previousActiveElementRef = useRef<Element | null>(null)
 
   const toggleMenu = useCallback(() => {
-    if (!game.isRunning()) {
+    if (!detectHasRunningGame()) {
       return
     }
 
     if (showMenuOverlay) {
-      game.start()
+      resumeGame()
       setShowMenuOverlay(false)
     } else {
-      game.pause()
+      pauseGame()
     }
     setShowMenuOverlay(!showMenuOverlay)
   }, [showMenuOverlay, setShowMenuOverlay])
 
   useEffect(() => {
     function onControlKeyup(event: KeyboardEvent) {
-      if (game.isRunning() && event.key === 'Control') {
+      if (detectHasRunningGame() && event.key === 'Control') {
         toggleMenu()
       }
     }
 
-    ui.onPressButtons(menuHotButtons, toggleMenu)
+    const offPress = onPress(menuHotButtons, toggleMenu)
     document.addEventListener('keyup', onControlKeyup)
 
     if (!showMenuOverlay) {
@@ -42,7 +42,7 @@ export function Emulator() {
     }
 
     return () => {
-      ui.offPressButtons(menuHotButtons, toggleMenu)
+      offPress()
       document.removeEventListener('keyup', onControlKeyup)
     }
   }, [showMenuOverlay, toggleMenu])

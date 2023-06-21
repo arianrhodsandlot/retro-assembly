@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { system } from '../../../core'
+import { detectNeedsSetup, start, teardown } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { HomeScreen } from '../home-screen'
 import SetupWizard from '../setup-wizard'
@@ -9,9 +9,9 @@ export function Home() {
   const [isStarted, setIsStarted] = useState(false)
 
   const preparationState = useAsyncRetry(async () => {
-    const needsSetup = await system.checkNeedsSetup()
+    const needsSetup = await detectNeedsSetup()
     if (needsSetup === false) {
-      await system.start()
+      await start()
       setIsStarted(true)
     }
     return needsSetup
@@ -20,7 +20,7 @@ export function Home() {
   useEffect(() => {
     async function reload() {
       setIsStarted(false)
-      await system.teardown()
+      await teardown()
       preparationState.retry()
     }
 

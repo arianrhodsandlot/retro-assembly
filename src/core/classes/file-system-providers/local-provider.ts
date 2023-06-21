@@ -1,5 +1,5 @@
 import { initial, last } from 'lodash-es'
-import { listDirectoryByHandle, requestLocalHandle } from '../..'
+import { listDirectoryByHandle, requestLocalHandle } from '../../helpers/file'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 

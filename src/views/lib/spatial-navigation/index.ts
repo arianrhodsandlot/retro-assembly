@@ -1,4 +1,4 @@
-import { ui } from '../../../core'
+import { onConfirm, onPress } from '../../../core'
 import { SpatialNavigation } from './js-spatial-navigation'
 
 SpatialNavigation.init()
@@ -51,7 +51,7 @@ function getCurrentFocusedElement() {
   }
 }
 
-ui.onPressButton('left', () => {
+onPress('left', () => {
   if (getCurrentFocusedElement()) {
     SpatialNavigation.move('left')
   } else {
@@ -59,7 +59,7 @@ ui.onPressButton('left', () => {
   }
 })
 
-ui.onPressButton('right', () => {
+onPress('right', () => {
   if (getCurrentFocusedElement()) {
     SpatialNavigation.move('right')
   } else {
@@ -67,7 +67,7 @@ ui.onPressButton('right', () => {
   }
 })
 
-ui.onPressButton('up', () => {
+onPress('up', () => {
   if (getCurrentFocusedElement()) {
     SpatialNavigation.move('up')
   } else {
@@ -75,7 +75,7 @@ ui.onPressButton('up', () => {
   }
 })
 
-ui.onPressButton('down', () => {
+onPress('down', () => {
   if (getCurrentFocusedElement()) {
     SpatialNavigation.move('down')
   } else {
@@ -83,7 +83,7 @@ ui.onPressButton('down', () => {
   }
 })
 
-ui.onConfirm(() => {
+onConfirm(() => {
   getCurrentFocusedElement()?.click?.()
 })
 

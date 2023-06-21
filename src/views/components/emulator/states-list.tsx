@@ -2,17 +2,14 @@ import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect, useRef } from 'react'
 import { useAsync } from 'react-use'
-import { ui } from '../../../core'
+import { getStates } from '../../../core'
 import { shouldFocusStatesListAtom } from './atoms'
 import { StateItem } from './state-item'
 
 export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }) {
   const [shouldFocusStatesList, setShouldFocusStatesList] = useAtom(shouldFocusStatesListAtom)
   const firstStateRef = useRef<HTMLButtonElement>(null)
-  const state = useAsync(async () => {
-    const states = await ui.listStates()
-    return states.reverse()
-  })
+  const state = useAsync(getStates)
 
   const hasStates = state?.value?.length && state?.value?.length > 0
 

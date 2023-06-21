@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useAsyncRetry, useMeasure } from 'react-use'
-import { ui } from '../../../core'
+import { getSystemRoms, getSystems, ui } from '../../../core'
 import { Emulator } from '../emulator'
 import { currentRomsAtom, currentSystemNameAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
@@ -32,10 +32,10 @@ export function HomeScreen() {
 
   const state = useAsyncRetry(async () => {
     if (currentSystemName) {
-      const roms = await ui.listRomsBySystem(currentSystemName)
+      const roms = await getSystemRoms(currentSystemName)
       setCurrentRoms(roms)
     } else {
-      const systems = await ui.listSystems()
+      const systems = await getSystems()
       setSystems(systems)
       const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
       if (lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)) {
@@ -44,7 +44,7 @@ export function HomeScreen() {
         setCurrentSystemName(systems.at(-1).name)
       }
 
-      const roms = await ui.listRomsBySystem(lastSelectedSystem)
+      const roms = await getSystemRoms(lastSelectedSystem)
       setCurrentRoms(roms)
     }
   }, [currentSystemName])

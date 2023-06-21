@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
-import { game, ui } from '../../../core'
+import { exitGame, loadGameState, onCancel, resumeGame, saveGameState } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
@@ -15,25 +15,25 @@ export function MenuOverlay() {
   const setShouldFocusStatesList = useSetAtom(shouldFocusStatesListAtom)
 
   async function saveState() {
-    await game.saveState()
-    game.start()
+    await saveGameState()
+    resumeGame()
     setShowMenuOverlay(false)
   }
 
   function resume() {
-    game.start()
+    resumeGame()
     setShowMenuOverlay(false)
   }
 
   function exit() {
-    game.exit()
+    exitGame()
     setShowMenuOverlay(false)
     emitter.emit('exit')
   }
 
   async function onSelectState(stateId: string) {
     setIsLoadingState(true)
-    await game.loadState(stateId)
+    await loadGameState(stateId)
     setIsLoadingState(false)
     setShowMenuOverlay(false)
   }
@@ -44,16 +44,14 @@ export function MenuOverlay() {
   }
 
   useEffect(() => {
-    function onCancel() {
+    const offCancel = onCancel(() => {
       SpatialNavigation.move('left')
-    }
-
-    ui.onCancel(onCancel)
+    })
 
     firstButtonRef.current?.focus()
 
     return () => {
-      ui.offCancel(onCancel)
+      offCancel()
     }
   }, [])
 

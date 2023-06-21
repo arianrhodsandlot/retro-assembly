@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { game, ui } from '../../../../core'
+import { detectHasRunningGame, onPress } from '../../../../core'
 import { currentSystemNameAtom, systemsAtom } from '../atoms'
 import { SystemNavigationItem } from './system-navigation-item'
 
@@ -12,7 +12,7 @@ export function SystemNavigation() {
 
   const shouldSwitchSystem = useCallback(
     function shouldSwitchSystem() {
-      return !game.isRunning() && isValidSystems
+      return !detectHasRunningGame() && isValidSystems
     },
     [isValidSystems]
   )
@@ -48,16 +48,16 @@ export function SystemNavigation() {
   }, [currentSystemName])
 
   useEffect(() => {
-    ui.onPressButton('l1', selectPrevSystem)
+    const offPress = onPress('l1', selectPrevSystem)
     return () => {
-      ui.offPressButton('l1', selectPrevSystem)
+      offPress()
     }
   }, [selectPrevSystem])
 
   useEffect(() => {
-    ui.onPressButton('r1', selectNextSystem)
+    const offPress = onPress('r1', selectNextSystem)
     return () => {
-      ui.offPressButton('r1', selectNextSystem)
+      offPress()
     }
   }, [selectNextSystem])
 

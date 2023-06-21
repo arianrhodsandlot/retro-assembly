@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { ui } from '../../../../core'
+import { listDirectory } from '../../../../core'
 
 export interface TreeNode {
   path: string
@@ -30,7 +30,7 @@ export function DirectoryTreeNode({
     if (node.expanded) {
       node.expanded = false
     } else {
-      const children = await ui.listDirectory({ path: node.path, type: cloudService })
+      const children = await listDirectory({ path: node.path, type: cloudService })
       node.children = children.map((child) => {
         const { name, isDirectory } = child
         const hasChildren = isDirectory

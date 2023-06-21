@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { system } from '../../../../core'
+import { isUsingLocal, isUsingOnedrive } from '../../../../core'
+import { isUsingGoogleDrive } from '../../../../core/exposed/is-using-google-drive'
 import { emitter } from '../../../lib/emitter'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 import { ClearSiteDataDialogContent } from './clear-site-data-dialog-content'
@@ -24,12 +25,15 @@ export function ClearSiteDataButton() {
   function updateSetConfirmMessage() {
     let confirmMessage = ''
 
-    if (system.isUsingLocal()) {
+    if (isUsingLocal()) {
       confirmMessage =
         'The position of your selected directory will be cleared, while your ROMs and save states will be preserved.'
-    } else if (system.isUsingOnedrive()) {
+    } else if (isUsingOnedrive()) {
       confirmMessage =
         'Your login status to Microsoft OneDrive will be cleared, while your ROMs and save states will be preserved.'
+    } else if (isUsingGoogleDrive()) {
+      confirmMessage =
+        'Your login status to Google Drive will be cleared, while your ROMs and save states will be preserved.'
     }
 
     setConfirmMessage(confirmMessage)

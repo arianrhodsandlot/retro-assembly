@@ -9,7 +9,7 @@ import {
 import { motion } from 'framer-motion'
 import { type ReactNode } from 'react'
 import { useEffect } from 'react'
-import { ui } from '../../../core'
+import { onCancel } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 
 interface BaseDialogProps extends DialogProps {
@@ -22,17 +22,15 @@ export function BaseDialogTrigger({ children, content, ...props }: BaseDialogPro
   }, [])
 
   useEffect(() => {
-    function onCancel() {
-      ui.offCancel(onCancel)
-      props.onOpenChange?.(false)
-    }
-
     if (props.open) {
-      ui.onCancel(onCancel)
-    }
+      const offCancel = onCancel(() => {
+        offCancel()
+        props.onOpenChange?.(false)
+      })
 
-    return () => {
-      ui.offCancel(onCancel)
+      return () => {
+        offCancel()
+      }
     }
   }, [props])
 

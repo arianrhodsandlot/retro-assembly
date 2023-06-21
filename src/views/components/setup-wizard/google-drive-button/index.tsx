@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { system, ui } from '../../../../core'
+import { updatePreference, validateRomDirectory } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 import { isInvalidDialogOpenAtom, onSetupAtom } from '../atoms'
@@ -10,13 +10,13 @@ export function GoogleDriveButton() {
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
   async function onSelect(romDirectory: string) {
-    const isValid = await ui.validateRomsDirectory({
+    const isValid = await validateRomDirectory({
       directory: romDirectory,
       type: 'google-drive',
     })
 
     if (isValid) {
-      await system.updateSettings({ fileSystem: 'google-drive', directory: romDirectory })
+      await updatePreference({ fileSystem: 'google-drive', directory: romDirectory })
       onSetup?.()
     } else {
       setIsInvalidDialogOpen(true)

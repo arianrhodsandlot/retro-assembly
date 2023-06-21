@@ -1,7 +1,7 @@
 import { type Target } from 'framer-motion'
 import $ from 'jquery'
 import { useState } from 'react'
-import { type Rom, game } from '../../../../core'
+import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
@@ -80,11 +80,7 @@ export function GameEntry({
         </div>
       </GameEntryButton>
 
-      <GameEntryPortals
-        maskContent={gameEntryContent}
-        maskPosition={maskPosition}
-        onMaskShow={() => game.launch(rom)}
-      />
+      <GameEntryPortals maskContent={gameEntryContent} maskPosition={maskPosition} onMaskShow={() => launchGame(rom)} />
     </>
   )
 }

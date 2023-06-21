@@ -1,11 +1,11 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
-import { Preference } from '../classes/preference'
 import { extSystemMap, systemNamesSorted } from '../constants/systems'
-import { parseGoodCode } from '../helpers/misc'
+import { getCover, parseGoodCode } from '../helpers/misc'
 import { type FileAccessor } from './file-system-providers/file-accessor'
 import { GamesDatabase } from './games-database'
+import { PreferenceParser } from './preference-parser'
 
 const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 
@@ -17,6 +17,7 @@ export class Rom {
   system = ''
   goodCode: GoodCodeResult
   gameInfo: any
+  cover = ''
 
   readyPromise: Promise<void>
 
@@ -77,14 +78,16 @@ export class Rom {
   }
 
   async updateGameInfo() {
-    if (!this.system) {
+    const { system, name } = this
+    if (!system) {
       await this.updateSystem()
     }
-    const gameInfo = await GamesDatabase.queryByFileNameFromSystem({
-      fileName: this.fileAccessor.name,
-      system: this.system,
-    })
-    this.gameInfo = gameInfo
+    const gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: name, system })
+
+    if (gameInfo) {
+      this.gameInfo = gameInfo
+      this.cover = getCover({ system, name: gameInfo.name })
+    }
   }
 
   async updateSystem() {
@@ -92,9 +95,9 @@ export class Rom {
       throw new Error('Invalid file')
     }
 
-    const preference = new Preference()
+    const preference = new PreferenceParser()
     let system = this.guessSystemByPath({ root: preference.get('romDirectory') }) || this.guessSystemByFileName()
-    if (!system && this.fileAccessor.isLoaded() && this.fileAccessor.name.endsWith('.zip')) {
+    if (!system && this.fileAccessor.isLoaded && this.fileAccessor.name.endsWith('.zip')) {
       system = await this.guessSystemByExtractedContent()
     }
 
@@ -114,7 +117,7 @@ export class Rom {
   }
 
   private async guessSystemByExtractedContent() {
-    if (!this.fileAccessor.isLoaded()) {
+    if (!this.fileAccessor.isLoaded) {
       return ''
     }
     const blob = await this.fileAccessor.getBlob()
@@ -139,7 +142,7 @@ export class Rom {
       const relativePath = this.fileAccessor.path.slice(root.length)
       const segments = relativePath.split('/')
       const [system] = segments
-      if (systemNamesSorted.includes(system)) {
+      if ((systemNamesSorted as string[]).includes(system)) {
         return system
       }
     }

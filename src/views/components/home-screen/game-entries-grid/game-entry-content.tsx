@@ -1,5 +1,4 @@
 import { useAsync } from 'react-use'
-import { getCover } from '../../../../core'
 import { systemContentImageMap } from '../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
 
@@ -36,7 +35,7 @@ function pseudoRandomDeg(seed: string) {
 export function GameEntryContent({ rom }: { rom: any }) {
   const state = useAsync(async () => {
     await rom.ready()
-    const cover = rom.gameInfo ? getCover({ system: rom.system, name: rom.gameInfo.name }) : ''
+    const { cover } = rom
     await loadImage(cover)
     return cover
   }, [rom])

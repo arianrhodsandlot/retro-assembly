@@ -1,10 +1,10 @@
-import { system } from '../../../../core'
+import { grantLocalPermission } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 
 export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
   async function grant() {
     try {
-      await system.grantPermissionManually()
+      await grantLocalPermission()
       onSolve()
     } catch {}
   }

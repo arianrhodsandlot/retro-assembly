@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ui } from '../../../../core'
+import { listDirectory } from '../../../../core'
 import { DirectoryTreeNode, type TreeNode } from './directory-tree-node'
 
 const cloudServiceNameMap = {
@@ -30,7 +30,7 @@ export function DirectoryTree({
   useEffect(() => {
     ;(async () => {
       const node = tree
-      const children = await ui.listDirectory({
+      const children = await listDirectory({
         path: node.path,
         type: cloudService,
       })

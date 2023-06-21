@@ -11,8 +11,9 @@ const defaultPreferences = {
 
 type PreferenceName = keyof typeof defaultPreferences
 
-export class Preference {
+export class PreferenceParser {
   static storageKey = 'preference'
+
   private configProviderType = ''
   private stateProviderType = ''
   private romProviderType = ''
@@ -35,6 +36,16 @@ export class Preference {
     }
   }
 
+  static get(key: PreferenceName) {
+    const preferenceParser = new PreferenceParser()
+    return preferenceParser.get(key)
+  }
+
+  static set({ name, value }: { name: PreferenceName; value: string }) {
+    const preferenceParser = new PreferenceParser()
+    return preferenceParser.set({ name, value })
+  }
+
   get(): typeof this.value
   get(name: PreferenceName): string
   get(name?: PreferenceName) {
@@ -51,7 +62,7 @@ export class Preference {
   }
 
   private loadFromStorage() {
-    const preference = getStorageByKey(Preference.storageKey)
+    const preference = getStorageByKey(PreferenceParser.storageKey)
     this.configProviderType = preference?.configProviderType ?? defaultPreferences.configProviderType
     this.stateProviderType = preference?.stateProviderType ?? defaultPreferences.stateProviderType
     this.romProviderType = preference?.romProviderType ?? defaultPreferences.romProviderType
@@ -61,6 +72,6 @@ export class Preference {
   }
 
   private saveToStorage() {
-    setStorageByKey({ key: Preference.storageKey, value: this.value })
+    setStorageByKey({ key: PreferenceParser.storageKey, value: this.value })
   }
 }

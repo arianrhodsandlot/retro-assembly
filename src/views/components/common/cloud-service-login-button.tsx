@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import { system } from '../../../core'
+import { authorize, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 
 export function CloudServiceLoginButton({
@@ -11,13 +11,13 @@ export function CloudServiceLoginButton({
   cloudService: 'onedrive' | 'google-drive'
   onLogin: () => void
 }) {
-  const authorizeUrl = system.getAuthorizeUrl(cloudService)
+  const authorizeUrl = getAuthorizeUrl(cloudService)
   const authorizeWindow = useRef<Window | null>(null)
 
   const [state, checkLoginStatus] = useAsyncFn(async () => {
     await new Promise<void>((resolve, reject) => {
       function onStorage(event: StorageEvent) {
-        if (event.key === system.getTokenStorageKey(cloudService)) {
+        if (event.key === getTokenStorageKey(cloudService)) {
           authorizeWindow.current?.close()
           removeEventListener('storage', onStorage)
           resolve()
@@ -25,8 +25,8 @@ export function CloudServiceLoginButton({
       }
       addEventListener('storage', onStorage)
     })
-    const needsOnedriveLogin = await system.needsLogin(cloudService)
-    if (!needsOnedriveLogin) {
+    const needsLogin = await detectNeedsLogin(cloudService)
+    if (!needsLogin) {
       return true
     }
     throw new Error('Login failed')
@@ -34,7 +34,7 @@ export function CloudServiceLoginButton({
 
   async function login(event) {
     event.preventDefault()
-    authorizeWindow.current = system.authorize(cloudService)
+    authorizeWindow.current = authorize(cloudService)
     const isLogin = await checkLoginStatus()
     if (isLogin) {
       onLogin()

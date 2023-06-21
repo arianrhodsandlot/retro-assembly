@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { system, ui } from '../../../../core'
+import { updatePreference, validateRomDirectory } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 import { isInvalidDialogOpenAtom, onSetupAtom } from '../atoms'
@@ -10,10 +10,10 @@ export function OnedriveButton() {
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
   async function onSelect(romDirectory: string) {
-    const isValid = await ui.validateRomsDirectory({ directory: romDirectory, type: 'onedrive' })
+    const isValid = await validateRomDirectory({ directory: romDirectory, type: 'onedrive' })
 
     if (isValid) {
-      await system.updateSettings({ fileSystem: 'onedrive', directory: romDirectory })
+      await updatePreference({ fileSystem: 'onedrive', directory: romDirectory })
       onSetup?.()
     } else {
       setIsInvalidDialogOpen(true)

@@ -18,5 +18,5 @@ export function isPreferenceValid() {
   }
 
   const directories = [configDirectory, stateDirectory]
-  return directories.every((directory) => directory.endsWith('/'))
+  return directories.every(Boolean)
 }

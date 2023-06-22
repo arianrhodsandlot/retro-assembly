@@ -202,7 +202,7 @@ export class OneDriveProvider implements FileSystemProvider {
     let top = 200
     let token = ''
     do {
-      const request = this.client.api(apiPath).top(top).skipToken(token)
+      const request = this.client.api(apiPath).top(top).skipToken(token).orderby('name')
       const result = await OneDriveProvider.wrapRequest(() => request.get())
       fileAccessors.push(
         ...result.value.map(

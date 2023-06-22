@@ -1,6 +1,7 @@
 import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
+import { isAbsolute, parse, relative } from 'path-browserify'
 import { extSystemMap, systemNamesSorted } from '../constants/systems'
 import { getCover, parseGoodCode } from '../helpers/misc'
 import { type FileAccessor } from './file-system-providers/file-accessor'
@@ -91,24 +92,23 @@ export class Rom {
   }
 
   async updateSystem() {
-    if (!this.fileAccessor.name) {
+    if (!this.name) {
       throw new Error('Invalid file')
     }
 
-    const preference = new PreferenceParser()
-    let system = this.guessSystemByPath({ root: preference.get('romDirectory') }) || this.guessSystemByFileName()
-    if (!system && this.fileAccessor.isLoaded && this.fileAccessor.name.endsWith('.zip')) {
+    let system = this.guessSystemByPath() || this.guessSystemByFileName()
+    if (!system && this.fileAccessor.isLoaded && this.name.endsWith('.zip')) {
       system = await this.guessSystemByExtractedContent()
     }
 
     if (!system) {
-      throw new Error(`Unknown system for ${this.fileAccessor.name}`)
+      throw new Error(`Unknown system for ${this.name}`)
     }
 
     this.system = system
   }
 
-  private guessSystemByFileName(name: string = this.fileAccessor.name) {
+  private guessSystemByFileName(name: string = this.name) {
     const extname = name.split('.').pop()
     if (!extname) {
       return ''
@@ -137,13 +137,15 @@ export class Rom {
     return ''
   }
 
-  private guessSystemByPath({ root }: { root: string }) {
-    if (this.fileAccessor.path?.startsWith(root)) {
-      const relativePath = this.fileAccessor.path.slice(root.length)
-      const segments = relativePath.split('/')
-      const [system] = segments
-      if ((systemNamesSorted as string[]).includes(system)) {
-        return system
+  private guessSystemByPath() {
+    const romDirectory = PreferenceParser.get('romDirectory')
+    if (this.fileAccessor.path?.startsWith(romDirectory)) {
+      const relativePath = isAbsolute(this.fileAccessor.path)
+        ? relative(romDirectory, this.fileAccessor.path)
+        : this.fileAccessor.path
+      const { dir } = parse(relativePath)
+      if ((systemNamesSorted as string[]).includes(dir)) {
+        return dir
       }
     }
   }

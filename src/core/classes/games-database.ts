@@ -1,6 +1,7 @@
 import blobToBuffer from 'blob-to-buffer'
 import ky from 'ky'
-import { camelCase, isEqual, pick } from 'lodash-es'
+import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
+import { parse } from 'path-browserify'
 import { systemFullNameMap } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
@@ -74,12 +75,19 @@ export class GamesDatabase {
 
   queryByFileName(fileName: string) {
     const key = normalizeGameName(fileName)
-    const candidates = this.index.get(key)
-    if (!candidates) {
+    const indexed = this.index.get(key)
+    if (!indexed) {
       return
     }
 
+    const candidates = sortBy(indexed, Object.keys)
+
     if (candidates?.length > 1) {
+      for (const candidate of candidates) {
+        if (candidate.name === parse(fileName).name) {
+          return candidate
+        }
+      }
       for (const candidate of candidates) {
         if (isSimilarName(candidate.name, fileName)) {
           return candidate

@@ -1,4 +1,5 @@
 import { lightFormat, parse, toDate } from 'date-fns'
+import { orderBy } from 'lodash-es'
 import { join } from 'path-browserify'
 import { humanizeDate } from '../helpers/misc'
 import { type FileAccessor } from './file-system-providers/file-accessor'
@@ -6,7 +7,7 @@ import { type FileSystemProvider } from './file-system-providers/file-system-pro
 
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
 
-interface CoreState {
+interface CoreStateParams {
   core: string
   name: string
   createTime: number
@@ -14,7 +15,7 @@ interface CoreState {
   thumbnailBlob?: Blob
 }
 
-interface CoreStateSummary {
+interface CoreState {
   id: string
   name: string
   createTime: {
@@ -22,7 +23,7 @@ interface CoreStateSummary {
     humanized: string
   }
   path: string
-  thumbnailUrl: string
+  thumbnail: FileAccessor | undefined
 }
 
 export class CoreStateManager {
@@ -48,14 +49,14 @@ export class CoreStateManager {
     this.fileSystemProvider = fileSystemProvider
   }
 
-  async createState(state: CoreState) {
+  async createState(state: CoreStateParams) {
     const { fileSystemProvider, directory } = this
     const { core, name, createTime, blob, thumbnailBlob } = state
     const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
     const stateDirPath = join(directory, core, name)
     await fileSystemProvider.createFile({ file: blob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
     if (thumbnailBlob) {
-      fileSystemProvider.createFile({ file: thumbnailBlob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
+      fileSystemProvider.createFile({ file: thumbnailBlob, path: join(stateDirPath, `${stateBaseFileName}.png`) })
     }
   }
 
@@ -63,44 +64,44 @@ export class CoreStateManager {
     const { fileSystemProvider, core, directory, name } = this
     const stateDirPath = join(directory, core, name)
 
-    let children: FileAccessor[] = []
+    let fileAccessors: FileAccessor[] = []
     try {
-      children = await fileSystemProvider.listChildren(stateDirPath)
+      fileAccessors = await fileSystemProvider.listChildren(stateDirPath)
     } catch (error) {
       if (error?.code !== 'itemNotFound') {
         throw error
       }
     }
 
-    const states: CoreStateSummary[] = []
-    const thumbnailMap: Record<string, string> = {}
+    const states: CoreState[] = []
+    const thumbnailMap: Record<string, FileAccessor> = {}
 
-    for (const child of children) {
-      const [base, ext] = child.name.split('.')
-      const createTime = parse(base, stateCreateTimeFormat, new Date())
+    const now = new Date()
+    for (const fileAccessor of fileAccessors) {
+      const { basename, extname, path } = fileAccessor
+      const createTime = parse(basename, stateCreateTimeFormat, now)
       if (createTime) {
-        if (ext === 'state') {
+        if (extname === 'state') {
           const state = {
-            id: base,
+            id: fileAccessor.name,
             name,
             createTime: { humanized: humanizeDate(createTime), date: createTime },
-            path: child.path,
-            thumbnailUrl: '',
+            path,
+            thumbnail: undefined,
           }
           states.push(state)
-        } else if (ext === 'png') {
-          // todo: downloadUrl is not supported for local provider
-          thumbnailMap[base] = child.downloadUrl
+        } else if (extname === 'png') {
+          thumbnailMap[basename] = fileAccessor
         }
       }
     }
 
     for (const state of states) {
       const key = lightFormat(state.createTime.date, stateCreateTimeFormat)
-      state.thumbnailUrl = thumbnailMap[key] ?? state.thumbnailUrl
+      state.thumbnail = thumbnailMap[key] ?? state.thumbnail
     }
 
-    return states
+    return orderBy(states, ['createTime.date'], ['desc'])
   }
 
   async deleteState(stateId: string) {

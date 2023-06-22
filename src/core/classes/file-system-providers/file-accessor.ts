@@ -1,10 +1,11 @@
-import { join } from 'path-browserify'
+import { join, parse } from 'path-browserify'
 import { type FileSystemProvider } from './file-system-provider'
 
 interface FileAccessorOptions {
   name: string
   directory: string
   type: string
+  temporaryUrl?: string
   fileSystemProvider: FileSystemProvider
 }
 
@@ -13,17 +14,25 @@ export class FileAccessor {
   readonly directory: string
   readonly path: string
 
+  readonly basename: string
+  readonly extname: string
+
   private type: string
-  private url: string | undefined
+  private temporaryUrl: string
+  private blobUrl: string | undefined
   private blob: Blob | undefined
   private fileSystemProvider: FileSystemProvider
 
-  constructor({ name, directory, type, fileSystemProvider }: FileAccessorOptions) {
+  constructor({ name, directory, type, temporaryUrl = '', fileSystemProvider }: FileAccessorOptions) {
     this.name = name
     this.directory = directory
     this.type = type
+    this.temporaryUrl = temporaryUrl
     this.fileSystemProvider = fileSystemProvider
     this.path = join(directory, name)
+    const { name: base, ext } = parse(name)
+    this.basename = base
+    this.extname = ext.slice(1)
   }
 
   get isDirectory() {
@@ -43,21 +52,24 @@ export class FileAccessor {
   }
 
   async getUrl() {
-    if (this.url) {
-      return this.url
+    if (this.temporaryUrl) {
+      return this.temporaryUrl
+    }
+    if (this.blobUrl) {
+      return this.blobUrl
     }
     const blob = await this.getBlob()
     if (!blob) {
       throw new Error('no blob for the file')
     }
-    this.url = URL.createObjectURL(blob)
-    return this.url
+    this.blobUrl = URL.createObjectURL(blob)
+    return this.blobUrl
   }
 
   release() {
-    if (this.url) {
-      URL.revokeObjectURL(this.url)
-      this.url = undefined
+    if (this.blobUrl) {
+      URL.revokeObjectURL(this.blobUrl)
+      this.blobUrl = undefined
     }
     this.blob = undefined
   }

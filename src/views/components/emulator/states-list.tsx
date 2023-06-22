@@ -29,6 +29,10 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
         <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
           <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
         </div>
+      ) : state.error ? (
+        <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
+          Failed to load state list
+        </div>
       ) : state?.value?.length ? (
         <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
           {state?.value?.map((s, index) => (

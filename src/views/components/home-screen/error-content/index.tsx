@@ -27,12 +27,12 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     )
   }
 
-  console.log(error)
+  console.log(error, error.stack)
 
   // todo: needs better error text
   return (
     <BaseDialogContent>
-      <div>{JSON.stringify(error)}</div>
+      <div>{error.stack ? <pre>{error.stack}</pre> : JSON.stringify(error)}</div>
     </BaseDialogContent>
   )
 }

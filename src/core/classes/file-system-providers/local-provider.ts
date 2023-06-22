@@ -1,4 +1,5 @@
-import { initial, last } from 'lodash-es'
+import { compact, orderBy } from 'lodash-es'
+import { parse, sep } from 'path-browserify'
 import { listDirectoryByHandle, requestLocalHandle } from '../../helpers/file'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
@@ -51,9 +52,10 @@ export class LocalProvider implements FileSystemProvider {
   async listChildren(path = '') {
     const handle = await this.getHandleByPath({ path })
     const childrenHandles = await listDirectoryByHandle({ handle })
-    return childrenHandles.map(
+    const fileAccessors = childrenHandles.map(
       ({ name, kind }) => new FileAccessor({ name, directory: path, type: kind, fileSystemProvider: this })
     )
+    return orderBy(fileAccessors, ['name'], ['asc'])
   }
 
   private async load() {
@@ -61,23 +63,25 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   private async getHandleByPath({ path, create = false }: { path: string; create?: boolean }) {
-    const segments = path.split('/')
-    const directorySegments = segments.length > 1 ? initial(segments) : []
-    const fileName = last(segments)
-
     if (!this.handle) {
       await this.load()
-    }
-    if (!this.handle) {
-      throw new Error('invalid file system handle')
+      if (!this.handle) {
+        throw new Error('invalid file system handle')
+      }
     }
 
+    const { base, dir } = parse(path)
     let directoryHandle = this.handle
-    for (const segment of directorySegments) {
+    for (const segment of compact(dir.split(sep))) {
       directoryHandle = await directoryHandle.getDirectoryHandle(segment, { create })
     }
-    if (fileName) {
-      return await directoryHandle.getFileHandle(fileName, { create })
+
+    if (base) {
+      try {
+        return await directoryHandle.getFileHandle(base, { create })
+      } catch {
+        return await directoryHandle.getDirectoryHandle(base, { create })
+      }
     }
     return directoryHandle
   }

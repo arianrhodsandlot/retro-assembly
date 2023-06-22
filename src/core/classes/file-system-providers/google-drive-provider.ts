@@ -1,14 +1,11 @@
-import { openDB } from 'idb'
 import ky from 'ky'
-import { compact, identity, initial, last } from 'lodash-es'
+import { compact, initial, last } from 'lodash-es'
 import queryString from 'query-string'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
-import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
-window.RequestCache = RequestCache
 const authorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
 
 const googleDriveAuth = {
@@ -110,7 +107,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const directory = await this.getDirectory(fileDirectory)
     const conditions = ['trashed=false', `parents in '${directory.id}'`, `name='${fileName}'`]
     const q = conditions.join(' and ')
-    const response = await this.client.list({ q, fields: defaultFileNestedFields })
+    const response = await this.client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
     const [file] = response.result.files
     const fileId = file.id
     const { access_token: accessToken } = gapi.client.getToken()
@@ -169,7 +166,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     let pageToken = ''
     do {
       const fields = `${defaultFileNestedFields},nextPageToken`
-      const { result } = await this.client.list({ q, fields, pageSize, pageToken })
+      const { result } = await this.client.list({ orderBy: 'name', q, fields, pageSize, pageToken })
       fileAccessors.push(
         ...result.files.map(
           (file) =>
@@ -177,6 +174,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
               name: file.name,
               directory: path,
               type: file.mimeType === folderMimeType ? 'directory' : 'file',
+              temporaryUrl: file.webContentLink,
               fileSystemProvider: this,
             })
         )
@@ -191,7 +189,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const { client } = this
     const conditions = ["parents in 'root'", 'trashed=false']
     const q = conditions.join(' and ')
-    return await client.list({ q, fields: defaultFileNestedFields })
+    return await client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
   }
 
   private async getDirectory(path) {
@@ -214,10 +212,13 @@ export class GoogleDriveProvider implements FileSystemProvider {
 
       if (directory) {
         const cacheIdentifier = { directory }
-        const response = await this.listWithCache({ q, fields: defaultFileNestedFields }, cacheIdentifier)
+        const response = await this.listWithCache(
+          { orderBy: 'name', q, fields: defaultFileNestedFields },
+          cacheIdentifier
+        )
         directory = response.result.files[0]
       } else {
-        const response = await this.client.list({ q, fields: defaultFileNestedFields })
+        const response = await this.client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
         directory = response.result.files[0]
       }
 
@@ -247,7 +248,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
       const directoryId = directory?.id || 'root'
       const conditions = [`name='${segment}'`, `parents in '${directoryId}'`, 'trashed=false']
       const q = conditions.join(' and ')
-      const response = await client.list({ q, fields: defaultFileNestedFields })
+      const response = await client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
 
       directory = response.result.files[0]
       if (!directory) {

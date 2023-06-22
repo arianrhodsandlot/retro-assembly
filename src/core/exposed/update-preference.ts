@@ -1,5 +1,6 @@
 import { get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
+import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
 
 function setFileSystemProviderType(type: 'local' | 'onedrive' | 'google-drive') {
@@ -9,9 +10,13 @@ function setFileSystemProviderType(type: 'local' | 'onedrive' | 'google-drive') 
 }
 
 function setWorkingDirectory(path: string) {
-  PreferenceParser.set({ name: 'configDirectory', value: `${path}retro-assembly/` })
-  PreferenceParser.set({ name: 'stateDirectory', value: `${path}retro-assembly/states/` })
   PreferenceParser.set({ name: 'romDirectory', value: path })
+
+  const configDirectory = join(path, 'retro-assembly')
+  PreferenceParser.set({ name: 'configDirectory', value: configDirectory })
+
+  const statesDirectory = join(configDirectory, 'states')
+  PreferenceParser.set({ name: 'stateDirectory', value: statesDirectory })
 }
 
 async function setLocalFileSystemHandle(handle) {

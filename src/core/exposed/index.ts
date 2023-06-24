@@ -1,4 +1,4 @@
-export { type Rom } from './types'
+export type * from './types'
 
 export { authorize } from './authorize'
 export { detectHasRunningGame } from './detect-has-running-game'

@@ -31,7 +31,6 @@ export function GameEntryGrid(props: Omit<FixedSizeGrid['props'], 'children'>) {
             <GameEntry
               columnCount={columnCount}
               columnIndex={columnIndex}
-              index={index}
               rom={rom}
               rowCount={rowCount}
               rowIndex={rowIndex}

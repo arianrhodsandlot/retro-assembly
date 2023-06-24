@@ -22,7 +22,6 @@ function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
 
 export function GameEntry({
   rom,
-  index,
   columnIndex,
   rowIndex,
   rowCount,
@@ -30,7 +29,6 @@ export function GameEntry({
   style,
 }: {
   rom: Rom
-  index: number
   columnIndex: number
   rowIndex: number
   rowCount: number

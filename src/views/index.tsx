@@ -7,11 +7,3 @@ const rootElement = document.querySelector<HTMLDivElement>('#root')
 if (rootElement) {
   createRoot(rootElement).render(<App />)
 }
-
-document.addEventListener(
-  'focus',
-  () => {
-    console.log('activeElement:', document.activeElement)
-  },
-  true
-)

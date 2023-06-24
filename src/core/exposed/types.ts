@@ -1,1 +1,2 @@
-export { Rom } from '../classes/rom'
+export type { SystemName } from '../constants/systems'
+export type { Rom } from '../classes/rom'

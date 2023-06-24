@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom, useStore } from 'jotai'
 import { useAsyncRetry, useMeasure } from 'react-use'
 import { getSystemRoms, getSystems } from '../../../core'
 import { Emulator } from '../emulator'
@@ -24,7 +24,8 @@ const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function HomeScreen() {
   const [currentRoms, setCurrentRoms] = useAtom(currentRomsAtom)
-  const [systems, setSystems] = useAtom(systemsAtom)
+  const setSystems = useSetAtom(systemsAtom)
+  const store = useStore()
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
 
@@ -33,7 +34,9 @@ export function HomeScreen() {
   const state = useAsyncRetry(async () => {
     if (currentSystemName) {
       const roms = await getSystemRoms(currentSystemName)
-      setCurrentRoms(roms)
+      if (currentSystemName === store.get(currentSystemNameAtom)) {
+        setCurrentRoms(roms)
+      }
     } else {
       const systems = await getSystems()
       setSystems(systems)
@@ -41,7 +44,7 @@ export function HomeScreen() {
       if (lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)) {
         setCurrentSystemName(lastSelectedSystem)
       } else {
-        setCurrentSystemName(systems.at(-1).name)
+        setCurrentSystemName(systems[0].name)
       }
 
       const roms = await getSystemRoms(lastSelectedSystem)

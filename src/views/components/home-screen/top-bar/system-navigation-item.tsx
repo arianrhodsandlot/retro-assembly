@@ -1,23 +1,47 @@
 import { clsx } from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
+import $ from 'jquery'
+import { useEffect, useRef } from 'react'
 import { systemImageMap } from '../../../lib/constants'
 import { currentSystemNameAtom } from '../atoms'
 import { TopBarButton } from './top-bar-button'
 
+function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
+  const $focusedElement = $(e.currentTarget)
+  const $outer = $focusedElement.parent()
+  const outerScrollLeft = $outer.scrollLeft()
+  const outerWidth = $outer.width()
+  const focusedElementWidth = $focusedElement.width()
+  if (outerScrollLeft !== undefined && outerWidth !== undefined && focusedElementWidth !== undefined) {
+    const offsetLeft = $focusedElement.position().left + outerScrollLeft
+    const scrollLeft = offsetLeft - outerWidth / 2 + focusedElementWidth / 2
+    $outer.stop().animate({ scrollLeft }, 100)
+  }
+}
+
 export function SystemNavigationItem({ system }: { system: any }) {
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
+  const button = useRef<HTMLButtonElement>(null)
 
   const isSelected = system.name === currentSystemName
   const shortName = system.fullName.split(' - ')[1]
   const displayName = /^\d+$/.test(shortName) ? system.fullName : shortName
 
+  useEffect(() => {
+    if (isSelected) {
+      button.current?.focus()
+    }
+  }, [isSelected])
+
   return (
     <TopBarButton
-      className='px-8'
+      className='flex-shrink-0 px-8'
       highlighted={isSelected}
       key={system.name}
       onClick={() => setCurrentSystemName(system.name)}
+      onFocus={onFocus}
+      ref={button}
     >
       <div className={clsx('relative z-[1] flex items-center justify-center')}>
         <div className={clsx('flex items-center justify-center')}>

@@ -83,7 +83,7 @@ export class CoreStateManager {
       if (createTime) {
         if (extname === 'state') {
           const state = {
-            id: fileAccessor.name,
+            id: basename,
             name,
             createTime: { humanized: humanizeDate(createTime), date: createTime },
             path,

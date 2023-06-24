@@ -19,12 +19,16 @@ export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function 
       ref={ref}
     >
       <div className='h-40 w-40 overflow-hidden'>
-        {thumbnailUrlState.value ? (
-          <img
-            alt={`the thumnail of the state saved at ${state.createTime.humanized}`}
-            className='block h-40 w-40 transform-gpu bg-gray-300 object-cover text-transparent transition-transform'
-            src={thumbnailUrlState.value}
-          />
+        {state.thumbnail ? (
+          thumbnailUrlState.value ? (
+            <img
+              alt={`the thumnail of the state saved at ${state.createTime.humanized}`}
+              className='block h-40 w-40 transform-gpu bg-gray-300 object-cover text-transparent transition-transform'
+              src={thumbnailUrlState.value}
+            />
+          ) : (
+            <div className='flex h-40 w-40 animate-pulse items-center justify-center bg-gray-300' />
+          )
         ) : (
           <div className='flex h-40 w-40 items-center justify-center bg-gray-600 '>
             <span className='icon-[mdi--image-broken-variant] h-12 w-12 text-white' />

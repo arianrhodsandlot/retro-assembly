@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import delay from 'delay'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import $ from 'jquery'
@@ -7,19 +8,6 @@ import { systemImageMap } from '../../../lib/constants'
 import { currentSystemNameAtom } from '../atoms'
 import { TopBarButton } from './top-bar-button'
 
-function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
-  const $focusedElement = $(e.currentTarget)
-  const $outer = $focusedElement.parent()
-  const outerScrollLeft = $outer.scrollLeft()
-  const outerWidth = $outer.width()
-  const focusedElementWidth = $focusedElement.width()
-  if (outerScrollLeft !== undefined && outerWidth !== undefined && focusedElementWidth !== undefined) {
-    const offsetLeft = $focusedElement.position().left + outerScrollLeft
-    const scrollLeft = offsetLeft - outerWidth / 2 + focusedElementWidth / 2
-    $outer.stop().animate({ scrollLeft }, 100)
-  }
-}
-
 export function SystemNavigationItem({ system }: { system: any }) {
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const button = useRef<HTMLButtonElement>(null)
@@ -27,6 +15,22 @@ export function SystemNavigationItem({ system }: { system: any }) {
   const isSelected = system.name === currentSystemName
   const shortName = system.fullName.split(' - ')[1]
   const displayName = /^\d+$/.test(shortName) ? system.fullName : shortName
+
+  async function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
+    const $focusedElement = $(e.currentTarget)
+    const $outer = $focusedElement.parent()
+    if (isSelected) {
+      await delay(300)
+    }
+    const outerScrollLeft = $outer.scrollLeft()
+    const outerWidth = $outer.width()
+    const focusedElementWidth = $focusedElement.width()
+    if (outerScrollLeft !== undefined && outerWidth !== undefined && focusedElementWidth !== undefined) {
+      const offsetLeft = $focusedElement.position().left + outerScrollLeft
+      const scrollLeft = offsetLeft - outerWidth + focusedElementWidth
+      $outer.stop().animate({ scrollLeft }, 300)
+    }
+  }
 
   useEffect(() => {
     if (isSelected) {

@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { useAtomValue, useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { exitGame, loadGameState, onCancel, resumeGame, saveGameState } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
@@ -14,19 +15,33 @@ export function MenuOverlay() {
   const setShouldFocusStatesList = useSetAtom(shouldFocusStatesListAtom)
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
-  const [isLoadingState, setIsLoadingState] = useState(false)
 
-  async function saveState() {
+  const [saveStateState, saveState] = useAsyncFn(async () => {
+    if (saveStateState.loading) {
+      return
+    }
     await saveGameState()
     resumeGame()
     setShowMenuOverlay(false)
     previousFocusedElement?.focus()
-  }
+  })
 
-  function resume() {
-    resumeGame()
+  const [loadStateState, loadState] = useAsyncFn(async (stateId: string) => {
+    if (loadStateState.loading) {
+      return
+    }
+    await loadGameState(stateId)
     setShowMenuOverlay(false)
     previousFocusedElement?.focus()
+    resumeGame()
+  })
+
+  const isPending = loadStateState.loading || saveStateState.loading
+
+  function resume() {
+    setShowMenuOverlay(false)
+    previousFocusedElement?.focus()
+    resumeGame()
   }
 
   function exit() {
@@ -34,14 +49,6 @@ export function MenuOverlay() {
     setShowMenuOverlay(false)
     previousFocusedElement?.focus()
     emitter.emit('exit')
-  }
-
-  async function onSelectState(stateId: string) {
-    setIsLoadingState(true)
-    await loadGameState(stateId)
-    setIsLoadingState(false)
-    setShowMenuOverlay(false)
-    previousFocusedElement?.focus()
   }
 
   function onLoadStateButtonFocus() {
@@ -54,6 +61,7 @@ export function MenuOverlay() {
       if ($('.menu-overlay-buttons button:focus')) {
         setShowMenuOverlay(false)
         previousFocusedElement?.focus()
+        resumeGame()
       } else {
         SpatialNavigation.move('left')
       }
@@ -63,15 +71,16 @@ export function MenuOverlay() {
 
     return () => {
       offCancel()
+      previousFocusedElement?.focus()
     }
-  }, [])
+  }, [previousFocusedElement, setShowMenuOverlay])
 
   const menuButtonClassNames =
     'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600 focus:animate-[pulse-white-bg_1.5s_ease-in-out_infinite] flex items-center justify-end'
 
   return (
     <div className='menu-overlay flex h-full w-full items-stretch justify-center py-10'>
-      {isLoadingState ? (
+      {isPending ? (
         <div className='flex items-center'>
           <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
         </div>
@@ -112,7 +121,7 @@ export function MenuOverlay() {
             </div>
           </div>
           <div className='menu-overlay-button-details w-1/2'>
-            {showStateList ? <StatesList onSelect={onSelectState} /> : null}
+            {showStateList ? <StatesList onSelect={loadState} /> : null}
           </div>
         </>
       )}

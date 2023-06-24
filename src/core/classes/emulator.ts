@@ -284,11 +284,12 @@ export class Emulator {
 
   private async waitForEmscriptenFile(fileName) {
     const { FS } = this.emscripten
+    const maxRetries = 10
     let buffer
-    let maxRetries = 100
     let isFinished = false
-    while ((maxRetries -= 1) && !isFinished) {
-      await delay(40)
+    let retryTimes = 0
+    while (retryTimes <= maxRetries && !isFinished) {
+      await delay(100 * 2 ** retryTimes)
       try {
         const newBuffer = FS.readFile(fileName).buffer
         isFinished = buffer?.byteLength > 0 && buffer?.byteLength === newBuffer.byteLength
@@ -296,6 +297,10 @@ export class Emulator {
       } catch (error) {
         console.warn(error)
       }
+      retryTimes += 1
+    }
+    if (!isFinished) {
+      throw new Error('fs timeout')
     }
     return buffer
   }
@@ -434,6 +439,11 @@ export class Emulator {
       // input_hold_fast_forward_btn: 7, // R2
       input_menu_toggle_gamepad_combo: 6, // L1+R1
       rewind_granularity: 4,
+
+      input_player1_analog_dpad_mode: 1,
+      input_player2_analog_dpad_mode: 1,
+      input_player3_analog_dpad_mode: 1,
+      input_player4_analog_dpad_mode: 1,
     }
     this.writeConfig({ path: raConfigPath, config: raConfig })
   }

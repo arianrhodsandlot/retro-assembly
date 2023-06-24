@@ -6,6 +6,12 @@ import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 
+interface ListOptions {
+  pageSize?: number
+  pageCursor?: string
+  orderBy?: string
+}
+
 const authorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
 
 const googleDriveAuth = {
@@ -150,7 +156,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     throw new Error('not implemented')
   }
 
-  async listChildren(path = '/') {
+  async listChildren(path: string, options?: ListOptions) {
     let directoryId = 'root'
     if (path !== '/') {
       const directory = await this.getDirectory(path)

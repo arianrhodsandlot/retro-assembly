@@ -50,7 +50,7 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   gba: 'mgba',
   gbc: 'gearboy',
   megadrive: 'genesis_plus_gx',
-  nes: 'nestopia',
+  nes: 'fceumm',
   sms: 'genesis_plus_gx',
   snes: 'snes9x',
   vb: 'mednafen_vb',

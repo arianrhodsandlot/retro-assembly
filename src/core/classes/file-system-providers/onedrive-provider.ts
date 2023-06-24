@@ -1,12 +1,9 @@
 import { Client } from '@microsoft/microsoft-graph-client'
-import { openDB } from 'idb'
 import ky from 'ky'
-import { join } from 'path-browserify'
 import queryString from 'query-string'
 import { oneDriveAuth } from '../../constants/auth'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 import { FileAccessor } from './file-accessor'
-import { FileSummary } from './file-summary'
 import { type FileSystemProvider } from './file-system-provider'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
@@ -14,9 +11,11 @@ const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
-const cacheDbName = 'onedrive-api-directory-children'
-const cacheDbVersion = 1
-const onedriveApiCacheKey = 'responses'
+interface ListOptions {
+  pageSize?: number
+  pageCursor?: string
+  orderBy?: string
+}
 
 let onedriveCloudProvider: OneDriveProvider
 export class OneDriveProvider implements FileSystemProvider {
@@ -139,37 +138,6 @@ export class OneDriveProvider implements FileSystemProvider {
     }
   }
 
-  private static async setDirectoryApiCache({ path, size, lastModified, response }) {
-    OneDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
-      upgrade(database) {
-        database
-          .createObjectStore(onedriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
-          .createIndex('path', 'path')
-      },
-    })
-
-    const database = await OneDriveProvider.cacheIndexedDb
-
-    await database.add(onedriveApiCacheKey, { path, cacheIdentifier: { size, lastModified }, response })
-  }
-
-  private static async getDirectoryApiCache({ path, size, lastModified }) {
-    OneDriveProvider.cacheIndexedDb ??= openDB(cacheDbName, cacheDbVersion, {
-      upgrade(database) {
-        database
-          .createObjectStore(onedriveApiCacheKey, { keyPath: 'id', autoIncrement: true })
-          .createIndex('path', 'path')
-      },
-    })
-    const database = await OneDriveProvider.cacheIndexedDb
-    const rows = await database.getAllFromIndex(onedriveApiCacheKey, 'path', path)
-    for (const row of rows) {
-      if (row && row.cacheIdentifier.size === size && row.cacheIdentifier.lastModified === lastModified) {
-        return row.response
-      }
-    }
-  }
-
   async getFileContent(path: string) {
     const request = this.client.api(`/me/drive/root:${path}`)
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await OneDriveProvider.wrapRequest(() => request.get())
@@ -193,40 +161,54 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  async listChildren(path) {
+  async listChildren(path: string, options?: ListOptions) {
+    if (options) {
+      return await this.listByPages(path, options)
+    }
+
     const fileAccessors: FileAccessor[] = []
-
-    let apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
-
-    // "top" means page size
-    let top = 200
-    let token = ''
+    let listNextPage = async () => await this.listChildren(path, {})
     do {
-      const request = this.client.api(apiPath).top(top).skipToken(token).orderby('name')
-      const result = await OneDriveProvider.wrapRequest(() => request.get())
-      fileAccessors.push(
-        ...result.value.map(
-          (item) =>
-            new FileAccessor({
-              name: item.name,
-              directory: path,
-              type: 'folder' in item ? 'directory' : 'file',
-              fileSystemProvider: this,
-            })
-        )
-      )
-
-      const nextLink = result['@odata.nextLink']
-      if (nextLink) {
-        const { url, query } = queryString.parseUrl(nextLink)
-        apiPath = new URL(url).pathname.replace('/v1.0', '')
-        token = query.$skipToken ? `${query.$skipToken}` : ''
-        top = Number.parseInt(`${query.$top}`, 10) ?? top
-      } else {
-        apiPath = ''
-      }
-    } while (apiPath)
+      const result = await listNextPage()
+      fileAccessors.push(...result.items)
+      listNextPage = result.listNextPage
+    } while (listNextPage)
 
     return fileAccessors
+  }
+
+  async listByPages(path: string, { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions = {}) {
+    const apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
+    const request = this.client.api(apiPath).top(pageSize).skipToken(pageCursor).orderby(orderBy)
+    const result = await OneDriveProvider.wrapRequest(() => request.get())
+
+    const children: { name: string; folder?: unknown }[] = result.value
+    const fileAccessors = children.map(
+      (item) =>
+        new FileAccessor({
+          name: item.name,
+          directory: path,
+          type: 'folder' in item ? 'directory' : 'file',
+          fileSystemProvider: this,
+        })
+    )
+
+    const pager = { size: pageSize, cursor: '' }
+    const nextLink = result['@odata.nextLink']
+    let listNextPage
+    if (nextLink) {
+      const { query } = queryString.parseUrl(nextLink)
+      pager.size = Number.parseInt(`${query.$top}`, 10) ?? pageSize
+      pager.cursor = query.$skipToken ? `${query.$skipToken}` : ''
+      listNextPage = async () => {
+        return await this.listByPages(path, { pageSize: pager.size, pageCursor: pager.cursor, orderBy })
+      }
+    }
+
+    return {
+      items: fileAccessors,
+      pager,
+      listNextPage,
+    }
   }
 }

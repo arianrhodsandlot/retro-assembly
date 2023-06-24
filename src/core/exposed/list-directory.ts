@@ -1,5 +1,5 @@
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
-import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
+import { OneDriveProvider } from '../classes/file-system-providers/onedrive-provider'
 
 export async function listDirectory({ path, type }: { path: string; type: 'onedrive' | 'google-drive' }) {
   switch (type) {

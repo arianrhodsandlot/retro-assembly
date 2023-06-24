@@ -460,7 +460,7 @@ export class Emulator {
         ...globalKeyboardEventHandler,
         handlerFunc: (...args) => {
           const [event] = args
-          if (event?.target === this.canvasContainer) {
+          if (event?.target === this.canvas) {
             handlerFunc(...args)
           }
         },

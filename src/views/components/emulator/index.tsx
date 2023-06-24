@@ -1,16 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { detectHasRunningGame, onPress, pauseGame, resumeGame } from '../../../core'
-import { showMenuOverlayAtom } from './atoms'
+import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
 import { MenuOverlay } from './menu-overlay'
 
 const menuHotButtons = ['l3', 'r3']
 
 export function Emulator() {
   const [showMenuOverlay, setShowMenuOverlay] = useAtom(showMenuOverlayAtom)
-  const previousActiveElementRef = useRef<Element | null>(null)
+  const [previousFocusedElement, setPreviousFocusedElement] = useAtom(previousFocusedElementAtom)
 
   const toggleMenu = useCallback(() => {
     if (!detectHasRunningGame()) {
@@ -18,13 +18,15 @@ export function Emulator() {
     }
 
     if (showMenuOverlay) {
+      previousFocusedElement?.focus()
       resumeGame()
-      setShowMenuOverlay(false)
     } else {
+      setPreviousFocusedElement(document.activeElement as HTMLElement)
       pauseGame()
     }
+
     setShowMenuOverlay(!showMenuOverlay)
-  }, [showMenuOverlay, setShowMenuOverlay])
+  }, [showMenuOverlay, previousFocusedElement, setShowMenuOverlay, setPreviousFocusedElement])
 
   useEffect(() => {
     function onControlKeyup(event: KeyboardEvent) {
@@ -35,11 +37,6 @@ export function Emulator() {
 
     const offPress = onPress(menuHotButtons, toggleMenu)
     document.addEventListener('keyup', onControlKeyup)
-
-    if (!showMenuOverlay) {
-      // @ts-expect-error focus previous active element
-      previousActiveElementRef.current?.focus()
-    }
 
     return () => {
       offPress()

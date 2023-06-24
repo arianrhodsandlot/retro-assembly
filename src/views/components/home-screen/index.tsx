@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useAsyncRetry, useMeasure } from 'react-use'
-import { getSystemRoms, getSystems, ui } from '../../../core'
+import { getSystemRoms, getSystems } from '../../../core'
 import { Emulator } from '../emulator'
 import { currentRomsAtom, currentSystemNameAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'

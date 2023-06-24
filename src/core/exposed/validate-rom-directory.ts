@@ -2,7 +2,7 @@ import { filter } from 'lodash-es'
 import { type FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
-import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
+import { OneDriveProvider } from '../classes/file-system-providers/onedrive-provider'
 import { systemNamesSorted } from '../constants/systems'
 
 interface ValidateRomDirectoryParamsForLocalType {

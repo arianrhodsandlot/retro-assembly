@@ -1,33 +1,38 @@
 import { clsx } from 'clsx'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
+import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
 import { exitGame, loadGameState, onCancel, resumeGame, saveGameState } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
-import { shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
+import { previousFocusedElementAtom, shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
 import { StatesList } from './states-list'
 
 export function MenuOverlay() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
+  const previousFocusedElement = useAtomValue(previousFocusedElementAtom)
+  const setShouldFocusStatesList = useSetAtom(shouldFocusStatesListAtom)
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
   const [isLoadingState, setIsLoadingState] = useState(false)
-  const setShouldFocusStatesList = useSetAtom(shouldFocusStatesListAtom)
 
   async function saveState() {
     await saveGameState()
     resumeGame()
     setShowMenuOverlay(false)
+    previousFocusedElement?.focus()
   }
 
   function resume() {
     resumeGame()
     setShowMenuOverlay(false)
+    previousFocusedElement?.focus()
   }
 
   function exit() {
     exitGame()
     setShowMenuOverlay(false)
+    previousFocusedElement?.focus()
     emitter.emit('exit')
   }
 
@@ -36,6 +41,7 @@ export function MenuOverlay() {
     await loadGameState(stateId)
     setIsLoadingState(false)
     setShowMenuOverlay(false)
+    previousFocusedElement?.focus()
   }
 
   function onLoadStateButtonFocus() {
@@ -45,7 +51,12 @@ export function MenuOverlay() {
 
   useEffect(() => {
     const offCancel = onCancel(() => {
-      SpatialNavigation.move('left')
+      if ($('.menu-overlay-buttons button:focus')) {
+        setShowMenuOverlay(false)
+        previousFocusedElement?.focus()
+      } else {
+        SpatialNavigation.move('left')
+      }
     })
 
     firstButtonRef.current?.focus()

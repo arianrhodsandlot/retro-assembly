@@ -1,6 +1,6 @@
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
-import { OneDriveProvider } from '../classes/file-system-providers/one-drive-provider'
+import { OneDriveProvider } from '../classes/file-system-providers/onedrive-provider'
 import { PreferenceParser } from '../classes/preference-parser'
 import { globalContext } from '../internal/global-context'
 

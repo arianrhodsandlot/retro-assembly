@@ -3,6 +3,10 @@ import { parse } from 'goodcodes-parser'
 import { capitalize } from 'lodash-es'
 import { systemFullNameMap } from '../constants/systems'
 
+function encodeRFC3986URIComponent(str) {
+  return encodeURIComponent(str).replaceAll(/[!'()*]/g, (c) => `%${c.codePointAt(0)?.toString(16).toUpperCase()}`)
+}
+
 export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxart' }) {
   if (!name || !system) {
     return ''
@@ -13,9 +17,9 @@ export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxa
   }
 
   const typeUrlPart = `Named_${capitalize(type)}s`
-  return `https://thumbnails.libretro.com/${encodeURIComponent(systemFullName)}/${encodeURIComponent(
+  return `https://thumbnails.libretro.com/${encodeRFC3986URIComponent(systemFullName)}/${encodeRFC3986URIComponent(
     typeUrlPart
-  )}/${encodeURIComponent(name)}.png`
+  )}/${encodeRFC3986URIComponent(name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_'))}.png`
 }
 
 export function parseGoodCode(name: string) {

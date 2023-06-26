@@ -80,7 +80,7 @@ export class GamesDatabase {
       return
     }
 
-    const candidates = sortBy(indexed, Object.keys)
+    const candidates = sortBy(indexed, (item) => Object.keys(item).length)
 
     if (candidates?.length > 1) {
       for (const candidate of candidates) {

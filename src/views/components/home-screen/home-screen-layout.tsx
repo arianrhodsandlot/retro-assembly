@@ -6,13 +6,15 @@ const backgroundImage =
 
 export function HomeScreenLayout({ children }: { children: ReactNode }) {
   return (
-    <div
-      className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
-      style={{ backgroundImage }}
-    >
-      <TopBar />
-      <div className='flex-1 overflow-hidden'>
-        <div className='flex h-full items-center justify-center '>{children}</div>
+    <div className='relative h-screen w-screen'>
+      <div
+        className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
+        style={{ backgroundImage }}
+      >
+        <TopBar />
+        <div className='flex-1 overflow-hidden'>
+          <div className='flex h-full items-center justify-center '>{children}</div>
+        </div>
       </div>
     </div>
   )

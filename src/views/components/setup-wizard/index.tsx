@@ -1,10 +1,12 @@
-import { AnimatePresence, motion } from 'framer-motion'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { onSetupAtom } from './atoms'
 import { GetStarted } from './get-started'
 import { Header } from './header'
 
+const backgroundImage =
+  'repeating-linear-gradient(45deg, #fafafa 25%, transparent 25%, transparent 75%, #fafafa 75%, #fafafa), repeating-linear-gradient(45deg, #fafafa 25%, white 25%, white 75%, #fafafa 75%, #fafafa)'
 export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
   const setOnSetup = useSetAtom(onSetupAtom)
 
@@ -12,25 +14,20 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
     setOnSetup(() => onSetup)
   }, [onSetup, setOnSetup])
 
-  return (
-    <AnimatePresence initial={false}>
-      <div className='absolute inset-0 z-10 overflow-hidden text-red-600'>
-        <motion.div
-          animate={{ opacity: 1, scale: 1 }}
-          className='h-full w-full origin-top'
-          exit={{ opacity: 0, scale: 2.1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className='relative flex h-1/2 flex-col bg-red-600'>
-            <div className='flex-1' />
-            <Header />
-          </div>
-
-          <div className='h-1/2 overflow-auto bg-white py-10'>
-            <GetStarted />
-          </div>
-        </motion.div>
+  return createPortal(
+    <div className='text-red-600'>
+      <div className='relative flex h-[800px] max-h-[60vh] min-h-[350px] flex-col bg-red-600'>
+        <div className='flex-1' />
+        <Header />
       </div>
-    </AnimatePresence>
+
+      <div
+        className='overflow-auto bg-white bg-[length:30px_30px]  bg-[0_0,15px_15px] py-10'
+        style={{ backgroundImage }}
+      >
+        <GetStarted />
+      </div>
+    </div>,
+    document.body
   )
 }

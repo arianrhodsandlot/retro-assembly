@@ -79,16 +79,16 @@ export class Rom {
   }
 
   async updateGameInfo() {
-    const { system, name } = this
+    const { system, name, fileAccessor } = this
     if (!system) {
       await this.updateSystem()
     }
-    const gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: name, system })
 
+    const gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: name, system })
     if (gameInfo) {
       this.gameInfo = gameInfo
-      this.cover = getCover({ system, name: gameInfo.name })
     }
+    this.cover = getCover({ system, name: gameInfo?.name || fileAccessor.basename })
   }
 
   async updateSystem() {

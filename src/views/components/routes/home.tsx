@@ -31,9 +31,9 @@ export function Home() {
   }, [preparationState])
 
   return (
-    <div className='relative h-screen w-screen'>
+    <>
       {isStarted ? <HomeScreen /> : false}
       {preparationState.value ? <SetupWizard onSetup={() => preparationState.retry()} /> : false}
-    </div>
+    </>
   )
 }

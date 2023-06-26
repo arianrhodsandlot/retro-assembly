@@ -1,54 +1,41 @@
 import { clsx } from 'clsx'
-import { join } from 'path-browserify'
-import { listDirectory } from '../../../../core'
+import { useAtom } from 'jotai'
+import { useEffect } from 'react'
+import { useAsyncFn } from 'react-use'
+import { directoyTreeAtom } from './atoms'
+import { type TreeNode } from './types'
+import { toggleNodeExpanded } from './utils'
 
-export interface TreeNode {
-  path: string
-  name: string
-  expanded: boolean
-  isDirectory: boolean
-  hasChildren: boolean
-  children: TreeNode[] | undefined
-}
-
-export function DirectoryTreeNode({
-  node,
-  root,
-  cloudService,
-  onChange,
-  onSelect,
-}: {
-  root: TreeNode
+interface DirectoryTreeNodeParams {
   node: TreeNode
   cloudService: 'onedrive' | 'google-drive'
-  onChange: (tree: TreeNode) => void
   onSelect: (path: string) => void
-}) {
-  async function toggleNodeExpanded(node) {
-    if (!node.hasChildren) {
-      return
+}
+
+export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTreeNodeParams) {
+  const [tree, setTree] = useAtom(directoyTreeAtom)
+
+  const [state, updateTree] = useAsyncFn(async () => {
+    if (tree) {
+      await toggleNodeExpanded({ node, cloudService })
+      setTree({ ...tree })
     }
-    if (node.expanded) {
-      node.expanded = false
-    } else {
-      const children = await listDirectory({ path: node.path, type: cloudService })
-      node.children = children.map((child) => {
-        const { name, isDirectory } = child
-        const hasChildren = isDirectory
-        const path = join(node.path, name)
-        return {
-          path,
-          name,
-          expanded: false,
-          isDirectory,
-          hasChildren,
-          children: undefined,
-        }
-      })
-      node.expanded = true
+  })
+
+  function onClickDirectoryName() {
+    if (state.loading === false) {
+      updateTree()
     }
-    onChange({ ...root })
   }
+
+  const isRoot = node === tree
+
+  useEffect(() => {
+    if (isRoot) {
+      updateTree()
+    }
+  }, [isRoot, updateTree])
+
   return (
     <div>
       <div className='flex items-center rounded p-2 py-1 transition-[background-color,color] hover:bg-red-100 hover:text-red-600'>
@@ -68,7 +55,7 @@ export function DirectoryTreeNode({
           <div
             aria-hidden
             className='flex flex-1 cursor-default items-center overflow-hidden text-ellipsis whitespace-nowrap'
-            onClick={() => toggleNodeExpanded(node)}
+            onClick={onClickDirectoryName}
             title={node.name}
           >
             <div>{node.name}</div>
@@ -91,17 +78,12 @@ export function DirectoryTreeNode({
         </div>
       </div>
 
+      {state.loading ? <span className='icon-[line-md--loading-loop] my-2 ml-10 h-6 w-6 text-red-600' /> : null}
+
       {node.expanded ? (
         <div className='pl-6'>
           {node.children?.map((node) => (
-            <DirectoryTreeNode
-              cloudService={cloudService}
-              key={node.name}
-              node={node}
-              onChange={onChange}
-              onSelect={onSelect}
-              root={root}
-            />
+            <DirectoryTreeNode cloudService={cloudService} key={node.name} node={node} onSelect={onSelect} />
           ))}
         </div>
       ) : null}

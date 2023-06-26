@@ -161,13 +161,13 @@ export class OneDriveProvider implements FileSystemProvider {
     await OneDriveProvider.wrapRequest(() => request.delete())
   }
 
-  async listChildren(path: string, options?: ListOptions) {
-    if (options) {
-      return await this.listByPages(path, options)
-    }
+  async listChildren(path: string) {
+    // if (options) {
+    //   return await this.listByPages(path, options)
+    // }
 
     const fileAccessors: FileAccessor[] = []
-    let listNextPage = async () => await this.listChildren(path, {})
+    let listNextPage = async () => await this.listByPages(path, {})
     do {
       const result = await listNextPage()
       fileAccessors.push(...result.items)
@@ -183,7 +183,7 @@ export class OneDriveProvider implements FileSystemProvider {
     const result = await OneDriveProvider.wrapRequest(() => request.get())
 
     const children: { name: string; folder?: unknown }[] = result.value
-    const fileAccessors = children.map(
+    const fileAccessors: FileAccessor[] = children.map(
       (item) =>
         new FileAccessor({
           name: item.name,

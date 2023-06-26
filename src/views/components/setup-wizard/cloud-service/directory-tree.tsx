@@ -1,54 +1,45 @@
-import { join } from 'path-browserify'
-import { useEffect, useState } from 'react'
-import { listDirectory } from '../../../../core'
-import { DirectoryTreeNode, type TreeNode } from './directory-tree-node'
+import { useAtom } from 'jotai'
+import { useEffect } from 'react'
+import { directoyTreeAtom } from './atoms'
+import { DirectoryTreeNode } from './directory-tree-node'
 
 const cloudServiceNameMap = {
   onedrive: 'OneDrive',
   'google-drive': 'Google Drive',
 }
 
-export function DirectoryTree({
-  cloudService,
-  onSelect,
-}: {
+interface DirectoryTreeParams {
   cloudService: 'onedrive' | 'google-drive'
   onSelect: (path: string) => void
-}) {
-  const [tree, setTree] = useState<TreeNode>({
-    path: '/',
-    name: cloudServiceNameMap[cloudService],
-    expanded: false,
-    isDirectory: true,
-    hasChildren: true,
-    children: undefined,
-  })
+}
 
-  function onChange(changed: TreeNode) {
-    setTree(changed)
-  }
+export function DirectoryTree({ cloudService, onSelect }: DirectoryTreeParams) {
+  const [tree, setTree] = useAtom(directoyTreeAtom)
+  const name = cloudServiceNameMap[cloudService]
 
   useEffect(() => {
-    ;(async () => {
-      const node = tree
-      const children = await listDirectory({
-        path: node.path,
-        type: cloudService,
-      })
-      node.children = children.map((child) => {
-        const { name, isDirectory } = child
-        const hasChildren = isDirectory
-        const path = join(node.path, name)
-        return { path, name, expanded: false, isDirectory, hasChildren, children: undefined }
-      })
-      node.expanded = true
-      setTree({ ...node })
-    })()
-  })
+    return () => {
+      setTree(undefined)
+    }
+  }, [setTree])
+
+  useEffect(() => {
+    if (!tree) {
+      const initialTree = {
+        path: '/',
+        name,
+        expanded: false,
+        isDirectory: true,
+        hasChildren: true,
+        children: undefined,
+      }
+      setTree(initialTree)
+    }
+  }, [tree, name, setTree])
 
   return (
     <div className='mt-4 text-lg text-black'>
-      <DirectoryTreeNode cloudService={cloudService} node={tree} onChange={onChange} onSelect={onSelect} root={tree} />
+      {tree ? <DirectoryTreeNode cloudService={cloudService} node={tree} onSelect={onSelect} /> : null}
     </div>
   )
 }

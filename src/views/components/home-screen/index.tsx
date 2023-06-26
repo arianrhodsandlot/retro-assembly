@@ -39,15 +39,19 @@ export function HomeScreen() {
       }
     } else {
       const systems = await getSystems()
-      setSystems(systems)
-      const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-      if (lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)) {
-        setCurrentSystemName(lastSelectedSystem)
-      } else {
-        setCurrentSystemName(systems[0].name)
-      }
 
-      const roms = await getSystemRoms(lastSelectedSystem)
+      const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
+      const newCurrentSystemName =
+        lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)
+          ? lastSelectedSystem
+          : systems[0].name
+
+      setSystems(systems)
+      setCurrentSystemName(newCurrentSystemName)
+
+      localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
+
+      const roms = await getSystemRoms(newCurrentSystemName)
       setCurrentRoms(roms)
     }
   }, [currentSystemName])

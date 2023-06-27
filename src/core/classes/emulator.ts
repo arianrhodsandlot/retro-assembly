@@ -284,12 +284,13 @@ export class Emulator {
 
   private async waitForEmscriptenFile(fileName) {
     const { FS } = this.emscripten
-    const maxRetries = 10
+    const maxRetries = 30
     let buffer
     let isFinished = false
     let retryTimes = 0
     while (retryTimes <= maxRetries && !isFinished) {
-      await delay(100 * 2 ** retryTimes)
+      const delayTime = Math.min(100 * 2 ** retryTimes, 1000)
+      await delay(delayTime)
       try {
         const newBuffer = FS.readFile(fileName).buffer
         isFinished = buffer?.byteLength > 0 && buffer?.byteLength === newBuffer.byteLength

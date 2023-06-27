@@ -57,7 +57,7 @@ async function getFilePromise({ entry, handle, path }) {
   })
 }
 
-export async function listDirectoryByHandle({ handle, path }: { handle: FileSystemHandle; path?: string }) {
+export async function listDirectoryByHandle({ handle, path }: { handle: FileSystemDirectoryHandle; path?: string }) {
   const entries: FileSystemHandle[] = []
   for await (const entry of handle.values()) {
     entries.push(entry)

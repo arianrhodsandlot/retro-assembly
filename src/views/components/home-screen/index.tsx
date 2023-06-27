@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import { useAtom, useSetAtom, useStore } from 'jotai'
+import { useEffect } from 'react'
 import { useAsyncRetry, useMeasure } from 'react-use'
 import { getSystemRoms, getSystems } from '../../../core'
 import { Emulator } from '../emulator'
@@ -31,13 +32,8 @@ export function HomeScreen() {
 
   const columnCount = getColumnCount(gridWidth)
 
-  const state = useAsyncRetry(async () => {
-    if (currentSystemName) {
-      const roms = await getSystemRoms(currentSystemName)
-      if (currentSystemName === store.get(currentSystemNameAtom)) {
-        setCurrentRoms(roms)
-      }
-    } else {
+  useEffect(() => {
+    async function updateSystems() {
       const systems = await getSystems()
 
       const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
@@ -50,9 +46,16 @@ export function HomeScreen() {
       setCurrentSystemName(newCurrentSystemName)
 
       localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
+    }
+    updateSystems()
+  }, [setSystems, setCurrentSystemName])
 
-      const roms = await getSystemRoms(newCurrentSystemName)
-      setCurrentRoms(roms)
+  const state = useAsyncRetry(async () => {
+    if (currentSystemName) {
+      const roms = await getSystemRoms(currentSystemName)
+      if (currentSystemName === store.get(currentSystemNameAtom)) {
+        setCurrentRoms(roms)
+      }
     }
   }, [currentSystemName])
 

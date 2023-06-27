@@ -1,6 +1,6 @@
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
-import { OneDriveProvider } from '../classes/file-system-providers/onedrive-provider'
+import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
 import { PreferenceParser } from '../classes/preference-parser'
 import { globalContext } from '../internal/global-context'
 
@@ -11,7 +11,7 @@ export async function start() {
       globalContext.fileSystem = await LocalProvider.getSingleton()
       break
     case 'onedrive':
-      globalContext.fileSystem = await OneDriveProvider.getSingleton()
+      globalContext.fileSystem = await OnedriveProvider.getSingleton()
       break
     case 'google-drive':
       globalContext.fileSystem = await GoogleDriveProvider.getSingleton()

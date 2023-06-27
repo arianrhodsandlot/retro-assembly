@@ -1,10 +1,10 @@
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
-import { OneDriveProvider } from '../classes/file-system-providers/onedrive-provider'
+import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
 
 export async function listDirectory({ path, type }: { path: string; type: 'onedrive' | 'google-drive' }) {
   switch (type) {
     case 'onedrive': {
-      const onedrive = await OneDriveProvider.getSingleton()
+      const onedrive = await OnedriveProvider.getSingleton()
       return await onedrive.listChildren(path)
     }
     case 'google-drive': {

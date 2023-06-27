@@ -2,7 +2,7 @@ import { filter } from 'lodash-es'
 import { type FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
-import { OneDriveProvider } from '../classes/file-system-providers/onedrive-provider'
+import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
 import { systemNamesSorted } from '../constants/systems'
 
 interface ValidateRomDirectoryParamsForLocalType {
@@ -24,7 +24,7 @@ export async function validateRomDirectory(params: ValidateRomDirectoryParams) {
   switch (type) {
     case 'onedrive': {
       const { directory } = params
-      const onedrive = OneDriveProvider.getSingleton()
+      const onedrive = OnedriveProvider.getSingleton()
       const children = await onedrive.listChildren(directory)
       directories = filter(children, 'isDirectory')
       break

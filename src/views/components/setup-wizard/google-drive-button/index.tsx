@@ -1,4 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
+import { useAsyncFn } from 'react-use'
 import { updatePreference, validateRomDirectory } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
@@ -9,25 +10,26 @@ export function GoogleDriveButton() {
   const onSetup = useAtomValue(onSetupAtom)
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
 
-  async function onSelect(romDirectory: string) {
-    const isValid = await validateRomDirectory({
-      directory: romDirectory,
-      type: 'google-drive',
-    })
+  const [state, onSelect] = useAsyncFn(
+    async (romDirectory: string) => {
+      const isValid = await validateRomDirectory({ directory: romDirectory, type: 'google-drive' })
 
-    if (isValid) {
-      await updatePreference({ fileSystem: 'google-drive', directory: romDirectory })
-      onSetup?.()
-    } else {
-      setIsInvalidDialogOpen(true)
-    }
-  }
+      if (isValid) {
+        await updatePreference({ fileSystem: 'google-drive', directory: romDirectory })
+        onSetup?.()
+        setIsInvalidDialogOpen(false)
+      } else {
+        setIsInvalidDialogOpen(true)
+      }
+    },
+    [onSetup]
+  )
 
   return (
     <BaseDialogTrigger
       content={
         <div className='w-96 max-w-full'>
-          <GoogleDriveDirectoryPicker onSelect={onSelect} />
+          <GoogleDriveDirectoryPicker isValidating={state.loading} onSelect={onSelect} />
         </div>
       }
     >

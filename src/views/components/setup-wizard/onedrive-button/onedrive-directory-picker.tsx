@@ -5,7 +5,13 @@ import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { DirectoryTree } from '../cloud-service/directory-tree'
 import { OnedriveLoginEntry } from './onedrive-login-entry'
 
-export function OnedriveDirectoryPicker({ onSelect }: { onSelect: (path: string) => void }) {
+export function OnedriveDirectoryPicker({
+  isValidating,
+  onSelect,
+}: {
+  isValidating: boolean
+  onSelect: (path: string) => void
+}) {
   const state = useAsyncRetry(async () => await detectNeedsLogin('onedrive'))
 
   useEffect(() => {
@@ -14,7 +20,7 @@ export function OnedriveDirectoryPicker({ onSelect }: { onSelect: (path: string)
     }
   }, [state.value])
 
-  if (state.loading) {
+  if (isValidating || state.loading) {
     return (
       <div className='flex items-center justify-center py-6'>
         <span className='icon-[line-md--loading-loop] h-12 w-12 text-red-600' />

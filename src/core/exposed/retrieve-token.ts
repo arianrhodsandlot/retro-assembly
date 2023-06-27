@@ -1,5 +1,5 @@
+import { GoogleDriveClient } from '../classes/cloude-service/google-drive-client'
 import { OnedriveClient } from '../classes/cloude-service/onedrive-client'
-import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 
 export async function retrieveToken(type: 'onedrive' | 'google-drive') {
   switch (type) {
@@ -7,7 +7,7 @@ export async function retrieveToken(type: 'onedrive' | 'google-drive') {
       await OnedriveClient.retrieveToken()
       break
     case 'google-drive':
-      await GoogleDriveProvider.retrieveToken()
+      await GoogleDriveClient.retrieveToken()
       break
     default:
       throw new Error('invalid token type')

@@ -2,6 +2,7 @@ import { Client, type GraphRequest } from '@microsoft/microsoft-graph-client'
 import ky from 'ky'
 import queryString from 'query-string'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
+import { type CloudServiceClient } from './cloud-service-client'
 
 const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
 const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
@@ -15,7 +16,7 @@ const oneDriveAuth = {
 
 const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
 
-export class OnedriveClient {
+export class OnedriveClient implements CloudServiceClient {
   static tokenStorageKey = 'onedrive-token'
   private client: Client
 

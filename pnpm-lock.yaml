@@ -124,6 +124,9 @@ devDependencies:
   '@types/gapi':
     specifier: 0.0.44
     version: 0.0.44
+  '@types/gapi.client.drive-v3':
+    specifier: 0.0.1
+    version: 0.0.1
   '@types/ini':
     specifier: 1.3.31
     version: 1.3.31
@@ -610,6 +613,20 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@maxim_mazurok/gapi.client.discovery-v1@0.0.20200806:
+    resolution: {integrity: sha512-0pZtrElj8bc0YROIo7nH8VVvks/iww/L68l7r74oC9+ksSVO3Lum1zUR8dXTvJ7TqLGaNYiiNaUZianK6doh/w==}
+    dependencies:
+      '@types/gapi.client': 1.0.5
+      '@types/gapi.client.discovery': 1.0.9
+    dev: true
+
+  /@maxim_mazurok/gapi.client.drive-v3@0.0.20230621:
+    resolution: {integrity: sha512-VFoiaFrHq0ug6zF8XYq1eiIkujXTwNXKXSiminGyQ9S1vUlKDRxwBFYa4kSOre5GzT+SzUvNgKoKmd2sIo3IWA==}
+    dependencies:
+      '@types/gapi.client': 1.0.5
+      '@types/gapi.client.discovery': 1.0.9
+    dev: true
+
   /@microsoft/microsoft-graph-client@3.0.5(buffer@6.0.3):
     resolution: {integrity: sha512-xQADFNLUhE78RzYadFZtOmy/5wBZenSZhVK193m40MTDC5hl1aYMQO1QOJApnKga8WcvMCDCU10taRhuXTOz5w==}
     engines: {node: '>=12.0.0'}
@@ -1075,6 +1092,23 @@ packages:
     dependencies:
       '@types/jsonfile': 6.1.1
       '@types/node': 18.16.18
+    dev: true
+
+  /@types/gapi.client.discovery@1.0.9:
+    resolution: {integrity: sha512-51fXpt7DM7+zPG5pgwnNr3KaRXmyszznu66VPpV7+FAu0LGtpTohvdfvkRCnCn2Z6EgNTq/baFAtCa/9ylHOug==}
+    deprecated: use @types/gapi.client.discovery-v1 instead; see https://github.com/Maxim-Mazurok/google-api-typings-generator/issues/652 for details
+    dependencies:
+      '@maxim_mazurok/gapi.client.discovery-v1': 0.0.20200806
+    dev: true
+
+  /@types/gapi.client.drive-v3@0.0.1:
+    resolution: {integrity: sha512-tIvUpcfeTZI5yRYWAPo/kx6w8kAfW8HeOAJPmXlhVpSBUO8R4hUVZiZhuc6PxNtQkI6LKXeyOuJv70Nd3Nb/8g==}
+    dependencies:
+      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20230621
+    dev: true
+
+  /@types/gapi.client@1.0.5:
+    resolution: {integrity: sha512-OTpbBMuzfC4lkvaomxqskI/iWRGW3zOZbDXZLNSyiuswTiSSGgILRLkg0POuZ4EgzEdaYaTlXpnXiCp07ri/Yw==}
     dev: true
 
   /@types/gapi@0.0.44:

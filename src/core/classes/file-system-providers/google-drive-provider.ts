@@ -1,109 +1,24 @@
 import ky from 'ky'
 import { compact, initial, last } from 'lodash-es'
-import queryString from 'query-string'
-import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
+import { GoogleDriveClient } from '../cloude-service/google-drive-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
-
-interface ListOptions {
-  pageSize?: number
-  pageCursor?: string
-  orderBy?: string
-}
-
-const authorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
-
-const googleDriveAuth = {
-  clientId: '274532033666-qenp1uucqj33b57qphiojlc47198q972.apps.googleusercontent.com',
-  projectId: 'retro-assembly',
-  authUri: 'https://accounts.google.com/o/oauth2/auth',
-  tokenUri: 'https://oauth2.googleapis.com/token',
-  auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
-  redirectUri: 'http://localhost:5173/auth/googledrive',
-  javascript_origins: ['http://localhost:5173'],
-  scope: 'https://www.googleapis.com/auth/drive',
-}
-
-const { clientId, scope, redirectUri } = googleDriveAuth
 
 const defaultFileFields = 'name,id,mimeType,modifiedTime,version,webContentLink'
 const defaultFileNestedFields = `files(${defaultFileFields})`
 
 export class GoogleDriveProvider implements FileSystemProvider {
-  static tokenStorageKey = 'google-drive-token'
-
-  private client
+  private client: GoogleDriveClient
 
   constructor({ client }) {
     this.client = client
   }
 
   static async getSingleton() {
-    await GoogleDriveProvider.loadGapi()
-    return new GoogleDriveProvider({ client: gapi.client.drive.files })
-  }
-
-  static getAuthorizeUrl() {
-    const query = {
-      client_id: clientId,
-      scope,
-      response_type: 'token',
-      redirect_uri: redirectUri,
-    }
-    return queryString.stringifyUrl({ url: authorizeUrl, query })
-  }
-
-  static isRetrievingToken() {
-    const { access_token: accessToken } = queryString.parse(location.hash)
-    return typeof accessToken === 'string'
-  }
-
-  static retrieveToken() {
-    const isRetrievingToken = GoogleDriveProvider.isRetrievingToken()
-    if (!isRetrievingToken) {
-      throw new TypeError('token is empty')
-    }
-
-    const { access_token: accessToken, error, error_description: errorDescription } = queryString.parse(location.hash)
-    if (error) {
-      throw new Error(`error: ${error}, error description: ${errorDescription}`)
-    } else if (typeof accessToken === 'string') {
-      setStorageByKey({ key: GoogleDriveProvider.tokenStorageKey, value: { access_token: accessToken } })
-    } else {
-      throw new TypeError(`invalide code. code: ${accessToken}`)
-    }
-  }
-
-  static async loadGapi() {
-    await new Promise((resolve) => gapi.load('client', resolve))
-    const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
-    const accessToken = GoogleDriveProvider.getAccessToken()
-    await gapi.client.init({
-      apiKey: 'AIzaSyDPqjP2pwqA_ZgYcGwm3P336qEMUNssmsY',
-      discoveryDocs: [DISCOVERY_DOC],
-    })
-    gapi.client.setToken({ access_token: accessToken })
-  }
-
-  static getAccessToken() {
-    const tokenRecord = getStorageByKey(GoogleDriveProvider.tokenStorageKey)
-    return tokenRecord?.access_token
-  }
-
-  static async validateAccessToken() {
-    if (!GoogleDriveProvider.getAccessToken()) {
-      return false
-    }
-
-    await GoogleDriveProvider.loadGapi()
-    try {
-      await gapi.client.drive.files.list({ pageSize: 1, fields: 'files(id)' })
-    } catch (error) {
-      console.warn(error)
-      return false
-    }
-    return true
+    await GoogleDriveClient.loadGapi()
+    const client = new GoogleDriveClient()
+    return new GoogleDriveProvider({ client })
   }
 
   async getFileContent(path: string) {
@@ -114,7 +29,10 @@ export class GoogleDriveProvider implements FileSystemProvider {
     const conditions = ['trashed=false', `parents in '${directory.id}'`, `name='${fileName}'`]
     const q = conditions.join(' and ')
     const response = await this.client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
-    const [file] = response.result.files
+    const file = response.result.files?.[0]
+    if (!file) {
+      throw new Error('invalid file')
+    }
     const fileId = file.id
     const { access_token: accessToken } = gapi.client.getToken()
     return await ky(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
@@ -156,7 +74,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     throw new Error('not implemented')
   }
 
-  async listChildren(path: string, options?: ListOptions) {
+  async listChildren(path: string) {
     let directoryId = 'root'
     if (path !== '/') {
       const directory = await this.getDirectory(path)
@@ -172,20 +90,24 @@ export class GoogleDriveProvider implements FileSystemProvider {
     let pageToken = ''
     do {
       const fields = `${defaultFileNestedFields},nextPageToken`
-      const { result } = await this.client.list({ orderBy: 'name', q, fields, pageSize, pageToken })
-      fileAccessors.push(
-        ...result.files.map(
-          (file) =>
-            new FileAccessor({
-              name: file.name,
-              directory: path,
-              type: file.mimeType === folderMimeType ? 'directory' : 'file',
-              temporaryUrl: file.webContentLink,
-              fileSystemProvider: this,
-            })
+      const {
+        result: { files, nextPageToken },
+      } = await this.client.list({ orderBy: 'name', q, fields, pageSize, pageToken })
+      if (files) {
+        fileAccessors.push(
+          ...files.map(
+            (file) =>
+              new FileAccessor({
+                name: file.name ?? '',
+                directory: path,
+                type: file.mimeType === folderMimeType ? 'directory' : 'file',
+                temporaryUrl: file.webContentLink,
+                fileSystemProvider: this,
+              })
+          )
         )
-      )
-      pageToken = result.nextPageToken ?? ''
+      }
+      pageToken = nextPageToken ?? ''
     } while (pageToken)
 
     return fileAccessors
@@ -225,7 +147,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
         directory = response.result.files[0]
       } else {
         const response = await this.client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
-        directory = response.result.files[0]
+        directory = response.result.files?.[0]
       }
 
       if (!directory) {
@@ -256,8 +178,9 @@ export class GoogleDriveProvider implements FileSystemProvider {
       const q = conditions.join(' and ')
       const response = await client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
 
-      directory = response.result.files[0]
+      directory = response.result.files?.[0]
       if (!directory) {
+        // @ts-expect-error creating a directory does not need a file parameter
         const response = await client.create({
           resource: { name: segment, mimeType: 'application/vnd.google-apps.folder', parents: [directoryId] },
           fields: defaultFileFields,

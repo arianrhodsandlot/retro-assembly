@@ -1,24 +1,23 @@
 import clsx from 'clsx'
 import { useRef } from 'react'
-import { useAsyncFn } from 'react-use'
-import { authorize, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
+import { useAsync, useAsyncFn } from 'react-use'
+import { detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 
-export function CloudServiceLoginButton({
-  cloudService,
-  onLogin,
-}: {
+interface CloudServiceLoginButtonProps {
   cloudService: 'onedrive' | 'google-drive'
   onLogin: () => void
-}) {
-  const authorizeUrl = getAuthorizeUrl(cloudService)
+}
+
+export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceLoginButtonProps) {
+  const authorizeUrlState = useAsync(async () => await getAuthorizeUrl(cloudService))
   const authorizeWindow = useRef<Window | null>(null)
 
   const [state, checkLoginStatus] = useAsyncFn(async () => {
     await new Promise<void>((resolve, reject) => {
       function onStorage(event: StorageEvent) {
         if (event.key === getTokenStorageKey(cloudService)) {
-          authorizeWindow.current?.close()
+          // authorizeWindow.current?.close()
           removeEventListener('storage', onStorage)
           resolve()
         }
@@ -34,7 +33,10 @@ export function CloudServiceLoginButton({
 
   async function login(event) {
     event.preventDefault()
-    authorizeWindow.current = authorize(cloudService)
+    if (!event.target.href) {
+      return
+    }
+    authorizeWindow.current = open(event.target.href)
     const isLogin = await checkLoginStatus()
     if (isLogin) {
       onLogin()
@@ -52,21 +54,23 @@ export function CloudServiceLoginButton({
   return (
     <div className='flex h-12 items-center justify-center'>
       <BaseButton className='m-auto !px-0 !py-0' onClick={login} styleType='primary'>
-        <a
-          className='flex items-center justify-center self-stretch px-4 py-2'
-          href={authorizeUrl}
-          onClick={(e) => e.preventDefault()}
-          rel='noreferrer'
-          target='_blank'
-        >
-          <span
-            className={clsx('mr-2 inline-block h-5 w-5', {
-              'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
-              'icon-[logos--google-icon]': cloudService === 'google-drive',
-            })}
-          />
-          Login
-        </a>
+        {authorizeUrlState.value ? (
+          <a
+            className='flex items-center justify-center self-stretch px-4 py-2'
+            href={authorizeUrlState.value}
+            onClick={(e) => e.preventDefault()}
+            rel='noreferrer'
+            target='_blank'
+          >
+            <span
+              className={clsx('mr-2 inline-block h-5 w-5', {
+                'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
+                'icon-[logos--google-icon]': cloudService === 'google-drive',
+              })}
+            />
+            Login
+          </a>
+        ) : null}
       </BaseButton>
     </div>
   )

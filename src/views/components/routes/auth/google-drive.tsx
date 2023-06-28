@@ -10,7 +10,7 @@ export function AuthGoogleDrive() {
 
   useEffect(() => {
     if (!state.loading && !state.error) {
-      close()
+      // close()
     }
   }, [state.loading, state.error])
 

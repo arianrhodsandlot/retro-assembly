@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { useAtom, useSetAtom, useStore } from 'jotai'
 import { useEffect } from 'react'
-import { useAsyncRetry, useMeasure } from 'react-use'
+import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getSystemRoms, getSystems } from '../../../core'
 import { Emulator } from '../emulator'
 import { currentRomsAtom, currentSystemNameAtom, systemsAtom } from './atoms'
@@ -32,25 +32,22 @@ export function HomeScreen() {
 
   const columnCount = getColumnCount(gridWidth)
 
-  useEffect(() => {
-    async function updateSystems() {
-      const systems = await getSystems()
+  const systemsState = useAsyncRetry(async () => {
+    const systems = await getSystems()
 
-      const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-      const newCurrentSystemName =
-        lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)
-          ? lastSelectedSystem
-          : systems[0].name
+    const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
+    const newCurrentSystemName =
+      lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)
+        ? lastSelectedSystem
+        : systems[0].name
 
-      setSystems(systems)
-      setCurrentSystemName(newCurrentSystemName)
+    setSystems(systems)
+    setCurrentSystemName(newCurrentSystemName)
 
-      localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
-    }
-    updateSystems()
+    localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])
 
-  const state = useAsyncRetry(async () => {
+  const romsState = useAsyncRetry(async () => {
     if (currentSystemName) {
       const roms = await getSystemRoms(currentSystemName)
       if (currentSystemName === store.get(currentSystemNameAtom)) {
@@ -59,15 +56,27 @@ export function HomeScreen() {
     }
   }, [currentSystemName])
 
-  if (state.error) {
+  const error = systemsState.error || romsState.error
+  const loading = systemsState.loading || romsState.loading
+
+  function retry() {
+    if (systemsState.error) {
+      systemsState.retry()
+    }
+    if (romsState.error) {
+      romsState.retry()
+    }
+  }
+
+  if (error) {
     return (
       <HomeScreenLayout>
-        <ErrorContent error={state.error} onSolve={() => state.retry()} />
+        <ErrorContent error={error} onSolve={retry} />
       </HomeScreenLayout>
     )
   }
 
-  if (state.loading) {
+  if (loading) {
     return (
       <HomeScreenLayout>
         <span className='icon-[line-md--loading-loop] h-16 w-16 text-red-600' />

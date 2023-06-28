@@ -12,7 +12,7 @@ export default function App() {
       <Route path='/auth/onedrive'>
         <AuthOnedrive />
       </Route>
-      <Route path='/auth/googledrive'>
+      <Route path='/auth/google-drive'>
         <AuthGoogleDrive />
       </Route>
     </>

@@ -1,58 +1,38 @@
 import { Client, type GraphRequest } from '@microsoft/microsoft-graph-client'
-import ky from 'ky'
 import queryString from 'query-string'
-import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
+import { Auth } from './auth'
 import { type CloudServiceClient } from './cloud-service-client'
 
-const authorizeUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
-const tokenUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
+const hostUrl = `${location.protocol}//${location.host}`
+export class OnedriveClient extends Auth implements CloudServiceClient {
+  protected static tokenStorageKey = 'onedrive-token'
+  protected static config = {
+    authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+    tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+    clientId: import.meta.env.VITE_ONEDRIVE_CLIENT_ID,
+    scope: 'offline_access Files.ReadWrite.All Files.ReadWrite.AppFolder',
+    redirectUri: `${hostUrl}/auth/onedrive`,
+  }
 
-const oneDriveAuth = {
-  clientId: '2c4631a1-bd21-4437-a502-49f841c25367',
-  scope: 'offline_access Files.ReadWrite.All Files.ReadWrite.AppFolder',
-  redirectUri: `${location.protocol}//${location.host}/auth/onedrive`,
-  codeChallenge: 'YTFjNjI1OWYzMzA3MTI4ZDY2Njg5M2RkNmVjNDE5YmEyZGRhOGYyM2IzNjdmZWFhMTQ1ODg3NDcxY2Nl',
-}
-
-const { clientId, scope, redirectUri, codeChallenge } = oneDriveAuth
-
-export class OnedriveClient implements CloudServiceClient {
-  static tokenStorageKey = 'onedrive-token'
   private client: Client
 
   constructor() {
+    super()
     this.client = OnedriveClient.getClient()
   }
 
-  static isRetrievingToken() {
-    const { code } = queryString.parse(location.search)
-    return typeof code === 'string'
-  }
+  static async getAuthorizeUrl(): Promise<string> {
+    const { codeChallenge } = await this.getPkceChanllenge()
 
-  static async retrieveToken() {
-    const isRetrievingToken = OnedriveClient.isRetrievingToken()
-    if (!isRetrievingToken) {
-      throw new TypeError('code is empty')
+    const query = {
+      client_id: this.config.clientId,
+      scope: this.config.scope,
+      response_type: 'code',
+      redirect_uri: this.config.redirectUri,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
     }
-
-    const { code, error, error_description: errorDescription } = queryString.parse(location.search)
-    if (error) {
-      throw new Error(`error: ${error}, error description: ${errorDescription}`)
-    } else if (typeof code === 'string') {
-      const grantType = 'authorization_code'
-      const params = {
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        code,
-        grant_type: grantType,
-        code_verifier: codeChallenge,
-      }
-      const body = new URLSearchParams(params)
-      const result = await ky.post(tokenUrl, { body }).json<any>()
-      setStorageByKey({ key: OnedriveClient.tokenStorageKey, value: result })
-    } else {
-      throw new TypeError(`invalide code. code: ${code}`)
-    }
+    return queryString.stringifyUrl({ url: this.config.authorizeUrl, query })
   }
 
   static async validateAccessToken() {
@@ -63,7 +43,7 @@ export class OnedriveClient implements CloudServiceClient {
     const client = OnedriveClient.getClient()
     const request = client.api('/me')
     try {
-      await OnedriveClient.wrapRequest(() => request.get())
+      await OnedriveClient.requestWithRefreshTokenOnError(() => request.get())
     } catch (error) {
       console.warn(error)
       return false
@@ -71,59 +51,17 @@ export class OnedriveClient implements CloudServiceClient {
     return true
   }
 
-  static getAuthorizeUrl() {
-    const query = {
-      client_id: clientId,
-      scope,
-      response_type: 'code',
-      redirect_uri: redirectUri,
-      code_challenge: codeChallenge,
-    }
-    return queryString.stringifyUrl({ url: authorizeUrl, query })
+  protected static shouldRefreshToken(error: unknown) {
+    return (error as any)?.code === 'InvalidAuthenticationToken'
   }
 
-  static getClient() {
+  private static getClient() {
     return Client.init({
       authProvider(done) {
         const accessToken = OnedriveClient.getAccessToken()
         done(undefined, accessToken)
       },
     })
-  }
-
-  static async wrapRequest(request: any) {
-    try {
-      return await request()
-    } catch (error: any) {
-      if (error.code === 'InvalidAuthenticationToken') {
-        await OnedriveClient.refreshToken()
-        return await request()
-      }
-      throw error
-    }
-  }
-
-  private static getAccessToken() {
-    const tokenRecord = getStorageByKey(OnedriveClient.tokenStorageKey)
-    return tokenRecord?.access_token
-  }
-
-  private static async refreshToken() {
-    const refreshToken = getStorageByKey(OnedriveClient.tokenStorageKey).refresh_token
-    if (!refreshToken) {
-      return
-    }
-    const result = await ky
-      .post(tokenUrl, {
-        body: new URLSearchParams({
-          client_id: clientId,
-          refresh_token: refreshToken,
-          grant_type: 'refresh_token',
-          code_verifier: codeChallenge,
-        }),
-      })
-      .json<any>()
-    setStorageByKey({ key: OnedriveClient.tokenStorageKey, value: result })
   }
 
   async request({
@@ -151,6 +89,11 @@ export class OnedriveClient implements CloudServiceClient {
     if (orderby) {
       request = request.orderby(orderby)
     }
-    return await OnedriveClient.wrapRequest(() => request[method](content))
+
+    function sendRequest() {
+      return request[method](content)
+    }
+
+    return await OnedriveClient.requestWithRefreshTokenOnError(sendRequest)
   }
 }

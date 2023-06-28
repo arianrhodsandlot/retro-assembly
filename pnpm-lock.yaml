@@ -80,6 +80,9 @@ dependencies:
   path-browserify:
     specifier: 1.0.1
     version: 1.0.1
+  pkce-challenge:
+    specifier: ^4.0.1
+    version: 4.0.1
   query-string:
     specifier: 8.1.0
     version: 8.1.0
@@ -3774,6 +3777,11 @@ packages:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
     dev: true
+
+  /pkce-challenge@4.0.1:
+    resolution: {integrity: sha512-WGmtS1stcStsvRwNXix3iR1ujFcDaJR+sEODRa2ZFruT0lM4lhPAFTL5SUpqD5vTJdRlgtuMQhcp1kIEJx4LUw==}
+    engines: {node: '>=16.20.0'}
+    dev: false
 
   /pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}

@@ -112,6 +112,8 @@ export class Emulator {
   private previousActiveElement: Element | null
   private messageQueue: [Uint8Array, number][] = []
 
+  private hideCursorAbortController: AbortController | undefined
+
   constructor({ core, rom, style }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.core = core ?? ''
@@ -182,6 +184,8 @@ export class Emulator {
     this.prepareRaCoreConfigFile()
     this.runMain()
     this.resizeCanvas()
+    this.showCanvasCusor()
+    window.addEventListener('mousemove', this.showCanvasCusor, false)
     window.addEventListener('resize', this.resizeCanvas, false)
     if (this.canvas) {
       updateStyle(this.canvas, { visibility: 'visible' })
@@ -245,10 +249,24 @@ export class Emulator {
       FS.unmount('/home')
       JSEvents.removeAllEventListeners()
     }
+    window.removeEventListener('mousemove', this.showCanvasCusor, false)
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas.remove()
     // @ts-expect-error try to focus on previous active element
     this.previousActiveElement?.focus?.()
+  }
+
+  private async showCanvasCusor() {
+    this.canvas.style.cursor = 'default'
+
+    if (this.hideCursorAbortController) {
+      this.hideCursorAbortController.abort()
+    }
+    this.hideCursorAbortController = new AbortController()
+    try {
+      await delay(3000, { signal: this.hideCursorAbortController.signal })
+      this.canvas.style.cursor = 'none'
+    } catch {}
   }
 
   private sendCommand(msg: RetroArchCommand) {

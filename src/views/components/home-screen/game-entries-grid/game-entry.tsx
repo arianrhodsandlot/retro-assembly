@@ -1,8 +1,10 @@
 import { type Target } from 'framer-motion'
 import $ from 'jquery'
+import { uniq } from 'lodash-es'
 import { useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
+import { DistrictIcon } from './district-icon'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
@@ -61,6 +63,11 @@ export function GameEntry({
 
   const gameEntryContent = <GameEntryContent rom={rom} />
 
+  const { goodCode } = rom
+  const { codes } = goodCode
+  const { revision, countries } = codes
+  const districts = uniq(countries?.map(({ code }) => code))
+
   return (
     <>
       <GameEntryButton
@@ -73,8 +80,22 @@ export function GameEntry({
         style={style}
       >
         {gameEntryContent}
-        <div className='absolute bottom-0 w-full overflow-hidden text-ellipsis whitespace-nowrap bg-[#ffffffee] px-3 py-1 text-center text-xs text-slate-400'>
-          {rom.goodCode.rom}
+        <div
+          className='absolute bottom-0 w-full overflow-hidden bg-[#ffffffee] px-1 py-1 text-center text-xs text-slate-400'
+          title={rom.name}
+        >
+          {districts?.map((district) => (
+            <DistrictIcon district={district} key={district} />
+          ))}
+
+          <span className='align-middle'>{goodCode.rom}</span>
+
+          {revision !== undefined && (
+            <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+              <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
+              {revision > 1 && <span className='ml-2 h-4 align-middle font-mono'>{revision}</span>}
+            </span>
+          )}
         </div>
       </GameEntryButton>
 

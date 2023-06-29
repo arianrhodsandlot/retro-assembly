@@ -8,4 +8,7 @@ export default defineConfig({
   server: {
     host: true,
   },
+  optimizeDeps: {
+    force: true,
+  },
 })

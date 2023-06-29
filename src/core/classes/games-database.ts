@@ -5,6 +5,7 @@ import { parse } from 'path-browserify'
 import { systemFullNameMap } from '../constants/systems'
 import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
+import { type Entry } from './libretrodb/types'
 
 function normalizeGameName(originalName: string) {
   let name = parseGoodCode(originalName).rom
@@ -24,7 +25,7 @@ function isSimilarName(name1: string, name2: string) {
 export class GamesDatabase {
   private static dbPromises = new Map<string, Promise<GamesDatabase>>()
 
-  private index = new Map<string, { name: string }[]>()
+  private index = new Map<string, Entry<string>[]>()
   private system: string
   private readyPromise: Promise<void>
   constructor(name: string) {
@@ -89,7 +90,7 @@ export class GamesDatabase {
         }
       }
       for (const candidate of candidates) {
-        if (isSimilarName(candidate.name, fileName)) {
+        if (candidate.name && isSimilarName(candidate.name, fileName)) {
           return candidate
         }
       }

@@ -6,6 +6,7 @@ import { extSystemMap, systemNamesSorted } from '../constants/systems'
 import { getCover, parseGoodCode } from '../helpers/misc'
 import { type FileAccessor } from './file-system-providers/file-accessor'
 import { GamesDatabase } from './games-database'
+import { type Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 
 const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
@@ -17,7 +18,7 @@ export class Rom {
 
   system = ''
   goodCode: GoodCodeResult
-  gameInfo: any
+  gameInfo: Entry<string> | undefined
   cover = ''
 
   readyPromise: Promise<void>

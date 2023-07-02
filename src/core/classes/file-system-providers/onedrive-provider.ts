@@ -1,6 +1,7 @@
 import ky from 'ky'
 import queryString from 'query-string'
 import { OnedriveClient } from '../cloude-service/onedrive-client'
+import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 
@@ -28,13 +29,13 @@ export class OnedriveProvider implements FileSystemProvider {
     return onedriveCloudProvider
   }
 
-  async getFileContent(path: string) {
+  async getContent(path: string) {
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.request({ api: `/me/drive/root:${path}` })
     return await ky(downloadUrl).blob()
   }
 
   // path should start with a slash
-  async createFile({ file, path }) {
+  async create({ file, path }) {
     if (!file || !path) {
       return
     }
@@ -45,7 +46,7 @@ export class OnedriveProvider implements FileSystemProvider {
     })
   }
 
-  async deleteFile(path: string) {
+  async delete(path: string) {
     if (!path) {
       return
     }
@@ -55,29 +56,20 @@ export class OnedriveProvider implements FileSystemProvider {
     })
   }
 
-  async listChildren(path: string) {
-    const fileAccessors: FileAccessor[] = []
-    let listNextPage = async () => await this.listByPages(path, {})
+  async list(path: string) {
+    const children: { name: string; folder?: unknown }[] = []
+    let listNextPage = async () => await this.listChildrenByPages(path, {})
     do {
       const result = await listNextPage()
-      fileAccessors.push(...result.items)
+      children.push(...result.items)
       listNextPage = result.listNextPage
     } while (listNextPage)
 
-    return fileAccessors
-  }
+    if (children?.length) {
+      RequestCache.set({ name: `${this.constructor.name}.peek`, path }, children)
+    }
 
-  async listByPages(path: string, { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions = {}) {
-    const apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
-    const result = await this.client.request({
-      api: apiPath,
-      top: pageSize,
-      skipToken: pageCursor,
-      orderby: orderBy,
-    })
-
-    const children: { name: string; folder?: unknown }[] = result.value
-    const fileAccessors: FileAccessor[] = children.map(
+    return children.map(
       (item) =>
         new FileAccessor({
           name: item.name,
@@ -86,7 +78,30 @@ export class OnedriveProvider implements FileSystemProvider {
           fileSystemProvider: this,
         })
     )
+  }
 
+  async peek(path: string) {
+    const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peek`, path })
+    const children = rawCache?.value
+    const fileAccessors: FileAccessor[] = children?.map(
+      (item) =>
+        new FileAccessor({
+          name: item.name,
+          directory: path,
+          type: 'folder' in item ? 'directory' : 'file',
+          fileSystemProvider: this,
+        })
+    )
+    return fileAccessors
+  }
+
+  private async listChildrenByPages(
+    path: string,
+    { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions = {}
+  ) {
+    const apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
+    const result = await this.client.request({ api: apiPath, top: pageSize, skipToken: pageCursor, orderby: orderBy })
+    const items: { name: string; folder?: unknown }[] = result.value
     const pager = { size: pageSize, cursor: '' }
     const nextLink = result['@odata.nextLink']
     let listNextPage
@@ -97,12 +112,12 @@ export class OnedriveProvider implements FileSystemProvider {
       if (skipToken) {
         pager.cursor = skipToken.toString()
         listNextPage = async () =>
-          await this.listByPages(path, { pageSize: pager.size, pageCursor: pager.cursor, orderBy })
+          await this.listChildrenByPages(path, { pageSize: pager.size, pageCursor: pager.cursor, orderBy })
       }
     }
 
     return {
-      items: fileAccessors,
+      items,
       pager,
       listNextPage,
     }

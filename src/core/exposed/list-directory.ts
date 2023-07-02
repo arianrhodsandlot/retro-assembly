@@ -5,11 +5,11 @@ export async function listDirectory({ path, type }: { path: string; type: 'onedr
   switch (type) {
     case 'onedrive': {
       const onedrive = await OnedriveProvider.getSingleton()
-      return await onedrive.listChildren(path)
+      return await onedrive.list(path)
     }
     case 'google-drive': {
       const googleDrive = await GoogleDriveProvider.getSingleton()
-      return await googleDrive.listChildren(path)
+      return await googleDrive.list(path)
     }
     default:
       throw new Error('invalid token type:', type)

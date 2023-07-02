@@ -17,7 +17,7 @@ export class LocalProvider implements FileSystemProvider {
     return new LocalProvider({ handle })
   }
 
-  async getFileContent(path: string) {
+  async getContent(path: string) {
     const handle = await this.getHandleByPath({ path })
     if (handle instanceof FileSystemDirectoryHandle) {
       throw new TypeError(`path "${path}" is not a file but a directory (maybe)`)
@@ -27,7 +27,7 @@ export class LocalProvider implements FileSystemProvider {
 
   // path should not start with a slash
   // todo: maybe needs to make it be the same as the onedrive provider
-  async createFile({ file, path }: { file: Blob; path: string }) {
+  async create({ file, path }: { file: Blob; path: string }) {
     const handle = await this.getHandleByPath({ path, create: true })
     if (handle instanceof FileSystemDirectoryHandle) {
       throw new TypeError(`path "${path}" is not a file but a directory (maybe)`)
@@ -43,13 +43,13 @@ export class LocalProvider implements FileSystemProvider {
     await this.load()
   }
 
-  async deleteFile(path: string) {
+  async delete(path: string) {
     const fileHandle = await this.getHandleByPath({ path, create: true })
     // @ts-expect-error "remove" is not listed in typescript's declaration files
     await fileHandle?.remove()
   }
 
-  async listChildren(path = '') {
+  async list(path = '') {
     const handle = await this.getHandleByPath({ path })
     const childrenHandles = await listDirectoryByHandle({ handle })
     const fileAccessors = childrenHandles.map(

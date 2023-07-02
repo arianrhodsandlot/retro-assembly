@@ -1,7 +1,7 @@
 import { type Target } from 'framer-motion'
 import $ from 'jquery'
 import { uniq } from 'lodash-es'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
 import { DistrictIcon } from './district-icon'
@@ -22,7 +22,7 @@ function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
   }
 }
 
-export function GameEntry({
+function GameEntry({
   rom,
   columnIndex,
   rowIndex,
@@ -103,3 +103,25 @@ export function GameEntry({
     </>
   )
 }
+
+function arePropsEqual(oldProps, newProps) {
+  if (oldProps === newProps) {
+    return true
+  }
+
+  if (oldProps.rom.id !== newProps.rom.id) {
+    return false
+  }
+
+  for (const key of ['columnCount', 'columnIndex', 'rowCount', 'rowIndex']) {
+    if (oldProps[key] !== newProps[key]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+const MemoedGameEntry = memo(GameEntry, arePropsEqual)
+
+export { MemoedGameEntry as GameEntry }

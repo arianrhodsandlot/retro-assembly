@@ -54,9 +54,9 @@ export class CoreStateManager {
     const { core, name, createTime, blob, thumbnailBlob } = state
     const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
     const stateDirPath = join(directory, core, name)
-    await fileSystemProvider.createFile({ file: blob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
+    await fileSystemProvider.create({ file: blob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
     if (thumbnailBlob) {
-      fileSystemProvider.createFile({ file: thumbnailBlob, path: join(stateDirPath, `${stateBaseFileName}.png`) })
+      fileSystemProvider.create({ file: thumbnailBlob, path: join(stateDirPath, `${stateBaseFileName}.png`) })
     }
   }
 
@@ -66,7 +66,7 @@ export class CoreStateManager {
 
     let fileAccessors: FileAccessor[] = []
     try {
-      fileAccessors = await fileSystemProvider.listChildren(stateDirPath)
+      fileAccessors = await fileSystemProvider.list(stateDirPath)
     } catch (error) {
       if (error?.code !== 'itemNotFound') {
         throw error
@@ -108,8 +108,8 @@ export class CoreStateManager {
     const { fileSystemProvider, directory, core, name } = this
     const stateDirPath = join(directory, core, name)
     await Promise.allSettled([
-      fileSystemProvider.deleteFile(join(stateDirPath, `${stateId}.state`)),
-      fileSystemProvider.deleteFile(join(stateDirPath, `${stateId}.png`)),
+      fileSystemProvider.delete(join(stateDirPath, `${stateId}.state`)),
+      fileSystemProvider.delete(join(stateDirPath, `${stateId}.png`)),
     ])
   }
 
@@ -117,6 +117,6 @@ export class CoreStateManager {
     const { fileSystemProvider, directory, core, name } = this
     const stateDirPath = join(directory, core, name)
     const statePath = join(stateDirPath, `${stateId}.state`)
-    return await fileSystemProvider.getFileContent(statePath)
+    return await fileSystemProvider.getContent(statePath)
   }
 }

@@ -1,10 +1,11 @@
 import { type FileAccessor } from './file-accessor'
 
 export interface FileSystemProvider {
-  getFileContent: (path: string) => Promise<Blob>
+  getContent: (path: string) => Promise<Blob>
 
-  createFile: ({ file, path }: { file: Blob; path: string }) => Promise<void>
-  deleteFile: (path: string) => Promise<void>
+  create: ({ file, path }: { file: Blob; path: string }) => Promise<void>
+  delete: (path: string) => Promise<void>
 
-  listChildren: (path: string) => Promise<FileAccessor[]>
+  list: (path: string) => Promise<FileAccessor[]>
+  peek: (path: string) => Promise<FileAccessor[]>
 }

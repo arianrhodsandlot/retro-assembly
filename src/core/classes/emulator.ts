@@ -446,6 +446,7 @@ export class Emulator {
       notification_show_when_menu_is_alive: true,
       stdin_cmd_enable: true,
       quit_press_twice: false,
+      video_vsync: true,
 
       rgui_menu_color_theme: 4,
       // rgui_particle_effect: 3,

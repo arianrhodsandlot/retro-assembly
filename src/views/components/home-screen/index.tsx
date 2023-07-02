@@ -1,10 +1,8 @@
-import { clsx } from 'clsx'
 import { useAtom, useSetAtom, useStore } from 'jotai'
-import { useEffect } from 'react'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
-import { getSystemRoms, getSystems } from '../../../core'
+import { getSystemRoms, getSystems, peekSystemRoms } from '../../../core'
 import { Emulator } from '../emulator'
-import { currentRomsAtom, currentSystemNameAtom, systemsAtom } from './atoms'
+import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { HomeScreenLayout } from './home-screen-layout'
@@ -24,7 +22,7 @@ function getColumnCount(width: number) {
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function HomeScreen() {
-  const [currentRoms, setCurrentRoms] = useAtom(currentRomsAtom)
+  const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
   const store = useStore()
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
@@ -47,17 +45,33 @@ export function HomeScreen() {
     localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])
 
+  const peekRomsState = useAsync(async () => {
+    if (!currentSystemName) {
+      return
+    }
+
+    const roms = await peekSystemRoms(currentSystemName)
+    if (currentSystemName === store.get(currentSystemNameAtom) && roms) {
+      setRoms(roms)
+      return true
+    }
+
+    return false
+  }, [currentSystemName])
+
   const romsState = useAsyncRetry(async () => {
-    if (currentSystemName) {
-      const roms = await getSystemRoms(currentSystemName)
-      if (currentSystemName === store.get(currentSystemNameAtom)) {
-        setCurrentRoms(roms)
-      }
+    if (!currentSystemName) {
+      return
+    }
+
+    const roms = await getSystemRoms(currentSystemName)
+    if (currentSystemName === store.get(currentSystemNameAtom)) {
+      setRoms(roms)
     }
   }, [currentSystemName])
 
   const error = systemsState.error || romsState.error
-  const loading = systemsState.loading || romsState.loading
+  const loading = peekRomsState.loading || (!peekRomsState.value && (systemsState.loading || romsState.loading))
 
   function retry() {
     if (systemsState.error) {
@@ -89,11 +103,12 @@ export function HomeScreen() {
     <HomeScreenLayout>
       <div className='h-full w-full' ref={gridContainerRef}>
         <GameEntryGrid
-          className={clsx(['game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'])}
+          className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
           columnCount={columnCount}
           columnWidth={columnWidth}
           height={gridHeight}
-          rowCount={Math.ceil(currentRoms?.length ? currentRoms.length / columnCount : 0)}
+          roms={roms}
+          rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
           rowHeight={columnWidth}
           width={gridWidth}
         />

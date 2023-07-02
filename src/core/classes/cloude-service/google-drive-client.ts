@@ -14,7 +14,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
     clientId: import.meta.env.VITE_GOOGLE_DRIVE_CLIENT_ID,
     clientSecret: import.meta.env.VITE_GOOGLE_DRIVE_CLIENT_SECRET,
     scope: 'https://www.googleapis.com/auth/drive',
-    redirectUri: `${hostUrl}/auth/googledrive`,
+    redirectUri: `${hostUrl}/auth/google-drive`,
   }
 
   private static apiKey = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY

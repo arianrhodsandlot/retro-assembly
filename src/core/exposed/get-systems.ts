@@ -10,7 +10,7 @@ export async function getSystems() {
   }
 
   const romDirectory = PreferenceParser.get('romDirectory')
-  const directories = await fileSystem.listChildren(romDirectory)
+  const directories = await fileSystem.list(romDirectory)
   const directoryNames = directories.map(({ name }) => name)
   const systemNames = intersection(systemNamesSorted, directoryNames)
   return (systemNames as typeof systemNamesSorted).map((systemName) => ({

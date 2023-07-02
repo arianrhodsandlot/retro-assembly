@@ -25,21 +25,21 @@ export async function validateRomDirectory(params: ValidateRomDirectoryParams) {
     case 'onedrive': {
       const { directory } = params
       const onedrive = OnedriveProvider.getSingleton()
-      const children = await onedrive.listChildren(directory)
+      const children = await onedrive.list(directory)
       directories = filter(children, 'isDirectory')
       break
     }
     case 'google-drive': {
       const { directory } = params
       const googleDrive = await GoogleDriveProvider.getSingleton()
-      const children = await googleDrive.listChildren(directory)
+      const children = await googleDrive.list(directory)
       directories = filter(children, 'isDirectory')
       break
     }
     case 'local': {
       const { handle } = params
       const local = LocalProvider.getSingleton({ handle })
-      const children = await local.listChildren()
+      const children = await local.list()
       directories = filter(children, 'isDirectory')
       break
     }

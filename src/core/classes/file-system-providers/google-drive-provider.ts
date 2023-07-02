@@ -5,8 +5,16 @@ import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 
+interface ListOptions {
+  pageSize?: number
+  pageCursor?: string
+  orderBy?: string
+}
+
 const defaultFileFields = 'name,id,mimeType,modifiedTime,version,webContentLink'
 const defaultFileNestedFields = `files(${defaultFileFields})`
+
+const folderMimeType = 'application/vnd.google-apps.folder'
 
 export class GoogleDriveProvider implements FileSystemProvider {
   private client: GoogleDriveClient
@@ -21,11 +29,11 @@ export class GoogleDriveProvider implements FileSystemProvider {
     return new GoogleDriveProvider({ client })
   }
 
-  async getFileContent(path: string) {
+  async getContent(path: string) {
     const segments = path.split('/')
     const fileDirectory = initial(segments).join('/')
     const fileName = last(segments)
-    const directory = await this.getDirectory(fileDirectory)
+    const directory = await this.getDirectoryWithCache(fileDirectory)
     const conditions = ['trashed=false', `parents in '${directory.id}'`, `name='${fileName}'`]
     const q = conditions.join(' and ')
     const response = await this.client.list({ orderBy: 'name', q, fields: defaultFileNestedFields })
@@ -41,7 +49,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     }).blob()
   }
 
-  async createFile({ file, path }) {
+  async create({ file, path }) {
     const segments = path.split('/')
 
     const [fileName] = segments.slice(-1)
@@ -69,48 +77,75 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   // todo: not implemented yet
-  async deleteFile(path) {
+  async delete(path) {
     await this
     throw new Error('not implemented')
   }
 
-  async listChildren(path: string) {
+  async list(path: string) {
+    const children: { name: string; folder?: unknown }[] = []
+    let listNextPage = async () => await this.listChildrenByPages(path, {})
+    do {
+      const result = await listNextPage()
+      children.push(...result.items)
+      listNextPage = result.listNextPage
+    } while (listNextPage)
+
+    if (children?.length) {
+      RequestCache.set({ name: `${this.constructor.name}.peek`, path }, children)
+    }
+
+    return children.map(
+      (item) =>
+        new FileAccessor({
+          name: item.name ?? '',
+          directory: path,
+          type: item.mimeType === folderMimeType ? 'directory' : 'file',
+          temporaryUrl: item.webContentLink,
+          fileSystemProvider: this,
+        })
+    )
+  }
+
+  async peek(path: string) {
+    const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peek`, path })
+    const children = rawCache?.value
+    const fileAccessors: FileAccessor[] = children?.map(
+      (item) =>
+        new FileAccessor({
+          name: item.name ?? '',
+          directory: path,
+          type: item.mimeType === folderMimeType ? 'directory' : 'file',
+          temporaryUrl: item.webContentLink,
+          fileSystemProvider: this,
+        })
+    )
+    return fileAccessors
+  }
+
+  private async listChildrenByPages(path: string, { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions) {
     let directoryId = 'root'
     if (path !== '/') {
-      const directory = await this.getDirectory(path)
+      const directory = await this.getDirectoryWithCache(path)
       directoryId = directory.id
     }
 
     const conditions = [`parents in '${directoryId}'`, 'trashed=false']
     const q = conditions.join(' and ')
 
-    const folderMimeType = 'application/vnd.google-apps.folder'
-    const fileAccessors: FileAccessor[] = []
-    const pageSize = 200
-    let pageToken = ''
-    do {
-      const fields = `${defaultFileNestedFields},nextPageToken`
-      const {
-        result: { files, nextPageToken },
-      } = await this.client.list({ orderBy: 'name', q, fields, pageSize, pageToken })
-      if (files) {
-        fileAccessors.push(
-          ...files.map(
-            (file) =>
-              new FileAccessor({
-                name: file.name ?? '',
-                directory: path,
-                type: file.mimeType === folderMimeType ? 'directory' : 'file',
-                temporaryUrl: file.webContentLink,
-                fileSystemProvider: this,
-              })
-          )
-        )
-      }
-      pageToken = nextPageToken ?? ''
-    } while (pageToken)
-
-    return fileAccessors
+    const pager = { size: pageSize, cursor: '' }
+    const fields = `${defaultFileNestedFields},nextPageToken`
+    const {
+      result: { files: items, nextPageToken },
+    } = await this.client.list({ orderBy, q, fields, pageSize, pageToken: pageCursor })
+    let listNextPage
+    if (nextPageToken) {
+      pager.size = pageSize
+      pager.cursor = nextPageToken
+      listNextPage = async () =>
+        await this.listChildrenByPages(path, { pageSize: pager.size, pageCursor: pager.cursor, orderBy })
+    }
+    return { items, pager, listNextPage }
   }
 
   private async getRootChildren() {
@@ -158,6 +193,14 @@ export class GoogleDriveProvider implements FileSystemProvider {
     return directory
   }
 
+  private async getDirectoryWithCache(path: string) {
+    const { cacheable } = await RequestCache.makeCacheable({
+      func: (path: string) => this.getDirectory(path),
+      identifier: `${this.constructor.name}.getDirectory`,
+    })
+    return cacheable(path)
+  }
+
   private async ensureDirectory(path: string) {
     if (!path.startsWith('/')) {
       throw new Error(`invalid path: ${path}`)
@@ -193,7 +236,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   private async listWithCache(gapiListParams, identifier) {
-    const cachedList = await RequestCache.makeCacheable({
+    const { cacheable: cachedList } = await RequestCache.makeCacheable({
       func: async () => await this.client.list(gapiListParams),
       identifier: (...args) => ({
         functionName: 'GoogleDriveProvider.listWithCache',

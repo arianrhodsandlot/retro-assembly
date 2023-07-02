@@ -1,7 +1,7 @@
 import { join, parse } from 'path-browserify'
 import { type FileSystemProvider } from './file-system-provider'
 
-interface FileAccessorOptions {
+export interface FileAccessorOptions {
   name: string
   directory: string
   type: string
@@ -48,7 +48,7 @@ export class FileAccessor {
   }
 
   async getBlob() {
-    return this.blob ?? (await this.fileSystemProvider.getFileContent(this.path))
+    return this.blob ?? (await this.fileSystemProvider.getContent(this.path))
   }
 
   async getUrl() {

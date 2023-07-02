@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
+import { isCloudServiceEnabled } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
@@ -7,6 +8,10 @@ import { isInvalidDialogOpenAtom } from './atoms'
 import { GoogleDriveButton } from './google-drive-button'
 import { LocalButton } from './local-button'
 import { OnedriveButton } from './onedrive-button'
+
+const isOnedriveEnabled = isCloudServiceEnabled('onedrive')
+const isGoogleDriveEnabled = isCloudServiceEnabled('google-drive')
+const isAnyCloudServiceEnabled = isOnedriveEnabled || isGoogleDriveEnabled
 
 export function GetStarted() {
   const [isInvalidDialogOpen, setIsInvalidDialogOpenAtom] = useAtom(isInvalidDialogOpenAtom)
@@ -19,24 +24,30 @@ export function GetStarted() {
     <div className='container m-auto max-w-5xl px-10'>
       <div className='get-started mt-4 w-full rounded-xl border-2 border-red-600 px-10 py-6'>
         <div className='flex flex-col items-center gap-10'>
-          <div className='flex flex-col'>
-            <div className='flex items-center justify-center gap-2 text-center font-bold'>
-              <span className='icon-[mdi--cube-outline] h-6 w-6' />
-              Select a cloud directory
-            </div>
-            <div className='mt-2 flex items-start justify-center text-xs'>
-              <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
-              <div>Sync your games and progress between multiple devices.</div>
-            </div>
-            <div className='mt-4 flex flex-col justify-center gap-4'>
-              <div className='text-center'>
-                <OnedriveButton />
+          {isAnyCloudServiceEnabled ? (
+            <div className='flex flex-col'>
+              <div className='flex items-center justify-center gap-2 text-center font-bold'>
+                <span className='icon-[mdi--cube-outline] h-6 w-6' />
+                Select a cloud directory
               </div>
-              <div className='text-center'>
-                <GoogleDriveButton />
+              <div className='mt-2 flex items-start justify-center text-xs'>
+                <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
+                <div>Sync your games and progress between multiple devices.</div>
+              </div>
+              <div className='mt-4 flex flex-col justify-center gap-4'>
+                {isOnedriveEnabled ? (
+                  <div className='text-center'>
+                    <OnedriveButton />
+                  </div>
+                ) : null}
+                {isGoogleDriveEnabled ? (
+                  <div className='text-center'>
+                    <GoogleDriveButton />
+                  </div>
+                ) : null}
               </div>
             </div>
-          </div>
+          ) : null}
 
           <div>
             <div className='flex items-center justify-center gap-2 text-center font-bold'>

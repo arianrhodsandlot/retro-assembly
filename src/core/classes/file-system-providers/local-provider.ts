@@ -1,4 +1,4 @@
-import { compact, orderBy } from 'lodash-es'
+import { compact, noop, orderBy } from 'lodash-es'
 import { parse, sep } from 'path-browserify'
 import { listDirectoryByHandle, requestLocalHandle } from '../../helpers/file'
 import { FileAccessor } from './file-accessor'
@@ -56,6 +56,10 @@ export class LocalProvider implements FileSystemProvider {
       ({ name, kind }) => new FileAccessor({ name, directory: path, type: kind, fileSystemProvider: this })
     )
     return orderBy(fileAccessors, ['name'], ['asc'])
+  }
+
+  async peek(path: string) {
+    return await Promise.resolve(noop(path))
   }
 
   private async load() {

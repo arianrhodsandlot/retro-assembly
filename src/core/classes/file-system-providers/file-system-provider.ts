@@ -7,5 +7,5 @@ export interface FileSystemProvider {
   delete: (path: string) => Promise<void>
 
   list: (path: string) => Promise<FileAccessor[]>
-  peek: (path: string) => Promise<FileAccessor[]>
+  peek: (path: string) => Promise<FileAccessor[] | undefined>
 }

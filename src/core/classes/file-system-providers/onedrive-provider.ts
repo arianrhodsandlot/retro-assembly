@@ -83,7 +83,7 @@ export class OnedriveProvider implements FileSystemProvider {
   async peek(path: string) {
     const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peek`, path })
     const children = rawCache?.value
-    const fileAccessors: FileAccessor[] = children?.map(
+    const fileAccessors: FileAccessor[] | undefined = children?.map(
       (item) =>
         new FileAccessor({
           name: item.name,

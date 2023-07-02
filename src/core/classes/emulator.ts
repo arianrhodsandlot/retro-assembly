@@ -106,7 +106,8 @@ interface EmulatorConstructorOptions {
 export class Emulator {
   core = ''
   rom?: Rom
-  status: 'initial' | 'ready' | 'terminated' = 'initial'
+  processStatus: 'initial' | 'ready' | 'terminated' = 'initial'
+  gameStatus: 'paused' | 'running' = 'running'
   canvas: HTMLCanvasElement
   emscripten: any
   private previousActiveElement: Element | null
@@ -191,15 +192,26 @@ export class Emulator {
       updateStyle(this.canvas, { visibility: 'visible' })
       this.canvas.focus()
     }
-    this.status = 'ready'
+    this.processStatus = 'ready'
   }
 
   resume() {
-    this.sendCommand('PAUSE_TOGGLE')
+    if (this.gameStatus === 'paused') {
+      this.sendCommand('PAUSE_TOGGLE')
+    }
+    this.gameStatus = 'running'
+  }
+
+  restart() {
+    this.sendCommand('RESET')
+    this.resume()
   }
 
   pause() {
-    this.sendCommand('PAUSE_TOGGLE')
+    if (this.gameStatus === 'running') {
+      this.sendCommand('PAUSE_TOGGLE')
+    }
+    this.gameStatus = 'paused'
   }
 
   async saveState() {
@@ -242,7 +254,7 @@ export class Emulator {
   }
 
   exit(statusCode = 0) {
-    this.status = 'terminated'
+    this.processStatus = 'terminated'
     if (this.emscripten) {
       const { FS, exit, JSEvents } = this.emscripten
       exit(statusCode)
@@ -325,11 +337,11 @@ export class Emulator {
   }
 
   private isTerminated() {
-    return this.status === 'terminated'
+    return this.processStatus === 'terminated'
   }
 
   private forceExit() {
-    this.status = 'terminated'
+    this.processStatus = 'terminated'
     const { FS, exit, JSEvents } = this.emscripten || {}
     try {
       exit(0)

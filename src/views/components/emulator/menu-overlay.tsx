@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { exitGame, loadGameState, onCancel, resumeGame, saveGameState } from '../../../core'
+import { exitGame, loadGameState, onCancel, restartGame, resumeGame, saveGameState } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { previousFocusedElementAtom, shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
@@ -44,11 +44,22 @@ export function MenuOverlay() {
     resumeGame()
   }
 
+  function restart() {
+    setShowMenuOverlay(false)
+    previousFocusedElement?.focus()
+    restartGame()
+  }
+
   function exit() {
     exitGame()
     setShowMenuOverlay(false)
     previousFocusedElement?.focus()
     emitter.emit('exit')
+  }
+
+  async function saveAndExit() {
+    await saveState()
+    exit()
   }
 
   function onLoadStateButtonFocus() {
@@ -98,6 +109,11 @@ export function MenuOverlay() {
                 Resume
               </button>
 
+              <button className={menuButtonClassNames} onClick={restart} onFocus={() => setShowStateList(false)}>
+                <span className='icon-[mdi--restart] mr-2 h-6 w-6' />
+                Restart
+              </button>
+
               <button className={menuButtonClassNames} onClick={saveState} onFocus={() => setShowStateList(false)}>
                 <span className='icon-[mdi--content-save] mr-2 h-6 w-6' />
                 Save state
@@ -112,6 +128,11 @@ export function MenuOverlay() {
               >
                 <span className='icon-[mdi--tray-arrow-down] mr-2 h-6 w-6' />
                 Load state
+              </button>
+
+              <button className={menuButtonClassNames} onClick={saveAndExit} onFocus={() => setShowStateList(false)}>
+                <span className='icon-[mdi--location-exit] mr-2 h-6 w-6' />
+                Save & exit
               </button>
 
               <button className={menuButtonClassNames} onClick={exit} onFocus={() => setShowStateList(false)}>

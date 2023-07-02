@@ -68,9 +68,10 @@ export class CoreStateManager {
     try {
       fileAccessors = await fileSystemProvider.list(stateDirPath)
     } catch (error) {
-      if (error?.code !== 'itemNotFound') {
-        throw error
+      if (this.isInvalidDirectoryError(error)) {
+        return []
       }
+      throw error
     }
 
     const states: CoreState[] = []
@@ -118,5 +119,18 @@ export class CoreStateManager {
     const stateDirPath = join(directory, core, name)
     const statePath = join(stateDirPath, `${stateId}.state`)
     return await fileSystemProvider.getContent(statePath)
+  }
+
+  private isInvalidDirectoryError(error: any) {
+    // local file system
+    if (error?.name === 'NotFoundError') {
+      return true
+    }
+    // onedrive
+    if (error?.code === 'itemNotFound') {
+      return true
+    }
+    // google drive
+    return error?.message?.startsWith?.('directory not found')
   }
 }

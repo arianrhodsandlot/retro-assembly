@@ -1,3 +1,4 @@
+import logo from '../../assets/logo/logo.svg'
 import { AnimatedIcons } from './animated-icons'
 
 export function Header() {
@@ -6,7 +7,7 @@ export function Header() {
       <div className='container m-auto'>
         <h3 className='font-[audiowide,ui-sans-serif,sans-serif]'>
           <span className='flex items-center justify-center text-6xl font-bold tracking-widest'>
-            <span className='icon-[mdi--controller-classic] mr-6 h-20 w-20' />
+            <img alt='Retro Assembly' className='m-6 h-20 w-20 rounded-full' src={logo} />
             Retro Assembly
           </span>
         </h3>

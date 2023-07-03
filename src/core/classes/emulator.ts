@@ -393,7 +393,7 @@ export class Emulator {
         }),
     ]
 
-    const emscriptenFS = createEmscriptenFS({ FS, PATH, ERRNO_CODES })
+    const emscriptenFS = await createEmscriptenFS({ FS, PATH, ERRNO_CODES })
     FS.mount(emscriptenFS, { root: '/home' }, '/home')
 
     if (this.rom) {

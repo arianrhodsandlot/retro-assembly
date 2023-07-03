@@ -93,7 +93,9 @@ function GameEntry({
           {revision !== undefined && (
             <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
               <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
-              {revision > 1 && <span className='ml-2 h-4 align-middle font-mono'>{revision}</span>}
+              {revision > 1 && (
+                <span className='ml-2 h-4 align-middle font-["Noto_Mono",ui-monospace,monospace]'>{revision}</span>
+              )}
             </span>
           )}
 

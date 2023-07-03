@@ -1,4 +1,3 @@
-import { BlobReader, ZipReader } from '@zip.js/zip.js'
 import { type GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
 import { isAbsolute, parse, relative } from 'path-browserify'
@@ -118,6 +117,7 @@ export class Rom {
   }
 
   private async guessSystemByExtractedContent() {
+    const { BlobReader, ZipReader } = await import('@zip.js/zip.js')
     if (!this.fileAccessor.isLoaded) {
       return ''
     }

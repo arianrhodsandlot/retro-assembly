@@ -15,17 +15,27 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
   }, [onSetup, setOnSetup])
 
   return createPortal(
-    <div className='text-red-600'>
+    <div className='min-h-screen bg-white  bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
       <div className='relative flex h-[800px] max-h-[60vh] min-h-[350px] flex-col bg-red-600'>
         <div className='flex-1' />
         <Header />
       </div>
 
-      <div
-        className='overflow-auto bg-white bg-[length:30px_30px]  bg-[0_0,15px_15px] py-10'
-        style={{ backgroundImage }}
-      >
+      <div className='mt-10'>
         <GetStarted />
+      </div>
+
+      <div className='mt-10 py-4 text-center text-xs text-red-300'>
+        <div className='flex items-center justify-center'>
+          <div>
+            © <a href='https://github.com/arianrhodsandlot/'> arianrhodsandlot</a> 2023
+          </div>
+          <div className='mx-2'>|</div>
+          <div className='flex items-center justify-center'>
+            <span className='icon-[mdi--github] mr-1 h-4 w-4' />
+            <a href='https://github.com/arianrhodsandlot/retro-assembly'>GitHub</a>
+          </div>
+        </div>
       </div>
     </div>,
     document.body

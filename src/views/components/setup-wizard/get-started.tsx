@@ -21,8 +21,8 @@ export function GetStarted() {
   }, [])
 
   return (
-    <div className='container m-auto max-w-5xl px-10'>
-      <div className='get-started mt-4 w-full rounded-xl border-2 border-red-600 px-10 py-6'>
+    <div className='container m-auto max-w-5xl px-10 text-red-600'>
+      <div className='get-started w-full rounded-xl border-2 border-red-600 px-10 py-6'>
         <div className='flex flex-col items-center gap-10'>
           {isAnyCloudServiceEnabled ? (
             <div className='flex flex-col'>

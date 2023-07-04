@@ -512,7 +512,7 @@ export class Emulator {
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
       if (gamepad) {
-        window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
+        // window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
       }
     }
   }

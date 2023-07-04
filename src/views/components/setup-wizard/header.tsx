@@ -1,4 +1,4 @@
-import logo from '../../assets/logo/logo.svg'
+import logo from '../../../assets/logo/logo-512.png'
 import { AnimatedIcons } from './animated-icons'
 
 export function Header() {

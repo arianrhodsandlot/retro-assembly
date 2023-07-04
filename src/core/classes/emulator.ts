@@ -72,7 +72,7 @@ function getEmscriptenModuleOverrides() {
     },
 
     locateFile(path) {
-      return `/cores/${path}`
+      return `/vendor/cores/${path}`
     },
 
     async monitorRunDependencies(left: number) {
@@ -361,7 +361,7 @@ export class Emulator {
   }
 
   private async prepareEmscripten() {
-    const jsContentBody = await ky(`/cores/${this.core}_libretro.js`).text()
+    const jsContentBody = await ky(`/vendor/cores/${this.core}_libretro.js`).text()
     const jsContent = `
     export function getEmscripten({ Module }) {
       ${jsContentBody}

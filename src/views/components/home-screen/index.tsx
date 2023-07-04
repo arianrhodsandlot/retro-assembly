@@ -9,8 +9,8 @@ import { HomeScreenLayout } from './home-screen-layout'
 import { InputTips } from './input-tips'
 
 function getColumnCount(width: number) {
-  const idealItemWidth = 250
-  const candicates = [10, 8, 5, 4]
+  const idealItemWidth = 200
+  const candicates = [20, 16, 10, 8, 5, 4, 2]
   for (const candicate of candicates) {
     if (width / candicate > idealItemWidth) {
       return candicate

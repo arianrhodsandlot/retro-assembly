@@ -65,7 +65,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
               exit={{ width: 0 }}
               initial={{ width: 0 }}
             >
-              <div className='pl-4 font-bold tracking-wider text-red-600'>{displayName}</div>
+              <div className='hidden pl-4 font-bold tracking-wider text-red-600 md:block'>{displayName}</div>
             </motion.div>
           ) : null}
         </AnimatePresence>

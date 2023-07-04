@@ -62,6 +62,7 @@
     "postcss": "8.4.24",
     "sass": "1.63.6",
     "tailwindcss": "3.3.2",
+    "ts-node": "^10.9.1",
     "typescript": "5.1.6",
     "vite": "4.3.9",
     "vite-plugin-pwa": "0.16.4",

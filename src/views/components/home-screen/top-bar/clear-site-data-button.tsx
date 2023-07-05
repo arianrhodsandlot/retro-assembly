@@ -45,7 +45,7 @@ export function ClearSiteDataButton() {
       onOpenChange={onOpenChange}
       open={open}
     >
-      <TopBarButton className='aspect-square border-l'>
+      <TopBarButton className='aspect-square'>
         <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
       </TopBarButton>
     </BaseDialogTrigger>

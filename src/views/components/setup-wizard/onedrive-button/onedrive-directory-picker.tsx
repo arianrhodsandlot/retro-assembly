@@ -23,7 +23,7 @@ export function OnedriveDirectoryPicker({
   if (isValidating || state.loading) {
     return (
       <div className='flex items-center justify-center py-6'>
-        <span className='icon-[line-md--loading-loop] h-12 w-12 text-red-600' />
+        <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />
       </div>
     )
   }
@@ -35,8 +35,8 @@ export function OnedriveDirectoryPicker({
   if (state.value === false) {
     return (
       <div className='flex h-full flex-col'>
-        <div className='text-red-600'>
-          <div className='flex items-center rounded border border-red-600 bg-red-100 px-4 py-2 text-sm'>
+        <div className='text-rose-700'>
+          <div className='flex items-center rounded border border-rose-700 bg-rose-100 px-4 py-2 text-sm'>
             <span className='icon-[mdi--bell] mr-2 h-4 w-4' />
             Select a directory to initialize your game library.
           </div>

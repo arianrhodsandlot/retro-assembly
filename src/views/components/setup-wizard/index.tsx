@@ -16,7 +16,7 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
 
   return createPortal(
     <div className='min-h-screen bg-white  bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
-      <div className='relative flex h-[800px] max-h-[60vh] min-h-[350px] flex-col bg-red-600'>
+      <div className='relative flex h-[800px] max-h-[60vh] min-h-[350px] flex-col bg-rose-700'>
         <div className='flex-1' />
         <Header />
       </div>
@@ -25,7 +25,7 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
         <GetStarted />
       </div>
 
-      <div className='mt-10 py-4 text-center text-xs text-red-300'>
+      <div className='mt-10 py-4 text-center text-xs text-rose-300'>
         <div className='flex items-center justify-center'>
           <div>
             © <a href='https://github.com/arianrhodsandlot/'> arianrhodsandlot</a> 2023

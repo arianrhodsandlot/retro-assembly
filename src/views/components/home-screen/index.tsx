@@ -93,7 +93,7 @@ export function HomeScreen() {
   if (loading) {
     return (
       <HomeScreenLayout>
-        <span className='icon-[line-md--loading-loop] h-16 w-16 text-red-600' />
+        <span className='icon-[line-md--loading-loop] h-16 w-16 text-rose-700' />
       </HomeScreenLayout>
     )
   }

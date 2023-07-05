@@ -3,7 +3,7 @@ import { type ReactNode } from 'react'
 
 export function BaseCallout({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <div className={clsx('rounded border border-red-600 bg-red-100 px-4 py-2 text-sm text-red-600', className)}>
+    <div className={clsx('rounded border border-rose-700 bg-rose-100 px-4 py-2 text-sm text-rose-700', className)}>
       {children}
     </div>
   )

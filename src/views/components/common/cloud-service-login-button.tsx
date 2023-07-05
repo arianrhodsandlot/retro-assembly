@@ -46,7 +46,7 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
   if (state.loading || state.value) {
     return (
       <div className='flex h-12 items-center justify-center'>
-        <span className='icon-[line-md--loading-loop] h-12 w-12 text-red-600' />
+        <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />
       </div>
     )
   }

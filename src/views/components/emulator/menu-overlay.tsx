@@ -87,7 +87,7 @@ export function MenuOverlay() {
   }, [previousFocusedElement, setShowMenuOverlay])
 
   const menuButtonClassNames =
-    'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-red-600 focus:animate-[pulse-white-bg_1.5s_ease-in-out_infinite] flex items-center justify-end'
+    'py-4 pr-20 text-right transition-[color,background-color] focus:bg-white focus:text-rose-700 focus:animate-[pulse-white-bg_1.5s_ease-in-out_infinite] flex items-center justify-end'
 
   return (
     <div className='menu-overlay flex h-full w-full items-stretch justify-center py-10'>
@@ -121,7 +121,7 @@ export function MenuOverlay() {
 
               <button
                 className={clsx(menuButtonClassNames, {
-                  'bg-white text-red-600': showStateList,
+                  'bg-white text-rose-700': showStateList,
                 })}
                 onClick={() => setShouldFocusStatesList(true)}
                 onFocus={onLoadStateButtonFocus}

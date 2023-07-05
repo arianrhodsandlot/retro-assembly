@@ -21,8 +21,8 @@ export function GetStarted() {
   }, [])
 
   return (
-    <div className='container m-auto max-w-5xl px-10 text-red-600'>
-      <div className='get-started w-full rounded-xl border-2 border-red-600 px-10 py-6'>
+    <div className='container m-auto max-w-5xl px-10 text-rose-700'>
+      <div className='get-started w-full rounded-xl border-2 border-rose-700 px-10 py-6'>
         <div className='flex flex-col items-center gap-10'>
           {isAnyCloudServiceEnabled ? (
             <div className='flex flex-col'>
@@ -61,7 +61,7 @@ export function GetStarted() {
           </div>
         </div>
 
-        <div className='m-auto mt-10 px-12 text-red-200' hidden>
+        <div className='m-auto mt-10 px-12 text-rose-200' hidden>
           <div className='flex items-center font-bold'>
             <span className='icon-[mdi--bell] mr-2 h-4 w-4' />
             Notice:

@@ -2,13 +2,14 @@ export function GameEntryImage({ src, alt }: { src: string; alt: string }) {
   return (
     <>
       <div className='absolute inset-0 overflow-hidden'>
-        <div
-          className='blur-25px absolute -inset-[25px] overflow-hidden bg-cover bg-center blur'
-          style={{
-            imageRendering: 'pixelated',
-            backgroundImage: `url("${src}")`,
-          }}
-        />
+        <div className='absolute -inset-[25px]'>
+          <img
+            alt={alt}
+            className='absolute h-full w-full overflow-hidden object-cover blur-sm'
+            src={src}
+            style={{ imageRendering: 'pixelated' }}
+          />
+        </div>
       </div>
       <img
         alt={alt}

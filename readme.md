@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo-512.png" alt="logo" width="128" height="128">
+  <img src="public/assets/logo/logo-512x512.png" alt="logo" width="128" height="128">
 </p>
 
 <h1 align="center">Retro Assembly</h1>
@@ -11,7 +11,7 @@ Retro Assembly is your personal retro game collection museum in your browser.
 + Import a directory from your OneDrive/Google Drive or disk, then a GameList will appear
 + Automatically grab game cover images
 + Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles.
-+ Save states and sync them to with different devices (if are using a cloud disk we support)
++ Save states and sync them to with different devices (if using a cloud disk we support)
 
 ## Usage
 1. Visit [retro-assembly.pages.dev](https://retro-assembly.pages.dev)
@@ -34,10 +34,9 @@ We support mainstream fourth-generation and earlier consoles as well as some han
 + <img width="18" align="center" src="docs/consoles/Sega - Game Gear.png" /> Sega - Game Gear
 + <img width="18" align="center" src="docs/consoles/Nintendo - Virtual Boy.png" /> Nintendo - Virtual Boy
 
-
 > ⚠️ As this project is still in an early stage, only some of the most popular consoles are supported.
 >
-> However, more consoles may be supported in the future.
+> However, more consoles will be supported in the future.
 
 ## Alternatives
 + EmulatorJS [🏠](https://emulatorjs.org) [:octocat:](https://github.com/EmulatorJS/EmulatorJS)

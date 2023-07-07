@@ -1,42 +1,24 @@
-/**
- * Creates an array of length `size` of random bytes
- * @param size
- * @returns Array of random ints (0 to 255)
- */
-function getRandomValues(size: number) {
-  return crypto.getRandomValues(new Uint8Array(size))
-}
-
-/** Generate cryptographically strong random string
- * @param size The desired length of the string
- * @returns The random string
- */
-function random(size: number) {
-  const mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'
-  let result = ''
-  const randomUints = getRandomValues(size)
-  for (let i = 0; i < size; i++) {
-    // cap the value of the randomIndex to mask.length - 1
-    const randomIndex = randomUints[i] % mask.length
-    result += mask[randomIndex]
-  }
-  return result
-}
+import { map, range, sample } from 'lodash-es'
 
 /** Generate a PKCE challenge verifier
  * @param length Length of the verifier
  * @returns A random verifier `length` characters long
  */
 function generateVerifier(length: number): string {
-  return random(length)
+  const mask = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'
+  return map(range(length), () => sample(mask)).join('')
 }
 
 /** Generate a PKCE code challenge from a code verifier
- * @param code_verifier
+ * @param codeVerifier
  * @returns The base64 url encoded code challenge
  */
-async function generateChallenge(code_verifier: string) {
-  const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code_verifier))
+async function generateChallenge(codeVerifier: string) {
+  if (!window.crypto?.subtle?.digest) {
+    return codeVerifier
+  }
+
+  const buffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier))
   // Generate base64url string
   // btoa is deprecated in Node.js but is used here for web browser compatibility
   // (which has no good replacement yet, see also https://github.com/whatwg/html/issues/6811)
@@ -56,7 +38,7 @@ export async function generatePKCEChallenge(length?: number) {
   }
 
   if (length < 43 || length > 128) {
-    throw `Expected a length between 43 and 128. Received ${length}.`
+    throw new Error(`Expected a length between 43 and 128. Received ${length}.`)
   }
 
   const verifier = generateVerifier(length)
@@ -65,5 +47,6 @@ export async function generatePKCEChallenge(length?: number) {
   return {
     codeVerifier: verifier,
     codeChallenge: challenge,
+    method: verifier === challenge ? 'plain' : 'S256',
   }
 }

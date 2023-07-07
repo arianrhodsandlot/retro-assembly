@@ -27,7 +27,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
   }
 
   static async getAuthorizeUrl(): Promise<string> {
-    const { codeChallenge } = await this.getPkceChanllenge()
+    const { codeChallenge, method } = await this.getPkceChanllenge()
 
     const query = {
       client_id: this.config.clientId,
@@ -35,7 +35,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
       response_type: 'code',
       redirect_uri: this.config.redirectUri,
       code_challenge: codeChallenge,
-      code_challenge_method: 'S256',
+      code_challenge_method: method,
       prompt: 'consent',
       access_type: 'offline',
     }

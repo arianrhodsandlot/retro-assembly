@@ -63,7 +63,7 @@ export abstract class Auth {
   protected static async getPkceChanllenge() {
     const storageChanllenge = getStorageByKey('pkce-chanllenge') ?? {}
     if (storageChanllenge.codeVerifier && storageChanllenge.codeChallenge) {
-      return storageChanllenge
+      // return storageChanllenge
     }
 
     const chanllenge = await generatePKCEChallenge()

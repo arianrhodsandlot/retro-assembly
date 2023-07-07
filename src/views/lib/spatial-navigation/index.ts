@@ -26,7 +26,7 @@ SpatialNavigation.add({
   id: 'menu-overlay-buttons',
   selector: '.menu-overlay-buttons button',
   restrict: 'self-only',
-  leaveFor: { up: '', down: '', left: '', right: '@menu-overlay-button-details' },
+  leaveFor: { up: '.menu-overlay-buttons button:last-child', down: '.menu-overlay-buttons button:first-child', left: '', right: '@menu-overlay-button-details' },
 })
 
 SpatialNavigation.add({

@@ -190,6 +190,7 @@ export class Emulator {
     window.addEventListener('mousemove', this.showCanvasCusor, false)
     window.addEventListener('resize', this.resizeCanvas, false)
     updateStyle(this.canvas, { visibility: 'visible' })
+    this.canvas.focus()
     this.processStatus = 'ready'
   }
 
@@ -375,7 +376,6 @@ export class Emulator {
 
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
-    this.canvas.focus()
 
     const { Module } = this.emscripten
     await Promise.all([await this.prepareFileSystem(), await Module.monitorRunDependencies()])

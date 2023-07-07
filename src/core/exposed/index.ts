@@ -1,6 +1,5 @@
 export type * from './types'
 
-export { authorize } from './authorize'
 export { detectHasRunningGame } from './detect-has-running-game'
 export { detectNeedsLogin } from './detect-needs-login'
 export { detectNeedsSetup } from './detect-needs-setup'

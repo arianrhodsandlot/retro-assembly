@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
@@ -9,12 +9,28 @@ interface CloudServiceLoginButtonProps {
   onLogin: () => void
 }
 
+const cloudServiceMap = {
+  onedrive: 'Microsoft',
+  'google-drive': 'Google',
+}
+
 export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceLoginButtonProps) {
   const authorizeUrlState = useAsync(async () => await getAuthorizeUrl(cloudService))
   const authorizeWindow = useRef<Window | null>(null)
+  const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIsAuthWindowOpening(!authorizeWindow.current?.closed)
+    }, 500)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
 
   const [state, checkLoginStatus] = useAsyncFn(async () => {
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve) => {
       function onStorage(event: StorageEvent) {
         if (event.key === getTokenStorageKey(cloudService)) {
           // authorizeWindow.current?.close()
@@ -33,17 +49,17 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
 
   async function login(event) {
     event.preventDefault()
-    if (!event.target.href) {
+    if (!event.currentTarget.href) {
       return
     }
-    authorizeWindow.current = open(event.target.href)
+    authorizeWindow.current = open(event.currentTarget.href, '_blank', 'popup')
     const isLogin = await checkLoginStatus()
     if (isLogin) {
       onLogin()
     }
   }
 
-  if (state.loading || state.value) {
+  if ((state.loading || state.value) && isAuthWindowOpening) {
     return (
       <div className='flex h-12 items-center justify-center'>
         <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />
@@ -53,24 +69,22 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
 
   return (
     <div className='flex h-12 items-center justify-center'>
-      <BaseButton className='m-auto !px-0 !py-0' onClick={login} styleType='primary'>
-        {authorizeUrlState.value ? (
-          <a
-            className='flex items-center justify-center self-stretch px-4 py-2'
-            href={authorizeUrlState.value}
-            onClick={(e) => e.preventDefault()}
-            rel='noreferrer'
-            target='_blank'
-          >
-            <span
-              className={clsx('mr-2 inline-block h-5 w-5', {
-                'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
-                'icon-[logos--google-icon]': cloudService === 'google-drive',
-              })}
-            />
-            Login
-          </a>
-        ) : null}
+      <BaseButton
+        href={authorizeUrlState.value}
+        onClick={login}
+        rel='noreferrer'
+        styleType='primary'
+        tabIndex={0}
+        tag='a'
+        target='_blank'
+      >
+        <span
+          className={clsx('mr-2 inline-block h-5 w-5', {
+            'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
+            'icon-[logos--google-icon]': cloudService === 'google-drive',
+          })}
+        />
+        Sign in with {cloudServiceMap[cloudService]}
       </BaseButton>
     </div>
   )

@@ -126,24 +126,25 @@ export class Emulator {
     this.previousActiveElement = document.activeElement
     this.canvas.tabIndex = 0
     updateStyle(this.canvas, {
-      display: 'block',
-      imageRendering: 'pixelated', // this boosts performance!
-      position: 'absolute',
-      inset: '0',
-      zIndex: '10',
-      cursor: 'default',
-      visibility: 'hidden',
       backgroundColor: 'black',
-      backgroundPosition: '0 0,15px 15px',
-      backgroundSize: '30px 30px',
-      maxHeight: '100%',
-      maxWidth: '100%',
       backgroundImage:
         'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #222 25%, #222 75%, #000 75%, #000)',
+      backgroundPosition: '0 0,15px 15px',
+      backgroundSize: '30px 30px',
+      cursor: 'default',
+      display: 'block',
+      imageRendering: 'pixelated', // this boosts performance!
+      inset: '0',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      position: 'absolute',
+      visibility: 'hidden',
+      zIndex: '10',
       ...style,
     })
 
     this.resizeCanvas = this.resizeCanvas.bind(this)
+    this.showCanvasCusor = this.showCanvasCusor.bind(this)
   }
 
   private get stateFileName() {
@@ -188,10 +189,7 @@ export class Emulator {
     this.showCanvasCusor()
     window.addEventListener('mousemove', this.showCanvasCusor, false)
     window.addEventListener('resize', this.resizeCanvas, false)
-    if (this.canvas) {
-      updateStyle(this.canvas, { visibility: 'visible' })
-      this.canvas.focus()
-    }
+    updateStyle(this.canvas, { visibility: 'visible' })
     this.processStatus = 'ready'
   }
 
@@ -377,6 +375,7 @@ export class Emulator {
 
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
+    this.canvas.focus()
 
     const { Module } = this.emscripten
     await Promise.all([await this.prepareFileSystem(), await Module.monitorRunDependencies()])
@@ -487,7 +486,6 @@ export class Emulator {
       raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileAccessor.name}`)
     }
     Module.callMain(raArgs)
-    // Module.resumeMainLoop()
 
     // Emscripten module register keyboard events to document, which make custome interactions unavilable.
     // Let's modify the default event liseners
@@ -512,7 +510,7 @@ export class Emulator {
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
       if (gamepad) {
-        // window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
+        window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
       }
     }
   }

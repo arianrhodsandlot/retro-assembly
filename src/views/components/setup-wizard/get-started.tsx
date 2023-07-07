@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { isCloudServiceEnabled } from '../../../core'
+import { isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
@@ -49,16 +49,18 @@ export function GetStarted() {
             </div>
           ) : null}
 
-          <div>
-            <div className='flex items-center justify-center gap-2 text-center font-bold'>
-              <span className='icon-[mdi--cube-outline] h-6 w-6' />
-              Select a local directory
+          {isLocalDirectorySelectorEnabled() ? (
+            <div>
+              <div className='flex items-center justify-center gap-2 text-center font-bold'>
+                <span className='icon-[mdi--cube-outline] h-6 w-6' />
+                Select a local directory
+              </div>
+              <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try Retro Assembly.</div>
+              <div className='mt-4 flex justify-center'>
+                <LocalButton />
+              </div>
             </div>
-            <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try Retro Assembly.</div>
-            <div className='mt-4 flex justify-center'>
-              <LocalButton />
-            </div>
-          </div>
+          ) : null}
         </div>
 
         <div className='m-auto mt-10 px-12 text-rose-200' hidden>

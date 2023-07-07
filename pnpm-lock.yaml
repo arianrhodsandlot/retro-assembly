@@ -38,9 +38,6 @@ dependencies:
   clsx:
     specifier: 1.2.1
     version: 1.2.1
-  crypto-js:
-    specifier: ^4.1.1
-    version: 4.1.1
   date-fns:
     specifier: 2.30.0
     version: 2.30.0
@@ -142,6 +139,9 @@ devDependencies:
   '@types/react-window':
     specifier: 1.8.5
     version: 1.8.5
+  '@types/wicg-file-system-access':
+    specifier: 2020.9.6
+    version: 2020.9.6
   '@vitejs/plugin-react-swc':
     specifier: 3.3.2
     version: 3.3.2(vite@4.4.1)
@@ -2500,6 +2500,10 @@ packages:
     resolution: {integrity: sha512-ASCxdbsrwNfSMXALlC3Decif9rwDMu+80KGp5zI2RLRotfMsTv7fHL8W8VDp24wymzDyIFudhUeSCugrgRFfHQ==}
     dev: true
 
+  /@types/wicg-file-system-access@2020.9.6:
+    resolution: {integrity: sha512-6hogE75Hl2Ov/jgp8ZhDaGmIF/q3J07GtXf8nCJCwKTHq7971po5+DId7grft09zG7plBwpF6ZU0yx9Du4/e1A==}
+    dev: true
+
   /@typescript-eslint/eslint-plugin@5.60.1(@typescript-eslint/parser@5.60.1)(eslint@8.44.0)(typescript@5.1.6):
     resolution: {integrity: sha512-KSWsVvsJsLJv3c4e73y/Bzt7OpqMCADUO846bHcuWYSYM19bldbAeDv7dYyV0jwkbMfJ2XdlzwjhXtuD7OY6bw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3122,10 +3126,6 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
-
-  /crypto-js@4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
-    dev: false
 
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}

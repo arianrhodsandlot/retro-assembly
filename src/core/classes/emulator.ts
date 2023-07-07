@@ -360,6 +360,8 @@ export class Emulator {
   }
 
   private async prepareEmscripten() {
+    // @ts-expect-error for retroarch fast forward
+    window.setImmediate ??= window.setTimeout
     const jsContentBody = await ky(`/vendor/cores/${this.core}_libretro.js`).text()
     const jsContent = `
     export function getEmscripten({ Module }) {
@@ -460,15 +462,15 @@ export class Emulator {
       video_vsync: true,
 
       rgui_menu_color_theme: 4,
-      // rgui_particle_effect: 3,
       rgui_show_start_screen: false,
       savestate_file_compression: true,
       savestate_thumbnail_enable: true,
       save_file_compression: true,
 
       input_rewind_btn: 6, // L2
-      // input_hold_fast_forward_btn: 7, // R2
-      input_menu_toggle_gamepad_combo: 6, // L1+R1
+      input_hold_fast_forward_btn: 7, // R2
+      // input_menu_toggle_gamepad_combo: 6, // L1+R1
+      input_enable_hotkey_btn: 8, // select
       rewind_granularity: 4,
 
       input_player1_analog_dpad_mode: 1,

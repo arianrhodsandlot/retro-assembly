@@ -6,7 +6,7 @@ import { detectHasRunningGame, onPress, pauseGame, resumeGame } from '../../../c
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
 import { MenuOverlay } from './menu-overlay'
 
-const menuHotButtons = ['l3', 'r3']
+const menuHotButtons = ['l1', 'r1']
 
 export function Emulator() {
   const [showMenuOverlay, setShowMenuOverlay] = useAtom(showMenuOverlayAtom)

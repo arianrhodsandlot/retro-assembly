@@ -55,7 +55,9 @@ export function GetStarted() {
                 <span className='icon-[mdi--cube-outline] h-6 w-6' />
                 Select a local directory
               </div>
-              <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try Retro Assembly.</div>
+              <div className='mt-2 flex items-center justify-center text-xs'>
+                A simple way to try Retro Assembly. Some browsers may be not supported.
+              </div>
               <div className='mt-4 flex justify-center'>
                 <LocalButton />
               </div>

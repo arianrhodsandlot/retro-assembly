@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource/audiowide": "5.0.4",
+    "@fontsource-variable/fredoka": "5.0.4",
     "@fontsource/noto-mono": "5.0.4",
     "@fontsource/noto-sans": "5.0.4",
     "@fontsource/roboto": "5.0.4",
@@ -64,7 +64,7 @@
     "sass": "1.63.6",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.6",
-    "vite": "4.4.1",
+    "vite": "4.4.2",
     "vite-plugin-pwa": "0.16.4",
     "zx": "7.2.3"
   }

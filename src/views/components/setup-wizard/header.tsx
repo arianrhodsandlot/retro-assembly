@@ -5,7 +5,7 @@ export function Header() {
   return (
     <div className='pb-16 text-center text-white'>
       <div className='container m-auto'>
-        <h3 className='font-[audiowide,ui-sans-serif,sans-serif]'>
+        <h3 className='font-["Fredoka_Variable"]'>
           <span className='flex items-center justify-center text-6xl font-bold tracking-widest'>
             <img alt='Retro Assembly' className='m-6 h-20 w-20 rounded-full' src={logo} />
             Retro Assembly

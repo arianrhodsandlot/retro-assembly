@@ -18,7 +18,7 @@ function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
   if (outerScrollTop && outerHeight && focusedElementHeight) {
     const offsetTop = $focusedElement.position().top + outerScrollTop
     const scrollTop = offsetTop - outerHeight / 2 + focusedElementHeight / 2
-    $outer.stop().animate({ scrollTop }, 100)
+    $outer.stop().animate({ scrollTop }, { duration: 40 })
   }
 }
 
@@ -45,6 +45,7 @@ function GameEntry({
   }
 
   function onClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.currentTarget.focus()
     const boundingClientRect = event.currentTarget.getBoundingClientRect()
     setMaskPosition({
       top: boundingClientRect.y,
@@ -79,39 +80,41 @@ function GameEntry({
         onFocus={onFocus}
         style={style}
       >
-        {gameEntryContent}
-        <div
-          className='absolute bottom-0 w-full overflow-hidden bg-[#ffffffee] px-1 py-1 text-center text-xs text-slate-400'
-          title={rom.name}
-        >
-          {districts?.map((district) => (
-            <DistrictIcon district={district} key={district} />
-          ))}
+        <div className='flex h-full flex-col'>
+          <div className='relative flex-1'>{gameEntryContent}</div>
+          <div
+            className='relative w-full overflow-hidden bg-slate-200 px-1 py-1 text-center text-xs text-slate-400'
+            title={rom.name}
+          >
+            {districts?.map((district) => (
+              <DistrictIcon district={district} key={district} />
+            ))}
 
-          <span className='align-middle'>{goodCode.rom}</span>
+            <span className='align-middle'>{goodCode.rom}</span>
 
-          {revision !== undefined && (
-            <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
-              <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
-              {revision > 1 && (
-                <span className='ml-2 h-4 align-middle font-["Noto_Mono",ui-monospace,monospace]'>{revision}</span>
-              )}
-            </span>
-          )}
+            {revision !== undefined && (
+              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+                <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
+                {revision > 1 && (
+                  <span className='ml-2 h-4 align-middle font-["Noto_Mono",ui-monospace,monospace]'>{revision}</span>
+                )}
+              </span>
+            )}
 
-          {version.alpha ? (
-            <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
-              <span className='icon-[mdi--alpha] h-4 w-4 align-middle' />
-            </span>
-          ) : version.beta ? (
-            <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
-              <span className='icon-[mdi--beta] h-4 w-4 align-middle' />
-            </span>
-          ) : version.prototype ? (
-            <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
-              <span className='icon-[mdi--flask] h-4 w-4 align-middle' />
-            </span>
-          ) : null}
+            {version.alpha ? (
+              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+                <span className='icon-[mdi--alpha] h-4 w-4 align-middle' />
+              </span>
+            ) : version.beta ? (
+              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+                <span className='icon-[mdi--beta] h-4 w-4 align-middle' />
+              </span>
+            ) : version.prototype ? (
+              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+                <span className='icon-[mdi--flask] h-4 w-4 align-middle' />
+              </span>
+            ) : null}
+          </div>
         </div>
       </GameEntryButton>
 

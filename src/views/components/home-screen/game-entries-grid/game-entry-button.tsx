@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
-import React from 'react'
+import { JSX } from 'react'
 
-type IntrinsicButtonProps = Partial<React.JSX.IntrinsicElements['button']>
+type IntrinsicButtonProps = Partial<JSX.IntrinsicElements['button']>
 
 interface GameEntryButtonProps extends IntrinsicButtonProps {
   isFirstRow: boolean

@@ -3,7 +3,7 @@ import delay from 'delay'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import $ from 'jquery'
-import { useEffect, useRef } from 'react'
+import { type FocusEvent, useEffect, useRef } from 'react'
 import { systemImageMap } from '../../../lib/constants'
 import { currentSystemNameAtom } from '../atoms'
 import { TopBarButton } from './top-bar-button'
@@ -16,7 +16,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
   const shortName = system.fullName.split(' - ')[1]
   const displayName = /^\d+$/.test(shortName) ? system.fullName : shortName
 
-  async function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
+  async function onFocus(e: FocusEvent<HTMLButtonElement>) {
     const $focusedElement = $(e.currentTarget)
     const $outer = $focusedElement.parent()
     if (isSelected) {

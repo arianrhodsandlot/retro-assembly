@@ -1,7 +1,7 @@
 import { type Target } from 'framer-motion'
 import $ from 'jquery'
 import { uniq } from 'lodash-es'
-import { memo, useState } from 'react'
+import { type CSSProperties, type FocusEvent, type MouseEvent, memo, useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
 import { DistrictIcon } from './district-icon'
@@ -9,7 +9,7 @@ import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
 
-function onFocus(e: React.FocusEvent<HTMLButtonElement, Element>) {
+function onFocus(e: FocusEvent<HTMLButtonElement, Element>) {
   const $focusedElement = $(e.currentTarget)
   const $outer = $focusedElement.offsetParent()
   const outerScrollTop = $outer.scrollTop()
@@ -35,7 +35,7 @@ function GameEntry({
   rowIndex: number
   rowCount: number
   columnCount: number
-  style: React.CSSProperties
+  style: CSSProperties
 }) {
   const [maskPosition, setMaskPosition] = useState<Target>()
 
@@ -44,7 +44,7 @@ function GameEntry({
     emitter.off('exit', onExit)
   }
 
-  function onClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function onClick(event: MouseEvent<HTMLButtonElement>) {
     event.currentTarget.focus()
     const boundingClientRect = event.currentTarget.getBoundingClientRect()
     setMaskPosition({

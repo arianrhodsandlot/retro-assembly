@@ -1,13 +1,15 @@
 import { type Target } from 'framer-motion'
 import $ from 'jquery'
-import { uniq } from 'lodash-es'
 import { type CSSProperties, type FocusEvent, type MouseEvent, memo, useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
-import { DistrictIcon } from './district-icon'
+import { BaseDialogContent } from '../../primitives/base-dialog-content'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
+import { GameTitle } from './game-title'
+
+const mayNeedsUserInteraction = /iphone|ipad|ipod/i.test(navigator.userAgent)
 
 function onFocus(e: FocusEvent<HTMLButtonElement, Element>) {
   const $focusedElement = $(e.currentTarget)
@@ -38,14 +40,18 @@ function GameEntry({
   style: CSSProperties
 }) {
   const [maskPosition, setMaskPosition] = useState<Target>()
+  const [showInteractionButton, setShowInteractionButton] = useState(false)
+  const [finishInteraction, setFinishInteraction] = useState<() => void>()
+  const [needsUserInteraction, setNeedsUserInteraction] = useState(false)
 
   function onExit() {
     setMaskPosition(undefined)
     emitter.off('exit', onExit)
   }
 
-  function onClick(event: MouseEvent<HTMLButtonElement>) {
+  function onClickGameEntryButton(event: MouseEvent<HTMLButtonElement>) {
     event.currentTarget.focus()
+
     const boundingClientRect = event.currentTarget.getBoundingClientRect()
     setMaskPosition({
       top: boundingClientRect.y,
@@ -54,7 +60,26 @@ function GameEntry({
       height: boundingClientRect.height,
     })
 
+    setNeedsUserInteraction(mayNeedsUserInteraction && event.clientX === 0 && event.clientY === 0)
+
     emitter.on('exit', onExit)
+  }
+
+  async function waitForUserInteraction() {
+    setShowInteractionButton(true)
+
+    return await new Promise<void>((resolve) => {
+      setFinishInteraction(() => resolve)
+    })
+  }
+
+  function onUserInteract() {
+    setShowInteractionButton(false)
+    finishInteraction?.()
+  }
+
+  async function onMaskShow() {
+    await (needsUserInteraction ? launchGame(rom, { waitForUserInteraction }) : launchGame(rom))
   }
 
   const isFirstRow = rowIndex === 0
@@ -64,11 +89,6 @@ function GameEntry({
 
   const gameEntryContent = <GameEntryContent rom={rom} />
 
-  const { goodCode } = rom
-  const { codes } = goodCode
-  const { revision, countries, version = {} } = codes
-  const districts = uniq(countries?.map(({ code }) => code))
-
   return (
     <>
       <GameEntryButton
@@ -76,49 +96,36 @@ function GameEntry({
         isFirstRow={isFirstRow}
         isLastColumn={isLastColumn}
         isLastRow={isLastRow}
-        onClick={onClick}
+        onClick={onClickGameEntryButton}
         onFocus={onFocus}
         style={style}
       >
         <div className='flex h-full flex-col'>
           <div className='relative flex-1'>{gameEntryContent}</div>
-          <div
-            className='relative w-full overflow-hidden bg-slate-200 px-1 py-1 text-center text-xs text-slate-400'
-            title={rom.name}
-          >
-            {districts?.map((district) => (
-              <DistrictIcon district={district} key={district} />
-            ))}
-
-            <span className='align-middle'>{goodCode.rom}</span>
-
-            {revision !== undefined && (
-              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-                <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
-                {revision > 1 && (
-                  <span className='ml-2 h-4 align-middle font-["Noto_Mono",ui-monospace,monospace]'>{revision}</span>
-                )}
-              </span>
-            )}
-
-            {version.alpha ? (
-              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-                <span className='icon-[mdi--alpha] h-4 w-4 align-middle' />
-              </span>
-            ) : version.beta ? (
-              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-                <span className='icon-[mdi--beta] h-4 w-4 align-middle' />
-              </span>
-            ) : version.prototype ? (
-              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-                <span className='icon-[mdi--flask] h-4 w-4 align-middle' />
-              </span>
-            ) : null}
-          </div>
+          <GameTitle rom={rom} />
         </div>
       </GameEntryButton>
 
-      <GameEntryPortals maskContent={gameEntryContent} maskPosition={maskPosition} onMaskShow={() => launchGame(rom)} />
+      <GameEntryPortals maskContent={gameEntryContent} maskPosition={maskPosition} onMaskShow={onMaskShow} />
+      {showInteractionButton ? (
+        <BaseDialogContent>
+          <div
+            aria-hidden
+            className='relative flex cursor-pointer items-center justify-center rounded border-2 border-rose-700 bg-rose-700 px-4 py-2 text-white'
+            onClick={onUserInteract}
+          >
+            <span className='icon-[mdi--gesture-tap] mr-2 h-5 w-5' />
+            Please tap here to launch the game
+          </div>
+          <div className='mt-2 flex max-w-xs text-xs'>
+            <span className='icon-[mdi--lightbulb-on-outline] mr-2 h-4 w-4' />
+            <div>
+              This is due to a limitation of the browser.
+              <br />A game can only run after the screen is tapped, rather than clicking a button on a gamepad.
+            </div>
+          </div>
+        </BaseDialogContent>
+      ) : null}
     </>
   )
 }

@@ -3,7 +3,10 @@ import { type Rom } from '../classes/rom'
 import { globalContext } from '../internal/global-context'
 import { exitGame } from './exit-game'
 
-export async function launchGame(rom: Rom) {
+export async function launchGame(
+  rom: Rom,
+  { waitForUserInteraction }: { waitForUserInteraction?: () => Promise<void> } = {}
+) {
   if (!globalContext.fileSystem) {
     throw new Error('fileSystem is not available')
   }
@@ -14,5 +17,5 @@ export async function launchGame(rom: Rom) {
 
   const emulator = new Emulator({ rom })
   globalContext.emulator = emulator
-  await emulator.launch()
+  await emulator.launch(waitForUserInteraction)
 }

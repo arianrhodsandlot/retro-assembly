@@ -160,7 +160,7 @@ export class Emulator {
     return `${this.stateFileName}.png`
   }
 
-  async launch() {
+  async launch(waitForUserInteraction?: () => Promise<void>) {
     if (this.rom) {
       // todo: maybe this is not necessary
       await this.rom.ready()
@@ -184,6 +184,9 @@ export class Emulator {
 
     this.prepareRaConfigFile()
     this.prepareRaCoreConfigFile()
+
+    await waitForUserInteraction?.()
+
     this.runMain()
     this.resizeCanvas()
     this.showCanvasCusor()

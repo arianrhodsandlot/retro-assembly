@@ -27,6 +27,6 @@ export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(functio
       ref,
       ...props,
     },
-    <div className='relative z-[1] flex items-center justify-center gap-2'>{children}</div>
+    <div className='relative flex items-center justify-center gap-2'>{children}</div>
   )
 })

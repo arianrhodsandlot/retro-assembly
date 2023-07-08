@@ -5,7 +5,6 @@ type CoreName =
   | 'fceumm'
   | 'gearboy'
   | 'genesis_plus_gx'
-  | 'gw'
   | 'mgba'
   | 'mupen64plus_next'
   | 'nestopia'

@@ -7,8 +7,8 @@ export function Header() {
       <div className='container m-auto'>
         <h3 className='font-["Fredoka_Variable"]'>
           <span className='flex items-center justify-center text-6xl font-bold tracking-widest'>
-            <img alt='Retro Assembly' className='m-6 h-20 w-20 rounded-full' src={logo} />
-            Retro Assembly
+            <img alt='RetroAssembly' className='m-6 h-20 w-20 rounded-full' src={logo} />
+            RetroAssembly
           </span>
         </h3>
         <div className='mt-10 flex items-center justify-center text-sm tracking-wider'>
@@ -26,7 +26,7 @@ export function Header() {
             </AnimatedIcons>
             retro
           </span>
-          <span>game collection museum in your</span>
+          <span>game collection museum inside your</span>
           <span className='mx-2 flex items-center justify-center rounded-full border-2 border-white px-4 py-2'>
             <AnimatedIcons wait={500}>
               <span className='icon-[simple-icons--googlechrome] h-4 w-4' />

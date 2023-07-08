@@ -2,13 +2,13 @@
   <img src="public/assets/logo/logo-512x512.png" alt="logo" width="128" height="128">
 </p>
 
-<h1 align="center">Retro Assembly</h1>
+<h1 align="center">RetroAssembly</h1>
 
 ## Overview
-Retro Assembly is your personal retro game collection museum in your browser.
+RetroAssembly is your personal retro game collection museum inside your browser.
 
 ## Features
-+ Import a directory from your OneDrive/Google Drive or disk, then a GameList will appear
++ Import a directory from your OneDrive/Google Drive or disk, then a game list will appear
 + Automatically grab game cover images
 + Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles.
 + Save states and sync them to with different devices (if using a cloud disk we support)
@@ -39,10 +39,10 @@ We support mainstream fourth-generation and earlier consoles as well as some han
 > However, more consoles will be supported in the future.
 
 ## Alternatives
-+ EmulatorJS [🏠](https://emulatorjs.org) [:octocat:](https://github.com/EmulatorJS/EmulatorJS)
-+ RetroArchWebPlayer [🏠](https://web.libretro.com) [:octocat:](https://github.com/libretro/RetroArch/blob/master/pkg/emscripten/README.md)
-+ webrcade [🏠](https://www.webrcade.com) [:octocat:](https://github.com/webrcade/webrcade)
-+ webretro [🏠](https://binbashbanana.github.io/webretro/) [:octocat:](https://github.com/BinBashBanana/webretro)
++ [EmulatorJS](https://emulatorjs.org) [:octocat:](https://github.com/EmulatorJS/EmulatorJS)
++ [RetroArchWebPlayer](https://web.libretro.com) [:octocat:](https://github.com/libretro/RetroArch/blob/master/pkg/emscripten/README.md)
++ [webrcade](https://www.webrcade.com) [:octocat:](https://github.com/webrcade/webrcade)
++ [webretro](https://binbashbanana.github.io/webretro/) [:octocat:](https://github.com/BinBashBanana/webretro)
 
 ## License
 [MIT](license)

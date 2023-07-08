@@ -36,7 +36,6 @@ export function GoogleDriveButton() {
       <BaseButton className='w-60' styleType='primary'>
         <span className='icon-[logos--google-drive] h-5 w-5' />
         Google Drive
-        <sup>beta</sup>
       </BaseButton>
     </BaseDialogTrigger>
   )

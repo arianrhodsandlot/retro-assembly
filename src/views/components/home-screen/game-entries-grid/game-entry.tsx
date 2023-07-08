@@ -93,7 +93,7 @@ function GameEntry({
             <span className='align-middle'>{goodCode.rom}</span>
 
             {revision !== undefined && (
-              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
                 <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
                 {revision > 1 && (
                   <span className='ml-2 h-4 align-middle font-["Noto_Mono",ui-monospace,monospace]'>{revision}</span>
@@ -102,15 +102,15 @@ function GameEntry({
             )}
 
             {version.alpha ? (
-              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
                 <span className='icon-[mdi--alpha] h-4 w-4 align-middle' />
               </span>
             ) : version.beta ? (
-              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
                 <span className='icon-[mdi--beta] h-4 w-4 align-middle' />
               </span>
             ) : version.prototype ? (
-              <span className='ml-2 inline-block rounded bg-gray-200 px-1'>
+              <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
                 <span className='icon-[mdi--flask] h-4 w-4 align-middle' />
               </span>
             ) : null}

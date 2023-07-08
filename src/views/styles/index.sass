@@ -6,11 +6,27 @@
 @tailwind components
 @tailwind utilities
 
-:focus
-  outline: none
-
 body
   font-family: 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif
+
+:focus
+  @apply outline-none
+
+.game-entry-grid::-webkit-scrollbar
+  @apply w-2
+  @apply bg-white
+
+.game-entry-grid::-webkit-scrollbar-thumb
+  @apply rounded-none
+  @apply bg-rose-600
+
+.system-navigation::-webkit-scrollbar
+  @apply h-2
+  @apply bg-white
+
+.system-navigation::-webkit-scrollbar-thumb
+  @apply rounded-none
+  @apply bg-rose-600
 
 @keyframes pulse-white-border
   0%, 100%

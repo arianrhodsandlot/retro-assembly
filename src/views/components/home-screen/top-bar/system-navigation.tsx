@@ -62,7 +62,7 @@ export function SystemNavigation() {
   }, [selectNextSystem])
 
   return (
-    <div className='flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
+    <div className='system-navigation flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
       {systems?.map((system) => (
         <SystemNavigationItem key={system.name} system={system} />
       ))}

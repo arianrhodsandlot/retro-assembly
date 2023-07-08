@@ -1,9 +1,9 @@
 export function GameEntryImage({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className='absolute inset-0 overflow-hidden bg-black'>
+    <div className='absolute inset-0 overflow-hidden bg-zinc-800'>
       <img
         alt={alt}
-        className='absolute inset-0 scale-150 bg-cover object-cover opacity-50'
+        className='absolute inset-0 scale-150 bg-cover object-cover opacity-20'
         src={src}
         style={{ imageRendering: 'pixelated' }}
       />

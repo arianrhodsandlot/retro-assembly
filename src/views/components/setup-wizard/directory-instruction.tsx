@@ -1,7 +1,7 @@
 import { getSupportedSystemNames } from '../../../core'
 import { BaseCallout } from '../primitives/base-callout'
 
-const supportedSystemNames = getSupportedSystemNames().sort()
+const supportedSystemNames = [...getSupportedSystemNames()].sort()
 
 export function DirectoryInstruction() {
   return (

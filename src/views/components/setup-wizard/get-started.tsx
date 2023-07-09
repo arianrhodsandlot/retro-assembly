@@ -9,6 +9,7 @@ import { isInvalidDialogOpenAtom } from './atoms'
 import { DirectoryInstruction } from './directory-instruction'
 import { GoogleDriveButton } from './google-drive-button'
 import { LocalButton } from './local-button'
+import { LocalFileButton } from './local-file-button'
 import { OnedriveButton } from './onedrive-button'
 
 const isOnedriveEnabled = isCloudServiceEnabled('onedrive')
@@ -78,6 +79,19 @@ export function GetStarted() {
               </div>
             </div>
           ) : null}
+
+          <div>
+            <div className='flex items-center justify-center gap-2 text-center font-bold'>
+              <span className='icon-[mdi--cube-outline] h-6 w-6' />
+              Select a local file
+            </div>
+            <div className='mt-2 flex items-center justify-center text-xs'>
+              Just play your ROMs, without setting up, instantly!
+            </div>
+            <div className='mt-4 flex justify-center'>
+              <LocalFileButton />
+            </div>
+          </div>
         </div>
 
         <div className='m-auto mt-10 px-12 text-rose-200' hidden>

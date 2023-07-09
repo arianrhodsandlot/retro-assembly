@@ -39,7 +39,7 @@ export async function requestLocalHandle({ name, mode }: { name: string; mode: s
 }
 
 export async function requestFreshLocalHandle({ name, mode }: { name: string; mode: string }) {
-  const handle = await showDirectoryPicker({ mode })
+  const handle = await window.showDirectoryPicker({ mode })
   const handles = (await get('local-file-system-handles')) ?? {}
   handles[name] = handle
   await set('local-file-system-handles', handles)

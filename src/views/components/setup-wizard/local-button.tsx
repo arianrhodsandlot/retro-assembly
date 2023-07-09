@@ -9,8 +9,7 @@ export function LocalButton() {
 
   async function selectLocalDirectory() {
     try {
-      // @ts-expect-error `showDirectoryPicker` is not defined in ts's default declaration files
-      const handle = await showDirectoryPicker({ mode: 'readwrite' })
+      const handle = await window.showDirectoryPicker({ mode: 'readwrite' })
 
       const isValid = await validateRomDirectory({ type: 'local', handle })
       if (isValid) {

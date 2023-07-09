@@ -47,6 +47,9 @@ dependencies:
   delay:
     specifier: 6.0.0
     version: 6.0.0
+  file-select:
+    specifier: ^1.0.2
+    version: 1.0.2
   framer-motion:
     specifier: 10.12.18
     version: 10.12.18(react-dom@18.2.0)(react@18.2.0)
@@ -4138,6 +4141,10 @@ packages:
     dependencies:
       flat-cache: 3.0.4
     dev: true
+
+  /file-select@1.0.2:
+    resolution: {integrity: sha512-SWtraBZdiz6JN+XBqm88p2mBzCRLA+vZ0kpQqoziCstP+Fc05mrIPXh0PsY8GmKcOM2jJPfj/83b+fmQkX0Kyw==}
+    dev: false
 
   /filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}

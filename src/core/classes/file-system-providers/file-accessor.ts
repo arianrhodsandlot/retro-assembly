@@ -48,7 +48,8 @@ export class FileAccessor {
   }
 
   async getBlob() {
-    return this.blob ?? (await this.fileSystemProvider.getContent(this.path))
+    this.blob ??= await this.fileSystemProvider.getContent(this.path)
+    return this.blob
   }
 
   async getUrl() {

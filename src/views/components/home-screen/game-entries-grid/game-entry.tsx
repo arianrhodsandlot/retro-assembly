@@ -1,9 +1,11 @@
 import { type Target } from 'framer-motion'
+import { useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { type CSSProperties, type FocusEvent, type MouseEvent, memo, useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
+import { isGameRunningAtom } from '../atoms'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
@@ -43,8 +45,10 @@ function GameEntry({
   const [showInteractionButton, setShowInteractionButton] = useState(false)
   const [finishInteraction, setFinishInteraction] = useState<() => void>()
   const [needsUserInteraction, setNeedsUserInteraction] = useState(false)
+  const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
 
   function onExit() {
+    setIsGameRunningAtom(false)
     setMaskPosition(undefined)
     emitter.off('exit', onExit)
   }
@@ -79,7 +83,9 @@ function GameEntry({
   }
 
   async function onMaskShow() {
+    setIsGameRunningAtom(true)
     await (needsUserInteraction ? launchGame(rom, { waitForUserInteraction }) : launchGame(rom))
+    document.body.dispatchEvent(new MouseEvent('mousemove'))
   }
 
   const isFirstRow = rowIndex === 0
@@ -107,6 +113,7 @@ function GameEntry({
       </GameEntryButton>
 
       <GameEntryPortals maskContent={gameEntryContent} maskPosition={maskPosition} onMaskShow={onMaskShow} />
+
       {showInteractionButton ? (
         <BaseDialogContent>
           <div

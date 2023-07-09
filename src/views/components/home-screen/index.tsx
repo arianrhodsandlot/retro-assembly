@@ -1,10 +1,10 @@
-import { useAtom, useSetAtom, useStore } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom, useStore } from 'jotai'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getSystemRoms, getSystems, peekSystemRoms } from '../../../core'
-import { Emulator } from '../emulator'
-import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
+import { currentSystemNameAtom, isGameRunningAtom, romsAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
+import { GameMenus } from './game-menus'
 import { HomeScreenLayout } from './home-screen-layout'
 import { InputTips } from './input-tips'
 
@@ -24,6 +24,7 @@ const lastSelectedSystemStorageKey = 'last-selected-system'
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
+  const isGameRunning = useAtomValue(isGameRunningAtom)
   const store = useStore()
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
@@ -114,7 +115,7 @@ export function HomeScreen() {
         />
       </div>
 
-      <Emulator />
+      {isGameRunning ? <GameMenus /> : null}
 
       <InputTips />
     </HomeScreenLayout>

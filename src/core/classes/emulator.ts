@@ -190,7 +190,7 @@ export class Emulator {
     this.runMain()
     this.resizeCanvas()
     this.showCanvasCusor()
-    window.addEventListener('mousemove', this.showCanvasCusor, false)
+    document.body.addEventListener('mousemove', this.showCanvasCusor, false)
     window.addEventListener('resize', this.resizeCanvas, false)
     updateStyle(this.canvas, { visibility: 'visible' })
     this.canvas.focus()
@@ -263,7 +263,7 @@ export class Emulator {
       FS.unmount('/home')
       JSEvents.removeAllEventListeners()
     }
-    window.removeEventListener('mousemove', this.showCanvasCusor, false)
+    document.body.removeEventListener('mousemove', this.showCanvasCusor, false)
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas.remove()
     // @ts-expect-error try to focus on previous active element
@@ -475,6 +475,8 @@ export class Emulator {
       // input_menu_toggle_gamepad_combo: 6, // L1+R1
       input_enable_hotkey_btn: 8, // select
       rewind_granularity: 4,
+
+      input_exit_emulator: 'nul',
 
       input_player1_analog_dpad_mode: 1,
       input_player2_analog_dpad_mode: 1,

@@ -2,7 +2,7 @@ import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect, useRef } from 'react'
 import { useAsync } from 'react-use'
-import { getStates } from '../../../core'
+import { getStates } from '../../../../core'
 import { shouldFocusStatesListAtom } from './atoms'
 import { StateItem } from './state-item'
 

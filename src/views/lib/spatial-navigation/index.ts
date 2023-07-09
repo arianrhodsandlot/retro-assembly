@@ -7,6 +7,7 @@ SpatialNavigation.add({
   id: 'get-started',
   selector: '.get-started button',
   enterTo: 'default-element',
+  defaultElement: '.get-started button[aria-haspopup=dialog]',
   leaveFor: { up: '', down: '', left: '', right: '' },
 })
 

@@ -31,7 +31,7 @@ const fileInstructionToolTip = (
   <BaseTooltip
     tooltipContent={
       <div className='z-[2] max-w-sm rounded border border-rose-700 bg-white p-6'>
-        <div>We currently support ROM files with these extensions:</div>
+        <div>We currently support ROM files with these file extensions:</div>
         <div className=' leading-loose'>
           {[...supportedFileExtensions].sort().map((extension) => {
             return (

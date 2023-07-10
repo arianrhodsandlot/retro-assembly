@@ -15,7 +15,7 @@ export function UserInteractionButton({ onUserInteract }: UserInteractionButtonP
         <span className='icon-[mdi--gesture-tap] mr-2 h-5 w-5' />
         Tap here to launch the game
       </div>
-      <div className='mt-2 flex max-w-xs text-xs'>
+      <div className='mt-2 flex max-w-xs text-xs text-rose-700'>
         <span className='icon-[mdi--lightbulb-on-outline] mr-2 h-4 w-4' />
         <div>
           This is due to a limitation of the browser.

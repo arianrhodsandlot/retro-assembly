@@ -110,6 +110,7 @@ export class Rom {
 
   private guessSystemByFileName(name: string = this.name) {
     const extname = name.split('.').pop()
+    console.log(extname)
     if (!extname) {
       return ''
     }

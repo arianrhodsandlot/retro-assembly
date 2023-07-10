@@ -11,7 +11,7 @@ export function BaseTooltip({ tooltipContent, children, ...props }: BaseTooltipP
       <Root delayDuration={0}>
         <Trigger {...props}>{children}</Trigger>
         <Portal>
-          <Content sideOffset={5}>
+          <Content className='z-[1]' sideOffset={5}>
             {tooltipContent}
             <Arrow className='fill-rose-700' />
           </Content>

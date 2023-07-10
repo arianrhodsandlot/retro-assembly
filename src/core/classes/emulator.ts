@@ -193,10 +193,6 @@ export class Emulator {
     this.canvas.focus()
 
     this.processStatus = 'ready'
-
-    setTimeout(() => {
-      this.pause()
-    }, 100)
   }
 
   resume() {

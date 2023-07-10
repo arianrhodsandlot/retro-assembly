@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const mayNeedsUserInteraction = /iphone|ipad|ipod/i.test(navigator.userAgent) || true
+const mayNeedsUserInteraction = /iphone|ipad|ipod/i.test(navigator.userAgent)
 
 export function useUserInteraction() {
   const [showInteractionButton, setShowInteractionButton] = useState(false)

@@ -1,13 +1,12 @@
 import { CloudServiceLoginButton } from '../../common/cloud-service-login-button'
 import { BaseCallout } from '../../primitives/base-callout'
 
-export function CloudServiceLogin({
-  cloudService,
-  onSolve,
-}: {
+interface CloudServiceLoginProps {
   cloudService: 'onedrive' | 'google-drive'
+  showReturnHome: boolean
   onSolve: () => void
-}) {
+}
+export function CloudServiceLogin({ cloudService, showReturnHome, onSolve }: CloudServiceLoginProps) {
   const loginNameMap = {
     onedrive: 'OneDrive',
     'google-drive': 'Google Drive',
@@ -24,7 +23,7 @@ export function CloudServiceLogin({
       </BaseCallout>
 
       <div className='mt-4'>
-        <CloudServiceLoginButton cloudService={cloudService} onLogin={onSolve} />
+        <CloudServiceLoginButton cloudService={cloudService} onLogin={onSolve} showReturnHome />
       </div>
     </div>
   )

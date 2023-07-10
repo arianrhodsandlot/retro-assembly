@@ -19,7 +19,11 @@ export function LocalFileButton() {
 
     const file: File = await fileSelect()
     if (file) {
-      await (mayNeedsUserInteraction ? previewGame(file, { waitForUserInteraction }) : previewGame(file))
+      try {
+        await (mayNeedsUserInteraction ? previewGame(file, { waitForUserInteraction }) : previewGame(file))
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 

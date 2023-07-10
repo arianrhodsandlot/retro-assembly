@@ -3,20 +3,20 @@ import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
-import { emitter } from '../../lib/emitter'
 import { ReturnToHomeButton } from './return-to-home-button'
-
-interface CloudServiceLoginButtonProps {
-  cloudService: 'onedrive' | 'google-drive'
-  onLogin: () => void
-}
 
 const cloudServiceMap = {
   onedrive: 'Microsoft',
   'google-drive': 'Google',
 }
 
-export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceLoginButtonProps) {
+interface CloudServiceLoginButtonProps {
+  cloudService: 'onedrive' | 'google-drive'
+  showReturnHome: boolean
+  onLogin: () => void
+}
+
+export function CloudServiceLoginButton({ cloudService, showReturnHome, onLogin }: CloudServiceLoginButtonProps) {
   const authorizeUrlState = useAsync(async () => await getAuthorizeUrl(cloudService))
   const authorizeWindow = useRef<Window | null>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
@@ -70,7 +70,7 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
   }
 
   return (
-    <div className='flex flex-col items-stretch justify-center gap-y-4 px-20'>
+    <div className='flex flex-col items-stretch justify-center gap-y-4 px-10'>
       <BaseButton
         href={authorizeUrlState.value}
         onClick={login}
@@ -88,7 +88,7 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
         />
         Sign in with {cloudServiceMap[cloudService]}
       </BaseButton>
-      <ReturnToHomeButton></ReturnToHomeButton>
+      {showReturnHome ? <ReturnToHomeButton /> : null}
     </div>
   )
 }

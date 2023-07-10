@@ -12,21 +12,19 @@ body
 :focus
   @apply outline-none
 
-// .game-entry-grid::-webkit-scrollbar
-//   @apply w-2
-//   @apply bg-white
+.hero:before
+  @apply absolute inset-0 bg-rose-700 content-['']
 
-// .game-entry-grid::-webkit-scrollbar-thumb
-//   @apply rounded-none
-//   @apply bg-rose-600
+.hero:after
+  @apply absolute inset-0 animate-[animated-background_10s_linear_infinite] bg-repeat opacity-10 content-['']
+  background-image: url('../../assets/hero-background.png')
+  background-size: 20rem
 
-// .system-navigation::-webkit-scrollbar
-//   @apply h-2
-//   @apply bg-white
-
-// .system-navigation::-webkit-scrollbar-thumb
-//   @apply rounded-none
-//   @apply bg-rose-600
+@keyframes animated-background
+  from
+    background-position: 0 0
+  to
+    background-position: 0 20rem
 
 @keyframes pulse-white-border
   0%, 100%

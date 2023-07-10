@@ -14,7 +14,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.statusCode === 401 || error.response?.status === 400) {
     return (
       <BaseDialogContent>
-        <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
+        <CloudServiceLogin showReturnHome cloudService={'onedrive'} onSolve={onSolve} />
       </BaseDialogContent>
     )
   }
@@ -22,17 +22,17 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.status === 401) {
     return (
       <BaseDialogContent>
-        <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} />
+        <CloudServiceLogin showReturnHome cloudService={'google-drive'} onSolve={onSolve} />
       </BaseDialogContent>
     )
   }
 
-  console.log(error, error.stack)
+  console.warn(error, error.stack)
 
   // todo: needs better error text
   return (
     <BaseDialogContent>
-      <div>{error.stack ? <pre>{error.stack}</pre> : JSON.stringify(error)}</div>
+      <div>Failed to load games.</div>
     </BaseDialogContent>
   )
 }

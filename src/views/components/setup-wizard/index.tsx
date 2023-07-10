@@ -25,7 +25,7 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
         <GetStarted />
       </div>
 
-      <div className='mt-10 py-4 text-center text-xs text-rose-400'>
+      <div className='mt-10 py-4 text-center text-xs text-rose-500'>
         <div className='flex items-center justify-center'>
           <div>
             © <a href='https://github.com/arianrhodsandlot/'> arianrhodsandlot</a> 2023

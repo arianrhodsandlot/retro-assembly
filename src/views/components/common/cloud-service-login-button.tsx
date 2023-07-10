@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
+import { emitter } from '../../lib/emitter'
+import { ReturnToHomeButton } from './return-to-home-button'
 
 interface CloudServiceLoginButtonProps {
   cloudService: 'onedrive' | 'google-drive'
@@ -68,7 +70,7 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
   }
 
   return (
-    <div className='flex h-12 items-center justify-center'>
+    <div className='flex flex-col items-stretch justify-center gap-y-4 px-20'>
       <BaseButton
         href={authorizeUrlState.value}
         onClick={login}
@@ -86,6 +88,7 @@ export function CloudServiceLoginButton({ cloudService, onLogin }: CloudServiceL
         />
         Sign in with {cloudServiceMap[cloudService]}
       </BaseButton>
+      <ReturnToHomeButton></ReturnToHomeButton>
     </div>
   )
 }

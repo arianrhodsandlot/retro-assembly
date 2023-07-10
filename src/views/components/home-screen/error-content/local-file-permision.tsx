@@ -1,4 +1,6 @@
 import { grantLocalPermission } from '../../../../core'
+import { emitter } from '../../../lib/emitter'
+import { ReturnToHomeButton } from '../../common/return-to-home-button'
 import { BaseButton } from '../../primitives/base-button'
 
 export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
@@ -16,17 +18,20 @@ export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
         <h3>Local file permission is needed</h3>
       </div>
       <div className='mt-4'>
-        We have to ask you to grant the permission to read your ROMs again, though you have done this last time.
+        We have to ask you to grant permission to read your ROMs again, even though you have already done so last time.
       </div>
-      <div className='mt-4 text-center'>
-        <BaseButton className='mx-auto' onClick={grant} styleType='primary'>
+      <div className='mt-4 flex flex-col items-stretch justify-center px-24'>
+        <BaseButton onClick={grant} styleType='primary'>
           <span className='icon-[mdi--folder-open] h-5 w-5' />
-          grant the permission
+          Grant permission
         </BaseButton>
+        <div className='mt-2 mb-4 text-xs text-rose-700 flex gap-1'>
+          <span className='icon-[mdi--information-outline] h-4 w-4' />
+          <div>
+          <div>This is due to a restriction of the security policy of your browser.</div>
+          </div>
       </div>
-      <div className='mt-4'>This is due to a restriction of the security police of your browser.</div>
-      <div className='mt-4'>
-        For more fluent experience, You can also consider using OneDrive as your ROMs directory latter.
+        <ReturnToHomeButton></ReturnToHomeButton>
       </div>
     </div>
   )

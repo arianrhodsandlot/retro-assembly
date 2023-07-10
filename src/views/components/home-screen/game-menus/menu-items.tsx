@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useAtomValue, useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
-import { onCancel, resumeGame } from '../../../../core'
+import { isUsingDummy, onCancel, resumeGame } from '../../../../core'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { previousFocusedElementAtom, shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
 import { StatesList } from './states-list'
@@ -25,6 +25,8 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
   const previousFocusedElement = useAtomValue(previousFocusedElementAtom)
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
+
+  const hideNonEssentialItems = isUsingDummy()
 
   function onLoadStateButtonFocus() {
     setShowStateList(true)
@@ -69,26 +71,30 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             Restart
           </button>
 
-          <button className={menuButtonClassNames} onClick={onSaveState} onFocus={() => setShowStateList(false)}>
-            <span className='icon-[mdi--content-save] mr-2 h-6 w-6' />
-            Save state
-          </button>
+          {!hideNonEssentialItems && (
+            <>
+              <button className={menuButtonClassNames} onClick={onSaveState} onFocus={() => setShowStateList(false)}>
+                <span className='icon-[mdi--content-save] mr-2 h-6 w-6' />
+                Save state
+              </button>
 
-          <button
-            className={clsx(menuButtonClassNames, {
-              'bg-white text-rose-700': showStateList,
-            })}
-            onClick={() => setShouldFocusStatesList(true)}
-            onFocus={onLoadStateButtonFocus}
-          >
-            <span className='icon-[mdi--tray-arrow-down] mr-2 h-6 w-6' />
-            Load state
-          </button>
+              <button
+                className={clsx(menuButtonClassNames, {
+                  'bg-white text-rose-700': showStateList,
+                })}
+                onClick={() => setShouldFocusStatesList(true)}
+                onFocus={onLoadStateButtonFocus}
+              >
+                <span className='icon-[mdi--tray-arrow-down] mr-2 h-6 w-6' />
+                Load state
+              </button>
 
-          <button className={menuButtonClassNames} onClick={onSaveAndExit} onFocus={() => setShowStateList(false)}>
-            <span className='icon-[mdi--location-exit] mr-2 h-6 w-6' />
-            Save & exit
-          </button>
+              <button className={menuButtonClassNames} onClick={onSaveAndExit} onFocus={() => setShowStateList(false)}>
+                <span className='icon-[mdi--location-exit] mr-2 h-6 w-6' />
+                Save & exit
+              </button>
+            </>
+          )}
 
           <button className={menuButtonClassNames} onClick={onExit} onFocus={() => setShowStateList(false)}>
             <span className='icon-[mdi--exit-to-app] mr-2 h-6 w-6' />

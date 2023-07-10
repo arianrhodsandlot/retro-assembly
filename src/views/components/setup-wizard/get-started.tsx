@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../core'
+import { getSupportedFileExtensions, isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
@@ -21,6 +21,31 @@ const directoryInstructionToolTip = (
   <BaseTooltip
     tooltipContent={
       <div className='z-[2] max-w-lg rounded border border-rose-700 bg-white p-6'>{directoryInstruction}</div>
+    }
+  >
+    <span className='icon-[mdi--help-circle-outline] relative -top-1 h-4 w-4' />
+  </BaseTooltip>
+)
+const supportedFileExtensions = getSupportedFileExtensions()
+const fileInstructionToolTip = (
+  <BaseTooltip
+    tooltipContent={
+      <div className='z-[2] max-w-sm rounded border border-rose-700 bg-white p-6'>
+        <div>We currently support ROM files with these extensions:</div>
+        <div className=' leading-loose'>
+          {[...supportedFileExtensions].sort().map((extension) => {
+            return (
+              <pre className='mr-2 mt-2 inline-block rounded bg-rose-100 px-2 text-sm text-rose-700' key={extension}>
+                {extension}
+              </pre>
+            )
+          })}
+        </div>
+        <div className='mt-2'>
+          or a <pre className='inline-block rounded bg-rose-100 px-2 text-sm text-rose-700'>zip</pre> file containing
+          one with above extensions.
+        </div>
+      </div>
     }
   >
     <span className='icon-[mdi--help-circle-outline] relative -top-1 h-4 w-4' />
@@ -71,9 +96,7 @@ export function GetStarted() {
                 Select a local directory
                 {directoryInstructionToolTip}
               </div>
-              <div className='mt-2 flex items-center justify-center text-xs'>
-                A simple way to try RetroAssembly. Some browsers may be not supported.
-              </div>
+              <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try RetroAssembly.</div>
               <div className='mt-4 flex justify-center'>
                 <LocalButton />
               </div>
@@ -84,9 +107,10 @@ export function GetStarted() {
             <div className='flex items-center justify-center gap-2 text-center font-bold'>
               <span className='icon-[mdi--cube-outline] h-6 w-6' />
               Select a local file
+              {fileInstructionToolTip}
             </div>
             <div className='mt-2 flex items-center justify-center text-xs'>
-              Just play your ROMs, without setting up, instantly!
+              Just play your ROMs, without setting up, instantly.
             </div>
             <div className='mt-4 flex justify-center'>
               <LocalFileButton />

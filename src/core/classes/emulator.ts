@@ -137,7 +137,7 @@ export class Emulator {
       inset: '0',
       maxHeight: '100%',
       maxWidth: '100%',
-      position: 'absolute',
+      position: 'fixed',
       visibility: 'hidden',
       zIndex: '10',
       ...style,

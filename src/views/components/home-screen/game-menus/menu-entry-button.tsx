@@ -16,7 +16,7 @@ export function MenuEntryButton({ onClick }: { onClick: () => void }) {
         <motion.div
           animate={{ opacity: 1 }}
           aria-hidden
-          className='absolute bottom-10 right-10 z-20 flex h-12 cursor-pointer items-center justify-center rounded bg-rose-700 px-6 text-white shadow-xl'
+          className='fixed bottom-10 right-10 z-20 flex h-12 cursor-pointer items-center justify-center rounded bg-rose-700 px-6 text-white shadow-xl'
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
           onClick={onClick}

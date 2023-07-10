@@ -4,14 +4,14 @@ import $ from 'jquery'
 import { type CSSProperties, type FocusEvent, type MouseEvent, memo, useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
+import { UserInteractionButton } from '../../common/user-interaction-button'
+import { useUserInteraction } from '../../hooks'
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
 import { isGameRunningAtom } from '../atoms'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
 import { GameTitle } from './game-title'
-
-const mayNeedsUserInteraction = /iphone|ipad|ipod/i.test(navigator.userAgent)
 
 function onFocus(e: FocusEvent<HTMLButtonElement, Element>) {
   const $focusedElement = $(e.currentTarget)
@@ -41,10 +41,15 @@ function GameEntry({
   columnCount: number
   style: CSSProperties
 }) {
+  const {
+    mayNeedsUserInteraction,
+    needsUserInteraction,
+    showInteractionButton,
+    setNeedsUserInteraction,
+    onUserInteract,
+    waitForUserInteraction,
+  } = useUserInteraction()
   const [maskPosition, setMaskPosition] = useState<Target>()
-  const [showInteractionButton, setShowInteractionButton] = useState(false)
-  const [finishInteraction, setFinishInteraction] = useState<() => void>()
-  const [needsUserInteraction, setNeedsUserInteraction] = useState(false)
   const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
 
   function onExit() {
@@ -67,19 +72,6 @@ function GameEntry({
     setNeedsUserInteraction(mayNeedsUserInteraction && event.clientX === 0 && event.clientY === 0)
 
     emitter.on('exit', onExit)
-  }
-
-  async function waitForUserInteraction() {
-    setShowInteractionButton(true)
-
-    return await new Promise<void>((resolve) => {
-      setFinishInteraction(() => resolve)
-    })
-  }
-
-  function onUserInteract() {
-    setShowInteractionButton(false)
-    finishInteraction?.()
   }
 
   async function onMaskShow() {
@@ -114,25 +106,7 @@ function GameEntry({
 
       <GameEntryPortals maskContent={gameEntryContent} maskPosition={maskPosition} onMaskShow={onMaskShow} />
 
-      {showInteractionButton ? (
-        <BaseDialogContent>
-          <div
-            aria-hidden
-            className='relative flex cursor-pointer items-center justify-center rounded border-2 border-rose-700 bg-rose-700 px-4 py-2 text-white'
-            onClick={onUserInteract}
-          >
-            <span className='icon-[mdi--gesture-tap] mr-2 h-5 w-5' />
-            Please tap here to launch the game
-          </div>
-          <div className='mt-2 flex max-w-xs text-xs'>
-            <span className='icon-[mdi--lightbulb-on-outline] mr-2 h-4 w-4' />
-            <div>
-              This is due to a limitation of the browser.
-              <br />A game can only run after the screen is tapped, rather than clicking a button on a gamepad.
-            </div>
-          </div>
-        </BaseDialogContent>
-      ) : null}
+      {showInteractionButton ? <UserInteractionButton onUserInteract={onUserInteract} /> : null}
     </>
   )
 }

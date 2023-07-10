@@ -53,7 +53,7 @@ export function GameMenus() {
         {showMenuOverlay ? (
           <motion.div
             animate={{ opacity: 1 }}
-            className='absolute inset-0 z-[11] overflow-hidden bg-black/90 text-white backdrop-blur'
+            className='fixed inset-0 z-[11] overflow-hidden bg-black/90 text-white backdrop-blur'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.1 }}

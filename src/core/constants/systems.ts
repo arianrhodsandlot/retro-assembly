@@ -57,7 +57,6 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
 }
 
 export const extSystemMap: Record<string, SystemName> = {
-  fds: 'nes',
   gb: 'gb',
   gba: 'gba',
   gbc: 'gbc',

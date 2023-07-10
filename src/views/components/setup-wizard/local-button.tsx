@@ -23,7 +23,7 @@ export function LocalButton() {
 
   return (
     <BaseButton className='w-60' onClick={selectLocalDirectory}>
-      <span className='icon-[mdi--desktop-classic] h-5 w-5' />
+      <span className='icon-[mdi--folder-table-outline] h-5 w-5' />
       select a directory
     </BaseButton>
   )

@@ -175,26 +175,28 @@ export class Emulator {
     if (!this.core) {
       throw new Error('Invalid core')
     }
-    await this.prepareEmscripten()
+    await this.setupEmscripten()
 
     if (this.isTerminated()) {
       this.forceExit()
       return
     }
 
-    this.prepareRaConfigFile()
-    this.prepareRaCoreConfigFile()
+    this.setupRaConfigFile()
+    this.setupRaCoreConfigFile()
 
     await waitForUserInteraction?.()
 
     this.runMain()
-    this.resizeCanvas()
-    this.showCanvasCusor()
-    document.body.addEventListener('mousemove', this.showCanvasCusor, false)
-    window.addEventListener('resize', this.resizeCanvas, false)
-    updateStyle(this.canvas, { visibility: 'visible' })
+
+    this.setupDOM()
     this.canvas.focus()
+
     this.processStatus = 'ready'
+
+    setTimeout(() => {
+      this.pause()
+    }, 100)
   }
 
   resume() {
@@ -263,9 +265,7 @@ export class Emulator {
       FS.unmount('/home')
       JSEvents.removeAllEventListeners()
     }
-    document.body.removeEventListener('mousemove', this.showCanvasCusor, false)
-    window.removeEventListener('resize', this.resizeCanvas, false)
-    this.canvas.remove()
+    this.cleanupDOM()
     // @ts-expect-error try to focus on previous active element
     this.previousActiveElement?.focus?.()
   }
@@ -352,17 +352,14 @@ export class Emulator {
       FS.unmount('/home')
     } catch {}
     try {
-      window.removeEventListener('resize', this.resizeCanvas, false)
-    } catch {}
-    try {
       JSEvents.removeAllEventListeners()
     } catch {}
     try {
-      this.canvas.remove()
+     this.cleanupDOM()
     } catch {}
   }
 
-  private async prepareEmscripten() {
+  private async setupEmscripten() {
     // @ts-expect-error for retroarch fast forward
     window.setImmediate ??= window.setTimeout
     const jsContentBody = await ky(`/vendor/cores/${this.core}_libretro.js`).text()
@@ -381,12 +378,13 @@ export class Emulator {
 
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)
+    document.body.style.setProperty('overflow', 'hidden')
 
     const { Module } = this.emscripten
-    await Promise.all([await this.prepareFileSystem(), await Module.monitorRunDependencies()])
+    await Promise.all([await this.setupFileSystem(), await Module.monitorRunDependencies()])
   }
 
-  private async prepareFileSystem() {
+  private async setupFileSystem() {
     const { Module, FS, PATH, ERRNO_CODES } = this.emscripten
 
     Module.canvas = this.canvas
@@ -437,12 +435,11 @@ export class Emulator {
     return map[this.core]
   }
 
-  private prepareRaCoreConfigFile() {
+  private setupRaCoreConfigFile() {
     const raCoreConfigPathMap = {
       nestopia: 'Nestopia/Nestopia.opt',
       fceumm: 'FCEUmm/FCEUmm.opt',
       gearboy: 'Gearboy/Gearboy.opt',
-      picodrive: 'PicoDrive/PicoDrive.opt',
       genesis_plus_gx: 'Genesis Plus GX/Genesis Plus GX.opt',
     }
     const raCoreConfigPath = raCoreConfigPathMap[this.core] ?? ''
@@ -455,7 +452,7 @@ export class Emulator {
     }
   }
 
-  private prepareRaConfigFile() {
+  private setupRaConfigFile() {
     const raConfig = {
       menu_driver: 'rgui',
       rewind_enable: true,
@@ -513,6 +510,23 @@ export class Emulator {
         },
       })
     }
+  }
+
+  private resizeCanvas() {
+    requestAnimationFrame(() => {
+      const { Module } = this.emscripten
+      Module.setCanvasSize(innerWidth, innerHeight)
+    })
+  }
+
+  private setupDOM() {
+    this.resizeCanvas()
+    this.showCanvasCusor()
+
+    document.body.addEventListener('mousemove', this.showCanvasCusor, false)
+    window.addEventListener('resize', this.resizeCanvas, false)
+    document.body.style.setProperty('overflow', 'hidden')
+    updateStyle(this.canvas, { visibility: 'visible' })
 
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
@@ -522,10 +536,10 @@ export class Emulator {
     }
   }
 
-  private resizeCanvas() {
-    requestAnimationFrame(() => {
-      const { Module } = this.emscripten
-      Module.setCanvasSize(innerWidth, innerHeight)
-    })
+  private cleanupDOM() {
+    document.body.removeEventListener('mousemove', this.showCanvasCusor, false)
+    window.removeEventListener('resize', this.resizeCanvas, false)
+    this.canvas.remove()
+    document.body.style.removeProperty('overflow')
   }
 }

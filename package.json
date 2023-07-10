@@ -24,7 +24,7 @@
     "clsx": "1.2.1",
     "date-fns": "2.30.0",
     "delay": "6.0.0",
-    "file-select": "^1.0.2",
+    "file-select": "1.0.2",
     "framer-motion": "10.12.18",
     "goodcodes-parser": "2.5.0",
     "idb": "7.1.1",

@@ -48,7 +48,7 @@ dependencies:
     specifier: 6.0.0
     version: 6.0.0
   file-select:
-    specifier: ^1.0.2
+    specifier: 1.0.2
     version: 1.0.2
   framer-motion:
     specifier: 10.12.18
@@ -1838,8 +1838,8 @@ packages:
       '@types/gapi.client.discovery': 1.0.9
     dev: true
 
-  /@maxim_mazurok/gapi.client.drive-v3@0.0.20230626:
-    resolution: {integrity: sha512-83rLvWYm5DYiBxLhbOsxBIUaCNZ7/cOKWHHn3KfG7HDKXlDsJUkb78Fdr+o1tbddQeusrzf/CxHR4NL3egDg9A==}
+  /@maxim_mazurok/gapi.client.drive-v3@0.0.20230629:
+    resolution: {integrity: sha512-cCGCDEaHrqEniJLM0OX/6pXmo8zRKxGFaM3bfgP/DRJXaXooYIz8+mSM+50VRSh0liujxRMjgXoKBpHgejy28w==}
     dependencies:
       '@types/gapi.client': 1.0.5
       '@types/gapi.client.discovery': 1.0.9
@@ -2534,7 +2534,7 @@ packages:
   /@types/gapi.client.drive-v3@0.0.1:
     resolution: {integrity: sha512-tIvUpcfeTZI5yRYWAPo/kx6w8kAfW8HeOAJPmXlhVpSBUO8R4hUVZiZhuc6PxNtQkI6LKXeyOuJv70Nd3Nb/8g==}
     dependencies:
-      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20230626
+      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20230629
     dev: true
 
   /@types/gapi.client@1.0.5:

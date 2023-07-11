@@ -12,11 +12,15 @@ const cloudServiceMap = {
 
 interface CloudServiceLoginButtonProps {
   cloudService: 'onedrive' | 'google-drive'
-  showReturnHome: boolean
+  showReturnHome?: boolean
   onLogin: () => void
 }
 
-export function CloudServiceLoginButton({ cloudService, showReturnHome, onLogin }: CloudServiceLoginButtonProps) {
+export function CloudServiceLoginButton({
+  cloudService,
+  showReturnHome = false,
+  onLogin,
+}: CloudServiceLoginButtonProps) {
   const authorizeUrlState = useAsync(async () => await getAuthorizeUrl(cloudService))
   const authorizeWindow = useRef<Window | null>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)

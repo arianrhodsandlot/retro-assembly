@@ -71,11 +71,17 @@ export function MenuOverlay() {
             onSaveAndExit={saveAndExit}
             onSaveState={saveState}
           />
-          <div className='absolute bottom-10 right-10 flex items-center'>
-            <span className='icon-[mdi--lightbulb-on-outline] mr-2 h-4 w-4' />
-            <div className='flex items-center gap-2'>
-              Press<ButtonOnInputDevice>L1</ButtonOnInputDevice>+<ButtonOnInputDevice>R1</ButtonOnInputDevice>or
-              <ButtonOnInputDevice>ESC</ButtonOnInputDevice>to open / hide this menu
+          <div className='absolute bottom-10 right-10 flex gap-3'>
+            <span className='icon-[mdi--lightbulb-on-outline] mt-1 h-4 w-4' />
+            <div>
+              <div className='flex items-center gap-2'>
+                Press<ButtonOnInputDevice>L1</ButtonOnInputDevice>+<ButtonOnInputDevice>R1</ButtonOnInputDevice>or
+                <ButtonOnInputDevice>ESC</ButtonOnInputDevice>to open/hide this menu.
+              </div>
+              <div className='flex items-center gap-2'>
+                Press<ButtonOnInputDevice>select</ButtonOnInputDevice>+<ButtonOnInputDevice>L1</ButtonOnInputDevice>to
+                rewind while playing.
+              </div>
             </div>
           </div>
         </>

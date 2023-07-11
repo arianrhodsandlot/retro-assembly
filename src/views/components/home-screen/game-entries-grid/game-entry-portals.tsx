@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useAtom } from 'jotai'
 import { createPortal } from 'react-dom'
 import { useWindowSize } from 'react-use'
+import { isGameLaunchingAtom } from '../../atoms'
 import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { LoadingScreen } from '../../common/loading-screen'
 
@@ -15,7 +16,7 @@ export function GameEntryPortals({
   onMaskShow: () => Promise<void>
 }) {
   const { width: windowWidth, height: windowHeight } = useWindowSize()
-  const [isLaunching, setIsLaunching] = useState(false)
+  const [isGameLaunching, setIsGameLaunching] = useAtom(isGameLaunchingAtom)
   const maskInitialStyle = { ...maskPosition, filter: 'brightness(1)' }
   const maskExpandedStyle = {
     ...maskPosition,
@@ -28,9 +29,9 @@ export function GameEntryPortals({
 
   async function onAnimationComplete(definition) {
     if (definition === maskExpandedStyle) {
-      setIsLaunching(true)
+      setIsGameLaunching(true)
       await onMaskShow()
-      setIsLaunching(false)
+      setIsGameLaunching(false)
     }
   }
 
@@ -52,7 +53,7 @@ export function GameEntryPortals({
       </AnimatePresence>
 
       <AnimatePresence>
-        {isLaunching ? (
+        {maskPosition && isGameLaunching ? (
           <motion.div
             animate={{ opacity: 1 }}
             className='absolute inset-0 z-[11]'
@@ -61,7 +62,7 @@ export function GameEntryPortals({
             transition={{ duration: 0.2 }}
           >
             <LoadingScreen>
-              Game loading
+              Now loading
               <BouncingEllipsis />
             </LoadingScreen>
           </motion.div>

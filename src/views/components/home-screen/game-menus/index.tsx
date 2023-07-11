@@ -2,8 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { detectHasRunningGame, onPress, pauseGame, resumeGame } from '../../../../core'
-import { isGameRunningAtom } from '../../atoms'
+import { onPress, pauseGame, resumeGame } from '../../../../core'
+import { isGameLaunchedAtom } from '../../atoms'
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
 import { MenuEntryButton } from './menu-entry-button'
 import { MenuOverlay } from './menu-overlay'
@@ -11,12 +11,12 @@ import { MenuOverlay } from './menu-overlay'
 const menuShortcutButtons = ['l1', 'r1']
 
 export function GameMenus() {
-  const isGameRunning = useAtomValue(isGameRunningAtom)
+  const isGameLaunched = useAtomValue(isGameLaunchedAtom)
   const [showMenuOverlay, setShowMenuOverlay] = useAtom(showMenuOverlayAtom)
   const [previousFocusedElement, setPreviousFocusedElement] = useAtom(previousFocusedElementAtom)
 
   const toggleMenu = useCallback(() => {
-    if (!detectHasRunningGame()) {
+    if (!isGameLaunched) {
       return
     }
 
@@ -29,11 +29,11 @@ export function GameMenus() {
     }
 
     setShowMenuOverlay(!showMenuOverlay)
-  }, [showMenuOverlay, previousFocusedElement, setShowMenuOverlay, setPreviousFocusedElement])
+  }, [isGameLaunched, showMenuOverlay, previousFocusedElement, setShowMenuOverlay, setPreviousFocusedElement])
 
   useEffect(() => {
     function onEscapeKeyup(event: KeyboardEvent) {
-      if (detectHasRunningGame() && event.key === 'Escape') {
+      if (isGameLaunched && event.key === 'Escape') {
         toggleMenu()
       }
     }
@@ -45,9 +45,9 @@ export function GameMenus() {
       offPress()
       document.removeEventListener('keyup', onEscapeKeyup)
     }
-  }, [showMenuOverlay, toggleMenu])
+  }, [isGameLaunched, showMenuOverlay, toggleMenu])
 
-  if (!isGameRunning) {
+  if (!isGameLaunched) {
     return
   }
 

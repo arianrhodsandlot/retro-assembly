@@ -1,20 +1,22 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { detectHasRunningGame, onPress } from '../../../../core'
+import { onPress } from '../../../../core'
+import { isGameIdleAtom } from '../../atoms'
 import { currentSystemNameAtom, systemsAtom } from '../atoms'
 import { SystemNavigationItem } from './system-navigation-item'
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
 export function SystemNavigation() {
   const systems = useAtomValue(systemsAtom)
+  const isGameIdle = useAtomValue(isGameIdleAtom)
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const isValidSystems = systems?.length && systems.length > 0
 
   const shouldSwitchSystem = useCallback(
     function shouldSwitchSystem() {
-      return !detectHasRunningGame() && isValidSystems
+      return isGameIdle && isValidSystems
     },
-    [isValidSystems]
+    [isGameIdle, isValidSystems]
   )
 
   const selectPrevSystem = useCallback(() => {

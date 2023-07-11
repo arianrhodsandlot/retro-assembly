@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       devOptions: { enabled: true },
       manifest: {
-        name: 'RetroAssembly',
-        short_name: 'RetroAssembly',
+        name: 'Retro Assembly',
+        short_name: 'Retro Assembly',
         description: 'Your personal retro game collection museum inside your browser',
         theme_color: '#be123c',
         icons: [

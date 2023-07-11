@@ -8,7 +8,7 @@ export function ClearSiteDataDialogContent({ children, onConfirm }: { children: 
       <div>
         <div className='flex items-center text-lg font-bold'>
           <span className='icon-[mdi--alert] mr-2 h-5 w-5 text-yellow-400' />
-          Are you sure to clear all data?
+          Are you sure to logout?
         </div>
         <div className='mt-4'>{children}</div>
       </div>

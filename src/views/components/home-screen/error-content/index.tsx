@@ -1,3 +1,4 @@
+import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
 import { CloudServiceLogin } from './cloud-service-login'
 import { LocalFilePermision } from './local-file-permision'
@@ -14,7 +15,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.statusCode === 401 || error.response?.status === 400) {
     return (
       <BaseDialogContent>
-        <CloudServiceLogin showReturnHome cloudService={'onedrive'} onSolve={onSolve} />
+        <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} showReturnHome />
       </BaseDialogContent>
     )
   }
@@ -22,7 +23,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.status === 401) {
     return (
       <BaseDialogContent>
-        <CloudServiceLogin showReturnHome cloudService={'google-drive'} onSolve={onSolve} />
+        <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} showReturnHome />
       </BaseDialogContent>
     )
   }
@@ -32,7 +33,12 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   // todo: needs better error text
   return (
     <BaseDialogContent>
-      <div>Failed to load games.</div>
+      <div className='flex flex-col items-stretch'>
+        <div>Failed to load games.</div>
+        <BaseButton className='mt-2' onClick={onSolve}>
+          Retry
+        </BaseButton>
+      </div>
     </BaseDialogContent>
   )
 }

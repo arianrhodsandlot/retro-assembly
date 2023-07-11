@@ -2,10 +2,10 @@
   <img src="public/assets/logo/logo-512x512.png" alt="logo" width="128" height="128">
 </p>
 
-<h1 align="center">RetroAssembly</h1>
+<h1 align="center">Retro Assembly</h1>
 
 ## Overview
-RetroAssembly is your personal retro game collection museum inside your browser.
+Your personal retro game collection museum inside your browser.
 
 ## Features
 + Import a directory from your OneDrive/Google Drive or disk, then a game list will appear

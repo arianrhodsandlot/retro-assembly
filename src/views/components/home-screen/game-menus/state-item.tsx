@@ -18,24 +18,24 @@ export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function 
       onClick={() => onSelect(state.id)}
       ref={ref}
     >
-      <div className='h-40 w-40 overflow-hidden'>
+      <div className='h-36 w-36 overflow-hidden'>
         {state.thumbnail ? (
           thumbnailUrlState.value ? (
             <img
               alt={`the thumnail of the state saved at ${state.createTime.humanized}`}
-              className='block h-40 w-40 transform-gpu bg-gray-300 object-cover text-transparent transition-transform'
+              className='block h-36 w-36 transform-gpu bg-gray-300 object-cover text-transparent transition-transform'
               src={thumbnailUrlState.value}
             />
           ) : (
-            <div className='flex h-40 w-40 animate-pulse items-center justify-center bg-gray-300' />
+            <div className='flex h-36 w-36 animate-pulse items-center justify-center bg-gray-300' />
           )
         ) : (
-          <div className='flex h-40 w-40 items-center justify-center bg-gray-600 '>
+          <div className='flex h-36 w-36 items-center justify-center bg-gray-600 '>
             <span className='icon-[mdi--image-broken-variant] h-12 w-12 text-white' />
           </div>
         )}
       </div>
-      <div className={clsx('flex h-40 flex-1 items-center border-l-4 border-l-white pl-6', 'group-focus:bg-white')}>
+      <div className={clsx('flex h-36 flex-1 items-center border-l-4 border-l-white px-6', 'group-focus:bg-white')}>
         Saved at {state.createTime.humanized}
       </div>
     </button>

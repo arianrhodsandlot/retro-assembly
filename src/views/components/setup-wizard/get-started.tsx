@@ -96,7 +96,7 @@ export function GetStarted() {
                 Select a local directory
                 {directoryInstructionToolTip}
               </div>
-              <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try RetroAssembly.</div>
+              <div className='mt-2 flex items-center justify-center text-xs'>A simple way to try Retro Assembly.</div>
               <div className='mt-4 flex justify-center'>
                 <LocalButton />
               </div>

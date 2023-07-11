@@ -17,7 +17,8 @@ export default defineConfig({
         theme_color: '#be123c',
         icons: [
           { src: '/assets/logo/logo-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/assets/logo/logo-512x512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/assets/logo/logo-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/assets/logo/maskable-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
     }),

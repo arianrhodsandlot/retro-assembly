@@ -4,10 +4,9 @@ import $ from 'jquery'
 import { type CSSProperties, type FocusEvent, type MouseEvent, memo, useState } from 'react'
 import { type Rom, launchGame } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
+import { isGameRunningAtom } from '../../atoms'
 import { UserInteractionButton } from '../../common/user-interaction-button'
 import { useUserInteraction } from '../../hooks'
-import { BaseDialogContent } from '../../primitives/base-dialog-content'
-import { isGameRunningAtom } from '../atoms'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
@@ -53,7 +52,6 @@ function GameEntry({
   const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
 
   function onExit() {
-    setIsGameRunningAtom(false)
     setMaskPosition(undefined)
     emitter.off('exit', onExit)
   }

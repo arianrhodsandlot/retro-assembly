@@ -1,7 +1,8 @@
 import { useAtom, useAtomValue, useSetAtom, useStore } from 'jotai'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getSystemRoms, getSystems, peekSystemRoms } from '../../../core'
-import { currentSystemNameAtom, isGameRunningAtom, romsAtom, systemsAtom } from './atoms'
+import { isGameRunningAtom } from '../atoms'
+import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { GameMenus } from './game-menus'
@@ -115,7 +116,7 @@ export function HomeScreen() {
         />
       </div>
 
-      {isGameRunning ? <GameMenus /> : null}
+      <GameMenus />
 
       <InputTips />
     </HomeScreenLayout>

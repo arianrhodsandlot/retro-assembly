@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { detectHasRunningGame, onPress, pauseGame, resumeGame } from '../../../../core'
+import { isGameRunningAtom } from '../../atoms'
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
 import { MenuEntryButton } from './menu-entry-button'
 import { MenuOverlay } from './menu-overlay'
@@ -10,6 +11,7 @@ import { MenuOverlay } from './menu-overlay'
 const menuShortcutButtons = ['l1', 'r1']
 
 export function GameMenus() {
+  const isGameRunning = useAtomValue(isGameRunningAtom)
   const [showMenuOverlay, setShowMenuOverlay] = useAtom(showMenuOverlayAtom)
   const [previousFocusedElement, setPreviousFocusedElement] = useAtom(previousFocusedElementAtom)
 
@@ -44,6 +46,10 @@ export function GameMenus() {
       document.removeEventListener('keyup', onEscapeKeyup)
     }
   }, [showMenuOverlay, toggleMenu])
+
+  if (!isGameRunning) {
+    return
+  }
 
   return createPortal(
     <>

@@ -2,6 +2,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
 import { exitGame, loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
 import { emitter } from '../../../lib/emitter'
+import { isGameRunningAtom } from '../../atoms'
 import { ButtonOnInputDevice } from '../../common/button-on-input-device'
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
 import { MenuItems } from './menu-items'
@@ -10,6 +11,7 @@ import { MenuLoading } from './menu-loading'
 export function MenuOverlay() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const previousFocusedElement = useAtomValue(previousFocusedElementAtom)
+  const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
 
   const [saveStateState, saveState] = useAsyncFn(async () => {
     if (saveStateState.loading) {
@@ -46,6 +48,7 @@ export function MenuOverlay() {
   function exit() {
     exitGame()
     setShowMenuOverlay(false)
+    setIsGameRunningAtom(false)
     previousFocusedElement?.focus()
     emitter.emit('exit')
   }

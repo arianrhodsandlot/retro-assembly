@@ -23,7 +23,7 @@ export function useMouseMoving({ timeout }: { timeout: number }) {
     return () => {
       document.body.removeEventListener('mousemove', onMouseMove)
     }
-  })
+  }, [])
 
   return { isMouseMoving }
 }

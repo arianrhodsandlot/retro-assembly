@@ -1,11 +1,14 @@
 import fileSelect from 'file-select'
+import { useSetAtom } from 'jotai'
 import { previewGame } from '../../../core'
+import { isGameRunningAtom } from '../atoms'
 import { UserInteractionButton } from '../common/user-interaction-button'
 import { GameMenus } from '../home-screen/game-menus'
 import { useUserInteraction } from '../hooks'
 import { BaseButton } from '../primitives/base-button'
 
 export function LocalFileButton() {
+  const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
   const {
     mayNeedsUserInteraction,
     showInteractionButton,
@@ -20,7 +23,9 @@ export function LocalFileButton() {
     const file: File = await fileSelect()
     if (file) {
       try {
+        setIsGameRunningAtom(true)
         await (mayNeedsUserInteraction ? previewGame(file, { waitForUserInteraction }) : previewGame(file))
+        document.body.dispatchEvent(new MouseEvent('mousemove'))
       } catch (error) {
         console.log(error)
       }

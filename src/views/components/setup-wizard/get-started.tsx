@@ -72,17 +72,29 @@ export function GetStarted() {
               </div>
               <div className='mt-2 flex items-start justify-center text-xs'>
                 <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
-                <div>Sync your games and progress between multiple devices.</div>
+                <div>Synchronize your games and progress across multiple devices.</div>
               </div>
               <div className='mt-4 flex flex-col justify-center gap-4'>
                 {isOnedriveEnabled ? (
-                  <div className='text-center'>
+                  <div className='flex justify-center'>
                     <OnedriveButton />
                   </div>
                 ) : null}
                 {isGoogleDriveEnabled ? (
-                  <div className='text-center'>
+                  <div className='flex justify-center'>
                     <GoogleDriveButton />
+                  </div>
+                ) : null}
+                {isOnedriveEnabled || isGoogleDriveEnabled ? (
+                  <div className='flex flex-col items-center opacity-50'>
+                    <BaseButton className='w-60' disabled styleType='primary'>
+                      <span className='icon-[logos--dropbox] h-5 w-5' />
+                      Dropbox
+                    </BaseButton>
+                    <div className='mt-1 flex w-60 items-center gap-1 text-xs'>
+                      <span className='icon-[mdi--rocket-launch-outline]' />
+                      Not available yet but coming soon!
+                    </div>
                   </div>
                 ) : null}
               </div>

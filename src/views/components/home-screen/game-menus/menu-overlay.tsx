@@ -1,17 +1,16 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
-import { exitGame, loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
-import { emitter } from '../../../lib/emitter'
-import { isGameRunningAtom } from '../../atoms'
+import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
 import { ButtonOnInputDevice } from '../../common/button-on-input-device'
+import { LoadingScreen } from '../../common/loading-screen'
+import { useExit } from '../hooks'
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
 import { MenuItems } from './menu-items'
-import { MenuLoading } from './menu-loading'
 
 export function MenuOverlay() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const previousFocusedElement = useAtomValue(previousFocusedElementAtom)
-  const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
+  const { exit } = useExit()
 
   const [saveStateState, saveState] = useAsyncFn(async () => {
     if (saveStateState.loading) {
@@ -45,14 +44,6 @@ export function MenuOverlay() {
     restartGame()
   }
 
-  function exit() {
-    exitGame()
-    setShowMenuOverlay(false)
-    setIsGameRunningAtom(false)
-    previousFocusedElement?.focus()
-    emitter.emit('exit')
-  }
-
   async function saveAndExit() {
     await saveState()
     exit()
@@ -61,9 +52,9 @@ export function MenuOverlay() {
   return (
     <div className='menu-overlay h-full w-full py-10'>
       {saveStateState.loading ? (
-        <MenuLoading>Saving... Please do not turn off your device!</MenuLoading>
+        <LoadingScreen>Saving... Please do not turn off your device!</LoadingScreen>
       ) : loadStateState.loading ? (
-        <MenuLoading>Loading selected state...</MenuLoading>
+        <LoadingScreen>Loading selected state...</LoadingScreen>
       ) : (
         <>
           <MenuItems

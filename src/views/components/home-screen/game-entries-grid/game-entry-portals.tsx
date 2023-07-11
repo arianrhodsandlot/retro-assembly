@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useWindowSize } from 'react-use'
+import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
+import { LoadingScreen } from '../../common/loading-screen'
 
 export function GameEntryPortals({
   maskContent,
@@ -21,7 +23,7 @@ export function GameEntryPortals({
     left: 0,
     width: windowWidth,
     height: windowHeight,
-    filter: 'brightness(.05)',
+    filter: 'brightness(0)',
   }
 
   async function onAnimationComplete(definition) {
@@ -53,12 +55,15 @@ export function GameEntryPortals({
         {isLaunching ? (
           <motion.div
             animate={{ opacity: 1 }}
-            className='absolute inset-0 z-[11] flex items-center justify-center backdrop-blur-xl'
+            className='absolute inset-0 z-[11]'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
+            <LoadingScreen>
+              Game loading
+              <BouncingEllipsis />
+            </LoadingScreen>
           </motion.div>
         ) : null}
       </AnimatePresence>

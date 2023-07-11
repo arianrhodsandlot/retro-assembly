@@ -7,6 +7,7 @@ import { emitter } from '../../../lib/emitter'
 import { isGameRunningAtom } from '../../atoms'
 import { UserInteractionButton } from '../../common/user-interaction-button'
 import { useUserInteraction } from '../../hooks'
+import { useExit } from '../hooks'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameEntryPortals } from './game-entry-portals'
@@ -50,6 +51,7 @@ function GameEntry({
   } = useUserInteraction()
   const [maskPosition, setMaskPosition] = useState<Target>()
   const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
+  const { exit } = useExit()
 
   function onExit() {
     setMaskPosition(undefined)
@@ -74,8 +76,13 @@ function GameEntry({
 
   async function onMaskShow() {
     setIsGameRunningAtom(true)
-    await (needsUserInteraction ? launchGame(rom, { waitForUserInteraction }) : launchGame(rom))
-    document.body.dispatchEvent(new MouseEvent('mousemove'))
+    try {
+      await (needsUserInteraction ? launchGame(rom, { waitForUserInteraction }) : launchGame(rom))
+      document.body.dispatchEvent(new MouseEvent('mousemove'))
+    } catch (error) {
+      console.warn(error)
+      exit()
+    }
   }
 
   const isFirstRow = rowIndex === 0

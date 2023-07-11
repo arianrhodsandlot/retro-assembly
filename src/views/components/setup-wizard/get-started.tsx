@@ -72,7 +72,7 @@ export function GetStarted() {
               </div>
               <div className='mt-2 flex items-start justify-center text-xs'>
                 <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
-                <div>Synchronize your games and progress across multiple devices.</div>
+                <div>Synchronize your games and saves across multiple devices.</div>
               </div>
               <div className='mt-4 flex flex-col justify-center gap-4'>
                 {isOnedriveEnabled ? (

@@ -3,7 +3,7 @@ export function GameEntryImage({ src, alt }: { src: string; alt: string }) {
     <div className='absolute inset-0 overflow-hidden bg-zinc-800'>
       <img
         alt={alt}
-        className='absolute inset-0 scale-150 bg-cover object-cover opacity-20'
+        className='absolute top-0 h-full w-full scale-150 bg-cover object-cover opacity-20'
         src={src}
         style={{ imageRendering: 'pixelated' }}
       />

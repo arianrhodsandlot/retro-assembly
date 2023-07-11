@@ -351,7 +351,7 @@ export class Emulator {
       JSEvents.removeAllEventListeners()
     } catch {}
     try {
-     this.cleanupDOM()
+      this.cleanupDOM()
     } catch {}
   }
 

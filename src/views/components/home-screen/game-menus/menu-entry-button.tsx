@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
+import { detectHasRunningGame } from '../../../../core'
 import { isGameRunningAtom } from '../../atoms'
 import { showMenuOverlayAtom } from './atoms'
 import { useMouseMoving } from './hooks'
@@ -9,7 +10,7 @@ export function MenuEntryButton({ onClick }: { onClick: () => void }) {
   const showMenuOverlay = useAtomValue(showMenuOverlayAtom)
   const { isMouseMoving } = useMouseMoving({ timeout: 3000 })
 
-  const showMenuEntryButton = isGameRunning && isMouseMoving && !showMenuOverlay
+  const showMenuEntryButton = isGameRunning && detectHasRunningGame() && isMouseMoving && !showMenuOverlay
 
   return (
     <AnimatePresence>

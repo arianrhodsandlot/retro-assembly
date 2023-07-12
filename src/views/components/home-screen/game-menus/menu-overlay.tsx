@@ -1,7 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
-import { ButtonOnInputDevice } from '../../common/button-on-input-device'
+import { LightInputButton } from '../../common/light-input-button'
 import { LoadingScreen } from '../../common/loading-screen'
 import { useExit } from '../hooks'
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
@@ -69,11 +69,11 @@ export function MenuOverlay() {
             <span className='icon-[mdi--lightbulb-on-outline] mt-1 h-4 w-4' />
             <div>
               <div className='flex items-center gap-2'>
-                Press<ButtonOnInputDevice>L1</ButtonOnInputDevice>+<ButtonOnInputDevice>R1</ButtonOnInputDevice>or
-                <ButtonOnInputDevice>ESC</ButtonOnInputDevice>to open/hide this menu.
+                Press<LightInputButton>L1</LightInputButton>+<LightInputButton>R1</LightInputButton>or
+                <LightInputButton>ESC</LightInputButton>to open/hide this menu.
               </div>
               <div className='flex items-center gap-2'>
-                Press<ButtonOnInputDevice>select</ButtonOnInputDevice>+<ButtonOnInputDevice>L1</ButtonOnInputDevice>to
+                Press<LightInputButton>select</LightInputButton>+<LightInputButton>L1</LightInputButton>to
                 rewind while playing.
               </div>
             </div>

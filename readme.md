@@ -10,7 +10,7 @@ Your personal retro game collection cabinet inside your browser.
 ## Usage
 1. Visit [retro-assembly.pages.dev](https://retro-assembly.pages.dev)
 2. Pick a method you prefer to provide your ROMs
-3. Start to Play!
+3. Start to play!
 
 ## Features
 |Description|Screenshot|

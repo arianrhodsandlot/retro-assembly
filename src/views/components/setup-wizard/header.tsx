@@ -26,7 +26,7 @@ export function Header() {
             </AnimatedIcons>
             retro
           </span>
-          <span>game collection museum inside your</span>
+          <span>game collection cabinet inside your</span>
           <span className='mx-2 flex items-center justify-center rounded-full border-2 border-white bg-rose-700 px-4 py-2'>
             <AnimatedIcons wait={500}>
               <span className='icon-[simple-icons--googlechrome] h-4 w-4' />

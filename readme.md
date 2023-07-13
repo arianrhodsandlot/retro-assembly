@@ -5,18 +5,22 @@
 <h1 align="center">Retro Assembly</h1>
 
 ## Overview
-Your personal retro game collection museum inside your browser.
-
-## Features
-+ Import a directory from your OneDrive/Google Drive or disk, then a game list will appear
-+ Automatically grab game cover images
-+ Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles.
-+ Save states and sync them to with different devices (if using a cloud disk we support)
+Your personal retro game collection cabinet inside your browser.
 
 ## Usage
 1. Visit [retro-assembly.pages.dev](https://retro-assembly.pages.dev)
 2. Pick a method you prefer to provide your ROMs
 3. Start to Play!
+
+## Features
+|Description|Screenshot|
+|---|---|
+|Import a directory from your OneDrive/Google Drive or disk, then a game list will appear|<img src="docs/screenshots/import.gif" width="200" />|
+|Automatically grab game cover images|<img src="docs/screenshots/cover.gif" width="200" />|
+|Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles |<img src="docs/screenshots/joystick.gif" width="200" />|
+|Of course, rewinding|<img src="docs/screenshots/rewind.gif" width="200" />|
+|Save states and sync them to with different devices (if using a cloud disk we support)|<img src="docs/screenshots/save.gif" width="200" />|
+|Play a single ROM file without initializing a game library|<img src="docs/screenshots/single.gif" width="200" />|
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
@@ -35,7 +39,6 @@ We support mainstream fourth-generation and earlier consoles as well as some han
 + <img width="18" align="center" src="docs/consoles/Nintendo - Virtual Boy.png" /> Nintendo - Virtual Boy
 
 > ⚠️ As this project is still in an early stage, only some of the most popular consoles are supported.
->
 > However, more consoles will be supported in the future.
 
 ## Alternatives

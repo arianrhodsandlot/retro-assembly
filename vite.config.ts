@@ -13,7 +13,7 @@ export default defineConfig({
       manifest: {
         name: 'Retro Assembly',
         short_name: 'Retro Assembly',
-        description: 'Your personal retro game collection museum inside your browser',
+        description: 'Your personal retro game collection cabinet inside your browser',
         theme_color: '#be123c',
         icons: [
           { src: '/assets/logo/logo-192x192.png', sizes: '192x192', type: 'image/png' },

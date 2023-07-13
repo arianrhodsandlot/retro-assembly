@@ -31,6 +31,7 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
         </div>
       ) : state.error ? (
         <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
+          <span className='icon-[mdi--alert-circle-outline] mr-2 h-6 w-6' />
           Failed to load state list
         </div>
       ) : state?.value?.length ? (

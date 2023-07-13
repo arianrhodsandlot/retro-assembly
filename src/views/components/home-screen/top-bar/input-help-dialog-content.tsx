@@ -61,7 +61,7 @@ export function InputHelpDialogContent() {
       </div>
 
       <h3 className='mt-4 flex items-center gap-2 font-semibold'>
-        <span className='icon-[mdi--fit-to-screen-outline] h-5 w-5' />
+        <span className='icon-[mdi--keyboard] h-5 w-5' />
         Gameplay controller-keyboard mappings
       </h3>
       <div className='mt-2 flex flex-wrap gap-x-4 gap-y-2 px-8'>

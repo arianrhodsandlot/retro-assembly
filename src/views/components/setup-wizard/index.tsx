@@ -16,10 +16,24 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
   return (
     <div className='min-h-screen bg-white  bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
       <div className='hero relative h-[600px] max-h-[50vh] min-h-[350px]'>
-        <div className='absolute right-5 top-5 z-[2] text-white'>
-          <a className='flex items-center justify-center' href='https://github.com/arianrhodsandlot/retro-assembly'>
-            <span className='icon-[mdi--github] mr-1 h-5 w-5' />
+        <div className='absolute right-5 top-5 z-[2] flex items-center gap-4 text-white'>
+          <a
+            className='flex items-center justify-center gap-1'
+            href='https://github.com/arianrhodsandlot/retro-assembly'
+            rel='noreferrer'
+            target='_blank'
+          >
+            <span className='icon-[simple-icons--github] mr-1 h-5 w-5' />
             GitHub
+          </a>
+          <a
+            className='flex items-center justify-center gap-1'
+            href='https://discord.gg/V4VmDkmT'
+            rel='noreferrer'
+            target='_blank'
+          >
+            <span className='icon-[simple-icons--discord] mr-1 h-5 w-5' />
+            Discord
           </a>
         </div>
 

@@ -13,7 +13,7 @@ export function InputHelpButton() {
   return (
     <BaseDialogTrigger content={<InputHelpDialogContent />} onOpenChange={onOpenChange} open={open}>
       <TopBarButton className='flex aspect-square items-center justify-center'>
-        <span className='icon-[mdi--controller-classic-outline] relative z-[1] h-8 w-8' />
+        <span className='icon-[mdi--help-circle-outline] relative z-[1] h-8 w-8' />
       </TopBarButton>
     </BaseDialogTrigger>
   )

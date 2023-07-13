@@ -1,6 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
+import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { LightInputButton } from '../../common/light-input-button'
 import { LoadingScreen } from '../../common/loading-screen'
 import { useExit } from '../hooks'
@@ -52,9 +53,14 @@ export function MenuOverlay() {
   return (
     <div className='menu-overlay h-full w-full py-10'>
       {saveStateState.loading ? (
-        <LoadingScreen>Saving... Please do not turn off your device!</LoadingScreen>
+        <LoadingScreen>
+          Saving <BouncingEllipsis /> Please do not turn off your device!
+        </LoadingScreen>
       ) : loadStateState.loading ? (
-        <LoadingScreen>Loading selected state...</LoadingScreen>
+        <LoadingScreen>
+          Loading selected state
+          <BouncingEllipsis />
+        </LoadingScreen>
       ) : (
         <>
           <MenuItems
@@ -73,8 +79,8 @@ export function MenuOverlay() {
                 <LightInputButton>ESC</LightInputButton>to open/hide this menu.
               </div>
               <div className='flex items-center gap-2'>
-                Press<LightInputButton>select</LightInputButton>+<LightInputButton>L1</LightInputButton>to
-                rewind while playing.
+                Press<LightInputButton>select</LightInputButton>+<LightInputButton>L1</LightInputButton>to rewind while
+                playing.
               </div>
             </div>
           </div>

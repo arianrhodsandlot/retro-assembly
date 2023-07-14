@@ -1,3 +1,4 @@
+import htmlMinimize from '@sergeymakinen/vite-plugin-html-minimize'
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -7,6 +8,8 @@ export default defineConfig({
   plugins: [
     react(),
     splitVendorChunkPlugin(),
+    // @ts-expect-error the package provided a wrong type decleration
+    htmlMinimize.default(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: { enabled: true },

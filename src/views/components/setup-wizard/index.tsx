@@ -15,8 +15,8 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
 
   return (
     <div className='min-h-screen bg-white  bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
-      <div className='hero relative h-[600px] max-h-[50vh] min-h-[350px]'>
-        <div className='absolute right-5 top-5 z-[2] flex items-center gap-4 text-white'>
+      <div className='hero relative h-[600px] max-h-[50vh] min-h-[450px]'>
+        <div className='absolute right-5 top-5 z-[2] flex items-center gap-4 text-sm text-white'>
           <a
             className='flex items-center justify-center gap-1'
             href='https://github.com/arianrhodsandlot/retro-assembly'

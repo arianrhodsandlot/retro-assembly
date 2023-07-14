@@ -18,7 +18,6 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
   const [state, updateTree] = useAsyncFn(async () => {
     if (tree) {
       await toggleNodeExpanded({ node, cloudService })
-      tree.children = [tree.children[0]]
       setTree({ ...tree })
     }
   })
@@ -59,7 +58,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
             onClick={onClickDirectoryName}
             title={node.name}
           >
-            <div>{node.name === 'OneDrive' ? 'OneDrive' : 'roms'}</div>
+            <div>{node.name}</div>
             {!node.hasChildren && node.isDirectory ? (
               <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>an empty directory</div>
             ) : null}

@@ -12,7 +12,7 @@ export function Header() {
           </span>
         </h3>
         <div className='mt-6 flex flex-col items-center justify-center gap-2 text-sm tracking-wider sm:flex-row sm:gap-0'>
-          <span>Your personal</span>
+          <span>A personal</span>
           <span className='mx-2 flex items-center justify-center rounded-full border-2 border-white bg-rose-700 px-4 py-2'>
             <AnimatedIcons>
               <div className='icon-[mdi--space-invaders] h-4 w-4' />
@@ -26,7 +26,7 @@ export function Header() {
             </AnimatedIcons>
             retro
           </span>
-          <span>game collection cabinet inside your</span>
+          <span>game collection cabinet in your</span>
           <span className='mx-2 flex items-center justify-center rounded-full border-2 border-white bg-rose-700 px-4 py-2'>
             <AnimatedIcons wait={500}>
               <span className='icon-[simple-icons--googlechrome] h-4 w-4' />

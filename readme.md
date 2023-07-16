@@ -21,7 +21,7 @@ A personal retro game collection cabinet in your browser.
 |⏳ Of course, rewinding|<img src="docs/screenshots/rewind.gif" width="200" />|
 |💾 Save states and sync them to with different devices (if using a cloud disk we support)|<img src="docs/screenshots/save.gif" width="200" />|
 |🗎 Play a single ROM file without initializing a game library|<img src="docs/screenshots/single.gif" width="200" />|
-|🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. However, a joystick is necessary.||
+|🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen. Notice: a joystick is necessary.  |<img src="docs/screenshots/add-to-home-screen.png" width="200" />|
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
@@ -44,7 +44,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
 
 ## Alternatives
 + [EmulatorJS](https://emulatorjs.org) [:octocat:](https://github.com/EmulatorJS/EmulatorJS)
-+ [RetroArchWebPlayer](https://web.libretro.com) [:octocat:](https://github.com/libretro/RetroArch/blob/master/pkg/emscripten/README.md)
++ [RetroArch Web Player](https://web.libretro.com) [:octocat:](https://github.com/libretro/RetroArch/blob/master/pkg/emscripten/README.md)
 + [webrcade](https://www.webrcade.com) [:octocat:](https://github.com/webrcade/webrcade)
 + [webretro](https://binbashbanana.github.io/webretro/) [:octocat:](https://github.com/BinBashBanana/webretro)
 

@@ -7,6 +7,10 @@
 ## Overview
 A personal retro game collection cabinet in your browser.
 
+<p align="center">
+  <img src="docs/screenshots/home.png" width="400" />
+</p>
+
 ## Usage
 1. Visit [retro-assembly.pages.dev](https://retro-assembly.pages.dev)
 2. Pick a method you prefer to provide your ROMs

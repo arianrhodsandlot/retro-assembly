@@ -97,12 +97,6 @@ export function InputHelpDialogContent() {
           <div className='flex items-center gap-2'>
             <DarkInputButton>R1</DarkInputButton> - <DarkInputButton>W</DarkInputButton>
           </div>
-          <div className='flex items-center gap-2'>
-            <DarkInputButton>L2</DarkInputButton> - <DarkInputButton>A</DarkInputButton>
-          </div>
-          <div className='flex items-center gap-2'>
-            <DarkInputButton>R2</DarkInputButton> - <DarkInputButton>Z</DarkInputButton>
-          </div>
         </div>
       </div>
 

@@ -47,7 +47,10 @@ We support mainstream fourth-generation and earlier consoles as well as some han
 > However, more consoles will be supported in the future.
 
 ## Alternatives
++ [Afterplay.io](https://afterplay.io)
++ [Eclipse](https://eclipseemu.me)
 + [EmulatorJS](https://emulatorjs.org) [:octocat:](https://github.com/EmulatorJS/EmulatorJS)
++ [GamePlayColor](https://gameplaycolor.com) [:octocat:](https://github.com/gameplaycolor/gameplaycolor)
 + [RetroArch Web Player](https://web.libretro.com) [:octocat:](https://github.com/libretro/RetroArch/blob/master/pkg/emscripten/README.md)
 + [webrcade](https://www.webrcade.com) [:octocat:](https://github.com/webrcade/webrcade)
 + [webretro](https://binbashbanana.github.io/webretro/) [:octocat:](https://github.com/BinBashBanana/webretro)

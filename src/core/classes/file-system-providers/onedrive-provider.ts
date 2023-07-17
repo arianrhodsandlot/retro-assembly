@@ -76,7 +76,7 @@ export class OnedriveProvider implements FileSystemProvider {
           directory: path,
           type: 'folder' in item ? 'directory' : 'file',
           fileSystemProvider: this,
-        })
+        }),
     )
   }
 
@@ -90,14 +90,14 @@ export class OnedriveProvider implements FileSystemProvider {
           directory: path,
           type: 'folder' in item ? 'directory' : 'file',
           fileSystemProvider: this,
-        })
+        }),
     )
     return fileAccessors
   }
 
   private async listChildrenByPages(
     path: string,
-    { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions = {}
+    { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions = {},
   ) {
     const apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
     const result = await this.client.request({ api: apiPath, top: pageSize, skipToken: pageCursor, orderby: orderBy })

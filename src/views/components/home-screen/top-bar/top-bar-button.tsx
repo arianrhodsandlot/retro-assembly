@@ -7,7 +7,7 @@ interface TopBarButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(function TopBarButton(
   { children, highlighted = false, className, ...props },
-  ref
+  ref,
 ) {
   return (
     <button
@@ -21,7 +21,7 @@ export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(fun
         highlighted ? 'focus:after:bg-white' : 'focus:after:bg-rose-900',
         'focus:after:rounded-sm focus:after:border-4',
         'focus:after:animate-[pulse-rose-border_1.5s_ease-in-out_infinite]',
-        className
+        className,
       )}
     >
       {children}

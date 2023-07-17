@@ -16,7 +16,7 @@ export function SystemNavigation() {
     function shouldSwitchSystem() {
       return isGameIdle && isValidSystems
     },
-    [isGameIdle, isValidSystems]
+    [isGameIdle, isValidSystems],
   )
 
   const selectPrevSystem = useCallback(() => {
@@ -65,9 +65,7 @@ export function SystemNavigation() {
 
   return (
     <div className='system-navigation flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
-      {systems?.map((system) => (
-        <SystemNavigationItem key={system.name} system={system} />
-      ))}
+      {systems?.map((system) => <SystemNavigationItem key={system.name} system={system} />)}
     </div>
   )
 }

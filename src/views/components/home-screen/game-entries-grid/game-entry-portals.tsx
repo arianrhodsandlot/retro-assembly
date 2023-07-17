@@ -69,6 +69,6 @@ export function GameEntryPortals({
         ) : null}
       </AnimatePresence>
     </>,
-    document.body
+    document.body,
   )
 }

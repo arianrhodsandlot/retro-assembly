@@ -74,13 +74,13 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
 
   async list(...args: Parameters<typeof gapi.client.drive.files.list>) {
     return await GoogleDriveClient.requestWithRefreshTokenOnError(
-      async () => await this.client.client.drive.files.list(...args)
+      async () => await this.client.client.drive.files.list(...args),
     )
   }
 
   async create(...args: Parameters<typeof gapi.client.drive.files.create>) {
     return await GoogleDriveClient.requestWithRefreshTokenOnError(
-      async () => await this.client.client.drive.files.create(...args)
+      async () => await this.client.client.drive.files.create(...args),
     )
   }
 }

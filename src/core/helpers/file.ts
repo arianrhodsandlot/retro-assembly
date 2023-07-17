@@ -1,16 +1,6 @@
 import { get, set } from 'idb-keyval'
 import { join } from 'path-browserify'
 
-export async function readBlobAsUint8Array(file: Blob) {
-  const fileReader = new FileReader()
-  fileReader.readAsArrayBuffer(file)
-  return await new Promise<ArrayBuffer>((resolve, reject) => {
-    fileReader.addEventListener('load', () => {
-      resolve(new Uint8Array(fileReader.result as ArrayBuffer))
-    })
-  })
-}
-
 export async function detectLocalHandleExistence(name: string) {
   const handles = (await get('local-file-system-handles')) ?? {}
   const handle = handles[name]
@@ -57,7 +47,7 @@ async function getFilePromise({ entry, handle, path }) {
   })
 }
 
-export async function listDirectoryByHandle({ handle, path }: { handle: FileSystemDirectoryHandle; path?: string }) {
+export async function listDirectoryByHandle({ handle }: { handle: FileSystemDirectoryHandle }) {
   const entries: FileSystemHandle[] = []
   for await (const entry of handle.values()) {
     entries.push(entry)

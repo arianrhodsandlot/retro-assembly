@@ -22,7 +22,7 @@ export function GoogleDriveButton() {
         setIsInvalidDialogOpen(true)
       }
     },
-    [onSetup]
+    [onSetup],
   )
 
   return (

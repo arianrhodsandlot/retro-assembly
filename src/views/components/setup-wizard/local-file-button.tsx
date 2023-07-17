@@ -27,7 +27,7 @@ export function LocalFileButton() {
         await (mayNeedsUserInteraction ? previewGame(file, { waitForUserInteraction }) : previewGame(file))
         document.body.dispatchEvent(new MouseEvent('mousemove'))
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
   }

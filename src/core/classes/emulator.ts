@@ -5,7 +5,6 @@ import { kebabCase } from 'lodash-es'
 import { join } from 'path-browserify'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
-import { readBlobAsUint8Array } from '../helpers/file'
 import { type Rom } from './rom'
 
 // Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
@@ -397,7 +396,8 @@ export class Emulator {
     if (this.rom) {
       const blob = await this.rom.getBlob()
       const fileName = this.rom.fileAccessor.name
-      const uint8Array = await readBlobAsUint8Array(blob)
+      const arrayBuffer = await blob.arrayBuffer()
+      const uint8Array = new Uint8Array(arrayBuffer)
       FS.createDataFile('/', fileName, uint8Array, true, false)
       const data = FS.readFile(fileName, { encoding: 'binary' })
       FS.mkdirTree(`${raUserdataDir}content/`)
@@ -491,7 +491,7 @@ export class Emulator {
     // Let's modify the default event liseners
     const keyboardEvents = new Set(['keyup', 'keydown', 'keypress'])
     const globalKeyboardEventHandlers = JSEvents.eventHandlers.filter(
-      ({ eventTypeString, target }) => keyboardEvents.has(eventTypeString) && target === document
+      ({ eventTypeString, target }) => keyboardEvents.has(eventTypeString) && target === document,
     )
     for (const globalKeyboardEventHandler of globalKeyboardEventHandlers) {
       const { eventTypeString, target, handlerFunc } = globalKeyboardEventHandler

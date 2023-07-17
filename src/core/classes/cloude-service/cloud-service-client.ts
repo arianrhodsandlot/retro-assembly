@@ -1,6 +1,5 @@
 import { type AuthConfig } from './auth'
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class CloudServiceClient {
   static getAuthorizeUrl: () => string
   static isRetrievingToken: () => boolean

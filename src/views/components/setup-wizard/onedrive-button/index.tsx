@@ -22,7 +22,7 @@ export function OnedriveButton() {
         setIsInvalidDialogOpen(true)
       }
     },
-    [onSetup]
+    [onSetup],
   )
 
   return (

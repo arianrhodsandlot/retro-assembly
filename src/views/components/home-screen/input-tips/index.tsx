@@ -48,7 +48,7 @@ export function InputTips() {
       }
     },
     document.body,
-    { capture: true }
+    { capture: true },
   )
 
   return (

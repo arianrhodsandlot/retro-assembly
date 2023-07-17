@@ -11,7 +11,7 @@ interface BaseButtonProps extends ButtonProps {
 
 export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(function BaseButton(
   { styleType = 'normal', children, className, tag = 'button', ...props },
-  ref
+  ref,
 ) {
   return createElement(
     tag,
@@ -22,11 +22,11 @@ export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(functio
         { 'bg-rose-700 text-white': styleType === 'primary' },
         'focus:rounded-none',
         'focus:before:absolute focus:before:-inset-2 focus:before:animate-[pulse-rose-border_1.5s_ease-in-out_infinite] focus:before:rounded focus:before:border-8',
-        className
+        className,
       ),
       ref,
       ...props,
     },
-    <div className='relative flex items-center justify-center gap-2'>{children}</div>
+    <div className='relative flex items-center justify-center gap-2'>{children}</div>,
   )
 })

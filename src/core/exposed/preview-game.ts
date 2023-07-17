@@ -7,7 +7,7 @@ import { exitGame } from './exit-game'
 
 export async function previewGame(
   file: File,
-  { waitForUserInteraction }: { waitForUserInteraction?: () => Promise<void> } = {}
+  { waitForUserInteraction }: { waitForUserInteraction?: () => Promise<void> } = {},
 ) {
   globalContext.fileSystem = new DummyProvider(file)
   try {

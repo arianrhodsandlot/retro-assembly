@@ -18,7 +18,7 @@ export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxa
 
   const typeUrlPart = `Named_${capitalize(type)}s`
   return `https://thumbnails.libretro.com/${encodeRFC3986URIComponent(systemFullName)}/${encodeRFC3986URIComponent(
-    typeUrlPart
+    typeUrlPart,
   )}/${encodeRFC3986URIComponent(name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_'))}.png`
 }
 

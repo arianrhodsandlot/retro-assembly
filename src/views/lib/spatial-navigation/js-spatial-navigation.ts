@@ -1,4 +1,4 @@
-/* eslint-disable disable eslint entirely since this is a vendor file */
+/* eslint-disabled disable eslint entirely since this is a vendor file */
 // @ts-nocheck
 let $
 
@@ -654,7 +654,7 @@ function fireNavigatefailed(elem, direction) {
     {
       direction,
     },
-    false
+    false,
   )
 }
 
@@ -708,7 +708,7 @@ function focusNext(direction, currentFocusedElement, currentSectionId) {
       currentFocusedElement,
       direction,
       exclude(currentSectionNavigableElements, currentFocusedElement),
-      config
+      config,
     )
 
     if (!next && config.restrict === 'self-first') {
@@ -716,7 +716,7 @@ function focusNext(direction, currentFocusedElement, currentSectionId) {
         currentFocusedElement,
         direction,
         exclude(allNavigableElements, currentSectionNavigableElements),
-        config
+        config,
       )
     }
   } else {
@@ -1131,4 +1131,4 @@ export const SpatialNavigation = {
     }
   },
 }
-/* eslint-enable */
+/* eslint-enabled */

@@ -67,7 +67,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
             <button
               className={clsx(
                 'flex scale-50 transform-gpu items-center justify-center rounded bg-rose-700 px-2 py-1 text-sm text-white opacity-0 transition-[transform,opacity]',
-                'group-hover:scale-100 group-hover:opacity-100'
+                'group-hover:scale-100 group-hover:opacity-100',
               )}
               onClick={() => onSelect(node.path)}
             >

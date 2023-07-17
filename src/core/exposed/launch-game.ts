@@ -5,7 +5,7 @@ import { exitGame } from './exit-game'
 
 export async function launchGame(
   rom: Rom,
-  { waitForUserInteraction }: { waitForUserInteraction?: () => Promise<void> } = {}
+  { waitForUserInteraction }: { waitForUserInteraction?: () => Promise<void> } = {},
 ) {
   if (!globalContext.fileSystem) {
     throw new Error('fileSystem is not available')

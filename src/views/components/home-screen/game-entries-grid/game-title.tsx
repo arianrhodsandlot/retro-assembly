@@ -13,9 +13,7 @@ export function GameTitle({ rom }: { rom: Rom }) {
       className='relative w-full overflow-hidden bg-slate-200 px-1 py-1 text-center text-xs text-slate-400'
       title={rom.name}
     >
-      {districts?.map((district) => (
-        <DistrictIcon district={district} key={district} />
-      ))}
+      {districts?.map((district) => <DistrictIcon district={district} key={district} />)}
 
       <span className='align-middle'>{goodCode.rom}</span>
 

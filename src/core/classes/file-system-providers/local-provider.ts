@@ -53,7 +53,7 @@ export class LocalProvider implements FileSystemProvider {
     const handle = await this.getHandleByPath({ path })
     const childrenHandles = await listDirectoryByHandle({ handle })
     const fileAccessors = childrenHandles.map(
-      ({ name, kind }) => new FileAccessor({ name, directory: path, type: kind, fileSystemProvider: this })
+      ({ name, kind }) => new FileAccessor({ name, directory: path, type: kind, fileSystemProvider: this }),
     )
     return orderBy(fileAccessors, ['name'], ['asc'])
   }

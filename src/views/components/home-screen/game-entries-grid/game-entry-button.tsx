@@ -39,7 +39,7 @@ export function GameEntryButton({
             'origin-bottom-left group-focus:-top-[5px] group-focus:left-[4px]': isLastRow && isFirstColumn,
             'origin-bottom group-focus:-top-[5px]': isLastRow && !isFirstColumn && !isLastColumn,
             'origin-bottom-right group-focus:-left-[4px] group-focus:-top-[5px]': isLastRow && isLastColumn,
-          }
+          },
         )}
       >
         {children}

@@ -52,7 +52,7 @@ export class GamesDatabase {
 
     const blob = await ky(`/vendor/databases/${systemFullName}.rdb`).blob()
     const buffer = await new Promise((resolve, reject) =>
-      blobToBuffer(blob, (error, buffer) => (buffer ? resolve(buffer) : reject(error)))
+      blobToBuffer(blob, (error, buffer) => (buffer ? resolve(buffer) : reject(error))),
     )
     const db = await Libretrodb.from(buffer, { indexHashes: false })
 

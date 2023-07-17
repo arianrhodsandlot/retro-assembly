@@ -116,7 +116,7 @@ export class Libretrodb<T extends Buffer | string> {
       console.warn(
         `** WARNING **\n** Unexpected cursor position (0x${this.file.tell().toString(16)} instead of 0x${(
           this.metadataOffset - 1
-        ).toString(16)}). **\n** There are some unidentified data after the last entry. **`
+        ).toString(16)}). **\n** There are some unidentified data after the last entry. **`,
       )
     }
   }

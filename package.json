@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "prepare-vendor": "zx scripts/prepare.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@fontsource-variable/fredoka": "5.0.5",
@@ -26,7 +27,7 @@
     "date-fns": "2.30.0",
     "delay": "6.0.0",
     "file-select": "1.0.2",
-    "framer-motion": "10.12.21",
+    "framer-motion": "10.12.22",
     "goodcodes-parser": "2.5.0",
     "idb": "7.1.1",
     "idb-keyval": "6.2.1",
@@ -46,7 +47,7 @@
     "wouter": "2.11.0"
   },
   "devDependencies": {
-    "@arianrhodsandlot/eslint-config": "0.7.1",
+    "@arianrhodsandlot/eslint-config": "0.7.3",
     "@iconify/json": "2.2.91",
     "@iconify/tailwind": "0.1.3",
     "@sergeymakinen/vite-plugin-html-minimize": "1.0.6",

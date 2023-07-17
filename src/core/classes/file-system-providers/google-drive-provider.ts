@@ -78,6 +78,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
 
   // todo: not implemented yet
   async delete(path) {
+    console.info(path)
     await this
     throw new Error('not implemented')
   }
@@ -103,7 +104,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
           type: item.mimeType === folderMimeType ? 'directory' : 'file',
           temporaryUrl: item.webContentLink,
           fileSystemProvider: this,
-        })
+        }),
     )
   }
 
@@ -118,7 +119,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
           type: item.mimeType === folderMimeType ? 'directory' : 'file',
           temporaryUrl: item.webContentLink,
           fileSystemProvider: this,
-        })
+        }),
     )
     return fileAccessors
   }
@@ -177,7 +178,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
         const cacheIdentifier = { directory }
         const response = await this.listWithCache(
           { orderBy: 'name', q, fields: defaultFileNestedFields },
-          cacheIdentifier
+          cacheIdentifier,
         )
         directory = response.result.files[0]
       } else {

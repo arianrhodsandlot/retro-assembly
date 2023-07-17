@@ -69,6 +69,6 @@ export function GameMenus() {
         ) : null}
       </AnimatePresence>
     </>,
-    document.body
+    document.body,
   )
 }

@@ -3,10 +3,9 @@ import { BaseCallout } from '../../primitives/base-callout'
 
 interface CloudServiceLoginProps {
   cloudService: 'onedrive' | 'google-drive'
-  showReturnHome: boolean
   onSolve: () => void
 }
-export function CloudServiceLogin({ cloudService, showReturnHome, onSolve }: CloudServiceLoginProps) {
+export function CloudServiceLogin({ cloudService, onSolve }: CloudServiceLoginProps) {
   const loginNameMap = {
     onedrive: 'OneDrive',
     'google-drive': 'Google Drive',

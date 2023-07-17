@@ -12,7 +12,6 @@ export interface AuthConfig {
   redirectUri: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class Auth {
   protected static tokenStorageKey: string
   protected static config: AuthConfig

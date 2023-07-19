@@ -1,11 +1,14 @@
 import fileSelect from 'file-select'
 import { useSetAtom } from 'jotai'
-import { previewGame } from '../../../core'
+import { getSupportedFileExtensions, previewGame } from '../../../core'
 import { isGameRunningAtom } from '../atoms'
 import { UserInteractionButton } from '../common/user-interaction-button'
 import { GameMenus } from '../home-screen/game-menus'
 import { useUserInteraction } from '../hooks'
 import { BaseButton } from '../primitives/base-button'
+
+const supportedFileExtensions = getSupportedFileExtensions()
+supportedFileExtensions.unshift('zip')
 
 export function LocalFileButton() {
   const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
@@ -20,7 +23,9 @@ export function LocalFileButton() {
   async function onClick() {
     setNeedsUserInteraction(mayNeedsUserInteraction)
 
-    const file: File = await fileSelect()
+    const file: File = await fileSelect({
+      accept: supportedFileExtensions.map((extension) => `.${extension}`),
+    })
     if (file) {
       try {
         setIsGameRunningAtom(true)
@@ -36,7 +41,7 @@ export function LocalFileButton() {
     <>
       <BaseButton className='w-60' onClick={onClick}>
         <span className='icon-[mdi--zip-box-outline] h-5 w-5' />
-        select a file
+        select a ROM
       </BaseButton>
 
       {showInteractionButton ? <UserInteractionButton onUserInteract={onUserInteract} /> : null}

@@ -1,6 +1,6 @@
 import { useAtom, useSetAtom, useStore } from 'jotai'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
-import { getSystemRoms, getSystems, peekSystemRoms } from '../../../core'
+import { getSystemRoms, getSystems, peekSystemRoms, peekSystems } from '../../../core'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
@@ -29,6 +29,24 @@ export function HomeScreen() {
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
 
   const columnCount = getColumnCount(gridWidth)
+
+  useAsyncRetry(async () => {
+    const systems = await peekSystems()
+
+    const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
+    const newCurrentSystemName =
+      lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)
+        ? lastSelectedSystem
+        : systems[0].name
+
+    if (!systems) {
+      return
+    }
+    setSystems(systems)
+    setCurrentSystemName(newCurrentSystemName)
+
+    localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
+  }, [setSystems, setCurrentSystemName])
 
   const systemsState = useAsyncRetry(async () => {
     const systems = await getSystems()

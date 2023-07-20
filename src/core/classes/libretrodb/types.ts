@@ -1,3 +1,5 @@
+import { type Buffer } from 'buffer/index'
+
 export interface Entry<BinType extends Buffer | string> {
   name?: string
   description?: string

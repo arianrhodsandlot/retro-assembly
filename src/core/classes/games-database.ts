@@ -1,8 +1,8 @@
-import blobToBuffer from 'blob-to-buffer'
 import ky from 'ky'
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { parse } from 'path-browserify'
 import { systemFullNameMap } from '../constants/systems'
+import { blobToBuffer } from '../helpers/file'
 import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
 import { type Entry } from './libretrodb/types'
@@ -51,9 +51,7 @@ export class GamesDatabase {
     const systemFullName = systemFullNameMap[this.system]
 
     const blob = await ky(`/vendor/databases/${systemFullName}.rdb`).blob()
-    const buffer = await new Promise((resolve, reject) =>
-      blobToBuffer(blob, (error, buffer) => (buffer ? resolve(buffer) : reject(error))),
-    )
+    const buffer = await blobToBuffer(blob)
     const db = await Libretrodb.from(buffer, { indexHashes: false })
 
     const { index } = this

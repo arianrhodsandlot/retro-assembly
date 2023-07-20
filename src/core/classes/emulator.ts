@@ -5,6 +5,7 @@ import { kebabCase } from 'lodash-es'
 import { join } from 'path-browserify'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
+import { blobToBuffer } from '../helpers/file'
 import { type Rom } from './rom'
 
 // Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
@@ -244,9 +245,8 @@ export class Emulator {
     this.clearStateFile()
     if (this.emscripten) {
       const { FS } = this.emscripten
-      const buffer = await blob.arrayBuffer()
-      const uint8Array = new Uint8Array(buffer)
-      FS.writeFile(this.stateFileName, uint8Array)
+      const buffer = await blobToBuffer(blob)
+      FS.writeFile(this.stateFileName, buffer)
       await this.waitForEmscriptenFile(this.stateFileName)
       this.sendCommand('LOAD_STATE')
     }
@@ -396,9 +396,8 @@ export class Emulator {
     if (this.rom) {
       const blob = await this.rom.getBlob()
       const fileName = this.rom.fileAccessor.name
-      const arrayBuffer = await blob.arrayBuffer()
-      const uint8Array = new Uint8Array(arrayBuffer)
-      FS.createDataFile('/', fileName, uint8Array, true, false)
+      const buffer = await blobToBuffer(blob)
+      FS.createDataFile('/', fileName, buffer, true, false)
       const data = FS.readFile(fileName, { encoding: 'binary' })
       FS.mkdirTree(`${raUserdataDir}content/`)
       FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })

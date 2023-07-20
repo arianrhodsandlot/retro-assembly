@@ -1,3 +1,5 @@
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { Buffer } from 'buffer/index'
 import { get, set } from 'idb-keyval'
 import { join } from 'path-browserify'
 
@@ -78,4 +80,9 @@ export async function listFilesRecursivelyByHandle({
   const directryFiles = directory.flat()
   const files = await Promise.all(filePromises)
   return [...directryFiles, ...files]
+}
+
+export async function blobToBuffer(blob: Blob) {
+  const arrayBuffer = await blob.arrayBuffer()
+  return Buffer.from(arrayBuffer)
 }

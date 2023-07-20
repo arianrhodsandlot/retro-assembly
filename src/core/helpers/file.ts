@@ -59,7 +59,7 @@ export async function listFilesRecursivelyByHandle({
   handle,
   path = handle.name,
 }: {
-  handle: FileSystemHandle
+  handle: FileSystemDirectoryHandle
   path?: string
 }) {
   const directoryPromises: Promise<File[]>[] = []

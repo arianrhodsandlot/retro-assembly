@@ -84,7 +84,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   async list(path: string) {
-    const children: { name: string; folder?: unknown }[] = []
+    const children: { name: string; mimeType: string; webContentLink: string }[] = []
     let listNextPage = async () => await this.listChildrenByPages(path, {})
     do {
       const result = await listNextPage()

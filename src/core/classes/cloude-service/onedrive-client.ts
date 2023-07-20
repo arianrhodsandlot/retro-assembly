@@ -5,7 +5,7 @@ import { type CloudServiceClient } from './cloud-service-client'
 
 const hostUrl = `${location.protocol}//${location.host}`
 export class OnedriveClient extends Auth implements CloudServiceClient {
-  protected static tokenStorageKey = 'onedrive-token'
+  static tokenStorageKey = 'onedrive-token'
   protected static config = {
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',

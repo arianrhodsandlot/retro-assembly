@@ -51,6 +51,9 @@ export class LocalProvider implements FileSystemProvider {
 
   async list(path = '') {
     const handle = await this.getHandleByPath({ path })
+    if (!(handle instanceof FileSystemDirectoryHandle)) {
+      throw new TypeError('invalid file handle')
+    }
     const childrenHandles = await listDirectoryByHandle({ handle })
     const fileAccessors = childrenHandles.map(
       ({ name, kind }) => new FileAccessor({ name, directory: path, type: kind, fileSystemProvider: this }),
@@ -59,7 +62,8 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   async peek(path: string) {
-    return await Promise.resolve(noop(path))
+    noop(path)
+    return await Promise.resolve(undefined)
   }
 
   private async load() {

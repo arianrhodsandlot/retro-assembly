@@ -57,22 +57,20 @@ export class FileHandler {
   }
 
   readUInt64() {
-    return this.read(8).readBigUInt64BE()
+    return this.read(8).readBigUInt64BE(0)
   }
 
   readUInt(len = 1) {
     const buffer = this.read(len)
-    return len < 7 ? buffer.readUIntBE(0, len) : Number(buffer.readBigUInt64BE())
+    return len < 7 ? buffer.readUIntBE(0, len) : Number(buffer.readBigUInt64BE(0))
   }
 
   readInt(len = 1) {
     const buffer = this.read(len)
-    return len < 7 ? buffer.readIntBE(0, len) : Number(buffer.readBigInt64BE())
+    return len < 7 ? buffer.readIntBE(0, len) : Number(buffer.readBigInt64BE(0))
   }
 
   readString(len = 1) {
     return this.read(len).toString()
   }
 }
-
-window.Buffer = Buffer

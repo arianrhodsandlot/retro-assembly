@@ -6,7 +6,7 @@ const discoveryDocs = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/re
 const hostUrl = `${location.protocol}//${location.host}`
 
 export class GoogleDriveClient extends Auth implements CloudServiceClient {
-  protected static tokenStorageKey = 'google-drive-token'
+  static tokenStorageKey = 'google-drive-token'
 
   protected static config = {
     authorizeUrl: 'https://accounts.google.com/o/oauth2/auth',

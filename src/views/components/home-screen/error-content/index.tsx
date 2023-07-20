@@ -15,7 +15,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.statusCode === 401 || error.response?.status === 400) {
     return (
       <BaseDialogContent>
-        <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} showReturnHome />
+        <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
       </BaseDialogContent>
     )
   }
@@ -23,7 +23,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
   if (error.status === 401) {
     return (
       <BaseDialogContent>
-        <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} showReturnHome />
+        <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} />
       </BaseDialogContent>
     )
   }

@@ -6,6 +6,7 @@ import { join } from 'path-browserify'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { blobToBuffer } from '../helpers/file'
+import { getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
 // Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
@@ -405,7 +406,7 @@ export class Emulator {
     }
   }
 
-  private writeConfig({ path, config }) {
+  private writeFile({ path, config }) {
     const { FS } = this.emscripten
     const dir = path.slice(0, path.lastIndexOf('/'))
     FS.mkdirTree(dir)
@@ -440,7 +441,7 @@ export class Emulator {
     const raCoreConfigPath = raCoreConfigPathMap[this.core] ?? ''
     const raCoreConfig = this.getRaCoreConfig()
     if (raCoreConfigPath && raCoreConfig) {
-      this.writeConfig({
+      this.writeFile({
         path: join(raCoreConfigDir, raCoreConfigPath),
         config: raCoreConfig,
       })
@@ -448,34 +449,8 @@ export class Emulator {
   }
 
   private setupRaConfigFile() {
-    const raConfig = {
-      menu_driver: 'rgui',
-      rewind_enable: true,
-      notification_show_when_menu_is_alive: true,
-      stdin_cmd_enable: true,
-      quit_press_twice: false,
-      video_vsync: true,
-
-      rgui_menu_color_theme: 4,
-      rgui_show_start_screen: false,
-      savestate_file_compression: true,
-      savestate_thumbnail_enable: true,
-      save_file_compression: true,
-
-      input_rewind_btn: 6, // L2
-      input_hold_fast_forward_btn: 7, // R2
-      // input_menu_toggle_gamepad_combo: 6, // L1+R1
-      input_enable_hotkey_btn: 8, // select
-      rewind_granularity: 4,
-
-      input_exit_emulator: 'nul',
-
-      input_player1_analog_dpad_mode: 1,
-      input_player2_analog_dpad_mode: 1,
-      input_player3_analog_dpad_mode: 1,
-      input_player4_analog_dpad_mode: 1,
-    }
-    this.writeConfig({ path: raConfigPath, config: raConfig })
+    const config = getRetroarchConfig()
+    this.writeFile({ path: raConfigPath, config })
   }
 
   private runMain() {

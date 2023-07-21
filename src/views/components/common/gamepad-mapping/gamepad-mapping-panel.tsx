@@ -17,9 +17,9 @@ export function GamepadMappingPanel({
   const [waitingButton, setWaitingButton] = useState('')
 
   function getCode(buttonName: string) {
-    for (const code in mapping) {
-      if (mapping[code] === buttonName) {
-        return code
+    for (const codeKey in mapping) {
+      if (mapping[codeKey] === buttonName) {
+        return codeKey
       }
     }
     return 'N/A'

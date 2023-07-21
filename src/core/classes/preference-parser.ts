@@ -1,3 +1,4 @@
+import { defaultGamepadMapping } from '../constants/input'
 import { getStorageByKey, setStorageByKey } from '../helpers/storage'
 
 const defaultPreferences = {
@@ -7,6 +8,7 @@ const defaultPreferences = {
   configDirectory: '',
   stateDirectory: '',
   romDirectory: '',
+  gamepadMappings: [{ name: '', mapping: defaultGamepadMapping }],
 }
 
 type PreferenceName = keyof typeof defaultPreferences
@@ -14,26 +16,10 @@ type PreferenceName = keyof typeof defaultPreferences
 export class PreferenceParser {
   static storageKey = 'preference'
 
-  private configProviderType = ''
-  private stateProviderType = ''
-  private romProviderType = ''
-  private configDirectory = ''
-  private stateDirectory = ''
-  private romDirectory = ''
+  private preferenceValues
 
   constructor() {
     this.loadFromStorage()
-  }
-
-  private get value() {
-    return {
-      configProviderType: this.configProviderType,
-      stateProviderType: this.stateProviderType,
-      romProviderType: this.romProviderType,
-      configDirectory: this.configDirectory,
-      stateDirectory: this.stateDirectory,
-      romDirectory: this.romDirectory,
-    }
   }
 
   static get(key: PreferenceName) {
@@ -41,37 +27,33 @@ export class PreferenceParser {
     return preferenceParser.get(key)
   }
 
-  static set({ name, value }: { name: PreferenceName; value: string }) {
+  static set({ name, value }: { name: PreferenceName; value: any }) {
     const preferenceParser = new PreferenceParser()
     return preferenceParser.set({ name, value })
   }
 
-  get(): typeof this.value
-  get(name: PreferenceName): string
+  get(): typeof this.preferenceValues
+  get(name: PreferenceName): any
   get(name?: PreferenceName) {
     this.loadFromStorage()
     if (name === undefined) {
-      return this.value
+      return this.preferenceValues
     }
-    return this.value[name]
+    return this.preferenceValues?.[name] || defaultPreferences[name]
   }
 
-  set({ name, value }: { name: PreferenceName; value: string }) {
-    this[name] = value
+  set({ name, value }: { name: PreferenceName; value: any }) {
+    this.preferenceValues[name] = value
     this.saveToStorage()
   }
 
   private loadFromStorage() {
-    const preference = getStorageByKey(PreferenceParser.storageKey)
-    this.configProviderType = preference?.configProviderType ?? defaultPreferences.configProviderType
-    this.stateProviderType = preference?.stateProviderType ?? defaultPreferences.stateProviderType
-    this.romProviderType = preference?.romProviderType ?? defaultPreferences.romProviderType
-    this.configDirectory = preference?.configDirectory ?? defaultPreferences.configDirectory
-    this.stateDirectory = preference?.stateDirectory ?? defaultPreferences.stateDirectory
-    this.romDirectory = preference?.romDirectory ?? defaultPreferences.romDirectory
+    this.preferenceValues = getStorageByKey(PreferenceParser.storageKey)
   }
 
   private saveToStorage() {
-    setStorageByKey({ key: PreferenceParser.storageKey, value: this.value })
+    setStorageByKey({ key: PreferenceParser.storageKey, value: this.preferenceValues })
   }
 }
+
+window.PreferenceParser = PreferenceParser

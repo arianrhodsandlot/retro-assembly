@@ -100,25 +100,6 @@ export function InputHelpDialogContent() {
         </div>
       </div>
 
-      <div className='mt-8 flex'>
-        <div className='-mt-1 mr-2'>
-          <span className='icon-[mdi--information-outline] h-3 w-3' />
-        </div>
-        <div className='text-xs'>
-          Currently, we only support{' '}
-          <a
-            className='text-rose-700 underline'
-            href='https://w3c.github.io/gamepad/#dfn-standard-gamepad'
-            rel='noreferrer'
-            target='_blank'
-          >
-            Standard Gamepad
-          </a>
-          , for example, Xbox 360 Controller. Other controllers may work well, or they may not.
-          <br />
-          For controllers that do not work properly, a custom remapping feature may be included in future updates.
-        </div>
-      </div>
       <div className='mt-8 flex items-center justify-center gap-5'>
         <DialogClose asChild>
           <BaseButton styleType='primary'>

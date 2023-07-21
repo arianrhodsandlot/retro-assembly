@@ -1,10 +1,13 @@
 import clsx from 'clsx'
 
-export function BouncingEllipsis() {
+type DivProps = JSX.IntrinsicElements['div']
+type BouncingEllipsisProps = DivProps
+
+export function BouncingEllipsis({ className, ...props }: BouncingEllipsisProps) {
   const text = '...'
 
   return (
-    <div className='ml-1 inline-block font-bold'>
+    <div className={clsx('inline-block font-bold', className)} {...props}>
       {[...text].map((char, index) => {
         return (
           <span

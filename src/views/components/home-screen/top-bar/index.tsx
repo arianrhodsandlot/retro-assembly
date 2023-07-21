@@ -1,4 +1,5 @@
 import { ClearSiteDataButton } from './clear-site-data-button'
+import { ConfigGamepadButton } from './config-gamepad-button'
 import { InputHelpButton } from './input-help-button'
 import { Logo } from './logo'
 import { SystemNavigation } from './system-navigation'
@@ -9,6 +10,7 @@ export function TopBar() {
       <Logo />
       <SystemNavigation />
       <InputHelpButton />
+      <ConfigGamepadButton />
       <ClearSiteDataButton />
     </div>
   )

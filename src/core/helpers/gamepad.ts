@@ -1,23 +1,8 @@
 import { isEqual, pull } from 'lodash-es'
+import { PreferenceParser } from '../classes/preference-parser'
 
-const buttonsMap = new Map([
-  [0, 'b'],
-  [1, 'a'],
-  [2, 'y'],
-  [3, 'x'],
-  [4, 'l1'],
-  [5, 'r1'],
-  [6, 'l2'],
-  [7, 'r2'],
-  [8, 'select'],
-  [9, 'start'],
-  [10, 'l3'],
-  [11, 'r3'],
-  [12, 'up'],
-  [13, 'down'],
-  [14, 'left'],
-  [15, 'right'],
-])
+const [defaultInputConfig] = PreferenceParser.get('gamepadMappings')
+const buttonsMap = new Map(Object.entries(defaultInputConfig.mapping))
 
 // window.addEventListener('gamepadconnected', updateGamepadInfo)
 // window.addEventListener('gamepaddisconnected', updateGamepadInfo)
@@ -76,7 +61,13 @@ export function gamepadPollLoop() {
   requestAnimationFrame(gamepadPollLoop)
 }
 
-type PressButtonListenerFunction = (pressedForTimesButtonNames: string[], pressedButtonNames: string[]) => void
+interface PressButtonListenerFunctionParam {
+  pressedForTimesButtonNames?: string[]
+  pressedButtonNames?: string[]
+  pressedForTimesButtonIndicies?: number[]
+  pressedButtonIndicies?: number[]
+}
+type PressButtonListenerFunction = (param: PressButtonListenerFunctionParam) => void
 interface PressButtonListener {
   buttonNames: string[]
   originalCallback: any
@@ -84,11 +75,41 @@ interface PressButtonListener {
 }
 const pressButtonListeners: PressButtonListener[] = []
 function pressButtonsCallback(pressedForTimesButtonIndicies: number[], pressedButtonIndicies: number[]) {
-  const pressedForTimesButtonNames = pressedForTimesButtonIndicies.map((i) => buttonsMap.get(i) as string)
-  const pressedButtonNames = pressedButtonIndicies.map((i) => buttonsMap.get(i) as string)
+  const pressedForTimesButtonNames = pressedForTimesButtonIndicies.map((i) => buttonsMap.get(`${i}`) as string)
+  const pressedButtonNames = pressedButtonIndicies.map((i) => buttonsMap.get(`${i}`) as string)
   if (pressedForTimesButtonNames.length > 0) {
     for (const { listener } of pressButtonListeners) {
-      listener(pressedForTimesButtonNames, pressedButtonNames)
+      listener({
+        pressedForTimesButtonNames,
+        pressedButtonNames,
+        pressedForTimesButtonIndicies,
+        pressedButtonIndicies,
+      })
+    }
+  }
+}
+
+export function onPressAnyButton(
+  callback: (param: { pressedForTimesButtonIndicies: number[]; pressedButtonIndicies: number[] }) => void,
+) {
+  if (typeof callback === 'function') {
+    pressButtonListeners.push({
+      buttonNames: [],
+      originalCallback: callback,
+      listener({ pressedForTimesButtonIndicies, pressedButtonIndicies }) {
+        if (pressedForTimesButtonIndicies && pressedButtonIndicies) {
+          // eslint-disable-next-line n/no-callback-literal
+          callback({ pressedForTimesButtonIndicies, pressedButtonIndicies })
+        }
+      },
+    })
+  }
+}
+
+export function offPressAnyButton(callback) {
+  for (const pressButtonListener of pressButtonListeners) {
+    if (callback === pressButtonListener.originalCallback) {
+      pull(pressButtonListeners, pressButtonListener)
     }
   }
 }
@@ -98,10 +119,10 @@ export function onPressButtons(buttonNames: string[], callback) {
     pressButtonListeners.push({
       buttonNames,
       originalCallback: callback,
-      listener(pressedForTimesButtonNames: string[], pressedButtonNames: string[]) {
+      listener({ pressedForTimesButtonNames, pressedButtonNames }) {
         if (
-          buttonNames.every((buttonName) => pressedForTimesButtonNames.includes(buttonName)) &&
-          buttonNames.some((buttonName) => pressedButtonNames.includes(buttonName))
+          buttonNames.every((buttonName) => pressedForTimesButtonNames?.includes(buttonName)) &&
+          buttonNames.some((buttonName) => pressedButtonNames?.includes(buttonName))
         ) {
           callback()
         }

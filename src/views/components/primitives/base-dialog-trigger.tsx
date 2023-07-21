@@ -14,25 +14,33 @@ import { SpatialNavigation } from '../../lib/spatial-navigation'
 
 interface BaseDialogProps extends DialogProps {
   content: ReactNode
+  closableByGamepadCancel?: boolean
 }
 
-export function BaseDialogTrigger({ children, content, ...props }: BaseDialogProps) {
+export function BaseDialogTrigger({
+  children,
+  content,
+  closableByGamepadCancel = true,
+  open,
+  onOpenChange,
+  ...props
+}: BaseDialogProps) {
   useEffect(() => {
     SpatialNavigation.focus('modal')
   }, [])
 
   useEffect(() => {
-    if (props.open) {
+    if (open && closableByGamepadCancel) {
       const offCancel = onCancel(() => {
         offCancel()
-        props.onOpenChange?.(false)
+        onOpenChange?.(false)
       })
 
       return () => {
         offCancel()
       }
     }
-  }, [props])
+  }, [open, onOpenChange, closableByGamepadCancel])
 
   return (
     <Dialog {...props}>

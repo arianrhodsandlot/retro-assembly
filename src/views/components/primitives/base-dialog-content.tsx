@@ -8,9 +8,16 @@ import { SpatialNavigation } from '../../lib/spatial-navigation'
 interface BaseDialogProps extends DialogProps {
   children: ReactNode
   closable?: boolean
+  closableByGamepadCancel?: boolean
 }
 
-export function BaseDialogContent({ children, open = true, closable = false, ...props }: BaseDialogProps) {
+export function BaseDialogContent({
+  children,
+  open = true,
+  closable = false,
+  closableByGamepadCancel = true,
+  ...props
+}: BaseDialogProps) {
   useEffect(() => {
     SpatialNavigation.focus('modal')
   }, [])
@@ -20,7 +27,7 @@ export function BaseDialogContent({ children, open = true, closable = false, ...
       return
     }
 
-    if (open) {
+    if (open && closableByGamepadCancel) {
       const offCancel = onCancel(() => {
         offCancel()
         props.onOpenChange?.(false)
@@ -30,7 +37,7 @@ export function BaseDialogContent({ children, open = true, closable = false, ...
         offCancel()
       }
     }
-  }, [props, closable, open])
+  }, [props, closable, open, closableByGamepadCancel])
 
   return (
     <Dialog open={open} {...props}>

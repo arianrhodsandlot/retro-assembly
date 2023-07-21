@@ -11,7 +11,12 @@ export function ConfigGamepadButton() {
   }
 
   return (
-    <BaseDialogTrigger content={<ConfigGamepadDialogContent />} onOpenChange={onOpenChange} open={open}>
+    <BaseDialogTrigger
+      closableByGamepadCancel={false}
+      content={<ConfigGamepadDialogContent />}
+      onOpenChange={onOpenChange}
+      open={open}
+    >
       <TopBarButton className='flex aspect-square items-center justify-center'>
         <span className='icon-[mdi--controller] relative z-[1] h-8 w-8' />
       </TopBarButton>

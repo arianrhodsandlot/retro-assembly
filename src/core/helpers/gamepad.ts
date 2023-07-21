@@ -1,25 +1,42 @@
 import { isEqual, pull } from 'lodash-es'
 import { PreferenceParser } from '../classes/preference-parser'
 
-const [defaultInputConfig] = PreferenceParser.get('gamepadMappings')
-const buttonsMap = new Map(Object.entries(defaultInputConfig.mapping))
+type GamepadButtonMap = Map<string, string>
+const buttonsMaps = new Map<string, GamepadButtonMap>()
 
-// window.addEventListener('gamepadconnected', updateGamepadInfo)
-// window.addEventListener('gamepaddisconnected', updateGamepadInfo)
+function updateButtonsMaps() {
+  const gamepadMappings = PreferenceParser.get('gamepadMappings')
+  for (const gamepadMapping of gamepadMappings) {
+    const gamepadButtonMap = new Map(Object.entries(gamepadMapping.mapping))
+    buttonsMaps.set(gamepadMapping.name, gamepadButtonMap)
+  }
+}
+
+PreferenceParser.onUpdated(({ name }) => {
+  if (name === 'gamepadMappings') {
+    updateButtonsMaps()
+  }
+})
+
+updateButtonsMaps()
 
 type GamepadButtonStatus = {
   -readonly [key in keyof GamepadButton]: GamepadButton[key]
 }
 const gamepadsStatus: GamepadButtonStatus[][] = []
 
-function updateGamepadStatus({ buttons, gamepadStatus }) {
+function updateGamepadStatus({ gamepad, gamepadStatus }) {
+  const { buttons } = gamepad
   const gamepadButtonsEntries = [...buttons.entries()]
 
   // run callback functions if certain buttons are pressed / touched
+
   // pressed in this loop
   const pressedButtonIndicies: number[] = []
+
   // pressed before or in this loop, includes `pressedButtonIndicies`
   const pressedForTimesButtonIndicies: number[] = []
+
   for (const [buttonIndex, button] of gamepadButtonsEntries) {
     const prevbuttonStatus = gamepadStatus[buttonIndex]
     if (button.pressed) {
@@ -30,7 +47,7 @@ function updateGamepadStatus({ buttons, gamepadStatus }) {
     }
   }
   if (pressedForTimesButtonIndicies.length > 0) {
-    pressButtonsCallback(pressedForTimesButtonIndicies, pressedButtonIndicies)
+    pressButtonsCallback({ gamepad, pressedForTimesButtonIndicies, pressedButtonIndicies })
   }
 
   // update button status record for using in next loop
@@ -43,9 +60,9 @@ function updateGamepadStatus({ buttons, gamepadStatus }) {
   }
 }
 
-function updateGamepadsStatus({ index, gamepad: { buttons } }) {
+function updateGamepadsStatus({ index, gamepad }) {
   const gamepadStatus = gamepadsStatus[index] ?? []
-  updateGamepadStatus({ buttons, gamepadStatus })
+  updateGamepadStatus({ gamepad, gamepadStatus })
   gamepadsStatus[index] = gamepadStatus
 }
 
@@ -62,6 +79,7 @@ export function gamepadPollLoop() {
 }
 
 interface PressButtonListenerFunctionParam {
+  gamepad: Gamepad
   pressedForTimesButtonNames?: string[]
   pressedButtonNames?: string[]
   pressedForTimesButtonIndicies?: number[]
@@ -74,12 +92,27 @@ interface PressButtonListener {
   listener: PressButtonListenerFunction
 }
 const pressButtonListeners: PressButtonListener[] = []
-function pressButtonsCallback(pressedForTimesButtonIndicies: number[], pressedButtonIndicies: number[]) {
+interface pressButtonsCallbackParams {
+  gamepad: Gamepad
+  pressedForTimesButtonIndicies: number[]
+  pressedButtonIndicies: number[]
+}
+function pressButtonsCallback({
+  gamepad,
+  pressedButtonIndicies,
+  pressedForTimesButtonIndicies,
+}: pressButtonsCallbackParams) {
+  const buttonsMap = buttonsMaps.get(gamepad.id) ?? buttonsMaps.get('')
+  if (!buttonsMap) {
+    return
+  }
+
   const pressedForTimesButtonNames = pressedForTimesButtonIndicies.map((i) => buttonsMap.get(`${i}`) as string)
   const pressedButtonNames = pressedButtonIndicies.map((i) => buttonsMap.get(`${i}`) as string)
   if (pressedForTimesButtonNames.length > 0) {
     for (const { listener } of pressButtonListeners) {
       listener({
+        gamepad,
         pressedForTimesButtonNames,
         pressedButtonNames,
         pressedForTimesButtonIndicies,

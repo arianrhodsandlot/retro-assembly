@@ -73,8 +73,8 @@ export function GamepadMapping() {
           ))
         ) : (
           <div className='flex flex-col items-center justify-center'>
-            <span className='icon-[line-md--loading-loop] my-4 h-8 w-8' />
-            <div className='text-sm'>Connect your controller and press any button to begin!</div>
+            <div className='text-lg'>Connect your controller and press any button to begin!</div>
+            <span className='icon-[line-md--loading-loop] mt-4 h-10 w-10 text-rose-700' />
           </div>
         )}
       </div>

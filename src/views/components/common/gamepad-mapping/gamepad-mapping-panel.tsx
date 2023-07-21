@@ -31,7 +31,14 @@ export function GamepadMappingPanel({
     const offPressAny = onPressAny((params) => {
       const code = params?.pressedForTimesButtonIndicies?.[0]
       if (!isNil(code)) {
-        onUpdateMapping({ ...mapping, [code]: buttonName })
+        const newMapping = { ...mapping }
+        for (const code in newMapping) {
+          if (buttonName === newMapping[code]) {
+            delete newMapping[code]
+          }
+        }
+        newMapping[code] = buttonName
+        onUpdateMapping(newMapping)
       }
       setWaitingButton('')
       offPressAny()
@@ -49,7 +56,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('l1')}
             >
-              L1<div className='ml-2 text-xs text-white/60'>{getCode('l1')}</div>
+              L1<div className='ml-2 font-mono text-xs text-white/60'>{getCode('l1')}</div>
             </button>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
@@ -57,7 +64,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('l2')}
             >
-              L2<div className='ml-2 text-xs text-white/60'>{getCode('l2')}</div>
+              L2<div className='ml-2 font-mono text-xs text-white/60'>{getCode('l2')}</div>
             </button>
           </div>
           <div className='flex gap-2'>
@@ -67,7 +74,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('r2')}
             >
-              R2<div className='ml-2 text-xs text-white/60'>{getCode('r2')}</div>
+              R2<div className='ml-2 font-mono text-xs text-white/60'>{getCode('r2')}</div>
             </button>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
@@ -75,7 +82,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('r1')}
             >
-              R1<div className='ml-2 text-xs text-white/60'>{getCode('r1')}</div>
+              R1<div className='ml-2 font-mono text-xs text-white/60'>{getCode('r1')}</div>
             </button>
           </div>
         </div>
@@ -87,7 +94,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('up')}
             >
-              <div className='text-xs text-white/60'>{getCode('up')}</div>
+              <div className='font-mono text-xs text-white/60'>{getCode('up')}</div>
             </button>
             <div className='flex gap-8'>
               <button
@@ -96,7 +103,7 @@ export function GamepadMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('left')}
               >
-                <div className='text-xs text-white/60'>{getCode('left')}</div>
+                <div className='font-mono text-xs text-white/60'>{getCode('left')}</div>
               </button>
               <button
                 className={clsx('flex h-8 w-8 items-center justify-center rounded-r-sm bg-rose-800 text-white', {
@@ -104,7 +111,7 @@ export function GamepadMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('right')}
               >
-                <div className='text-xs text-white/60'>{getCode('right')}</div>
+                <div className='font-mono text-xs text-white/60'>{getCode('right')}</div>
               </button>
             </div>
             <button
@@ -113,7 +120,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('down')}
             >
-              <div className='text-xs text-white/60'>{getCode('down')}</div>
+              <div className='font-mono text-xs text-white/60'>{getCode('down')}</div>
             </button>
           </div>
           <div className='flex gap-2'>
@@ -123,7 +130,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('select')}
             >
-              select<div className='ml-2 text-xs text-white/60'>{getCode('select')}</div>
+              select<div className='ml-2 font-mono text-xs text-white/60'>{getCode('select')}</div>
             </button>
             <button
               className={clsx('flex h-6 w-20 items-center justify-center rounded-sm bg-rose-800 text-white', {
@@ -131,7 +138,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('start')}
             >
-              start<div className='ml-2 text-xs text-white/60'>{getCode('start')}</div>
+              start<div className='ml-2 font-mono text-xs text-white/60'>{getCode('start')}</div>
             </button>
           </div>
           <div className='flex flex-col items-center'>
@@ -141,7 +148,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('x')}
             >
-              <div className='text-xs text-white/60'>{getCode('x')}</div>
+              <div className='font-mono text-xs text-white/60'>{getCode('x')}</div>
             </button>
             <div className='flex gap-8'>
               <button
@@ -150,7 +157,7 @@ export function GamepadMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('y')}
               >
-                <div className='text-xs text-white/60'>{getCode('y')}</div>
+                <div className='font-mono text-xs text-white/60'>{getCode('y')}</div>
               </button>
               <button
                 className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
@@ -158,7 +165,7 @@ export function GamepadMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('a')}
               >
-                <div className='text-xs text-white/60'>{getCode('a')}</div>
+                <div className='font-mono text-xs text-white/60'>{getCode('a')}</div>
               </button>
             </div>
             <button
@@ -167,7 +174,7 @@ export function GamepadMappingPanel({
               })}
               onClick={() => waitForButtonPressed('b')}
             >
-              <div className='text-xs text-white/60'>{getCode('b')}</div>
+              <div className='font-mono text-xs text-white/60'>{getCode('b')}</div>
             </button>
           </div>
         </div>

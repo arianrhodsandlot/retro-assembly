@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-const mayNeedsUserInteraction = /iphone|ipad|ipod/i.test(navigator.userAgent)
+const isAppleMobile = /iphone|ipad|ipod/i.test(navigator.userAgent)
+const isAppleMobileDesktopMode = /safari/i.test(navigator.userAgent) && screen.height <= 1366
+const mayNeedsUserInteraction = isAppleMobile || isAppleMobileDesktopMode
 
 export function useUserInteraction() {
   const [showInteractionButton, setShowInteractionButton] = useState(false)

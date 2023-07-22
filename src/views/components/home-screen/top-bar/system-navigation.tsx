@@ -1,4 +1,5 @@
 import { useAtom, useAtomValue } from 'jotai'
+import $ from 'jquery'
 import { useCallback, useEffect } from 'react'
 import { onPress } from '../../../../core'
 import { isGameIdleAtom } from '../../atoms'
@@ -14,7 +15,10 @@ export function SystemNavigation() {
 
   const shouldSwitchSystem = useCallback(
     function shouldSwitchSystem() {
-      return isGameIdle && isValidSystems
+      const homeScreenLayout = document.querySelector('.home-screen-layout')
+      const isFocusingHome =
+        homeScreenLayout && document.activeElement && $.contains(homeScreenLayout, document.activeElement)
+      return isFocusingHome && isGameIdle && isValidSystems
     },
     [isGameIdle, isValidSystems],
   )

@@ -6,7 +6,7 @@ const backgroundImage =
 
 export function HomeScreenLayout({ children }: { children: ReactNode }) {
   return (
-    <div className='relative h-screen w-screen'>
+    <div className='home-screen-layout relative h-screen w-screen'>
       <div
         className='absolute inset-0 flex flex-col bg-[length:30px_30px] bg-[0_0,15px_15px]'
         style={{ backgroundImage }}

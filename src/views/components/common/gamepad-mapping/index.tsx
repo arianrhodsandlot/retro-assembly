@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { compact, find, uniqBy } from 'lodash-es'
+import { compact, find, reject, uniqBy } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import { getGamepadMappings, updateGamepadMappings } from '../../../../core'
 import { GamepadMappingPanel } from './gamepad-mapping-panel'
@@ -9,6 +9,8 @@ export function GamepadMapping() {
   const [currentGamePadId, setCurrentGamePadId] = useState<string>()
   const [gamepadMappings, setGamepadMappings] = useState(getGamepadMappings())
   const currentMapping = find(gamepadMappings, ({ name }) => name === currentGamePadId) ?? gamepadMappings[0]
+
+  console.log(gamepadMappings)
 
   function updateMapping(mapping) {
     if (!currentGamePadId) {
@@ -26,6 +28,14 @@ export function GamepadMapping() {
 
     updateGamepadMappings(newMappings)
     setGamepadMappings(newMappings)
+  }
+
+  function resetMapping() {
+    if (currentGamePadId) {
+      const newMappings = reject(gamepadMappings, { name: currentGamePadId })
+      updateGamepadMappings(newMappings)
+      setGamepadMappings(newMappings)
+    }
   }
 
   useEffect(() => {
@@ -67,7 +77,11 @@ export function GamepadMapping() {
                 {gamepad.id}
               </button>
               {currentGamePadId === gamepad.id ? (
-                <GamepadMappingPanel mapping={currentMapping?.mapping} onUpdateMapping={updateMapping} />
+                <GamepadMappingPanel
+                  mapping={currentMapping?.mapping}
+                  onResetMapping={resetMapping}
+                  onUpdateMapping={updateMapping}
+                />
               ) : null}
             </div>
           ))

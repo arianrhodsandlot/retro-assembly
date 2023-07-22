@@ -7,13 +7,13 @@ import { BouncingEllipsis } from '../bouncing-ellipsis'
 
 type GamepadMapping = Record<string | number, string>
 
-export function GamepadMappingPanel({
-  mapping,
-  onUpdateMapping,
-}: {
+interface GamepadMappingPanelProps {
   mapping: GamepadMapping | undefined
   onUpdateMapping: (mapping: GamepadMapping) => void
-}) {
+  onResetMapping: () => void
+}
+
+export function GamepadMappingPanel({ mapping, onUpdateMapping, onResetMapping }: GamepadMappingPanelProps) {
   const [waitingButton, setWaitingButton] = useState('')
 
   function getCode(buttonName: string) {
@@ -48,7 +48,11 @@ export function GamepadMappingPanel({
   return (
     <BaseCallout className='mx-1 rounded-t-none border-t-0'>
       <div className='text-sm'>
-        <div className='flex justify-between pt-2'>
+        <div className={clsx('text-center text-xs transition-opacity', { 'opacity-0': !waitingButton })}>
+          Press a button on your controller <BouncingEllipsis />
+        </div>
+
+        <div className='mt-1 flex justify-between'>
           <div className='flex gap-2'>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
@@ -86,7 +90,7 @@ export function GamepadMappingPanel({
             </button>
           </div>
         </div>
-        <div className='mt-4 flex items-end justify-between gap-2'>
+        <div className='mt-4 flex items-center justify-between gap-2'>
           <div className='flex flex-col items-center'>
             <button
               className={clsx('flex h-8 w-8 items-center justify-center rounded-t-sm bg-rose-800 text-white', {
@@ -123,7 +127,8 @@ export function GamepadMappingPanel({
               <div className='font-mono text-xs text-white/60'>{getCode('down')}</div>
             </button>
           </div>
-          <div className='flex gap-2'>
+
+          <div className='mt-16 flex gap-2'>
             <button
               className={clsx('flex h-6 w-20 items-center justify-center rounded-sm bg-rose-800 text-white', {
                 'animate-pulse': waitingButton === 'select',
@@ -141,6 +146,7 @@ export function GamepadMappingPanel({
               start<div className='ml-2 font-mono text-xs text-white/60'>{getCode('start')}</div>
             </button>
           </div>
+
           <div className='flex flex-col items-center'>
             <button
               className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
@@ -179,8 +185,15 @@ export function GamepadMappingPanel({
           </div>
         </div>
       </div>
-      <div className={clsx('mt-2 text-center text-xs transition-opacity', { 'opacity-0': !waitingButton })}>
-        Please press a button on your controller <BouncingEllipsis />
+
+      <div className={clsx('mt-2 flex justify-end text-sm transition-opacity', { 'opacity-0': waitingButton })}>
+        <button
+          className='flex items-center justify-center gap-1 rounded border border-rose-800 bg-white px-2 py-1 text-rose-700'
+          onClick={onResetMapping}
+        >
+          <span className='icon-[mdi--reload-alert] h-4 w-4' />
+          Reset to default
+        </button>
       </div>
     </BaseCallout>
   )

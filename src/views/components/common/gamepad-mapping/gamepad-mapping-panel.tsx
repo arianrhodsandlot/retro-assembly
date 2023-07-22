@@ -8,12 +8,13 @@ import { BouncingEllipsis } from '../bouncing-ellipsis'
 type GamepadMapping = Record<string | number, string>
 
 interface GamepadMappingPanelProps {
+  gamepad: Gamepad
   mapping: GamepadMapping | undefined
   onUpdateMapping: (mapping: GamepadMapping) => void
   onResetMapping: () => void
 }
 
-export function GamepadMappingPanel({ mapping, onUpdateMapping, onResetMapping }: GamepadMappingPanelProps) {
+export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onResetMapping }: GamepadMappingPanelProps) {
   const [waitingButton, setWaitingButton] = useState('')
 
   function getCode(buttonName: string) {
@@ -29,7 +30,10 @@ export function GamepadMappingPanel({ mapping, onUpdateMapping, onResetMapping }
     setWaitingButton(buttonName)
 
     const offPressAny = onPressAny((params) => {
-      const code = params?.pressedForTimesButtonIndicies?.[0]
+      if (params.gamepad?.id !== gamepad.id) {
+        return
+      }
+      const code = params.pressedForTimesButtonIndicies?.[0]
       if (!isNil(code)) {
         const newMapping = { ...mapping }
         for (const code in newMapping) {

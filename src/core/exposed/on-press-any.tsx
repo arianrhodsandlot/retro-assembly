@@ -1,6 +1,6 @@
-import { offPressAnyButton, onPressAnyButton } from '../helpers/gamepad'
+import { type PressButtonListenerFunction, offPressAnyButton, onPressAnyButton } from '../helpers/gamepad'
 
-export function onPressAny(callback: (params) => void) {
+export function onPressAny(callback: PressButtonListenerFunction) {
   onPressAnyButton(callback)
   return () => offPressAnyButton(callback)
 }

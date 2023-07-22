@@ -79,13 +79,13 @@ export function gamepadPollLoop() {
 }
 
 interface PressButtonListenerFunctionParam {
-  gamepad: Gamepad
+  gamepad?: Gamepad
   pressedForTimesButtonNames?: string[]
   pressedButtonNames?: string[]
   pressedForTimesButtonIndicies?: number[]
   pressedButtonIndicies?: number[]
 }
-type PressButtonListenerFunction = (param: PressButtonListenerFunctionParam) => void
+export type PressButtonListenerFunction = (param: PressButtonListenerFunctionParam) => void
 interface PressButtonListener {
   buttonNames: string[]
   originalCallback: any
@@ -122,24 +122,22 @@ function pressButtonsCallback({
   }
 }
 
-export function onPressAnyButton(
-  callback: (param: { pressedForTimesButtonIndicies: number[]; pressedButtonIndicies: number[] }) => void,
-) {
+export function onPressAnyButton(callback: PressButtonListenerFunction) {
   if (typeof callback === 'function') {
     pressButtonListeners.push({
       buttonNames: [],
       originalCallback: callback,
-      listener({ pressedForTimesButtonIndicies, pressedButtonIndicies }) {
+      listener(params) {
+        const { pressedForTimesButtonIndicies, pressedButtonIndicies } = params
         if (pressedForTimesButtonIndicies && pressedButtonIndicies) {
-          // eslint-disable-next-line n/no-callback-literal
-          callback({ pressedForTimesButtonIndicies, pressedButtonIndicies })
+          callback(params)
         }
       },
     })
   }
 }
 
-export function offPressAnyButton(callback) {
+export function offPressAnyButton(callback: PressButtonListenerFunction) {
   for (const pressButtonListener of pressButtonListeners) {
     if (callback === pressButtonListener.originalCallback) {
       pull(pressButtonListeners, pressButtonListener)

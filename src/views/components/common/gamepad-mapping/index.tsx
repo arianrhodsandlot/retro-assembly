@@ -78,6 +78,7 @@ export function GamepadMapping() {
               </button>
               {currentGamePadId === gamepad.id ? (
                 <GamepadMappingPanel
+                  gamepad={gamepad}
                   mapping={currentMapping?.mapping}
                   onResetMapping={resetMapping}
                   onUpdateMapping={updateMapping}

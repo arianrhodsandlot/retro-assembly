@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { isNil } from 'lodash-es'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { onPressAny } from '../../../../core'
 import { BaseCallout } from '../../primitives/base-callout'
 import { BouncingEllipsis } from '../bouncing-ellipsis'
@@ -16,8 +16,23 @@ interface GamepadMappingPanelProps {
 
 export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onResetMapping }: GamepadMappingPanelProps) {
   const [waitingButton, setWaitingButton] = useState('')
+  const inputTimerRef = useRef(0)
+  const offPressAnyRef = useRef<() => void>()
+
+  useEffect(() => {
+    if (inputTimerRef.current) {
+      clearTimeout(inputTimerRef.current)
+    }
+    if (offPressAnyRef.current) {
+      offPressAnyRef.current()
+    }
+  }, [])
 
   function getCode(buttonName: string) {
+    if (waitingButton === buttonName) {
+      return ''
+    }
+
     for (const codeKey in mapping) {
       if (mapping[codeKey] === buttonName) {
         return codeKey
@@ -27,9 +42,16 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
   }
 
   function waitForButtonPressed(buttonName: string) {
+    if (inputTimerRef.current) {
+      clearTimeout(inputTimerRef.current)
+    }
+    if (offPressAnyRef.current) {
+      offPressAnyRef.current()
+    }
+
     setWaitingButton(buttonName)
 
-    const offPressAny = onPressAny((params) => {
+    offPressAnyRef.current = onPressAny((params) => {
       if (params.gamepad?.id !== gamepad.id) {
         return
       }
@@ -44,9 +66,17 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
         newMapping[code] = buttonName
         onUpdateMapping(newMapping)
       }
-      setWaitingButton('')
-      offPressAny()
+      finishWaitForButtonPressed()
     })
+
+    function finishWaitForButtonPressed() {
+      setWaitingButton('')
+      offPressAnyRef.current?.()
+    }
+
+    inputTimerRef.current = window.setTimeout(() => {
+      finishWaitForButtonPressed()
+    }, 5000)
   }
 
   return (
@@ -60,7 +90,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
           <div className='flex gap-2'>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'l1',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'l1',
               })}
               onClick={() => waitForButtonPressed('l1')}
             >
@@ -68,7 +98,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             </button>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'l2',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'l2',
               })}
               onClick={() => waitForButtonPressed('l2')}
             >
@@ -78,7 +108,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
           <div className='flex gap-2'>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'r2',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'r2',
               })}
               onClick={() => waitForButtonPressed('r2')}
             >
@@ -86,7 +116,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             </button>
             <button
               className={clsx('flex h-6 w-14 items-center justify-center rounded bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'r1',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'r1',
               })}
               onClick={() => waitForButtonPressed('r1')}
             >
@@ -98,7 +128,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
           <div className='flex flex-col items-center'>
             <button
               className={clsx('flex h-8 w-8 items-center justify-center rounded-t-sm bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'up',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'up',
               })}
               onClick={() => waitForButtonPressed('up')}
             >
@@ -107,7 +137,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             <div className='flex gap-8'>
               <button
                 className={clsx('flex h-8 w-8 items-center justify-center rounded-l-sm bg-rose-800 text-white', {
-                  'animate-pulse': waitingButton === 'left',
+                  'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'left',
                 })}
                 onClick={() => waitForButtonPressed('left')}
               >
@@ -115,7 +145,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
               </button>
               <button
                 className={clsx('flex h-8 w-8 items-center justify-center rounded-r-sm bg-rose-800 text-white', {
-                  'animate-pulse': waitingButton === 'right',
+                  'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'right',
                 })}
                 onClick={() => waitForButtonPressed('right')}
               >
@@ -124,7 +154,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             </div>
             <button
               className={clsx('flex h-8 w-8 items-center justify-center rounded-b-sm bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'down',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'down',
               })}
               onClick={() => waitForButtonPressed('down')}
             >
@@ -135,7 +165,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
           <div className='mt-16 flex gap-2'>
             <button
               className={clsx('flex h-6 w-20 items-center justify-center rounded-sm bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'select',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'select',
               })}
               onClick={() => waitForButtonPressed('select')}
             >
@@ -143,7 +173,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             </button>
             <button
               className={clsx('flex h-6 w-20 items-center justify-center rounded-sm bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'start',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'start',
               })}
               onClick={() => waitForButtonPressed('start')}
             >
@@ -154,7 +184,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
           <div className='flex flex-col items-center'>
             <button
               className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'x',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'x',
               })}
               onClick={() => waitForButtonPressed('x')}
             >
@@ -163,7 +193,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             <div className='flex gap-8'>
               <button
                 className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
-                  'animate-pulse': waitingButton === 'y',
+                  'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'y',
                 })}
                 onClick={() => waitForButtonPressed('y')}
               >
@@ -171,7 +201,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
               </button>
               <button
                 className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
-                  'animate-pulse': waitingButton === 'a',
+                  'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'a',
                 })}
                 onClick={() => waitForButtonPressed('a')}
               >
@@ -180,7 +210,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
             </div>
             <button
               className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
-                'animate-pulse': waitingButton === 'b',
+                'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'b',
               })}
               onClick={() => waitForButtonPressed('b')}
             >
@@ -190,7 +220,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
         </div>
       </div>
 
-      <div className={clsx('mt-2 flex justify-end text-sm transition-opacity', { 'opacity-0': waitingButton })}>
+      <div className={clsx('mt-2 flex justify-end text-sm', { 'scale-0': waitingButton })}>
         <button
           className='flex items-center justify-center gap-1 rounded border border-rose-800 bg-white px-2 py-1 text-rose-700'
           onClick={onResetMapping}

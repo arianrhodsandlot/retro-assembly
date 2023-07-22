@@ -10,8 +10,6 @@ export function GamepadMapping() {
   const [gamepadMappings, setGamepadMappings] = useState(getGamepadMappings())
   const currentMapping = find(gamepadMappings, ({ name }) => name === currentGamePadId) ?? gamepadMappings[0]
 
-  console.log(gamepadMappings)
-
   function updateMapping(mapping) {
     if (!currentGamePadId) {
       return

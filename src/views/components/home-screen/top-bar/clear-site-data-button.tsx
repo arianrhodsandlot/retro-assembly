@@ -15,7 +15,7 @@ export function ClearSiteDataButton() {
     setOpen(false)
   }
 
-  function onOpenChange(open) {
+  function onOpenChange(open: boolean) {
     if (open) {
       updateSetConfirmMessage()
     }
@@ -45,8 +45,11 @@ export function ClearSiteDataButton() {
       onOpenChange={onOpenChange}
       open={open}
     >
-      <TopBarButton className='flex aspect-square items-center justify-center'>
-        <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
+      <TopBarButton>
+        <div className='flex items-center gap-2 px-4'>
+          <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
+          Logout
+        </div>
       </TopBarButton>
     </BaseDialogTrigger>
   )

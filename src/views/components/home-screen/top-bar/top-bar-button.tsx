@@ -14,7 +14,7 @@ export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(fun
       ref={ref}
       {...props}
       className={clsx(
-        'relative text-sm transition-[opacity,background-color]',
+        'relative h-16 text-sm  transition-[opacity,background-color]',
         'after:absolute after:inset-0 after:z-0 after:transition-[background-color,border-width]',
         { 'after:bg-white': highlighted },
         highlighted ? 'hover:after:bg-white' : 'hover:after:bg-rose-900',
@@ -24,7 +24,7 @@ export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(fun
         className,
       )}
     >
-      {children}
+      <div className='relative z-[1] flex items-center'>{children}</div>
     </button>
   )
 })

@@ -17,8 +17,11 @@ export function ConfigGamepadButton() {
       onOpenChange={onOpenChange}
       open={open}
     >
-      <TopBarButton className='flex aspect-square items-center justify-center'>
-        <span className='icon-[mdi--controller] relative z-[1] h-8 w-8' />
+      <TopBarButton>
+        <div className='flex items-center gap-2 px-4'>
+          <span className='icon-[mdi--controller] relative z-[1] h-8 w-8' />
+          Configure gamepads
+        </div>
       </TopBarButton>
     </BaseDialogTrigger>
   )

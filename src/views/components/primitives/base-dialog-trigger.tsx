@@ -43,7 +43,7 @@ export function BaseDialogTrigger({
   }, [open, onOpenChange, closableByGamepadCancel])
 
   return (
-    <Dialog {...props}>
+    <Dialog onOpenChange={onOpenChange} open={open} {...props}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogPortal>

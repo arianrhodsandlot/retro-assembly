@@ -82,3 +82,15 @@ export function getRetroarchConfig() {
     ...inputConfig,
   }
 }
+
+export const defaultRetroarchCoresConfig = {
+  nestopia: {
+    nestopia_turbo_pulse: 2,
+  },
+  fceumm: {
+    fceumm_turbo_enable: 'Both',
+  },
+  snes9x: {},
+  gearboy: {},
+  genesis_plus_gx: {},
+}

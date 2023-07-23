@@ -6,7 +6,7 @@ import { join } from 'path-browserify'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { blobToBuffer } from '../helpers/file'
-import { getRetroarchConfig } from '../helpers/retroarch'
+import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
 // Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
@@ -415,20 +415,7 @@ export class Emulator {
   }
 
   private getRaCoreConfig() {
-    const map = {
-      nestopia: {
-        nestopia_turbo_pulse: 2,
-        nestopia_overclock: '2x',
-        nestopia_nospritelimit: 'enabled',
-      },
-      fceumm: {
-        fceumm_turbo_enable: 'Both',
-      },
-      snes9x: {},
-      gearboy: {},
-      genesis_plus_gx: {},
-    }
-    return map[this.core]
+    return defaultRetroarchCoresConfig[this.core]
   }
 
   private setupRaCoreConfigFile() {

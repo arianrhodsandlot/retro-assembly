@@ -362,7 +362,7 @@ export class Emulator {
     const jsContent = `
     export function getEmscripten({ Module }) {
       ${jsContentBody}
-      return { RA, RWC, GL, PATH, PATH_FS, TTY, MEMFS, FS, SYSCALLS, ERRNO_CODES, EGL, JSEvents, ENV, Module, Browser, exit: _emscripten_force_exit }
+      return { PATH, FS, ERRNO_CODES, JSEvents, ENV, Module, exit: _emscripten_force_exit }
     }
     `
     const jsBlob = new Blob([jsContent], {

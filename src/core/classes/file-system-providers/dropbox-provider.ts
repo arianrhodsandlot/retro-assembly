@@ -61,7 +61,7 @@ export class DropboxProvider implements FileSystemProvider {
     } while (listNextPage)
 
     if (children?.length) {
-      // RequestCache.set({ name: `${this.constructor.name}.peek`, path }, children)
+      RequestCache.set({ name: `${this.constructor.name}.peek`, path }, children)
     }
 
     return children.map(
@@ -83,7 +83,7 @@ export class DropboxProvider implements FileSystemProvider {
         new FileAccessor({
           name: item.name,
           directory: path,
-          type: 'folder' in item ? 'directory' : 'file',
+          type: item['.tag'] === 'folder' ? 'directory' : 'file',
           fileSystemProvider: this,
         }),
     )

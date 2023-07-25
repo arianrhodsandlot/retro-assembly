@@ -8,5 +8,5 @@ export abstract class CloudServiceClient {
   protected static shouldRefreshToken: (error: unknown) => boolean
   protected static tokenStorageKey: string
   protected static config: AuthConfig
-  private static getAccessToken: () => string
+  protected static getAccessToken: () => string
 }

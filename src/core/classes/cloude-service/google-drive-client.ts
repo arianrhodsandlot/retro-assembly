@@ -1,10 +1,11 @@
+import $ from 'jquery'
 import queryString from 'query-string'
 import { Auth } from './auth'
 import { type CloudServiceClient } from './cloud-service-client'
 
 const discoveryDocs = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
 const hostUrl = `${location.protocol}//${location.host}`
-
+window.$ = $
 export class GoogleDriveClient extends Auth implements CloudServiceClient {
   static tokenStorageKey = 'google-drive-token'
 
@@ -23,6 +24,9 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
 
   constructor() {
     super()
+    if (!('gapi' in window)) {
+      throw new Error('gapi is not available')
+    }
     this.client = gapi
   }
 
@@ -43,9 +47,18 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
   }
 
   static async loadGapi() {
-    await new Promise((resolve) => gapi.load('client', resolve))
-    await gapi.client.init({ apiKey: GoogleDriveClient.apiKey, discoveryDocs })
-    gapi.client.setToken({ access_token: GoogleDriveClient.getAccessToken() })
+    if (!('gapi' in window)) {
+      await $.getScript('https://apis.google.com/js/api.js')
+    }
+    if (!gapi.client) {
+      await new Promise((resolve) => gapi.load('client', resolve))
+    }
+    if (!gapi.client.getToken()) {
+      gapi.client.setToken({ access_token: GoogleDriveClient.getAccessToken() })
+    }
+    if (!gapi.client.drive) {
+      await gapi.client.init({ apiKey: GoogleDriveClient.apiKey, discoveryDocs })
+    }
   }
 
   static async validateAccessToken() {

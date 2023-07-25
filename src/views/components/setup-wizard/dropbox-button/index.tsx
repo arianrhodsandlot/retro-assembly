@@ -33,7 +33,7 @@ export function DropboxButton() {
         </div>
       }
     >
-      <BaseButton className='w-60' styleType='primary'>
+      <BaseButton styleType='primary'>
         <span className='icon-[logos--dropbox] h-5 w-5' />
         Dropbox
       </BaseButton>

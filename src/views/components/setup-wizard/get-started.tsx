@@ -66,7 +66,7 @@ export function GetStarted() {
       <div className='get-started w-full rounded-xl border-2 border-rose-700 px-10 py-6'>
         <div className='flex flex-col items-center gap-10'>
           {isAnyCloudServiceEnabled ? (
-            <div className='flex flex-col'>
+            <div className='flex flex-col items-center'>
               <div className='flex items-center justify-center gap-2 text-center font-bold'>
                 <span className='icon-[mdi--cube-outline] h-6 w-6' />
                 Select a cloud directory
@@ -76,22 +76,10 @@ export function GetStarted() {
                 <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
                 <div>Synchronize your games and saves across multiple devices.</div>
               </div>
-              <div className='mt-4 flex flex-col justify-center gap-4'>
-                {isOnedriveEnabled ? (
-                  <div className='flex justify-center'>
-                    <OnedriveButton />
-                  </div>
-                ) : null}
-                {isGoogleDriveEnabled ? (
-                  <div className='flex justify-center'>
-                    <GoogleDriveButton />
-                  </div>
-                ) : null}
-                {isDropboxEnabled ? (
-                  <div className='flex justify-center'>
-                    <DropboxButton />
-                  </div>
-                ) : null}
+              <div className='mt-4 flex w-60 flex-col justify-between gap-y-3'>
+                {isOnedriveEnabled ? <OnedriveButton /> : null}
+                {isGoogleDriveEnabled ? <GoogleDriveButton /> : null}
+                {isDropboxEnabled ? <DropboxButton /> : null}
               </div>
             </div>
           ) : null}

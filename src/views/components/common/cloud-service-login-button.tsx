@@ -11,7 +11,7 @@ const cloudServiceMap = {
 }
 
 interface CloudServiceLoginButtonProps {
-  cloudService: 'onedrive' | 'google-drive'
+  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
   showReturnHome?: boolean
   onLogin: () => void
 }

@@ -8,7 +8,7 @@ import { toggleNodeExpanded } from './utils'
 
 interface DirectoryTreeNodeParams {
   node: TreeNode
-  cloudService: 'onedrive' | 'google-drive'
+  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
   onSelect: (path: string) => void
 }
 
@@ -54,11 +54,11 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
         <div className='group flex min-w-0 flex-1'>
           <div
             aria-hidden
-            className='flex flex-1 cursor-default items-center overflow-hidden text-ellipsis whitespace-nowrap'
+            className='flex flex-1 cursor-default items-center overflow-hidden'
             onClick={onClickDirectoryName}
             title={node.name}
           >
-            <div>{node.name}</div>
+            <div className='overflow-hidden text-ellipsis whitespace-nowrap'>{node.name}</div>
             {!node.hasChildren && node.isDirectory ? (
               <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>an empty directory</div>
             ) : null}

@@ -1,3 +1,4 @@
+import { DropboxProvider } from '../classes/file-system-providers/dropbox-provider'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
@@ -15,6 +16,9 @@ export async function start() {
       break
     case 'google-drive':
       globalContext.fileSystem = await GoogleDriveProvider.getSingleton()
+      break
+    case 'dropbox':
+      globalContext.fileSystem = await DropboxProvider.getSingleton()
       break
     default:
       throw new Error('unknown rom provider type')

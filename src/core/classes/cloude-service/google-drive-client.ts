@@ -14,7 +14,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
     tokenUrl: 'https://oauth2.googleapis.com/token',
     clientId: import.meta.env.VITE_GOOGLE_DRIVE_CLIENT_ID,
     clientSecret: import.meta.env.VITE_GOOGLE_DRIVE_CLIENT_SECRET,
-    scope: 'https://www.googleapis.com/auth/drive',
+    scope: ['https://www.googleapis.com/auth/drive'],
     redirectUri: `${hostUrl}/auth/google-drive`,
   }
 
@@ -35,7 +35,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
 
     const query = {
       client_id: this.config.clientId,
-      scope: this.config.scope,
+      scope: this.config.scope.join(' '),
       response_type: 'code',
       redirect_uri: this.config.redirectUri,
       code_challenge: codeChallenge,

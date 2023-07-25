@@ -7,6 +7,7 @@ import { BaseDialogContent } from '../primitives/base-dialog-content'
 import { BaseTooltip } from '../primitives/base-tooltip'
 import { isInvalidDialogOpenAtom } from './atoms'
 import { DirectoryInstruction } from './directory-instruction'
+import { DropboxButton } from './dropbox-button'
 import { GoogleDriveButton } from './google-drive-button'
 import { LocalButton } from './local-button'
 import { LocalFileButton } from './local-file-button'
@@ -14,6 +15,7 @@ import { OnedriveButton } from './onedrive-button'
 
 const isOnedriveEnabled = isCloudServiceEnabled('onedrive')
 const isGoogleDriveEnabled = isCloudServiceEnabled('google-drive')
+const isDropboxEnabled = isCloudServiceEnabled('dropbox')
 const isAnyCloudServiceEnabled = isOnedriveEnabled || isGoogleDriveEnabled
 
 const directoryInstruction = <DirectoryInstruction />
@@ -85,16 +87,9 @@ export function GetStarted() {
                     <GoogleDriveButton />
                   </div>
                 ) : null}
-                {isOnedriveEnabled || isGoogleDriveEnabled ? (
-                  <div className='flex flex-col items-center opacity-50'>
-                    <BaseButton className='w-60' disabled styleType='primary'>
-                      <span className='icon-[logos--dropbox] h-5 w-5' />
-                      Dropbox
-                    </BaseButton>
-                    <div className='mt-1 flex w-60 items-center gap-1 text-xs'>
-                      <span className='icon-[mdi--rocket-launch-outline]' />
-                      Not available yet but coming soon!
-                    </div>
+                {isDropboxEnabled ? (
+                  <div className='flex justify-center'>
+                    <DropboxButton />
                   </div>
                 ) : null}
               </div>

@@ -25,6 +25,7 @@
     "clsx": "2.0.0",
     "date-fns": "2.30.0",
     "delay": "6.0.0",
+    "dropbox": "^10.34.0",
     "file-select": "1.0.2",
     "framer-motion": "10.13.0",
     "goodcodes-parser": "2.5.0",

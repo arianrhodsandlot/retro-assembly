@@ -6,10 +6,11 @@ import { DirectoryTreeNode } from './directory-tree-node'
 const cloudServiceNameMap = {
   onedrive: 'OneDrive',
   'google-drive': 'Google Drive',
+  dropbox: 'Dropbox',
 }
 
 interface DirectoryTreeParams {
-  cloudService: 'onedrive' | 'google-drive'
+  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
   onSelect: (path: string) => void
 }
 

@@ -1,4 +1,5 @@
 import { filter } from 'lodash-es'
+import { DropboxProvider } from '../classes/file-system-providers/dropbox-provider'
 import { type FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
@@ -11,7 +12,7 @@ interface ValidateRomDirectoryParamsForLocalType {
 }
 
 interface ValidateRomDirectoryParamsForCloudServiceType {
-  type: 'onedrive' | 'google-drive'
+  type: 'onedrive' | 'google-drive' | 'dropbox'
   directory: string
 }
 
@@ -33,6 +34,13 @@ export async function validateRomDirectory(params: ValidateRomDirectoryParams) {
       const { directory } = params
       const googleDrive = await GoogleDriveProvider.getSingleton()
       const children = await googleDrive.list(directory)
+      directories = filter(children, 'isDirectory')
+      break
+    }
+    case 'dropbox': {
+      const { directory } = params
+      const dropboxProvider = DropboxProvider.getSingleton()
+      const children = await dropboxProvider.list(directory)
       directories = filter(children, 'isDirectory')
       break
     }

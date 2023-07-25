@@ -3,7 +3,7 @@ import { isNil } from 'lodash-es'
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
 
-function setFileSystemProviderType(type: 'local' | 'onedrive' | 'google-drive') {
+function setFileSystemProviderType(type: 'local' | 'onedrive' | 'google-drive' | 'dropbox') {
   PreferenceParser.set({ name: 'configProviderType', value: type })
   PreferenceParser.set({ name: 'stateProviderType', value: type })
   PreferenceParser.set({ name: 'romProviderType', value: type })
@@ -30,7 +30,7 @@ export async function updatePreference({
   directory,
   handle,
 }: {
-  fileSystem?: 'local' | 'onedrive' | 'google-drive'
+  fileSystem?: 'local' | 'onedrive' | 'google-drive' | 'dropbox'
   directory?: string
   handle?: FileSystemHandle
 }) {

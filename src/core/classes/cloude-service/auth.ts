@@ -4,11 +4,11 @@ import { generatePKCEChallenge } from '../../helpers/pkce'
 import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 
 export interface AuthConfig {
-  authorizeUrl: string
+  authorizeUrl?: string
   tokenUrl: string
   clientId: string
   clientSecret?: string
-  scope: string
+  scope: string[]
   redirectUri: string
 }
 

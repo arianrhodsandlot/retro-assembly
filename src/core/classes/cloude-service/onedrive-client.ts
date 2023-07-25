@@ -10,7 +10,7 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     clientId: import.meta.env.VITE_ONEDRIVE_CLIENT_ID,
-    scope: 'offline_access Files.ReadWrite.All Files.ReadWrite.AppFolder',
+    scope: ['offline_access', 'Files.ReadWrite.All', 'Files.ReadWrite.AppFolder'],
     redirectUri: `${hostUrl}/auth/onedrive`,
   }
 
@@ -26,7 +26,7 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
 
     const query = {
       client_id: this.config.clientId,
-      scope: this.config.scope,
+      scope: this.config.scope.join(' '),
       response_type: 'code',
       redirect_uri: this.config.redirectUri,
       code_challenge: codeChallenge,

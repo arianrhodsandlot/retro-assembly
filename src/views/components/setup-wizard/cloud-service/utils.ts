@@ -4,7 +4,7 @@ import { type TreeNode } from './types'
 
 interface ToggleNodeExpandedParams {
   node: TreeNode
-  cloudService: 'onedrive' | 'google-drive'
+  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
 }
 
 export async function toggleNodeExpanded({ node, cloudService }: ToggleNodeExpandedParams) {

@@ -1,5 +1,3 @@
-import ky from 'ky'
-import queryString from 'query-string'
 import { DropboxClient } from '../cloude-service/dropbox-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
@@ -26,13 +24,13 @@ export class DropboxProvider implements FileSystemProvider {
     }
 
     dropboxCloudProvider = new DropboxProvider()
-    window.d = dropboxCloudProvider
     return dropboxCloudProvider
   }
 
   async getContent(path: string) {
-    const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.request({ api: `/me/drive/root:${path}` })
-    return await ky(downloadUrl).blob()
+    const result = await this.client.download({ path })
+    // @ts-expect-error fileBlob is not declared in dropbox sdk's types
+    return result.result.fileBlob
   }
 
   // path should start with a slash
@@ -40,10 +38,9 @@ export class DropboxProvider implements FileSystemProvider {
     if (!file || !path) {
       return
     }
-    return await this.client.request({
-      api: `/me/drive/root:${path}:/content`,
-      method: 'put',
-      content: file,
+    return await this.client.create({
+      path,
+      contents: file,
     })
   }
 

@@ -69,10 +69,18 @@ export class DropboxClient extends Auth implements CloudServiceClient {
     })
   }
 
-  async create(...args: Parameters<typeof gapi.client.drive.files.create>) {
+  async create(params: files.UploadArg) {
     return await DropboxClient.requestWithRefreshTokenOnError(async () => {
       const client = DropboxClient.getClient()
-      return await client.filesListFolder(params)
+      return await client.filesUpload(params)
+    })
+  }
+
+  async download(params: files.DownloadArg): ReturnType<Dropbox['filesDownload']> {
+    return await DropboxClient.requestWithRefreshTokenOnError(async () => {
+      const client = DropboxClient.getClient()
+
+      return await client.filesDownload(params)
     })
   }
 }

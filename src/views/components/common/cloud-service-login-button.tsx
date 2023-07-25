@@ -8,6 +8,7 @@ import { ReturnToHomeButton } from './return-to-home-button'
 const cloudServiceMap = {
   onedrive: 'Microsoft',
   'google-drive': 'Google',
+  dropbox: 'Dropbox',
 }
 
 interface CloudServiceLoginButtonProps {
@@ -88,6 +89,7 @@ export function CloudServiceLoginButton({
           className={clsx('mr-2 inline-block h-5 w-5', {
             'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
             'icon-[logos--google-icon]': cloudService === 'google-drive',
+            'icon-[logos--dropbox]': cloudService === 'dropbox',
           })}
         />
         Sign in with {cloudServiceMap[cloudService]}

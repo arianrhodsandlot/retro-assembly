@@ -74,7 +74,7 @@ export abstract class Auth {
     return !!error
   }
 
-  protected static async requestWithRefreshTokenOnError(request: () => Promise<any>): Promise<any> {
+  protected static async requestWithRefreshTokenOnError(request: () => Promise<any>): ReturnType<typeof request> {
     try {
       return await request()
     } catch (error: any) {

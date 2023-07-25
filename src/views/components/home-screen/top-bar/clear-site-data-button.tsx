@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { isUsingLocal, isUsingOnedrive } from '../../../../core'
+import { isUsingDropbox, isUsingLocal, isUsingOnedrive } from '../../../../core'
 import { isUsingGoogleDrive } from '../../../../core/exposed/is-using-google-drive'
 import { emitter } from '../../../lib/emitter'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
@@ -34,6 +34,9 @@ export function ClearSiteDataButton() {
     } else if (isUsingGoogleDrive()) {
       confirmMessage =
         'Your login status to Google Drive will be cleared, while your ROMs and save states will be preserved.'
+    } else if (isUsingDropbox()) {
+      confirmMessage =
+        'Your login status to Dropbox will be cleared, while your ROMs and save states will be preserved.'
     }
 
     setConfirmMessage(confirmMessage)

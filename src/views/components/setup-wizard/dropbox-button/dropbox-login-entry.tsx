@@ -9,7 +9,7 @@ export function DropboxLoginEntry({ onFinished }: { onFinished: () => void }) {
           <div>
             <span className='icon-[mdi--bell] mr-2 mt-[2px] h-4 w-4' />
           </div>
-          <div>To select a ROMs directory from your Dropbox, you need to sign in with Microsoft first.</div>
+          <div>To select a ROMs directory from your Dropbox, you need to sign in with Dropbox first.</div>
         </div>
       </BaseCallout>
 

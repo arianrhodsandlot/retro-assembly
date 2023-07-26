@@ -41,7 +41,7 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
     }
 
     const client = OnedriveClient.getClient()
-    const request = client.api('/me')
+    const request = client.api('/me/drive/root/children').top(1)
     try {
       await OnedriveClient.requestWithRefreshTokenOnError(() => request.get())
     } catch (error) {

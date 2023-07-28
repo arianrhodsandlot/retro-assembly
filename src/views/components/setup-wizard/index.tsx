@@ -57,9 +57,19 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
       </div>
 
       <div className='mt-10 py-4 text-center text-xs text-rose-700'>
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center gap-2'>
           <div>
-            © <a href='https://github.com/arianrhodsandlot/'> arianrhodsandlot</a> 2023
+            <span>©</span>
+            <a className='mx-1' href='https://github.com/arianrhodsandlot/' rel='noreferrer' target='_blank'>
+              arianrhodsandlot
+            </a>
+            <span>2023</span>
+          </div>
+          ·
+          <div>
+            <a href='/privacy-policy.html' target='_blank'>
+              Privacy Policy
+            </a>
           </div>
         </div>
       </div>

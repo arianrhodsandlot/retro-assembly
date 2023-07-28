@@ -59,7 +59,14 @@ export function CloudServiceLoginButton({
     if (!event.currentTarget.href) {
       return
     }
-    authorizeWindow.current = open(event.currentTarget.href, '_blank', 'popup')
+
+    const width = 600
+    const height = 700
+    const top = outerHeight / 2 + screenY - height / 2
+    const left = outerWidth / 2 + screenX - width / 2
+    const features = `popup,width=${width},height=${height},top=${top},left=${left}`
+    authorizeWindow.current = open(event.currentTarget.href, '_blank', features)
+
     const isLogin = await checkLoginStatus()
     if (isLogin) {
       onLogin()

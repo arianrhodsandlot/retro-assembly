@@ -5,6 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   server: { host: true },
+  build: { rollupOptions: { input: ['index.html', 'privacy-policy.html'] } },
   plugins: [
     react(),
     splitVendorChunkPlugin(),

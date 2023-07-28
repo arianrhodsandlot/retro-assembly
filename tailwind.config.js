@@ -1,9 +1,10 @@
 import { addDynamicIconSelectors } from '@iconify/tailwind'
+import typography from '@tailwindcss/typography'
 
 /** @type {import('tailwindcss').Config} */
 export default {
   mode: 'jit',
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./*.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: { extend: {} },
-  plugins: [addDynamicIconSelectors()],
+  plugins: [typography, addDynamicIconSelectors()],
 }

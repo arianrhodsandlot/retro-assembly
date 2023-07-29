@@ -7,6 +7,16 @@ import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
 import { type Entry } from './libretrodb/types'
 
+const cdnHost = 'https://cdn.jsdelivr.net'
+const cdnType = 'gh'
+const dbRepo = 'libretro/libretro-database'
+const dbVersion = '3e7bb'
+
+function getDbUrl(systemFullName: string) {
+  const dbPath = `rdb/${systemFullName}.rdb`
+  return `${cdnHost}/${cdnType}/${dbRepo}@${dbVersion}/${dbPath}`
+}
+
 function normalizeGameName(originalName: string) {
   let name = parseGoodCode(originalName).rom
   name = camelCase(name).toLowerCase()
@@ -50,7 +60,8 @@ export class GamesDatabase {
   async load() {
     const systemFullName = systemFullNameMap[this.system]
 
-    const blob = await ky(`/vendor/databases/${systemFullName}.rdb`).blob()
+    const dbUrl = getDbUrl(systemFullName)
+    const blob = await ky(dbUrl).blob()
     const buffer = await blobToBuffer(blob)
     const db = await Libretrodb.from(buffer, { indexHashes: false })
 

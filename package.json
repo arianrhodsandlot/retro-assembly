@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "prepare-vendor": "zx scripts/prepare.js",
+    "prepare-vendors": "zx scripts/prepare-vendors.js",
     "preview": "vite preview",
     "lint": "eslint src"
   },

@@ -1,4 +1,4 @@
 dist
 dev-dist
 node_modules
-vendor
+vendors

@@ -1,4 +1,7 @@
 export type SystemName =
+  | 'atari2600'
+  | 'atari5200'
+  | 'atari7800'
   | 'gamegear'
   | 'gb'
   | 'gba'
@@ -10,9 +13,6 @@ export type SystemName =
   | 'sms'
   | 'snes'
   | 'vb'
-  | 'atari2600'
-  | 'atari5200'
-  | 'atari7800'
   | 'wonderswan'
   | 'wonderswancolor'
 

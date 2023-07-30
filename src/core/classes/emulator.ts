@@ -71,7 +71,7 @@ function getEmscriptenModuleOverrides() {
     },
 
     locateFile(path) {
-      return `/vendor/cores/${path}`
+      return `/vendors/cores/${path}`
     },
 
     async monitorRunDependencies(left: number) {
@@ -355,7 +355,7 @@ export class Emulator {
   private async setupEmscripten() {
     // @ts-expect-error for retroarch fast forward
     window.setImmediate ??= window.setTimeout
-    const jsContentBody = await ky(`/vendor/cores/${this.core}_libretro.js`).text()
+    const jsContentBody = await ky(`/vendors/cores/${this.core}_libretro.js`).text()
     const jsContent = `
     export function getEmscripten({ Module }) {
       ${jsContentBody}

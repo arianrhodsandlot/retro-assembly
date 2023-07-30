@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { type Rom } from '../../../../core'
 import { GameEntry } from './game-entry'
+import { clearLoadImageQueue } from './utils'
 
 interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
   roms: Rom[]
@@ -23,6 +24,12 @@ function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   useEffect(() => {
     focusFirstButton()
   }, [focusFirstButton])
+
+  useEffect(() => {
+    return () => {
+      clearLoadImageQueue()
+    }
+  }, [])
 
   return roms?.length ? (
     <FixedSizeGrid {...props} innerRef={innerRef}>

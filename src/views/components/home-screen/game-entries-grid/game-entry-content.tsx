@@ -1,24 +1,8 @@
+import { useEffect, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { systemContentImageMap } from '../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
-
-const loadedImages = new Map<string, boolean>()
-async function loadImage(src: string) {
-  if (loadedImages.has(src)) {
-    throw new Error('invalid src')
-  }
-  const img = new Image()
-  img.src = src
-  return await new Promise<void>((resolve, reject) => {
-    img.addEventListener('load', () => {
-      resolve()
-    })
-    img.addEventListener('error', (error) => {
-      loadedImages.set(src, false)
-      reject(error)
-    })
-  })
-}
+import { loadImageWithLimit } from './utils'
 
 function pseudoRandomDeg(seed: string) {
   let code = 0
@@ -29,12 +13,22 @@ function pseudoRandomDeg(seed: string) {
 }
 
 export function GameEntryContent({ rom }: { rom: any }) {
+  const abortControllerRef = useRef<AbortController>()
   const state = useAsync(async () => {
     await rom.ready()
     const { cover } = rom
-    await loadImage(cover)
+    const abortController = new AbortController()
+    abortControllerRef.current = abortController
+    await loadImageWithLimit(cover, abortController.signal)
     return cover
   }, [rom])
+
+  useEffect(() => {
+    return () => {
+      const abortController = abortControllerRef.current
+      abortController?.abort()
+    }
+  }, [])
 
   if (state.loading) {
     const rotate = pseudoRandomDeg(rom.name)

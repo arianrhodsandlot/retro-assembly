@@ -31,17 +31,23 @@ A personal retro game collection cabinet in your browser.
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
 
 ### Home video game consoles
-+ <img width="18" align="center" src="docs/consoles/Atari - 2600.png" /> Atari - 2600
-+ <img width="18" align="center" src="docs/consoles/Nintendo - Nintendo Entertainment System.png" /> Nintendo - Nintendo Entertainment System / Famicom
-+ <img width="18" align="center" src="docs/consoles/Sega - Master System - Mark III.png" /> Sega - Master System / Mark III
-+ <img width="18" align="center" src="docs/consoles/Sega - Mega Drive - Genesis.png" /> Sega - Genesis / Mega Drive
-+ <img width="18" align="center" src="docs/consoles/Nintendo - Super Nintendo Entertainment System.png" /> Nintendo - Super Nintendo Entertainment System / Super Famicom
++ <img width="18" align="center" src="src/assets/consoles/Atari - 2600.png" /> Atari - 2600
++ <img width="18" align="center" src="src/assets/consoles/Atari - 5200.png" /> Atari - 5200
++ <img width="18" align="center" src="src/assets/consoles/Atari - 7800.png" /> Atari - 7800
++ <img width="18" align="center" src="src/assets/consoles/Nintendo - Nintendo Entertainment System.png" /> Nintendo - Nintendo Entertainment System / Famicom
++ <img width="18" align="center" src="src/assets/consoles/Nintendo - Super Nintendo Entertainment System.png" /> Nintendo - Super Nintendo Entertainment System / Super Famicom
++ <img width="18" align="center" src="src/assets/consoles/Sega - Master System - Mark III.png" /> Sega - Master System / Mark III
++ <img width="18" align="center" src="src/assets/consoles/Sega - Mega Drive - Genesis.png" /> Sega - Genesis / Mega Drive
 ### Handheld game consoles
-+ <img width="18" align="center" src="docs/consoles/Nintendo - Game Boy.png" /> Nintendo - Game Boy
-+ <img width="18" align="center" src="docs/consoles/Nintendo - Game Boy Color.png" /> Nintendo - Game Boy Color
-+ <img width="18" align="center" src="docs/consoles/Nintendo - Game Boy Advance.png" /> Nintendo - Game Boy Advance
-+ <img width="18" align="center" src="docs/consoles/Sega - Game Gear.png" /> Sega - Game Gear
-+ <img width="18" align="center" src="docs/consoles/Nintendo - Virtual Boy.png" /> Nintendo - Virtual Boy
++ <img width="18" align="center" src="src/assets/consoles/Bandai - WonderSwan Color.png" /> Bandai - WonderSwan Color
++ <img width="18" align="center" src="src/assets/consoles/Bandai - WonderSwan.png" /> Bandai - WonderSwan
++ <img width="18" align="center" src="src/assets/consoles/Nintendo - Game Boy Advance AGB-001 B.png" /> Nintendo - Game Boy Advance
++ <img width="18" align="center" src="src/assets/consoles/Nintendo - Game Boy Color.png" /> Nintendo - Game Boy Color
++ <img width="18" align="center" src="src/assets/consoles/Nintendo - Game Boy.png" /> Nintendo - Game Boy
++ <img width="18" align="center" src="src/assets/consoles/Nintendo - Virtual Boy.png" /> Nintendo - Virtual Boy
++ <img width="18" align="center" src="src/assets/consoles/Sega - Game Gear.png" /> Sega - Game Gear
++ <img width="18" align="center" src="src/assets/consoles/SNK - Neo Geo Pocket Color.png" /> SNK - Neo Geo Pocket Color
++ <img width="18" align="center" src="src/assets/consoles/SNK - Neo Geo Pocket.png" /> SNK - Neo Geo Pocket
 
 > ⚠️ As this project is still in an early stage, only some of the most popular consoles are supported.
 > However, more consoles will be supported in the future.

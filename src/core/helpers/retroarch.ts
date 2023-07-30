@@ -27,6 +27,9 @@ const defaultRetroarchConfig = {
   input_player2_analog_dpad_mode: 1,
   input_player3_analog_dpad_mode: 1,
   input_player4_analog_dpad_mode: 1,
+
+  nestopia_turbo_pulse: 2,
+  fceumm_turbo_enable: 'Both',
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -81,16 +84,4 @@ export function getRetroarchConfig() {
     ...defaultRetroarchConfig,
     ...inputConfig,
   }
-}
-
-export const defaultRetroarchCoresConfig = {
-  nestopia: {
-    nestopia_turbo_pulse: 2,
-  },
-  fceumm: {
-    fceumm_turbo_enable: 'Both',
-  },
-  snes9x: {},
-  gearboy: {},
-  genesis_plus_gx: {},
 }

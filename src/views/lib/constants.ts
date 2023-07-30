@@ -1,5 +1,13 @@
 import atari2600Content from '../../assets/consoles/Atari - 2600-content.png'
 import atari2600 from '../../assets/consoles/Atari - 2600.png'
+import atari5200Content from '../../assets/consoles/Atari - 5200-content.png'
+import atari5200 from '../../assets/consoles/Atari - 5200.png'
+import atari7800Content from '../../assets/consoles/Atari - 7800-content.png'
+import atari7800 from '../../assets/consoles/Atari - 7800.png'
+import wonderswancolorContent from '../../assets/consoles/Bandai - WonderSwan Color-content.png'
+import wonderswancolor from '../../assets/consoles/Bandai - WonderSwan Color.png'
+import wonderswanContent from '../../assets/consoles/Bandai - WonderSwan-content.png'
+import wonderswan from '../../assets/consoles/Bandai - WonderSwan.png'
 import gwContent from '../../assets/consoles/Handheld Electronic Game-content.png'
 import gw from '../../assets/consoles/Handheld Electronic Game.png'
 import gba from '../../assets/consoles/Nintendo - Game Boy Advance AGB-001 B.png'
@@ -14,6 +22,10 @@ import snesContent from '../../assets/consoles/Nintendo - Super Nintendo Enterta
 import snes from '../../assets/consoles/Nintendo - Super Nintendo Entertainment System.png'
 import vbContent from '../../assets/consoles/Nintendo - Virtual Boy-content.png'
 import vb from '../../assets/consoles/Nintendo - Virtual Boy.png'
+import ngpcContent from '../../assets/consoles/SNK - Neo Geo Pocket Color-content.png'
+import ngpc from '../../assets/consoles/SNK - Neo Geo Pocket Color.png'
+import ngpContent from '../../assets/consoles/SNK - Neo Geo Pocket-content.png'
+import ngp from '../../assets/consoles/SNK - Neo Geo Pocket.png'
 import gamegearContent from '../../assets/consoles/Sega - Game Gear-content.png'
 import gamegear from '../../assets/consoles/Sega - Game Gear.png'
 import smsContent from '../../assets/consoles/Sega - Master System - Mark III-content.png'
@@ -23,28 +35,40 @@ import megadrive from '../../assets/consoles/Sega - Mega Drive - Genesis.png'
 
 export const systemImageMap = {
   atari2600,
-  gw,
+  atari5200,
+  atari7800,
+  gamegear,
+  gb,
   gba,
   gbc,
-  gb,
+  gw,
+  megadrive,
   nes,
+  ngp,
+  ngpc,
+  sms,
   snes,
   vb,
-  gamegear,
-  sms,
-  megadrive,
+  wonderswan,
+  wonderswancolor,
 }
 
 export const systemContentImageMap = {
   atari2600: atari2600Content,
-  gw: gwContent,
+  atari5200: atari5200Content,
+  atari7800: atari7800Content,
+  gamegear: gamegearContent,
+  gb: gbContent,
   gba: gbaContent,
   gbc: gbcContent,
-  gb: gbContent,
+  gw: gwContent,
+  megadrive: megadriveContent,
   nes: nesContent,
+  ngp: ngpContent,
+  ngpc: ngpcContent,
+  sms: smsContent,
   snes: snesContent,
   vb: vbContent,
-  gamegear: gamegearContent,
-  sms: smsContent,
-  megadrive: megadriveContent,
+  wonderswan: wonderswanContent,
+  wonderswancolor: wonderswancolorContent,
 }

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/assets/logo/logo-512x512.png" alt="logo" width="128" height="128">
+  <img src="public/assets/logo/logo-512x512.png" alt="logo" width="64" height="64">
 </p>
 
 <h1 align="center">Retro Assembly</h1>
@@ -7,9 +7,7 @@
 ## Overview
 A personal retro game collection cabinet in your browser.
 
-<p align="center">
-  <img src="docs/screenshots/home.png" width="400" />
-</p>
+<p align="center"><img src="docs/screenshots/home.png"></p>
 
 ## Usage
 1. Visit [retroassembly.com](https://retroassembly.com)
@@ -19,13 +17,13 @@ A personal retro game collection cabinet in your browser.
 ## Features
 |Description|Screenshot|
 |---|---|
-|📁 Import a directory from your OneDrive/Google Drive or disk, then a game list will appear|<img src="docs/screenshots/import.gif" width="200" />|
-|🖼️ Automatically grab game cover images|<img src="docs/screenshots/cover.gif" width="200" />|
-|🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles |<img src="docs/screenshots/joystick.gif" width="200" />|
-|⏳ Of course, rewinding|<img src="docs/screenshots/rewind.gif" width="200" />|
-|💾 Save states and sync them to with different devices (if using a cloud disk we support)|<img src="docs/screenshots/save.gif" width="200" />|
-|🗎 Play a single ROM file without initializing a game library|<img src="docs/screenshots/single.gif" width="200" />|
-|🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen. Notice: a joystick is necessary.  |<img src="docs/screenshots/add-to-home-screen.png" width="200" />|
+|📁 Import a directory from your OneDrive/Google Drive or disk, then a game list will appear|<img src="docs/screenshots/features/import.gif" width="200" />|
+|🖼️ Automatically grab game cover images|<img src="docs/screenshots/features/cover.gif" width="200" />|
+|🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles |<img src="docs/screenshots/features/joystick.gif" width="200" />|
+|⏳ Of course, rewinding|<img src="docs/screenshots/features/rewind.gif" width="200" />|
+|💾 Save states and sync them to with different devices (if using a cloud disk we support)|<img src="docs/screenshots/features/save.gif" width="200" />|
+|🗎 Play a single ROM file without initializing a game library|<img src="docs/screenshots/features/single.gif" width="200" />|
+|🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen. Notice: a joystick is necessary.  |<img src="docs/screenshots/features/add-to-home-screen.png" width="200" />|
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
@@ -37,7 +35,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     <tr>
       <th>Firm</th>
       <th>Platform</th>
-      <th>ROM Extensions</th>
+      <th>Extension</th>
       <th>Emulator</th>
     </tr>
   </thead>
@@ -45,7 +43,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     <tr>
       <td rowspan="3">Atari</td>
       <td>Atari - 2600</td>
-      <td>.a26, .zip</td>
+      <td><code>.a26</code>, <code>.zip</code></td>
       <td>
         <b>Stella</b>
         <br>
@@ -55,7 +53,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Atari - 5200</td>
-      <td>.a52, .zip</td>
+      <td><code>.a52</code>, <code>.zip</code></td>
       <td>
         <b>Atari800</b>
         <br>
@@ -65,7 +63,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Atari - 7800</td>
-      <td>.a78, .zip</td>
+      <td><code>.a78</code>, <code>.zip</code></td>
       <td>
         <b>ProSystem</b>
         <br>
@@ -76,7 +74,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     <tr>
       <td rowspan="5">Nintendo</td>
       <td>Nintendo - Nintendo Entertainment System / Famicom</td>
-      <td>.nes, .zip</td>
+      <td><code>.nes</code>, <code>.zip</code></td>
       <td>
         <b>FCEUmm</b>
         <br>
@@ -86,7 +84,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Nintendo - Super Nintendo Entertainment System / Super Famicom</td>
-      <td>.sfc, .zip</td>
+      <td><code>.sfc</code>, <code>.zip</code></td>
       <td>
         <b>Snes9x</b>
         <br>
@@ -96,7 +94,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Nintendo - Game Boy Color</td>
-      <td>.gbc, .zip</td>
+      <td><code>.gbc</code>, <code>.zip</code></td>
       <td rowspan="2">
         <b>Gearboy</b>
         <br>
@@ -106,11 +104,11 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Nintendo - Game Boy</td>
-      <td>.gb, .zip</td>
+      <td><code>.gb</code>, <code>.zip</code></td>
     </tr>
     <tr>
       <td>Nintendo - Virtual Boy</td>
-      <td>.vb, .zip</td>
+      <td><code>.vb</code>, <code>.zip</code></td>
       <td>
         <b>Mednafen VB</b>
         <br>
@@ -121,7 +119,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     <tr>
       <td rowspan="3">Sega</td>
       <td>Master System / Mark III</td>
-      <td>.sms, .zip</td>
+      <td><code>.sms</code>, <code>.zip</code></td>
       <td rowspan="3">
         <b>Genesis Plus GX</b>
         <br>
@@ -131,16 +129,16 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Genesis / Mega Drive</td>
-      <td>.md, .zip</td>
+      <td><code>.md</code>, <code>.zip</code></td>
     </tr>
     <tr>
       <td>Game Gear</td>
-      <td>.gg, .zip</td>
+      <td><code>.gg</code>, <code>.zip</code></td>
     </tr>
     <tr>
       <td rowspan="2">Bandai</td>
       <td>WonderSwan Color</td>
-      <td>.wsc, .zip</td>
+      <td><code>.wsc</code>, <code>.zip</code></td>
       <td rowspan="2">
         <b>Mednafen WonderSwan</b>
         <br>
@@ -150,12 +148,12 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>WonderSwan</td>
-      <td>.ws, .zip</td>
+      <td><code>.ws</code>, <code>.zip</code></td>
     </tr>
     <tr>
       <td rowspan="2">SNK</td>
       <td>Neo Geo Pocket Color</td>
-      <td>.ngc, .zip</td>
+      <td><code>.ngc</code>, <code>.zip</code></td>
       <td rowspan="2">
         <b>Mednafen NGP</b>
         <br>
@@ -165,7 +163,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Neo Geo Pocket</td>
-      <td>.ngp, .zip</td>
+      <td><code>.ngp</code>, <code>.zip</code></td>
     </tr>
   </tbody>
 </table>

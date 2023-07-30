@@ -2,10 +2,11 @@ import delay from 'delay'
 import ini from 'ini'
 import ky from 'ky'
 import { kebabCase } from 'lodash-es'
+import { join } from 'path-browserify'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { blobToBuffer } from '../helpers/file'
-import { getRetroarchConfig } from '../helpers/retroarch'
+import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
 // Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
@@ -42,6 +43,7 @@ type RetroArchCommand =
   | 'MENU_TOGGLE'
 
 const raUserdataDir = '/home/web_user/retroarch/userdata/'
+const raCoreConfigDir = `${raUserdataDir}config/`
 const raConfigPath = `${raUserdataDir}retroarch.cfg`
 
 const encoder = new TextEncoder()
@@ -182,6 +184,7 @@ export class Emulator {
     }
 
     this.setupRaConfigFile()
+    this.setupRaCoreConfigFile()
 
     await waitForUserInteraction?.()
 
@@ -413,6 +416,23 @@ export class Emulator {
 
   private getRaCoreConfig() {
     return defaultRetroarchCoresConfig[this.core]
+  }
+
+  private setupRaCoreConfigFile() {
+    const raCoreConfigPathMap = {
+      nestopia: 'Nestopia/Nestopia.opt',
+      fceumm: 'FCEUmm/FCEUmm.opt',
+      gearboy: 'Gearboy/Gearboy.opt',
+      genesis_plus_gx: 'Genesis Plus GX/Genesis Plus GX.opt',
+    }
+    const raCoreConfigPath = raCoreConfigPathMap[this.core] ?? ''
+    const raCoreConfig = this.getRaCoreConfig()
+    if (raCoreConfigPath && raCoreConfig) {
+      this.writeFile({
+        path: join(raCoreConfigDir, raCoreConfigPath),
+        config: raCoreConfig,
+      })
+    }
   }
 
   private setupRaConfigFile() {

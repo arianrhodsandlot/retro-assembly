@@ -47,36 +47,30 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       <td>Atari - 2600</td>
       <td>.a26, .zip</td>
       <td>
-        <a href="https://github.com/libretro/stella-libretro"
-          >Stella libretro core</a
-        >
+        <b>Stella</b>
         <br>
-        original emulator:
-        <a href="https://github.com/stella-emu/stella">Stella</a>
+        <a href="https://github.com/libretro/stella-libretro">libretro core</a>,
+        <a href="https://github.com/stella-emu/stella">origin</a>
       </td>
     </tr>
     <tr>
       <td>Atari - 5200</td>
       <td>.a52, .zip</td>
       <td>
-        <a href="https://github.com/libretro/libretro-atari800"
-          >Atari800 libretro core</a
-        >
+        <b>Atari800</b>
         <br>
-        original emulator:
-        <a href="https://github.com/atari800/atari800">Atari800</a>
+        <a href="https://github.com/libretro/libretro-atari800">libretro core</a>,
+        <a href="https://github.com/atari800/atari800">origin</a>
       </td>
     </tr>
     <tr>
       <td>Atari - 7800</td>
       <td>.a78, .zip</td>
       <td>
-        <a href="https://github.com/libretro/prosystem-libretro"
-          >ProSystem libretro core</a
-        >
+        <b>ProSystem</b>
         <br>
-        original emulator:
-        <a href="https://github.com/gstanton/ProSystem1_3">ProSystem</a>
+        <a href="https://github.com/libretro/prosystem-libretro">libretro core</a>,
+        <a href="https://github.com/gstanton/ProSystem1_3">origin</a>
       </td>
     </tr>
     <tr>
@@ -84,30 +78,30 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       <td>Nintendo - Nintendo Entertainment System / Famicom</td>
       <td>.nes, .zip</td>
       <td>
-        <a href="https://github.com/libretro/libretro-fceumm">FCEUmm libretro core</a>
+        <b>FCEUmm</b>
         <br>
-        original emulator:
-        <a href="https://sourceforge.net/projects/fceumm/">FCEUmm</a>
+        <a href="https://github.com/libretro/libretro-fceumm">libretro core</a>,
+        <a href="https://sourceforge.net/projects/fceumm/">origin</a>
       </td>
     </tr>
     <tr>
       <td>Nintendo - Super Nintendo Entertainment System / Super Famicom</td>
       <td>.sfc, .zip</td>
       <td>
-        <a href="https://github.com/libretro/snes9x">Snes9x libretro core</a>
+        <b>Snes9x</b>
         <br>
-        original emulator:
-        <a href="https://github.com/snes9xgit/snes9x">Snes9x</a>
+        <a href="https://github.com/libretro/snes9x">libretro core</a>,
+        <a href="https://github.com/snes9xgit/snes9x">origin</a>
       </td>
     </tr>
     <tr>
       <td>Nintendo - Game Boy Color</td>
       <td>.gbc, .zip</td>
       <td rowspan="2">
-        <a href="https://github.com/libretro/Gearboy">Gearboy libretro core</a>
+        <b>Gearboy</b>
         <br>
-        original emulator:
-        <a href="https://github.com/drhelius/Gearboy">Gearboy</a>
+        <a href="https://github.com/libretro/Gearboy">libretro core</a>,
+        <a href="https://github.com/drhelius/Gearboy">origin</a>
       </td>
     </tr>
     <tr>
@@ -118,11 +112,10 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       <td>Nintendo - Virtual Boy</td>
       <td>.vb, .zip</td>
       <td>
-        <a href="https://github.com/libretro/beetle-vb-libretro"
-          >Mednafen VB libretro core</a
-        >
+        <b>Mednafen VB</b>
         <br>
-        original emulator: <a href="https://mednafen.github.io/">Mednafen</a>
+        <a href="https://github.com/libretro/beetle-vb-libretro">libretro core</a>,
+        <a href="https://mednafen.github.io/">origin</a>
       </td>
     </tr>
     <tr>
@@ -130,14 +123,11 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       <td>Master System / Mark III</td>
       <td>.sms, .zip</td>
       <td rowspan="3">
-        <a href="https://github.com/libretro/Genesis-Plus-GX"
-          >Genesis Plus GX libretro core</a
-        >
+        <b>Genesis Plus GX</b>
         <br>
-        original emulator:
-        <a href="https://github.com/ekeeke/Genesis-Plus-GX">libretro libretro core</a>
+        <a href="https://github.com/libretro/Genesis-Plus-GX">libretro core</a>,
+        <a href="https://github.com/ekeeke/Genesis-Plus-GX">origin</a>
       </td>
-      <br>
     </tr>
     <tr>
       <td>Genesis / Mega Drive</td>
@@ -152,11 +142,10 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       <td>WonderSwan Color</td>
       <td>.wsc, .zip</td>
       <td rowspan="2">
-        <a href="https://github.com/libretro/beetle-wswan-libretro"
-          >Mednafen WonderSwan libretro core</a
-        >
+        <b>Mednafen WonderSwan</b>
         <br>
-        original emulator: <a href="https://mednafen.github.io/">Mednafen</a>
+        <a href="https://github.com/libretro/beetle-wswan-libretro">libretro core</a>,
+        <a href="https://mednafen.github.io/">origin</a>
       </td>
     </tr>
     <tr>
@@ -168,11 +157,10 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       <td>Neo Geo Pocket Color</td>
       <td>.ngc, .zip</td>
       <td rowspan="2">
-        <a href="https://github.com/libretro/beetle-ngp-libretro"
-          >Mednafen NGP libretro core</a
-        >
+        <b>Mednafen NGP</b>
         <br>
-        original emulator: <a href="https://mednafen.github.io/">Mednafen</a>
+        <a href="https://github.com/libretro/beetle-ngp-libretro">libretro core</a>,
+        <a href="https://mednafen.github.io/">origin</a>
       </td>
     </tr>
     <tr>

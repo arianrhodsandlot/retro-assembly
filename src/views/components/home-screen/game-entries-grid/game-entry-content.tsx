@@ -5,16 +5,12 @@ import { GameEntryImage } from './game-entry-image'
 const loadedImages = new Map<string, boolean>()
 async function loadImage(src: string) {
   if (loadedImages.has(src)) {
-    if (loadedImages.get(src)) {
-      return true
-    }
     throw new Error('invalid src')
   }
   const img = new Image()
   img.src = src
   return await new Promise<void>((resolve, reject) => {
     img.addEventListener('load', () => {
-      loadedImages.set(src, true)
       resolve()
     })
     img.addEventListener('error', (error) => {

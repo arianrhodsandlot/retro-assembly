@@ -2,7 +2,7 @@
 import { $, cd } from 'zx'
 
 cd('public')
-await $`curl -LO https://github.com/arianrhodsandlot/retro-assembly-vendors/releases/download/v202307242031/retro-assembly-vendor.zip`
+await $`curl -LO https://github.com/arianrhodsandlot/retro-assembly-vendors/releases/download/v202307301520/retro-assembly-vendor.zip`
 await $`mkdir -p vendor`
 await $`unzip -q retro-assembly-vendor.zip -d vendor`
 await $`rm retro-assembly-vendor.zip`

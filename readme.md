@@ -29,28 +29,158 @@ A personal retro game collection cabinet in your browser.
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
-
-### Home video game consoles
-+ <img width="18" align="center" src="src/assets/consoles/Atari - 2600.png" /> Atari - 2600
-+ <img width="18" align="center" src="src/assets/consoles/Atari - 5200.png" /> Atari - 5200
-+ <img width="18" align="center" src="src/assets/consoles/Atari - 7800.png" /> Atari - 7800
-+ <img width="18" align="center" src="src/assets/consoles/Nintendo - Nintendo Entertainment System.png" /> Nintendo - Nintendo Entertainment System / Famicom
-+ <img width="18" align="center" src="src/assets/consoles/Nintendo - Super Nintendo Entertainment System.png" /> Nintendo - Super Nintendo Entertainment System / Super Famicom
-+ <img width="18" align="center" src="src/assets/consoles/Sega - Master System - Mark III.png" /> Sega - Master System / Mark III
-+ <img width="18" align="center" src="src/assets/consoles/Sega - Mega Drive - Genesis.png" /> Sega - Genesis / Mega Drive
-### Handheld game consoles
-+ <img width="18" align="center" src="src/assets/consoles/Bandai - WonderSwan Color.png" /> Bandai - WonderSwan Color
-+ <img width="18" align="center" src="src/assets/consoles/Bandai - WonderSwan.png" /> Bandai - WonderSwan
-+ <img width="18" align="center" src="src/assets/consoles/Nintendo - Game Boy Advance AGB-001 B.png" /> Nintendo - Game Boy Advance
-+ <img width="18" align="center" src="src/assets/consoles/Nintendo - Game Boy Color.png" /> Nintendo - Game Boy Color
-+ <img width="18" align="center" src="src/assets/consoles/Nintendo - Game Boy.png" /> Nintendo - Game Boy
-+ <img width="18" align="center" src="src/assets/consoles/Nintendo - Virtual Boy.png" /> Nintendo - Virtual Boy
-+ <img width="18" align="center" src="src/assets/consoles/Sega - Game Gear.png" /> Sega - Game Gear
-+ <img width="18" align="center" src="src/assets/consoles/SNK - Neo Geo Pocket Color.png" /> SNK - Neo Geo Pocket Color
-+ <img width="18" align="center" src="src/assets/consoles/SNK - Neo Geo Pocket.png" /> SNK - Neo Geo Pocket
-
 > ⚠️ As this project is still in an early stage, only some of the most popular consoles are supported.
 > However, more consoles will be supported in the future.
+
+<table>
+  <thead>
+    <tr>
+      <th>Firm</th>
+      <th>Platform</th>
+      <th>ROM Extensions</th>
+      <th>Emulator</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3">Atari</td>
+      <td>Atari - 2600</td>
+      <td>.a26, .zip</td>
+      <td>
+        <a href="https://github.com/libretro/stella-libretro"
+          >Stella libretro core</a
+        >
+        <br>
+        original emulator:
+        <a href="https://github.com/stella-emu/stella">Stella</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Atari - 5200</td>
+      <td>.a52, .zip</td>
+      <td>
+        <a href="https://github.com/libretro/libretro-atari800"
+          >Atari800 libretro core</a
+        >
+        <br>
+        original emulator:
+        <a href="https://github.com/atari800/atari800">Atari800</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Atari - 7800</td>
+      <td>.a78, .zip</td>
+      <td>
+        <a href="https://github.com/libretro/prosystem-libretro"
+          >ProSystem libretro core</a
+        >
+        <br>
+        original emulator:
+        <a href="https://github.com/gstanton/ProSystem1_3">ProSystem</a>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="5">Nintendo</td>
+      <td>Nintendo - Nintendo Entertainment System / Famicom</td>
+      <td>.nes, .zip</td>
+      <td>
+        <a href="https://github.com/libretro/libretro-fceumm">FCEUmm libretro core</a>
+        <br>
+        original emulator:
+        <a href="https://sourceforge.net/projects/fceumm/">FCEUmm</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Nintendo - Super Nintendo Entertainment System / Super Famicom</td>
+      <td>.sfc, .zip</td>
+      <td>
+        <a href="https://github.com/libretro/snes9x">Snes9x libretro core</a>
+        <br>
+        original emulator:
+        <a href="https://github.com/snes9xgit/snes9x">Snes9x</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Nintendo - Game Boy Color</td>
+      <td>.gbc, .zip</td>
+      <td rowspan="2">
+        <a href="https://github.com/libretro/Gearboy">Gearboy libretro core</a>
+        <br>
+        original emulator:
+        <a href="https://github.com/drhelius/Gearboy">Gearboy</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Nintendo - Game Boy</td>
+      <td>.gb, .zip</td>
+    </tr>
+    <tr>
+      <td>Nintendo - Virtual Boy</td>
+      <td>.vb, .zip</td>
+      <td>
+        <a href="https://github.com/libretro/beetle-vb-libretro"
+          >Mednafen VB libretro core</a
+        >
+        <br>
+        original emulator: <a href="https://mednafen.github.io/">Mednafen</a>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="3">Sega</td>
+      <td>Master System / Mark III</td>
+      <td>.sms, .zip</td>
+      <td rowspan="3">
+        <a href="https://github.com/libretro/Genesis-Plus-GX"
+          >Genesis Plus GX libretro core</a
+        >
+        <br>
+        original emulator:
+        <a href="https://github.com/ekeeke/Genesis-Plus-GX">libretro libretro core</a>
+      </td>
+      <br>
+    </tr>
+    <tr>
+      <td>Genesis / Mega Drive</td>
+      <td>.md, .zip</td>
+    </tr>
+    <tr>
+      <td>Game Gear</td>
+      <td>.gg, .zip</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Bandai</td>
+      <td>WonderSwan Color</td>
+      <td>.wsc, .zip</td>
+      <td rowspan="2">
+        <a href="https://github.com/libretro/beetle-wswan-libretro"
+          >Mednafen WonderSwan libretro core</a
+        >
+        <br>
+        original emulator: <a href="https://mednafen.github.io/">Mednafen</a>
+      </td>
+    </tr>
+    <tr>
+      <td>WonderSwan</td>
+      <td>.ws, .zip</td>
+    </tr>
+    <tr>
+      <td rowspan="2">SNK</td>
+      <td>Neo Geo Pocket Color</td>
+      <td>.ngc, .zip</td>
+      <td rowspan="2">
+        <a href="https://github.com/libretro/beetle-ngp-libretro"
+          >Mednafen NGP libretro core</a
+        >
+        <br>
+        original emulator: <a href="https://mednafen.github.io/">Mednafen</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Neo Geo Pocket</td>
+      <td>.ngp, .zip</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Alternatives
 + [Afterplay.io](https://afterplay.io)

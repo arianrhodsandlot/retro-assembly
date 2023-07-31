@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/assets/logo/logo-512x512.png" alt="logo" width="64" height="64">
+  <img src="public/assets/logo/logo-512x512.png" alt="logo" width="120" height="120">
 </p>
 
 <h1 align="center">Retro Assembly</h1>

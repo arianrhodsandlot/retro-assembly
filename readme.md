@@ -72,8 +72,8 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       </td>
     </tr>
     <tr>
-      <td rowspan="5">Nintendo</td>
-      <td>Nintendo - Nintendo Entertainment System / Famicom</td>
+      <td rowspan="6">Nintendo</td>
+      <td>Nintendo Entertainment System / Famicom</td>
       <td><code>.nes</code>, <code>.zip</code></td>
       <td>
         <b>FCEUmm</b>
@@ -83,7 +83,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       </td>
     </tr>
     <tr>
-      <td>Nintendo - Super Nintendo Entertainment System / Super Famicom</td>
+      <td>Super Nintendo Entertainment System / Super Famicom</td>
       <td><code>.sfc</code>, <code>.zip</code></td>
       <td>
         <b>Snes9x</b>
@@ -93,21 +93,25 @@ We support mainstream fourth-generation and earlier consoles as well as some han
       </td>
     </tr>
     <tr>
-      <td>Nintendo - Game Boy Color</td>
+      <td>Game Boy Advanced</td>
       <td><code>.gbc</code>, <code>.zip</code></td>
-      <td rowspan="2">
-        <b>Gearboy</b>
+      <td rowspan="3">
+        <b>mGBA</b>
         <br>
-        <a href="https://github.com/libretro/Gearboy">libretro core</a>,
-        <a href="https://github.com/drhelius/Gearboy">origin</a>
+        <a href="https://github.com/libretro/mgba">libretro core</a>,
+        <a href="https://github.com/mgba-emu/mgba">origin</a>
       </td>
     </tr>
     <tr>
-      <td>Nintendo - Game Boy</td>
+      <td>Game Boy Color</td>
+      <td><code>.gbc</code>, <code>.zip</code></td>
+    </tr>
+    <tr>
+      <td>Game Boy</td>
       <td><code>.gb</code>, <code>.zip</code></td>
     </tr>
     <tr>
-      <td>Nintendo - Virtual Boy</td>
+      <td>Virtual Boy</td>
       <td><code>.vb</code>, <code>.zip</code></td>
       <td>
         <b>Mednafen VB</b>

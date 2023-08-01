@@ -14,7 +14,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
 
   const isSelected = system.name === currentSystemName
   const shortName = system.fullName.split(' - ')[1]
-  const displayName = /^\d+$/.test(shortName) ? system.fullName : shortName
+  const displayName = !shortName || /^\d+$/.test(shortName) ? system.fullName : shortName
 
   async function onFocus(e: FocusEvent<HTMLButtonElement>) {
     const $focusedElement = $(e.currentTarget)

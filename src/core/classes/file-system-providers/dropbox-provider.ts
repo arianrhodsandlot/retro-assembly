@@ -30,7 +30,18 @@ export class DropboxProvider implements FileSystemProvider {
   async getContent(path: string) {
     const result = await this.client.download({ path })
     // @ts-expect-error fileBlob is not declared in dropbox sdk's types
-    return result.result.fileBlob
+    const blob = result.result.fileBlob
+
+    if (blob) {
+      RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
+    }
+
+    return blob
+  }
+
+  async peekContent(path: string) {
+    const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peekContent`, path })
+    return rawCache?.value
   }
 
   // path should start with a slash

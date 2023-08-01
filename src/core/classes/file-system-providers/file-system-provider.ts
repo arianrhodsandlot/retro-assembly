@@ -8,4 +8,5 @@ export interface FileSystemProvider {
 
   list: (path: string) => Promise<FileAccessor[]>
   peek: (path: string) => Promise<FileAccessor[] | undefined>
+  peekContent: (path: string) => Promise<Blob | undefined>
 }

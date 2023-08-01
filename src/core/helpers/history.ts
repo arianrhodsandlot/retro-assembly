@@ -1,7 +1,8 @@
 import { find, remove } from 'lodash-es'
-import { isAbsolute, join, relative } from 'path-browserify'
-import { type Rom } from '..'
+import { dirname, isAbsolute, join, relative } from 'path-browserify'
+import { FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { PreferenceParser } from '../classes/preference-parser'
+import { Rom } from '../classes/rom'
 import { globalContext } from '../internal/global-context'
 
 function getHistoryPath() {
@@ -9,21 +10,42 @@ function getHistoryPath() {
   return join(configDirectory, 'history.json')
 }
 
-export async function getHistory() {
-  if (!globalContext.fileSystem) {
-    throw new Error('fileSystem is not available')
+async function parseHistoryContent(blob?: Blob) {
+  if (!blob) {
+    return []
   }
-
-  const historyPath = getHistoryPath()
   try {
-    const historyBlob = await globalContext.fileSystem.getContent(historyPath)
-    const historyContent = await historyBlob.text()
+    const historyContent = await blob.text()
     const history = JSON.parse(historyContent)
     return history || { items: [] }
   } catch (error) {
     console.warn(error)
     return { items: [] }
   }
+}
+
+export async function getHistory() {
+  if (!globalContext.fileSystem) {
+    throw new Error('fileSystem is not available')
+  }
+
+  let historyBlob
+  try {
+    historyBlob = await globalContext.fileSystem.getContent(getHistoryPath())
+  } catch {}
+  return parseHistoryContent(historyBlob)
+}
+
+export async function peekHistory() {
+  if (!globalContext.fileSystem) {
+    throw new Error('fileSystem is not available')
+  }
+
+  let historyBlob
+  try {
+    historyBlob = await globalContext.fileSystem.peekContent(getHistoryPath())
+  } catch {}
+  return parseHistoryContent(historyBlob)
 }
 
 export async function addHistoryItem(rom: Rom) {
@@ -57,4 +79,28 @@ export async function addHistoryItem(rom: Rom) {
 
   const file = new Blob([historyContent], { type: 'application/json' })
   globalContext.fileSystem?.create({ path: historyPath, file })
+}
+
+export function historyToRom(history) {
+  if (!globalContext.fileSystem) {
+    throw new Error('fileSystem is not available')
+  }
+  const fileSystemProvider = globalContext.fileSystem
+
+  const historyItems = history.items
+  if (!historyItems) {
+    return []
+  }
+  const romDirectory = PreferenceParser.get('romDirectory')
+  const historyFileAccessors: FileAccessor[] = []
+  for (const { relativePath, name } of historyItems) {
+    if (relativePath) {
+      const path = join(romDirectory, relativePath)
+      const directory = dirname(path)
+      const fileAccessor = new FileAccessor({ name, directory, type: 'file', fileSystemProvider })
+      historyFileAccessors.push(fileAccessor)
+    }
+  }
+
+  return Rom.fromFileAccessors(historyFileAccessors)
 }

@@ -69,6 +69,7 @@ export function SystemNavigation() {
 
   return (
     <div className='system-navigation flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
+      <SystemNavigationItem system={{ name: 'history', fullName: 'Recently played' }} />
       {systems?.map((system) => <SystemNavigationItem key={system.name} system={system} />)}
     </div>
   )

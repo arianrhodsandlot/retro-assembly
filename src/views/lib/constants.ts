@@ -32,6 +32,7 @@ import smsContent from '../../assets/consoles/Sega - Master System - Mark III-co
 import sms from '../../assets/consoles/Sega - Master System - Mark III.png'
 import megadriveContent from '../../assets/consoles/Sega - Mega Drive - Genesis-content.png'
 import megadrive from '../../assets/consoles/Sega - Mega Drive - Genesis.png'
+import history from '../../assets/consoles/history.png'
 
 export const systemImageMap = {
   atari2600,
@@ -51,6 +52,8 @@ export const systemImageMap = {
   vb,
   wonderswan,
   wonderswancolor,
+
+  history,
 }
 
 export const systemContentImageMap = {

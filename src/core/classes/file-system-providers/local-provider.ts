@@ -25,6 +25,11 @@ export class LocalProvider implements FileSystemProvider {
     return await handle.getFile()
   }
 
+  async peekContent(path: string) {
+    noop(path)
+    return await Promise.resolve(undefined)
+  }
+
   // path should not start with a slash
   // todo: maybe needs to make it be the same as the onedrive provider
   async create({ file, path }: { file: Blob; path: string }) {

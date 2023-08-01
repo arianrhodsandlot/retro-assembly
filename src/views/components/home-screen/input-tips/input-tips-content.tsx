@@ -1,29 +1,6 @@
-import { useAtomValue } from 'jotai'
-import { systemsAtom } from '../atoms'
-
 export function InputTipsContent() {
-  const systems = useAtomValue(systemsAtom)
-
   return (
     <div className='flex gap-3 bg-black/90 px-4 py-2 font-["Noto_Mono",ui-monospace,monospace] text-sm text-white shadow shadow-black'>
-      {systems.length > 1 && (
-        <div className=' flex items-center justify-center gap-2'>
-          <kbd className='flex h-4 w-6 items-center justify-center rounded bg-white text-xs font-bold text-black'>
-            L1
-          </kbd>
-          Previous Console
-        </div>
-      )}
-
-      {systems.length > 1 && (
-        <div className='flex items-center justify-center gap-2'>
-          <kbd className='flex h-4 w-6 items-center justify-center rounded bg-white text-xs font-bold text-black'>
-            R1
-          </kbd>
-          Next Console
-        </div>
-      )}
-
       <div className='flex items-center justify-center gap-2'>
         <kbd className='icon-[mdi--gamepad] h-4 w-4' />
         Move

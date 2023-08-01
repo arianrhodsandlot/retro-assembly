@@ -1,6 +1,6 @@
 import { useAtom, useSetAtom, useStore } from 'jotai'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
-import { getSystemRoms, getSystems, peekSystemRoms, peekSystems } from '../../../core'
+import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
@@ -20,6 +20,7 @@ function getColumnCount(width: number) {
 }
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
+const historyDummySystem = { name: 'history', fullName: 'Recently played' }
 
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
@@ -32,10 +33,9 @@ export function HomeScreen() {
 
   useAsyncRetry(async () => {
     const systems = await peekSystems()
-
     const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
     const newCurrentSystemName =
-      lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)
+      lastSelectedSystem && [historyDummySystem, ...systems].some(({ name }) => name === lastSelectedSystem)
         ? lastSelectedSystem
         : systems[0].name
 
@@ -53,7 +53,7 @@ export function HomeScreen() {
 
     const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
     const newCurrentSystemName =
-      lastSelectedSystem && systems.some(({ name }) => name === lastSelectedSystem)
+      lastSelectedSystem && [historyDummySystem, ...systems].some(({ name }) => name === lastSelectedSystem)
         ? lastSelectedSystem
         : systems[0].name
 
@@ -68,7 +68,7 @@ export function HomeScreen() {
       return
     }
 
-    const roms = await peekSystemRoms(currentSystemName)
+    const roms = await (currentSystemName === 'history' ? peekHistoryRoms() : peekSystemRoms(currentSystemName))
     if (currentSystemName === store.get(currentSystemNameAtom) && roms) {
       setRoms(roms)
       return true
@@ -82,7 +82,7 @@ export function HomeScreen() {
       return
     }
 
-    const roms = await getSystemRoms(currentSystemName)
+    const roms = await (currentSystemName === 'history' ? getHistoryRoms() : getSystemRoms(currentSystemName))
     if (currentSystemName === store.get(currentSystemNameAtom)) {
       setRoms(roms)
     }

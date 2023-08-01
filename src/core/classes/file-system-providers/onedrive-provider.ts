@@ -31,7 +31,18 @@ export class OnedriveProvider implements FileSystemProvider {
 
   async getContent(path: string) {
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.request({ api: `/me/drive/root:${path}` })
-    return await ky(downloadUrl).blob()
+    const blob = await ky(downloadUrl).blob()
+
+    if (blob) {
+      RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
+    }
+
+    return blob
+  }
+
+  async peekContent(path: string) {
+    const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peekContent`, path })
+    return rawCache?.value
   }
 
   // path should start with a slash

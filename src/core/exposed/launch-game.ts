@@ -1,6 +1,6 @@
 import { Emulator } from '../classes/emulator'
 import { type Rom } from '../classes/rom'
-import { addHistoryItem } from '../helpers/history'
+import { emitter } from '../internal/emitter'
 import { globalContext } from '../internal/global-context'
 import { exitGame } from './exit-game'
 
@@ -19,6 +19,5 @@ export async function launchGame(
   const emulator = new Emulator({ rom })
   globalContext.emulator = emulator
   await emulator.launch(waitForUserInteraction)
-
-  addHistoryItem(rom)
+  emitter.emit('launched', rom)
 }

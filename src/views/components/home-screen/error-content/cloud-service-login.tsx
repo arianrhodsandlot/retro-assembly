@@ -1,8 +1,9 @@
+import { type CloudService } from '../../../../core'
 import { CloudServiceLoginButton } from '../../common/cloud-service-login-button'
 import { BaseCallout } from '../../primitives/base-callout'
 
 interface CloudServiceLoginProps {
-  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
+  cloudService: CloudService
   onSolve: () => void
 }
 export function CloudServiceLogin({ cloudService, onSolve }: CloudServiceLoginProps) {

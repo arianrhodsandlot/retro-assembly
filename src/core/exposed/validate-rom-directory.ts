@@ -5,6 +5,7 @@ import { GoogleDriveProvider } from '../classes/file-system-providers/google-dri
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
 import { systemNamesSorted } from '../constants/systems'
+import { type CloudService } from '.'
 
 interface ValidateRomDirectoryParamsForLocalType {
   type: 'local'
@@ -12,7 +13,7 @@ interface ValidateRomDirectoryParamsForLocalType {
 }
 
 interface ValidateRomDirectoryParamsForCloudServiceType {
-  type: 'onedrive' | 'google-drive' | 'dropbox'
+  type: CloudService
   directory: string
 }
 

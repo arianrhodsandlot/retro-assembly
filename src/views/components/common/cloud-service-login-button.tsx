@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import { detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
+import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
 
@@ -12,7 +12,7 @@ const cloudServiceMap = {
 }
 
 interface CloudServiceLoginButtonProps {
-  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
+  cloudService: CloudService
   showReturnHome?: boolean
   onLogin: () => void
 }

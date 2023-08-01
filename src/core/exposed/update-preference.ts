@@ -2,8 +2,9 @@ import { get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
+import { type FileSystemName } from '.'
 
-function setFileSystemProviderType(type: 'local' | 'onedrive' | 'google-drive' | 'dropbox') {
+function setFileSystemProviderType(type: FileSystemName) {
   PreferenceParser.set({ name: 'configProviderType', value: type })
   PreferenceParser.set({ name: 'stateProviderType', value: type })
   PreferenceParser.set({ name: 'romProviderType', value: type })
@@ -30,7 +31,7 @@ export async function updatePreference({
   directory,
   handle,
 }: {
-  fileSystem?: 'local' | 'onedrive' | 'google-drive' | 'dropbox'
+  fileSystem?: FileSystemName
   directory?: string
   handle?: FileSystemHandle
 }) {

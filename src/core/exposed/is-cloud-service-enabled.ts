@@ -1,3 +1,5 @@
+import { type CloudService } from '.'
+
 function isOnedriveEnabled() {
   return Boolean(import.meta.env.VITE_ONEDRIVE_CLIENT_ID)
 }
@@ -13,8 +15,6 @@ function isGoogleDriveEnabled() {
 function isDropboxEnabled() {
   return Boolean(import.meta.env.VITE_DROPBOX_CLIENT_ID)
 }
-
-type CloudService = 'onedrive' | 'google-drive' | 'dropbox'
 
 export function isCloudServiceEnabled(cloudService: CloudService) {
   if (cloudService === 'onedrive') {

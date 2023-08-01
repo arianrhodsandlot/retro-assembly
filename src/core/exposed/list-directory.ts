@@ -1,8 +1,9 @@
 import { DropboxProvider } from '../classes/file-system-providers/dropbox-provider'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
+import { type CloudService } from '.'
 
-export async function listDirectory({ path, type }: { path: string; type: 'onedrive' | 'google-drive' | 'dropbox' }) {
+export async function listDirectory({ path, type }: { path: string; type: CloudService }) {
   switch (type) {
     case 'onedrive': {
       const onedrive = await OnedriveProvider.getSingleton()

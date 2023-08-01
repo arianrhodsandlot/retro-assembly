@@ -2,13 +2,14 @@ import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useAsyncFn } from 'react-use'
+import { type CloudService } from '../../../../core'
 import { directoyTreeAtom } from './atoms'
 import { type TreeNode } from './types'
 import { toggleNodeExpanded } from './utils'
 
 interface DirectoryTreeNodeParams {
   node: TreeNode
-  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
+  cloudService: CloudService
   onSelect: (path: string) => void
 }
 

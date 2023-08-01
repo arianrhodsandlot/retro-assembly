@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useAsync } from 'react-use'
-import { retrieveToken } from '../../../../core'
+import { type CloudService, retrieveToken } from '../../../../core'
 import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { AuthLayout } from './auth-layout'
 
 interface AuthMainProps {
-  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
+  cloudService: CloudService
 }
 
 export function AuthMain({ cloudService }: AuthMainProps) {

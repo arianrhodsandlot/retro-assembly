@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
+import { type CloudService } from '../../../../core'
 import { directoyTreeAtom } from './atoms'
 import { DirectoryTreeNode } from './directory-tree-node'
 
@@ -10,7 +11,7 @@ const cloudServiceNameMap = {
 }
 
 interface DirectoryTreeParams {
-  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
+  cloudService: CloudService
   onSelect: (path: string) => void
 }
 

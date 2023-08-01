@@ -1,10 +1,10 @@
 import { join } from 'path-browserify'
-import { listDirectory } from '../../../../core'
+import { type CloudService, listDirectory } from '../../../../core'
 import { type TreeNode } from './types'
 
 interface ToggleNodeExpandedParams {
   node: TreeNode
-  cloudService: 'onedrive' | 'google-drive' | 'dropbox'
+  cloudService: CloudService
 }
 
 export async function toggleNodeExpanded({ node, cloudService }: ToggleNodeExpandedParams) {

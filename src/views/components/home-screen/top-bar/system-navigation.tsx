@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from 'jotai'
 import $ from 'jquery'
 import { findIndex, first, last } from 'lodash-es'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { SystemName, onPress } from '../../../../core'
 import { isGameIdleAtom } from '../../atoms'
 import { currentSystemNameAtom, systemsAtom } from '../atoms'
@@ -27,25 +27,26 @@ export function SystemNavigation() {
   const systems = useAtomValue(systemsAtom)
   const isGameIdle = useAtomValue(isGameIdleAtom)
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
+  const allSystems = useMemo(() => [historyDummySystem, ...systems], [systems])
 
   const shouldSwitchSystem = isFocusingHome() && isGameIdle
-  const currentSystemIndex = findIndex(systems, { name: currentSystemName as SystemName })
+  const currentSystemIndex = findIndex(allSystems, { name: currentSystemName as SystemName })
 
   const selectPrevSystem = useCallback(() => {
     if (!shouldSwitchSystem) {
       return
     }
-    const newCurrentSystem = systems[currentSystemIndex - 1] ?? last(systems)
+    const newCurrentSystem = allSystems[currentSystemIndex - 1] ?? last(allSystems)
     setCurrentSystemName(newCurrentSystem.name)
-  }, [currentSystemIndex, setCurrentSystemName, systems, shouldSwitchSystem])
+  }, [currentSystemIndex, setCurrentSystemName, allSystems, shouldSwitchSystem])
 
   const selectNextSystem = useCallback(() => {
     if (!shouldSwitchSystem) {
       return
     }
-    const newCurrentSystem = systems[currentSystemIndex + 1] ?? first(systems)
+    const newCurrentSystem = allSystems[currentSystemIndex + 1] ?? first(allSystems)
     setCurrentSystemName(newCurrentSystem.name)
-  }, [currentSystemIndex, setCurrentSystemName, systems, shouldSwitchSystem])
+  }, [currentSystemIndex, setCurrentSystemName, allSystems, shouldSwitchSystem])
 
   useEffect(() => {
     if (currentSystemName) {

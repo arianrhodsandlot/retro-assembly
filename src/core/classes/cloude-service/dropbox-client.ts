@@ -72,7 +72,11 @@ export class DropboxClient extends Auth implements CloudServiceClient {
   async create(params: files.UploadArg) {
     return await DropboxClient.requestWithRefreshTokenOnError(async () => {
       const client = DropboxClient.getClient()
-      return await client.filesUpload(params)
+      return await client.filesUpload({
+        mode: { '.tag': 'overwrite' },
+        mute: true,
+        ...params,
+      })
     })
   }
 

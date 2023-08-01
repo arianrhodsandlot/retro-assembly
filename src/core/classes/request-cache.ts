@@ -46,6 +46,11 @@ export class RequestCache {
     return requestCache.get(key)
   }
 
+  static async remove(key: unknown) {
+    const requestCache = await RequestCache.getSingleton()
+    return requestCache.remove(key)
+  }
+
   async initialize() {
     this.database = await openDB(databaseName, databaseVersion, {
       upgrade(database) {

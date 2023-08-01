@@ -13,6 +13,14 @@ export class DummyProvider implements FileSystemProvider {
     return await Promise.resolve(this.file)
   }
 
+  async peekContent(path: string) {
+    return await this.getContent(path)
+  }
+
+  async getContentAndCache(path: string) {
+    return await this.getContent(path)
+  }
+
   async create({ file, path }: { file: Blob; path: string }) {
     return await Promise.resolve(noop({ file, path }))
   }

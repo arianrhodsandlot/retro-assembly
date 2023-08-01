@@ -26,8 +26,11 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   async peekContent(path: string) {
-    noop(path)
-    return await Promise.resolve(undefined)
+    return await this.getContent(path)
+  }
+
+  async getContentAndCache(path: string) {
+    return await this.getContent(path)
   }
 
   // path should not start with a slash

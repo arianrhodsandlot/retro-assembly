@@ -63,7 +63,7 @@ export abstract class Auth {
   protected static async getPkceChanllenge() {
     const storageChanllenge = getStorageByKey('pkce-chanllenge') ?? {}
     if (storageChanllenge.codeVerifier && storageChanllenge.codeChallenge) {
-      // return storageChanllenge
+      return storageChanllenge
     }
 
     const chanllenge = await generatePKCEChallenge()
@@ -71,7 +71,11 @@ export abstract class Auth {
     return chanllenge
   }
 
-  protected static isTokenExpiredError(error: unknown) {
+  // todo: conditions here should be narrowed down
+  protected static isTokenExpiredError(error: any) {
+    if (error?.statusCode === 404 || error?.status === 409) {
+      return false
+    }
     return !!error
   }
 

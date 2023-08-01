@@ -31,12 +31,17 @@ export class OnedriveProvider implements FileSystemProvider {
 
   async getContent(path: string) {
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.request({ api: `/me/drive/root:${path}` })
-    const blob = await ky(downloadUrl).blob()
+    return await ky(downloadUrl).blob()
+  }
 
-    if (blob) {
-      RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
+  async getContentAndCache(path: string) {
+    let blob
+    try {
+      blob = await this.getContent(path)
+    } catch {
+      RequestCache.remove({ name: `${this.constructor.name}.peekContent`, path })
     }
-
+    RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
     return blob
   }
 

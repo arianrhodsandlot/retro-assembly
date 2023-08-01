@@ -1,4 +1,5 @@
 import { useAtom, useSetAtom, useStore } from 'jotai'
+import { useEffect } from 'react'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
@@ -44,8 +45,6 @@ export function HomeScreen() {
     }
     setSystems(systems)
     setCurrentSystemName(newCurrentSystemName)
-
-    localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])
 
   const systemsState = useAsyncRetry(async () => {
@@ -59,9 +58,13 @@ export function HomeScreen() {
 
     setSystems(systems)
     setCurrentSystemName(newCurrentSystemName)
-
-    localStorage.setItem(lastSelectedSystemStorageKey, newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])
+
+  useEffect(() => {
+    return () => {
+      setCurrentSystemName('')
+    }
+  }, [setCurrentSystemName])
 
   const peekRomsState = useAsync(async () => {
     if (!currentSystemName) {

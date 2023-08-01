@@ -43,15 +43,20 @@ export class GoogleDriveProvider implements FileSystemProvider {
     }
     const fileId = file.id
     const { access_token: accessToken } = gapi.client.getToken()
-    const blob = await ky(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
+    return await ky(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
       searchParams: { alt: 'media' },
     }).blob()
+  }
 
-    if (blob) {
-      RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
+  async getContentAndCache(path: string) {
+    let blob
+    try {
+      blob = await this.getContent(path)
+    } catch {
+      RequestCache.remove({ name: `${this.constructor.name}.peekContent`, path })
     }
-
+    RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
     return blob
   }
 

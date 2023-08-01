@@ -10,17 +10,22 @@ function getHistoryPath() {
   return join(configDirectory, 'history.json')
 }
 
+function getEmptyHistory() {
+  return { items: [] }
+}
+
 async function parseHistoryContent(blob?: Blob) {
+  const emptyHistory = getEmptyHistory()
   if (!blob) {
-    return []
+    return emptyHistory
   }
   try {
     const historyContent = await blob.text()
     const history = JSON.parse(historyContent)
-    return history || { items: [] }
+    return history || emptyHistory
   } catch (error) {
     console.warn(error)
-    return { items: [] }
+    return emptyHistory
   }
 }
 
@@ -31,7 +36,7 @@ export async function getHistory() {
 
   let historyBlob
   try {
-    historyBlob = await globalContext.fileSystem.getContent(getHistoryPath())
+    historyBlob = await globalContext.fileSystem.getContentAndCache(getHistoryPath())
   } catch {}
   return parseHistoryContent(historyBlob)
 }

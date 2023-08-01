@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## 2023-08-01
+### Added
+- Add recently played list
+
 ## 2023-07-31
 ### Added
 - Add launch screen for apple mobile devices.

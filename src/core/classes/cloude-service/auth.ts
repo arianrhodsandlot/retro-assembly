@@ -1,3 +1,4 @@
+import { addSeconds, isBefore, toDate } from 'date-fns'
 import ky from 'ky'
 import queryString from 'query-string'
 import { generatePKCEChallenge } from '../../helpers/pkce'
@@ -45,7 +46,7 @@ export abstract class Auth {
       const body = new URLSearchParams(params)
       try {
         const result = await ky.post(this.config.tokenUrl, { body }).json<any>()
-        setStorageByKey({ key: this.tokenStorageKey, value: result })
+        setStorageByKey({ key: this.tokenStorageKey, value: { ...result, createTime: Date.now() } })
       } catch {
         throw new TypeError(`invalide code. code: ${code}`)
       }
@@ -56,7 +57,7 @@ export abstract class Auth {
 
   protected static getAccessToken() {
     const tokenRecord = getStorageByKey(this.tokenStorageKey)
-    return tokenRecord?.access_token
+    return tokenRecord?.access_token ?? ''
   }
 
   protected static async getPkceChanllenge() {
@@ -70,15 +71,28 @@ export abstract class Auth {
     return chanllenge
   }
 
-  protected static shouldRefreshToken(error: unknown) {
+  protected static isTokenExpiredError(error: unknown) {
     return !!error
   }
 
   protected static async requestWithRefreshTokenOnError(request: () => Promise<any>): ReturnType<typeof request> {
+    const tokenStorage = getStorageByKey(this.tokenStorageKey) ?? {}
+    const { createTime, expires_in: expiresIn, refresh_token: refreshToken } = tokenStorage
+    if (refreshToken) {
+      if (createTime) {
+        const expiresTime = addSeconds(toDate(createTime), expiresIn)
+        if (isBefore(expiresTime, new Date())) {
+          await this.refreshToken()
+        }
+      }
+    } else {
+      await this.refreshToken()
+    }
+
     try {
       return await request()
     } catch (error: any) {
-      if (this.shouldRefreshToken(error)) {
+      if (this.isTokenExpiredError(error)) {
         await this.refreshToken()
         return await request()
       }
@@ -87,7 +101,7 @@ export abstract class Auth {
   }
 
   protected static async refreshToken() {
-    const tokenStorage = getStorageByKey(this.tokenStorageKey)
+    const tokenStorage = getStorageByKey(this.tokenStorageKey) ?? {}
     const refreshToken = tokenStorage.refresh_token
     if (!refreshToken) {
       return
@@ -107,7 +121,10 @@ export abstract class Auth {
 
     const body = new URLSearchParams(params)
     const result = await ky.post(this.config.tokenUrl, { body }).json<any>()
-    setStorageByKey({ key: this.tokenStorageKey, value: { ...tokenStorage, ...result } })
+    setStorageByKey({
+      key: this.tokenStorageKey,
+      value: { ...tokenStorage, ...result, createTime: Date.now() },
+    })
   }
 
   private static isRetrievingToken() {

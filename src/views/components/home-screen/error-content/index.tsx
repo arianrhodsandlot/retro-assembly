@@ -1,3 +1,4 @@
+import { isUsingGoogleDrive, isUsingOnedrive } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
 import { CloudServiceLogin } from './cloud-service-login'
@@ -12,7 +13,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     )
   }
 
-  if (error.statusCode === 401 || error.response?.status === 400) {
+  if (isUsingOnedrive() && (error.statusCode === 401 || error.response?.status === 400)) {
     return (
       <BaseDialogContent>
         <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
@@ -20,7 +21,7 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     )
   }
 
-  if (error.status === 401) {
+  if (isUsingGoogleDrive() && error.status === 401) {
     return (
       <BaseDialogContent>
         <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} />

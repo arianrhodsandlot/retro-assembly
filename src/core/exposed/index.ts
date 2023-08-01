@@ -18,6 +18,7 @@ export { isLocalDirectorySelectorEnabled } from './is-local-directory-selector-e
 export { isPreferenceValid } from './is-preference-valid'
 export { isUsingDropbox } from './is-using-dropbox'
 export { isUsingDummy } from './is-using-dummy'
+export { isUsingGoogleDrive } from './is-using-google-drive'
 export { isUsingLocal } from './is-using-local'
 export { isUsingOnedrive } from './is-using-onedrive'
 export { launchGame } from './launch-game'

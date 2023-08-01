@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 
-const emptyImage = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAI=;'
+const emptyImage = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='
 
 const queue = new PQueue({ concurrency: 5 })
 

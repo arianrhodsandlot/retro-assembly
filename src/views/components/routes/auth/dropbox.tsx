@@ -1,38 +1,5 @@
-import { useEffect } from 'react'
-import { useAsync } from 'react-use'
-import { retrieveToken } from '../../../../core'
-import { AuthLayout } from './auth-layout'
+import { AuthMain } from './auth-main'
 
 export function AuthDropbox() {
-  const state = useAsync(async () => await retrieveToken('dropbox'))
-
-  useEffect(() => {
-    if (!state.loading && !state.error) {
-      close()
-    }
-  }, [state.loading, state.error])
-
-  if (state.loading) {
-    return (
-      <AuthLayout>
-        <span className='icon-[line-md--loading-loop] h-6 w-6' />
-      </AuthLayout>
-    )
-  }
-
-  if (state.error) {
-    return (
-      <AuthLayout>
-        <span className='icon-[mdi--account-alert] h-6 w-6' />
-        Login fail. Error: {state.error.message}
-      </AuthLayout>
-    )
-  }
-
-  return (
-    <AuthLayout>
-      <span className='icon-[mdi--account-check] h-6 w-6' />
-      You are now authenticated with Retro Assembly.
-    </AuthLayout>
-  )
+  return <AuthMain cloudService='dropbox' />
 }

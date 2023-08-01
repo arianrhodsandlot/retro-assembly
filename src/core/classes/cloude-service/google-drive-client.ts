@@ -5,7 +5,7 @@ import { type CloudServiceClient } from './cloud-service-client'
 
 const discoveryDocs = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
 const hostUrl = `${location.protocol}//${location.host}`
-window.$ = $
+
 export class GoogleDriveClient extends Auth implements CloudServiceClient {
   static tokenStorageKey = 'google-drive-token'
 

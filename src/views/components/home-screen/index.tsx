@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
+import { historyDummySystem } from './constants'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { GameMenus } from './game-menus'
@@ -21,7 +22,6 @@ function getColumnCount(width: number) {
 }
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
-const historyDummySystem = { name: 'history', fullName: 'Recently played' }
 
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)

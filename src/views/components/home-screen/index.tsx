@@ -1,4 +1,5 @@
 import { useAtom, useSetAtom, useStore } from 'jotai'
+import { some } from 'lodash-es'
 import { useEffect } from 'react'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
@@ -23,6 +24,17 @@ function getColumnCount(width: number) {
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
+function getNewCurrentSystemName(systems) {
+  if (!systems?.length) {
+    return ''
+  }
+  const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
+  const allSystems = [historyDummySystem, ...systems]
+  const isLastSelectedSystemValid = some(allSystems, { name: lastSelectedSystem })
+  const defaultSystemName = systems[0].name
+  return isLastSelectedSystemValid ? lastSelectedSystem : defaultSystemName
+}
+
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
@@ -32,30 +44,21 @@ export function HomeScreen() {
 
   const columnCount = getColumnCount(gridWidth)
 
+  // load systems from cache
   useAsyncRetry(async () => {
     const systems = await peekSystems()
-    const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-    const newCurrentSystemName =
-      lastSelectedSystem && [historyDummySystem, ...systems].some(({ name }) => name === lastSelectedSystem)
-        ? lastSelectedSystem
-        : systems[0].name
-
     if (!systems) {
       return
     }
+    const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
     setCurrentSystemName(newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])
 
+  // load systems from remote
   const systemsState = useAsyncRetry(async () => {
     const systems = await getSystems()
-
-    const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-    const newCurrentSystemName =
-      lastSelectedSystem && [historyDummySystem, ...systems].some(({ name }) => name === lastSelectedSystem)
-        ? lastSelectedSystem
-        : systems[0].name
-
+    const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
     setCurrentSystemName(newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])

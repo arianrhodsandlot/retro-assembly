@@ -1,8 +1,12 @@
-import { isUsingGoogleDrive, isUsingOnedrive } from '../../../../core'
+import { isUsingDropbox, isUsingGoogleDrive, isUsingOnedrive } from '../../../../core'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
 import { CloudServiceLogin } from './cloud-service-login'
 import { LocalFilePermision } from './local-file-permision'
+
+function isInvalidTokenError(error: any) {
+  return error.statusCode === 401 || error.status === 401 || error.response?.status === 400
+}
 
 export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => void }) {
   if (error instanceof DOMException && error.name === 'SecurityError') {
@@ -13,20 +17,22 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     )
   }
 
-  if (isUsingOnedrive() && (error.statusCode === 401 || error.response?.status === 400)) {
-    return (
-      <BaseDialogContent>
-        <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
-      </BaseDialogContent>
-    )
-  }
-
-  if (isUsingGoogleDrive() && error.status === 401) {
-    return (
-      <BaseDialogContent>
-        <CloudServiceLogin cloudService={'google-drive'} onSolve={onSolve} />
-      </BaseDialogContent>
-    )
+  if (isInvalidTokenError(error)) {
+    let cloudService = ''
+    if (isUsingOnedrive()) {
+      cloudService = 'onedrive'
+    } else if (isUsingGoogleDrive()) {
+      cloudService = 'google-drive'
+    } else if (isUsingDropbox()) {
+      cloudService = 'dropbox'
+    }
+    if (cloudService) {
+      return (
+        <BaseDialogContent>
+          <CloudServiceLogin cloudService={'onedrive'} onSolve={onSolve} />
+        </BaseDialogContent>
+      )
+    }
   }
 
   console.warn(error, error.stack)

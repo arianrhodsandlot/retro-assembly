@@ -17,7 +17,7 @@ function getEmptyHistory() {
 async function parseHistoryContent(blob?: Blob) {
   const emptyHistory = getEmptyHistory()
   if (!blob) {
-    return emptyHistory
+    return
   }
   try {
     const historyContent = await blob.text()
@@ -34,11 +34,12 @@ export async function getHistory() {
     throw new Error('fileSystem is not available')
   }
 
-  let historyBlob
-  try {
-    historyBlob = await globalContext.fileSystem.getContentAndCache(getHistoryPath())
-  } catch {}
-  return parseHistoryContent(historyBlob)
+  const historyBlob = await globalContext.fileSystem.getContentAndCache(getHistoryPath())
+  const history = await parseHistoryContent(historyBlob)
+  if (!history) {
+    throw new Error('invalid history')
+  }
+  return history
 }
 
 export async function peekHistory() {
@@ -50,7 +51,7 @@ export async function peekHistory() {
   try {
     historyBlob = await globalContext.fileSystem.peekContent(getHistoryPath())
   } catch {}
-  return parseHistoryContent(historyBlob)
+  return await parseHistoryContent(historyBlob)
 }
 
 export async function addHistoryItem(rom: Rom) {
@@ -92,7 +93,7 @@ export function historyToRom(history) {
   }
   const fileSystemProvider = globalContext.fileSystem
 
-  const historyItems = history.items
+  const historyItems = history?.items
   if (!historyItems) {
     return []
   }

@@ -1,6 +1,7 @@
 import clsx from 'clsx'
-import { useEffect, useRef, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import mitt from 'mitt'
+import { useRef, useState } from 'react'
+import { useAsync, useAsyncFn, useInterval } from 'react-use'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
@@ -11,12 +12,22 @@ const cloudServiceMap = {
   dropbox: 'Dropbox',
 }
 
+function openAuthWindow(url) {
+  const width = 700
+  const height = 700
+  const top = outerHeight / 2 + screenY - height / 2
+  const left = outerWidth / 2 + screenX - width / 2
+  const features = `popup,width=${width},height=${height},top=${top},left=${left}`
+  return open(url, '_blank', features)
+}
+
 interface CloudServiceLoginButtonProps {
   cloudService: CloudService
   showReturnHome?: boolean
   onLogin: () => void
 }
 
+const emitter = mitt()
 export function CloudServiceLoginButton({
   cloudService,
   showReturnHome = false,
@@ -26,54 +37,57 @@ export function CloudServiceLoginButton({
   const authorizeWindow = useRef<Window | null>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIsAuthWindowOpening(!authorizeWindow.current?.closed)
-    }, 500)
-
-    return () => {
-      clearInterval(timer)
+  useInterval(() => {
+    const newIsAuthWindowOpening = authorizeWindow.current ? !authorizeWindow.current?.closed : false
+    setIsAuthWindowOpening(newIsAuthWindowOpening)
+    if (isAuthWindowOpening && !newIsAuthWindowOpening) {
+      emitter.emit('auth-window-closed')
     }
-  }, [])
+  }, 100)
 
-  const [state, checkLoginStatus] = useAsyncFn(async () => {
-    await new Promise<void>((resolve) => {
-      function onStorage(event: StorageEvent) {
+  const [needsLoginState, checkNeedsLogin] = useAsyncFn(async () => {
+    const promise = new Promise<boolean>((resolve) => {
+      async function onStorage(event: StorageEvent) {
         if (event.key === getTokenStorageKey(cloudService)) {
-          // authorizeWindow.current?.close()
-          removeEventListener('storage', onStorage)
-          resolve()
+          cleanup()
+          const needsLogin = await detectNeedsLogin(cloudService)
+          resolve(needsLogin)
         }
       }
+
+      function onAuthWindowClosed() {
+        cleanup()
+        resolve(true)
+      }
+
+      function cleanup() {
+        removeEventListener('storage', onStorage)
+        emitter.off('auth-window-closed', onAuthWindowClosed)
+      }
+
       addEventListener('storage', onStorage)
+      emitter.on('auth-window-closed', onAuthWindowClosed)
     })
-    const needsLogin = await detectNeedsLogin(cloudService)
-    if (!needsLogin) {
-      return true
-    }
-    throw new Error('Login failed')
+    return await promise
   })
 
   async function login(event) {
     event.preventDefault()
-    if (!event.currentTarget.href) {
-      return
-    }
-
-    const width = 600
-    const height = 700
-    const top = outerHeight / 2 + screenY - height / 2
-    const left = outerWidth / 2 + screenX - width / 2
-    const features = `popup,width=${width},height=${height},top=${top},left=${left}`
-    authorizeWindow.current = open(event.currentTarget.href, '_blank', features)
-
-    const isLogin = await checkLoginStatus()
-    if (isLogin) {
-      onLogin()
+    const authUrl = event.currentTarget.href
+    if (authUrl) {
+      authorizeWindow.current = openAuthWindow(authUrl)
+      const needsLogin = await checkNeedsLogin()
+      if (needsLogin === false) {
+        onLogin()
+      }
     }
   }
 
-  if ((state.loading || state.value) && isAuthWindowOpening) {
+  const loginPending = needsLoginState.loading || isAuthWindowOpening
+  const loginSuccess = !needsLoginState.loading && needsLoginState.value === false
+  const showLoading = loginPending || loginSuccess
+
+  if (showLoading) {
     return (
       <div className='flex h-12 items-center justify-center'>
         <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />

@@ -50,18 +50,19 @@ export class GoogleDriveProvider implements FileSystemProvider {
   }
 
   async getContentAndCache(path: string) {
-    let blob
-    try {
-      blob = await this.getContent(path)
-    } catch {
-      RequestCache.remove({ name: `${this.constructor.name}.peekContent`, path })
+    const cacheKey = { name: `${this.constructor.name}.peekContent`, path }
+    const blob = await this.getContent(path)
+
+    const text = await blob.text()
+    if (typeof text === 'string') {
+      RequestCache.set(cacheKey, blob)
     }
-    RequestCache.set({ name: `${this.constructor.name}.peekContent`, path }, blob)
     return blob
   }
 
   async peekContent(path: string) {
-    const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peekContent`, path })
+    const cacheKey = { name: `${this.constructor.name}.peekContent`, path }
+    const rawCache = await RequestCache.get(cacheKey)
     return rawCache?.value
   }
 

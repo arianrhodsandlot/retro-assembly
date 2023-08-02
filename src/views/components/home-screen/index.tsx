@@ -1,6 +1,6 @@
 import { useAtom, useSetAtom, useStore } from 'jotai'
 import { some } from 'lodash-es'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
@@ -35,17 +35,32 @@ function getNewCurrentSystemName(systems) {
   return isLastSelectedSystemValid ? lastSelectedSystem : defaultSystemName
 }
 
+async function peekRoms(system: string) {
+  if (system === 'history') {
+    return await peekHistoryRoms()
+  }
+  return await peekSystemRoms(system)
+}
+
+async function getRoms(system: string) {
+  if (system === 'history') {
+    return await getHistoryRoms()
+  }
+  return await getSystemRoms(system)
+}
+
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
   const store = useStore()
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
+  const [isRetrying, setIsRetrying] = useState(false)
 
   const columnCount = getColumnCount(gridWidth)
 
   // load systems from cache
-  useAsyncRetry(async () => {
+  useAsync(async () => {
     const systems = await peekSystems()
     if (!systems) {
       return
@@ -55,49 +70,45 @@ export function HomeScreen() {
     setCurrentSystemName(newCurrentSystemName)
   }, [setSystems, setCurrentSystemName])
 
+  // load roms from cache
+  const peekRomsState = useAsync(async () => {
+    setRoms([])
+    if (currentSystemName) {
+      const roms = await peekRoms(currentSystemName)
+      if (currentSystemName === store.get(currentSystemNameAtom) && roms) {
+        setRoms(roms)
+      }
+    }
+  }, [currentSystemName])
+
   // load systems from remote
   const systemsState = useAsyncRetry(async () => {
     const systems = await getSystems()
     const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
     setCurrentSystemName(newCurrentSystemName)
+    updateRetrying()
   }, [setSystems, setCurrentSystemName])
 
-  useEffect(() => {
-    return () => {
-      setCurrentSystemName('')
-    }
-  }, [setCurrentSystemName])
-
-  const peekRomsState = useAsync(async () => {
-    if (!currentSystemName) {
-      return
-    }
-
-    const roms = await (currentSystemName === 'history' ? peekHistoryRoms() : peekSystemRoms(currentSystemName))
-    if (currentSystemName === store.get(currentSystemNameAtom) && roms) {
-      setRoms(roms)
-      return true
-    }
-
-    return false
-  }, [currentSystemName])
-
+  // load roms from remote
   const romsState = useAsyncRetry(async () => {
-    if (!currentSystemName) {
-      return
+    if (currentSystemName) {
+      const roms = await getRoms(currentSystemName)
+      if (currentSystemName === store.get(currentSystemNameAtom)) {
+        setRoms(roms)
+      }
     }
-
-    const roms = await (currentSystemName === 'history' ? getHistoryRoms() : getSystemRoms(currentSystemName))
-    if (currentSystemName === store.get(currentSystemNameAtom)) {
-      setRoms(roms)
-    }
+    updateRetrying()
   }, [currentSystemName])
 
-  const error = systemsState.error || romsState.error
-  const loading = peekRomsState.loading || (!peekRomsState.value && (systemsState.loading || romsState.loading))
+  function updateRetrying() {
+    if (isRetrying) {
+      setIsRetrying(systemsState.loading || romsState.loading)
+    }
+  }
 
   function retry() {
+    setIsRetrying(true)
     if (systemsState.error) {
       systemsState.retry()
     }
@@ -106,13 +117,15 @@ export function HomeScreen() {
     }
   }
 
-  if (error) {
-    return (
-      <HomeScreenLayout>
-        <ErrorContent error={error} onSolve={retry} />
-      </HomeScreenLayout>
-    )
-  }
+  useEffect(() => {
+    return () => {
+      setCurrentSystemName('')
+    }
+  }, [setCurrentSystemName])
+
+  const isRomsEmpty = !roms?.length
+  const loading = romsState.loading && !peekRomsState.loading && isRomsEmpty
+  const error = systemsState.error || romsState.error
 
   if (loading) {
     return (
@@ -125,22 +138,30 @@ export function HomeScreen() {
   const columnWidth = gridWidth / columnCount
   return (
     <HomeScreenLayout>
-      <div className='h-full w-full' ref={gridContainerRef}>
-        <GameEntryGrid
-          className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
-          columnCount={columnCount}
-          columnWidth={columnWidth}
-          height={gridHeight}
-          roms={roms}
-          rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
-          rowHeight={columnWidth}
-          width={gridWidth}
-        />
-      </div>
+      <>
+        {isRomsEmpty || (
+          <>
+            <div className='h-full w-full' ref={gridContainerRef}>
+              <GameEntryGrid
+                className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
+                columnCount={columnCount}
+                columnWidth={columnWidth}
+                height={gridHeight}
+                roms={roms}
+                rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
+                rowHeight={columnWidth}
+                width={gridWidth}
+              />
+            </div>
 
-      <GameMenus />
+            <GameMenus />
 
-      <InputTips />
+            <InputTips />
+          </>
+        )}
+
+        {error ? <ErrorContent error={error} onSolve={retry} /> : null}
+      </>
     </HomeScreenLayout>
   )
 }

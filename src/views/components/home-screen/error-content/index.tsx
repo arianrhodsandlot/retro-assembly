@@ -5,7 +5,9 @@ import { CloudServiceLogin } from './cloud-service-login'
 import { LocalFilePermision } from './local-file-permision'
 
 function isInvalidTokenError(error: any) {
-  return error.statusCode === 401 || error.status === 401 || error.response?.status === 400
+  error ??= {}
+  const { message, status, statusCode, response } = error
+  return message === 'invalid token' || statusCode === 401 || status === 401 || response?.status === 400
 }
 
 export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => void }) {

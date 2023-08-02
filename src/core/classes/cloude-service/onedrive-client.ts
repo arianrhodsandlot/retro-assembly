@@ -59,6 +59,9 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
     return Client.init({
       authProvider(done) {
         const accessToken = OnedriveClient.getAccessToken()
+        if (!accessToken) {
+          throw new Error('invalid token')
+        }
         done(undefined, accessToken)
       },
     })

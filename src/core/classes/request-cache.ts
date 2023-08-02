@@ -1,4 +1,4 @@
-import { type IDBPDatabase, deleteDB, openDB } from 'idb'
+import { type IDBPDatabase, openDB } from 'idb'
 import { isMatch } from 'lodash-es'
 
 const databaseName = 'request-cache'
@@ -52,9 +52,10 @@ export class RequestCache {
   }
 
   static async destory() {
-    const requestCache = await RequestCache.getSingleton()
-    requestCache.database?.close()
-    await deleteDB(databaseName)
+    const { database } = await RequestCache.getSingleton()
+    if (database) {
+      await database.clear(tableName)
+    }
   }
 
   async initialize() {

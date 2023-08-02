@@ -1,4 +1,3 @@
-import { deleteDB } from 'idb'
 import { clear } from 'idb-keyval'
 import { RequestCache } from '../classes/request-cache'
 import { globalContext } from '../internal/global-context'
@@ -6,9 +5,6 @@ import { globalContext } from '../internal/global-context'
 async function clearIdbKeyval() {
   try {
     await clear()
-  } catch {}
-  try {
-    await deleteDB('keyval-store')
   } catch {}
 }
 

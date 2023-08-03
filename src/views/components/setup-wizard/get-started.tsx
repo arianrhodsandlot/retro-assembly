@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { getSupportedFileExtensions, isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
+import { BaseCallout } from '../primitives/base-callout'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
 import { BaseTooltip } from '../primitives/base-tooltip'
 import { isInvalidDialogOpenAtom } from './atoms'
@@ -62,8 +63,32 @@ export function GetStarted() {
   }, [])
 
   return (
-    <div className='container m-auto max-w-5xl px-10 text-rose-700'>
-      <div className='get-started w-full rounded-xl border-2 border-rose-700 px-10 py-6'>
+    <div className='container m-auto mt-6 flex max-w-5xl flex-col px-4 text-rose-700'>
+      {localStorage.showIntruductionButton ? (
+        <div className='mb-6 flex items-center justify-center'>
+          <BaseButton className='w-full px-16 py-4 text-lg font-semibold sm:w-auto' styleType='primary'>
+            <span className='icon-[mdi--play-circle] h-8 w-8' />
+            Introduction
+          </BaseButton>
+        </div>
+      ) : null}
+
+      <BaseCallout>
+        <div className='flex items-center justify-center gap-2 text-xs leading-relaxed'>
+          <span className='icon-[mdi--lightbulb-on-outline] h-4 w-4 shrink-0' />
+          <div className='align-middle'>
+            It&lsquo;s highly recommended to use a
+            <span className='icon-[mdi--controller] mx-1 h-4 w-4 shrink-0 align-middle' />
+            <span className='font-bold'>game controller</span> to experience Retro Assembly, though
+            <span className='icon-[mdi--mouse] mx-1 h-4 w-4 shrink-0 align-middle' />
+            mouses and
+            <span className='icon-[mdi--keyboard] mx-1 h-4 w-4 shrink-0 align-middle' />
+            keyboards are supported.
+          </div>
+        </div>
+      </BaseCallout>
+
+      <div className='get-started mt-4 w-full rounded-xl border-2 border-rose-700 px-10 py-6'>
         <div className='flex flex-col items-center gap-10'>
           {isAnyCloudServiceEnabled ? (
             <div className='flex flex-col items-center'>
@@ -130,7 +155,6 @@ export function GetStarted() {
           </div>
         </div>
       </div>
-
       <BaseDialogContent closable onOpenChange={setIsInvalidDialogOpenAtom} open={isInvalidDialogOpen}>
         <div className='max-w-lg'>
           <div className='flex items-center text-lg font-bold'>

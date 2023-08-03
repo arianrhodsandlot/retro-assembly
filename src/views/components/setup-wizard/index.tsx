@@ -23,26 +23,17 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
             rel='noreferrer'
             target='_blank'
           >
-            <span className='icon-[mdi--github] mr-1 h-5 w-5' />
+            <span className='icon-[simple-icons--github] mr-1 h-5 w-5' />
             GitHub
           </a>
           <a
             className='flex items-center justify-center gap-1'
-            href='https://github.com/arianrhodsandlot/retro-assembly/discussions'
+            href='https://discord.gg/RVVAMcCH'
             rel='noreferrer'
             target='_blank'
           >
-            <span className='icon-[mdi--comment-quote] mr-1 h-5 w-5' />
-            Feedback
-          </a>
-          <a
-            className='flex items-center justify-center gap-1'
-            href='mailto:theguidanceofawhitetower@gmail.com?subject=Feedbacks about Retro Assembly'
-            rel='noreferrer'
-            target='_blank'
-          >
-            <span className='icon-[mdi--email] mr-1 h-5 w-5' />
-            Contact
+            <span className='icon-[simple-icons--discord] mr-1 h-5 w-5' />
+            Discord
           </a>
         </div>
 
@@ -52,9 +43,7 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
         </div>
       </div>
 
-      <div className='mt-10'>
-        <GetStarted />
-      </div>
+      <GetStarted />
 
       <div className='mt-10 py-4 text-center text-xs text-rose-700'>
         <div className='flex items-center justify-center gap-2'>

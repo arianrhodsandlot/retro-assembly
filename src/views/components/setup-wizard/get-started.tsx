@@ -1,5 +1,6 @@
+import clsx from 'clsx'
 import { useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getSupportedFileExtensions, isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 import { BaseButton } from '../primitives/base-button'
@@ -55,23 +56,51 @@ const fileInstructionToolTip = (
   </BaseTooltip>
 )
 
+const youtubeVideoSrc = 'https://www.youtube.com/embed/5QNCsowNiE4'
+const youtubeVideoAutoPlaySrc = 'https://www.youtube.com/embed/5QNCsowNiE4?autoplay=1'
+
 export function GetStarted() {
   const [isInvalidDialogOpen, setIsInvalidDialogOpenAtom] = useAtom(isInvalidDialogOpenAtom)
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false)
+  const [videoSrc, setVideoSrc] = useState(youtubeVideoSrc)
+
+  function playVideo() {
+    setIsPlayingVideo(true)
+    setVideoSrc(youtubeVideoAutoPlaySrc)
+  }
 
   useEffect(() => {
     SpatialNavigation.focus()
   }, [])
 
   return (
-    <div className='container m-auto mt-6 flex max-w-5xl flex-col px-4 text-rose-700'>
-      {localStorage.showIntruductionButton ? (
-        <div className='mb-6 flex items-center justify-center'>
-          <BaseButton className='w-full px-16 py-4 text-lg font-semibold sm:w-auto' styleType='primary'>
-            <span className='icon-[mdi--play-circle] h-8 w-8' />
+    <div className='get-started container m-auto flex max-w-5xl flex-col px-4 text-rose-700'>
+      {!isPlayingVideo && (
+        <div className='my-6 flex items-center justify-center'>
+          <BaseButton
+            className='w-full px-20 py-4 text-lg font-semibold sm:w-auto'
+            onClick={playVideo}
+            styleType='primary'
+          >
+            <span className='icon-[mdi--youtube] h-8 w-8' />
             Introduction
           </BaseButton>
         </div>
-      ) : null}
+      )}
+
+      <div className='flex flex-col items-center justify-center'>
+        <iframe
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+          allowFullScreen
+          className={clsx(
+            'aspect-video max-w-full rounded border-0 shadow-xl shadow-zinc-500 transition-[height]',
+            isPlayingVideo ? 'my-6 aspect-video w-[840px]' : 'h-0',
+          )}
+          src={videoSrc}
+          title='YouTube video player'
+          width='840'
+        />
+      </div>
 
       <BaseCallout>
         <div className='flex items-center justify-center gap-2 text-xs leading-relaxed'>
@@ -88,7 +117,7 @@ export function GetStarted() {
         </div>
       </BaseCallout>
 
-      <div className='get-started mt-4 w-full rounded-xl border-2 border-rose-700 px-10 py-6'>
+      <div className='get-started-content mt-4 w-full rounded-xl border-2 border-rose-700 px-10 py-6'>
         <div className='flex flex-col items-center gap-10'>
           {isAnyCloudServiceEnabled ? (
             <div className='flex flex-col items-center'>

@@ -6,20 +6,20 @@ settings:
 
 dependencies:
   '@fontsource-variable/fredoka':
-    specifier: 5.0.6
-    version: 5.0.6
+    specifier: 5.0.7
+    version: 5.0.7
   '@fontsource-variable/outfit':
-    specifier: 5.0.6
-    version: 5.0.6
+    specifier: 5.0.7
+    version: 5.0.7
   '@fontsource/noto-mono':
     specifier: 5.0.6
     version: 5.0.6
   '@fontsource/noto-sans':
-    specifier: 5.0.6
-    version: 5.0.6
+    specifier: 5.0.7
+    version: 5.0.7
   '@fontsource/roboto':
-    specifier: 5.0.6
-    version: 5.0.6
+    specifier: 5.0.7
+    version: 5.0.7
   '@microsoft/microsoft-graph-client':
     specifier: 3.0.5
     version: 3.0.5(buffer@6.0.3)
@@ -116,8 +116,8 @@ devDependencies:
     specifier: 0.7.3
     version: 0.7.3(eslint@8.46.0)(typescript@5.1.6)
   '@iconify/json':
-    specifier: 2.2.97
-    version: 2.2.97
+    specifier: 2.2.98
+    version: 2.2.98
   '@iconify/tailwind':
     specifier: 0.1.3
     version: 0.1.3
@@ -1727,24 +1727,24 @@ packages:
     resolution: {integrity: sha512-m0G6wlnhm/AX0H12IOWtK8gASEMffnX08RtKkCgTdHb9JpHKGloI7icFfLg9ZmQeavcvR0PKmzxClyuFPSjKWw==}
     dev: false
 
-  /@fontsource-variable/fredoka@5.0.6:
-    resolution: {integrity: sha512-OHnY+pjU3AmDr5WxWUiRSwQ7vGKaVf5jpKCMFTwXKN8BpJeAaaO6+oh/Fw0S4OG6yOOPqUHLty5E6bv7DsGOWA==}
+  /@fontsource-variable/fredoka@5.0.7:
+    resolution: {integrity: sha512-FlOSDs1MLX+5t8XzJM+ihoyHg+P3b5BR9rROr8FuY7iR36zfRl3NQSvOvuQFHd6l8rlKHP5ilAq3uUSD9N4vcA==}
     dev: false
 
-  /@fontsource-variable/outfit@5.0.6:
-    resolution: {integrity: sha512-h/9ZsYFVSOHJ8G/R9e2FiiOuUM36be+QePzrPGGTpWRw8gP5sMu5W9XIYqEFip6jURYl4tM8SajvPK+AAQSaXw==}
+  /@fontsource-variable/outfit@5.0.7:
+    resolution: {integrity: sha512-xLZMsk59BVeR2kOC20OiOiEl26KDXbl9/RN7V5ZboLJhhtLpHxHjnLy9N9jXB2c5fhoI7tHT80WovclBfg+sVQ==}
     dev: false
 
   /@fontsource/noto-mono@5.0.6:
     resolution: {integrity: sha512-JGFB4MyRxl7uFW6Z+I45duzUjxboQaPgn5MzIt2BQ9dbrF1n6ev0L1ZQcZrUTXviglVeIjtopFXL00d9r+Aejw==}
     dev: false
 
-  /@fontsource/noto-sans@5.0.6:
-    resolution: {integrity: sha512-nqoV4oIdwzGnKUW+C1Po5WRbl2Yaks+68r4gtZjV6yXTvk7ku3xOWgq6S7Wad+CMl4bzzKs73AyVVNPhJmKIGA==}
+  /@fontsource/noto-sans@5.0.7:
+    resolution: {integrity: sha512-fo8mRRAG6W+5dt2METY/iVq3coRwNn+t7yjJvTlJ5waiV94Yoxu4h3ANvyJ7BaG6iYa/0Q/hp+xf/NNTtbOuGA==}
     dev: false
 
-  /@fontsource/roboto@5.0.6:
-    resolution: {integrity: sha512-SksyUGbdqY7a71l/ywdX5fm37fepCakgHZEZ3H4uP5A9wDJewrcSACtIzw6yi9QjJIYoj1xArhDSOz4XJxyWow==}
+  /@fontsource/roboto@5.0.7:
+    resolution: {integrity: sha512-Hcl5xloy9PH+hCGnKTl9Xg7SOXbvSFIg+AW2JZ5qrsAZBI9IEC4kwma6D/aTl9ywvsdEp+7TeVT2fmFImXyHTw==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.10:
@@ -1767,8 +1767,8 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@iconify/json@2.2.97:
-    resolution: {integrity: sha512-Ka/YX2/ayia0aFpZW8eZ36rqN6WMGyX6OjDLAIGueDsg8WGxJmdpjZs2VrcHwrrOVookMi9PSan36HFTuk3tcA==}
+  /@iconify/json@2.2.98:
+    resolution: {integrity: sha512-KbXFeKbbKrzdjei/vu43CJLQhBF8ZasVoY9+MWhKvqazzsd7ANC5+Z3CP87EP8vO7hEGUxD0ZXgyujSwk3s3aw==}
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.1
@@ -2533,7 +2533,7 @@ packages:
     resolution: {integrity: sha512-MxObHvNl4A69ofaTRU8DFqvgzzv8s9yRtaPPm5gud9HDNvpB3GPQFvNuTWAI59B9huVGV5jXYJwbCsmBsOGYWA==}
     dependencies:
       '@types/jsonfile': 6.1.1
-      '@types/node': 18.17.1
+      '@types/node': 18.17.2
     dev: true
 
   /@types/gapi.client.discovery@1.0.9:
@@ -2586,7 +2586,7 @@ packages:
   /@types/jsonfile@6.1.1:
     resolution: {integrity: sha512-GSgiRCVeapDN+3pqA35IkQwasaCh/0YFH5dEF6S88iDvEn901DjOeH3/QPY+XYP1DFzDZPvIvfeEgk+7br5png==}
     dependencies:
-      '@types/node': 18.17.1
+      '@types/node': 18.17.2
     dev: true
 
   /@types/lodash-es@4.17.8:
@@ -2612,16 +2612,16 @@ packages:
   /@types/node-fetch@2.6.4:
     resolution: {integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==}
     dependencies:
-      '@types/node': 20.4.6
+      '@types/node': 20.4.7
       form-data: 3.0.1
     dev: false
 
-  /@types/node@18.17.1:
-    resolution: {integrity: sha512-xlR1jahfizdplZYRU59JlUx9uzF1ARa8jbhM11ccpCJya8kvos5jwdm2ZAgxSCwOl0fq21svP18EVwPBXMQudw==}
+  /@types/node@18.17.2:
+    resolution: {integrity: sha512-wBo3KqP/PBqje5TI9UTiuL3yWfP6sdPtjtygSOqcYZWT232dfDeDOnkDps5wqZBP9NgGgYrNejinl0faAuE+HQ==}
     dev: true
 
-  /@types/node@20.4.6:
-    resolution: {integrity: sha512-q0RkvNgMweWWIvSMDiXhflGUKMdIxBo2M2tYM/0kEGDueQByFzK4KZAgu5YHGFNxziTlppNpTIBcqHQAxlfHdA==}
+  /@types/node@20.4.7:
+    resolution: {integrity: sha512-bUBrPjEry2QUTsnuEjzjbS7voGWCc30W0qzgMf90GPeDGFRakvrz47ju+oqDAKCXLUCe39u57/ORMl/O/04/9g==}
 
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -2659,7 +2659,7 @@ packages:
   /@types/resolve@1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 20.4.6
+      '@types/node': 20.4.7
     dev: true
 
   /@types/scheduler@0.16.3:
@@ -3085,7 +3085,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.10
-      caniuse-lite: 1.0.30001518
+      caniuse-lite: 1.0.30001519
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -3204,8 +3204,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001518
-      electron-to-chromium: 1.4.482
+      caniuse-lite: 1.0.30001519
+      electron-to-chromium: 1.4.484
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.10)
     dev: true
@@ -3263,8 +3263,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /caniuse-lite@1.0.30001518:
-    resolution: {integrity: sha512-rup09/e3I0BKjncL+FesTayKtPrdwKhUufQFd3riFw1hHg8JmIFoInYfB102cFcY/pPgGmdyl/iy+jgiDi2vdA==}
+  /caniuse-lite@1.0.30001519:
+    resolution: {integrity: sha512-0QHgqR+Jv4bxHMp8kZ1Kn8CH55OikjKJ6JmKkZYP1F3D7w+lnFXF70nG5eNfsZS89jadi5Ywy5UCSKLAglIRkg==}
     dev: true
 
   /chalk@2.4.2:
@@ -3602,8 +3602,8 @@ packages:
       jake: 10.8.7
     dev: true
 
-  /electron-to-chromium@1.4.482:
-    resolution: {integrity: sha512-h+UqpfmEr1Qkk0zp7ej/jid7CXoq4m4QzW6wNTb0ELJ/BZCpA4wgUylBIMGCe621tnr4l5VmoHjdoSx2lbnNJA==}
+  /electron-to-chromium@1.4.484:
+    resolution: {integrity: sha512-nO3ZEomTK2PO/3TUXgEx0A97xZTpKVf4p427lABHuCpT1IQ2N+njVh29DkQkCk6Q4m2wjU+faK4xAcfFndwjvw==}
     dev: true
 
   /emoji-regex@9.2.2:
@@ -4682,8 +4682,8 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
-  /immutable@4.3.1:
-    resolution: {integrity: sha512-lj9cnmB/kVS0QHsJnYKD1uo3o39nrbKxszjnqS9Fr6NB7bZzW45U6WSGBPKXDL/CvDKqDNPA4r3DoDQ8GTxo2A==}
+  /immutable@4.3.2:
+    resolution: {integrity: sha512-oGXzbEDem9OOpDWZu88jGiYCvIsLHMvGw+8OXlpsvTFvIQplQbjg1B1cvKg8f7Hoch6+NGjpPsH1Fr+Mc2D1aA==}
     dev: true
 
   /import-fresh@3.3.0:
@@ -4968,7 +4968,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.4.6
+      '@types/node': 20.4.7
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -6165,8 +6165,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rollup@3.27.0:
-    resolution: {integrity: sha512-aOltLCrYZ0FhJDm7fCqwTjIUEVjWjcydKBV/Zeid6Mn8BWgDCUBBWT5beM5ieForYNo/1ZHuGJdka26kvQ3Gzg==}
+  /rollup@3.27.1:
+    resolution: {integrity: sha512-tXNDFwOkN6C2w5Blj1g6ForKeFw6c1mDu5jxoeDO3/pmYjgt+8yvIFjKzH5FQUq70OKZBkOt0zzv0THXL7vwzQ==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -6226,7 +6226,7 @@ packages:
     hasBin: true
     dependencies:
       chokidar: 3.5.3
-      immutable: 4.3.1
+      immutable: 4.3.2
       source-map-js: 1.0.2
     dev: true
 
@@ -6954,7 +6954,7 @@ packages:
     dependencies:
       esbuild: 0.18.17
       postcss: 8.4.27
-      rollup: 3.27.0
+      rollup: 3.27.1
       sass: 1.64.2
     optionalDependencies:
       fsevents: 2.3.2
@@ -7214,7 +7214,7 @@ packages:
     dependencies:
       '@types/fs-extra': 11.0.1
       '@types/minimist': 1.2.2
-      '@types/node': 18.17.1
+      '@types/node': 18.17.2
       '@types/ps-tree': 1.1.2
       '@types/which': 3.0.0
       chalk: 5.3.0

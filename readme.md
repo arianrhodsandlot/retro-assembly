@@ -172,6 +172,16 @@ We support mainstream fourth-generation and earlier consoles as well as some han
   </tbody>
 </table>
 
+Emulator are built based on RetroArch. See [Retro Assembly vendors](https://github.com/arianrhodsandlot/retro-assembly-vendors) for details.
+
+## Development
+It's quite easy to develop Retro Assembly. All we need is the latest [Node.js](https://nodejs.org) and [pnpm](https://pnpm.io).
+
+Simply run `pnpm install` to setup dependencies, then run `pnpm dev` to launch the development server.
+
+## Architecture
+(Working in progress)
+
 ## Alternatives
 + [Afterplay.io](https://afterplay.io)
 + [Eclipse](https://eclipseemu.me)

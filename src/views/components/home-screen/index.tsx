@@ -39,7 +39,9 @@ async function peekRoms(system: string) {
   if (system === 'history') {
     return await peekHistoryRoms()
   }
-  return await peekSystemRoms(system)
+  const roms =  await peekSystemRoms(system)
+  console.log(roms)
+  return roms
 }
 
 async function getRoms(system: string) {
@@ -124,7 +126,7 @@ export function HomeScreen() {
   }, [setCurrentSystemName])
 
   const isRomsEmpty = !roms?.length
-  const loading = romsState.loading && !peekRomsState.loading && isRomsEmpty
+  const loading = (romsState.loading && !peekRomsState.loading && isRomsEmpty) || systemsState.loading
   const error = systemsState.error || romsState.error
 
   if (loading) {

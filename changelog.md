@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## 2023-08-01
 ### Added
+- Add a demo homescreen for users who want to simply try it
+
+## 2023-08-01
+### Added
 - Add recently played list
 
 ## 2023-07-31

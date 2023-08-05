@@ -1,4 +1,4 @@
-import { Client, type GraphRequest } from '@microsoft/microsoft-graph-client'
+import type { Client, GraphRequest } from '@microsoft/microsoft-graph-client'
 import queryString from 'query-string'
 import { Auth } from './auth'
 import { type CloudServiceClient } from './cloud-service-client'
@@ -14,7 +14,7 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
     redirectUri: `${hostUrl}/auth/onedrive`,
   }
 
-  private client: Client
+  private client: Client | Promise<Client>
 
   constructor() {
     super()
@@ -40,7 +40,7 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
       return false
     }
 
-    const client = OnedriveClient.getClient()
+    const client = await OnedriveClient.getClient()
     const request = client.api('/me/drive/root/children').top(1)
     try {
       await OnedriveClient.requestWithRefreshTokenOnError(() => request.get())
@@ -55,7 +55,8 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
     return (error as any)?.code === 'InvalidAuthenticationToken'
   }
 
-  private static getClient() {
+  private static async getClient() {
+    const { Client } = await import('@microsoft/microsoft-graph-client')
     return Client.init({
       authProvider(done) {
         const accessToken = OnedriveClient.getAccessToken()
@@ -82,7 +83,8 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
     orderby?: Parameters<GraphRequest['orderby']>[0]
     content?: unknown
   }) {
-    let request = this.client.api(api)
+    const client = await this.client
+    let request = client.api(api)
     if (top) {
       request = request.top(top)
     }

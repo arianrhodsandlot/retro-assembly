@@ -6,23 +6,22 @@ import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 
 export class DemoProvider implements FileSystemProvider {
-  private zipReader: ZipReader<any>
+  private zipUrl: string
+  private zipReaderPromise: Promise<ZipReader<any>>
 
-  private constructor(zipReader: ZipReader<any>) {
-    this.zipReader = zipReader
+  private constructor(zipUrl: string) {
+    this.zipUrl = zipUrl
+    this.zipReaderPromise = this.getZipReaderPromise()
   }
 
-  static async getSingleton() {
-    const { BlobReader, ZipReader } = await import('@zip.js/zip.js')
-    const blob = await ky('/demo-roms/archive.zip').blob()
-    const blobReader = new BlobReader(blob)
-    const zipReader = new ZipReader(blobReader)
-    return new DemoProvider(zipReader)
+  static getSingleton() {
+    return new DemoProvider('/demo-roms/archive.zip')
   }
 
   async getContent(path: string) {
     const { BlobWriter } = await import('@zip.js/zip.js')
-    const entries = await this.zipReader.getEntries()
+    const zipReader = await this.zipReaderPromise
+    const entries = await zipReader.getEntries()
     const file = entries.find(({ directory, filename }) => !directory && filename === path)
     if (!file) {
       throw new Error('file not found')
@@ -52,7 +51,8 @@ export class DemoProvider implements FileSystemProvider {
   }
 
   async list(path = '') {
-    const entries = await this.zipReader.getEntries()
+    const zipReader = await this.zipReaderPromise
+    const entries = await zipReader.getEntries()
 
     if (path) {
       const files = entries.filter(({ directory, filename }) => !directory && filename.startsWith(path))
@@ -84,5 +84,12 @@ export class DemoProvider implements FileSystemProvider {
   async peek(path: string) {
     noop(path)
     return await Promise.resolve(undefined)
+  }
+
+  private async getZipReaderPromise() {
+    const { BlobReader, ZipReader } = await import('@zip.js/zip.js')
+    const blob = await ky(this.zipUrl).blob()
+    const blobReader = new BlobReader(blob)
+    return new ZipReader(blobReader)
   }
 }

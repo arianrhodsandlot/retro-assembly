@@ -8,6 +8,7 @@ import { BaseCallout } from '../primitives/base-callout'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
 import { BaseTooltip } from '../primitives/base-tooltip'
 import { isInvalidDialogOpenAtom } from './atoms'
+import { DemoButton } from './demo-button'
 import { DirectoryInstruction } from './directory-instruction'
 import { DropboxButton } from './dropbox-button'
 import { GoogleDriveButton } from './google-drive-button'
@@ -56,17 +57,16 @@ const fileInstructionToolTip = (
   </BaseTooltip>
 )
 
-const youtubeVideoSrc = 'https://www.youtube.com/embed/5QNCsowNiE4'
 const youtubeVideoAutoPlaySrc = 'https://www.youtube.com/embed/5QNCsowNiE4?autoplay=1'
 
 export function GetStarted() {
   const [isInvalidDialogOpen, setIsInvalidDialogOpenAtom] = useAtom(isInvalidDialogOpenAtom)
   const [isPlayingVideo, setIsPlayingVideo] = useState(false)
-  const [videoSrc, setVideoSrc] = useState(youtubeVideoSrc)
+  const [videoSrc, setVideoSrc] = useState('')
 
-  function playVideo() {
-    setIsPlayingVideo(true)
-    setVideoSrc(youtubeVideoAutoPlaySrc)
+  function togglePlayVideo() {
+    setIsPlayingVideo(!isPlayingVideo)
+    setVideoSrc(isPlayingVideo ? '' : youtubeVideoAutoPlaySrc)
   }
 
   useEffect(() => {
@@ -75,25 +75,35 @@ export function GetStarted() {
 
   return (
     <div className='get-started container m-auto flex max-w-5xl flex-col px-4 text-rose-700'>
-      {!isPlayingVideo && (
-        <div className='my-6 flex items-center justify-center'>
+      <div className='my-6 flex flex-col items-center justify-center gap-4 sm:flex-row'>
+        {isPlayingVideo ? (
           <BaseButton
             className='w-full px-20 py-4 text-lg font-semibold sm:w-auto'
-            onClick={playVideo}
+            onClick={togglePlayVideo}
+            styleType='primary'
+          >
+            <span className='icon-[mdi--close-circle-outline] h-8 w-8' />
+            Hide Introduction
+          </BaseButton>
+        ) : (
+          <BaseButton
+            className='w-full px-20 py-4 text-lg font-semibold sm:w-auto'
+            onClick={togglePlayVideo}
             styleType='primary'
           >
             <span className='icon-[mdi--youtube] h-8 w-8' />
             Introduction
           </BaseButton>
-        </div>
-      )}
+        )}
+        <DemoButton />
+      </div>
 
       <div className='flex flex-col items-center justify-center'>
         <iframe
           allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
           allowFullScreen
           className={clsx(
-            'aspect-video max-w-full rounded border-0 shadow-xl shadow-zinc-500 transition-[height]',
+            'aspect-video max-w-full rounded border-0 bg-black shadow-xl shadow-zinc-500',
             isPlayingVideo ? 'my-6 aspect-video w-[840px]' : 'h-0',
           )}
           src={videoSrc}

@@ -1,3 +1,4 @@
+import { DemoProvider } from '../classes/file-system-providers/demo-provider'
 import { DropboxProvider } from '../classes/file-system-providers/dropbox-provider'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
@@ -8,6 +9,9 @@ import { globalContext } from '../internal/global-context'
 export async function start() {
   const type = PreferenceParser.get('romProviderType')
   switch (type) {
+    case 'demo':
+      globalContext.fileSystem = await DemoProvider.getSingleton()
+      break
     case 'local':
       globalContext.fileSystem = await LocalProvider.getSingleton()
       break

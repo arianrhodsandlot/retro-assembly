@@ -1,8 +1,15 @@
 import { DialogClose } from '@radix-ui/react-dialog'
-import { type ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
+import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { BaseButton } from '../../primitives/base-button'
 
 export function ClearSiteDataDialogContent({ children, onConfirm }: { children: ReactNode; onConfirm: () => void }) {
+  useEffect(() => {
+    if (isUsingDemo()) {
+      onConfirm()
+    }
+  }, [onConfirm])
+
   return (
     <div className='w-96'>
       <div>

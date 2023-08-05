@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
+import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { systemContentImageMap } from '../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
 import { loadImageWithLimit } from './utils'
@@ -14,7 +15,12 @@ function pseudoRandomDeg(seed: string) {
 
 export function GameEntryContent({ rom }: { rom: any }) {
   const abortControllerRef = useRef<AbortController>()
+  const skipLoadCover = useMemo(() => isUsingDemo(), [])
+
   const state = useAsync(async () => {
+    if (skipLoadCover) {
+      throw new Error('skip load cover')
+    }
     await rom.ready()
     const { cover } = rom
     const abortController = new AbortController()

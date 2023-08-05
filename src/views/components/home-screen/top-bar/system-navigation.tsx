@@ -3,6 +3,7 @@ import $ from 'jquery'
 import { findIndex, first, last } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
 import { SystemName, onPress } from '../../../../core'
+import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { isGameIdleAtom } from '../../atoms'
 import { currentSystemNameAtom, systemsAtom } from '../atoms'
 import { historyDummySystem } from '../constants'
@@ -28,6 +29,7 @@ export function SystemNavigation() {
   const isGameIdle = useAtomValue(isGameIdleAtom)
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const allSystems = useMemo(() => [historyDummySystem, ...systems], [systems])
+  const showHistory = useMemo(() => !isUsingDemo(), [])
 
   const shouldSwitchSystem = isFocusingHome() && isGameIdle
   const currentSystemIndex = findIndex(allSystems, { name: currentSystemName as SystemName })
@@ -59,7 +61,7 @@ export function SystemNavigation() {
 
   return (
     <div className='system-navigation flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
-      <SystemNavigationItem system={historyDummySystem} />
+      {showHistory ? <SystemNavigationItem system={historyDummySystem} /> : null}
       {systems.map((system) => (
         <SystemNavigationItem key={system.name} system={system} />
       ))}

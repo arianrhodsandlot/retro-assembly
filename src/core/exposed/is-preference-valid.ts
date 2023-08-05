@@ -9,6 +9,10 @@ export function isPreferenceValid() {
   const stateDirectory = preference.get('stateDirectory')
   const romDirectory = preference.get('romDirectory')
 
+  if (romProviderType === 'demo') {
+    return true
+  }
+
   const values = [configProviderType, stateProviderType, romProviderType, configDirectory, stateDirectory]
   if (romProviderType !== 'local') {
     values.push(romDirectory)

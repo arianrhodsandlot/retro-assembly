@@ -3,6 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
 import { isUsingDummy, onCancel, resumeGame } from '../../../../core'
+import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { previousFocusedElementAtom, shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
 import { StatesList } from './states-list'
@@ -26,7 +27,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
 
-  const hideNonEssentialItems = isUsingDummy()
+  const hideNonEssentialItems = isUsingDummy() || isUsingDemo()
 
   function onLoadStateButtonFocus() {
     setShowStateList(true)

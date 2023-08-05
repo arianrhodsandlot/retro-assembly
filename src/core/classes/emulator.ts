@@ -48,6 +48,21 @@ const raConfigPath = `${raUserdataDir}retroarch.cfg`
 
 const encoder = new TextEncoder()
 
+const cdnHost = 'https://cdn.jsdelivr.net'
+const cdnType = 'npm'
+const vendorsRepo = 'retro-assembly-vendors'
+const vendorsVersion = '1.16.0-202308050000'
+
+function getCoreWasmUrl(coreFileName: string) {
+  const corePath = `dist/cores/${coreFileName}`
+  return `${cdnHost}/${cdnType}/${vendorsRepo}@${vendorsVersion}/${corePath}`
+}
+
+function getCoreJsUrl(coreName: string) {
+  const corePath = `dist/cores/${coreName}_libretro.js`
+  return `${cdnHost}/${cdnType}/${vendorsRepo}@${vendorsVersion}/${corePath}`
+}
+
 function getEmscriptenModuleOverrides() {
   let resolveRunDependenciesPromise: () => void
   const runDependenciesPromise = new Promise<void>((resolve) => {
@@ -72,8 +87,8 @@ function getEmscriptenModuleOverrides() {
       }
     },
 
-    locateFile(path) {
-      return `/vendors/cores/${path}`
+    locateFile(path: string) {
+      return getCoreWasmUrl(path)
     },
 
     async monitorRunDependencies(left: number) {
@@ -358,7 +373,8 @@ export class Emulator {
   private async setupEmscripten() {
     // @ts-expect-error for retroarch fast forward
     window.setImmediate ??= window.setTimeout
-    const jsContentBody = await ky(`/vendors/cores/${this.core}_libretro.js`).text()
+    const coreJsUrl = getCoreJsUrl(this.core)
+    const jsContentBody = await ky(coreJsUrl).text()
     const jsContent = `
     export function getEmscripten({ Module }) {
       ${jsContentBody}
@@ -368,9 +384,9 @@ export class Emulator {
     const jsBlob = new Blob([jsContent], {
       type: 'application/javascript',
     })
-    const jsUrl = URL.createObjectURL(jsBlob)
-    const { getEmscripten } = await import(/* @vite-ignore */ jsUrl)
-    URL.revokeObjectURL(jsUrl)
+    const jsBlobUrl = URL.createObjectURL(jsBlob)
+    const { getEmscripten } = await import(/* @vite-ignore */ jsBlobUrl)
+    URL.revokeObjectURL(jsBlobUrl)
 
     this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
     document.body.append(this.canvas)

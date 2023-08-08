@@ -55,7 +55,7 @@ export class DemoProvider implements FileSystemProvider {
     const entries = await zipReader.getEntries()
 
     if (path) {
-      const files = entries.filter(({ directory, filename }) => !directory && filename.startsWith(path))
+      const files = entries.filter(({ directory, filename }) => !directory && filename.startsWith(`${path}/`))
 
       return files.map(
         (entry) =>

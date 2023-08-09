@@ -48,8 +48,9 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
       <div className='mt-10 py-4 text-center text-xs text-rose-700'>
         <div className='flex items-center justify-center gap-2'>
           <div>
-            <span>Version:</span>
+            <span>Version</span>
             <a
+              className='ml-1 underline decoration-dotted underline-offset-4'
               href={`https://github.com/arianrhodsandlot/retro-assembly/tree/${GIT_VERSION}`}
               rel='noreferrer'
               target='_blank'
@@ -57,22 +58,28 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
               {GIT_VERSION}
             </a>
           </div>
+          ·
           <div>
-            <span>Last Updated:</span>
-            <span>{BUILD_TIME}</span>
+            <span>Last Updated</span>
+            <span className='ml-1'>{BUILD_TIME}</span>
           </div>
         </div>
         <div className='mt-1 flex items-center justify-center gap-2'>
           <div>
             <span>©</span>
-            <a className='mx-1 underline' href='https://github.com/arianrhodsandlot/' rel='noreferrer' target='_blank'>
+            <a
+              className='mx-1 underline decoration-dotted underline-offset-4'
+              href='https://github.com/arianrhodsandlot/'
+              rel='noreferrer'
+              target='_blank'
+            >
               arianrhodsandlot
             </a>
             <span>2023</span>
           </div>
           ·
           <div>
-            <a className='underline' href='/privacy-policy.html' target='_blank'>
+            <a className='underline decoration-dotted underline-offset-4' href='/privacy-policy.html' target='_blank'>
               Privacy Policy
             </a>
           </div>

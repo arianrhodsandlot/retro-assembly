@@ -5,6 +5,7 @@ import { useRef, useState } from 'react'
 import { onCancel } from '../../../../core'
 import { ClearSiteDataButton } from './clear-site-data-button'
 import { ConfigGamepadButton } from './config-gamepad-button'
+import { ConfigKeyboardButton } from './config-keyboard-button'
 import { InputHelpButton } from './input-help-button'
 import { TopBarButton } from './top-bar-button'
 
@@ -96,6 +97,7 @@ export function TopBarDropdown() {
         ref={dropdownItemsContainerRef}
       >
         <InputHelpButton />
+        <ConfigKeyboardButton />
         <ConfigGamepadButton />
         <ClearSiteDataButton />
       </div>

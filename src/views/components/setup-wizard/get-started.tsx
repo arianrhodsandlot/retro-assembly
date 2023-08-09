@@ -3,9 +3,12 @@ import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { getSupportedFileExtensions, isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
+import { ConfigGamepadDialogContent } from '../home-screen/top-bar/config-gamepad-dialog-content'
+import { ConfigKeyboardDialogContent } from '../home-screen/top-bar/config-keyboard-dialog-content'
 import { BaseButton } from '../primitives/base-button'
 import { BaseCallout } from '../primitives/base-callout'
 import { BaseDialogContent } from '../primitives/base-dialog-content'
+import { BaseDialogTrigger } from '../primitives/base-dialog-trigger'
 import { BaseTooltip } from '../primitives/base-tooltip'
 import { isInvalidDialogOpenAtom } from './atoms'
 import { DemoButton } from './demo-button'
@@ -115,14 +118,39 @@ export function GetStarted() {
       <BaseCallout>
         <div className='flex items-center justify-center gap-2 text-xs leading-relaxed'>
           <span className='icon-[mdi--lightbulb-on-outline] h-4 w-4 shrink-0' />
-          <div className='align-middle'>
-            It&lsquo;s highly recommended to use a
-            <span className='icon-[mdi--controller] mx-1 h-4 w-4 shrink-0 align-middle' />
-            <span className='font-bold'>game controller</span> to experience Retro Assembly, though
-            <span className='icon-[mdi--mouse] mx-1 h-4 w-4 shrink-0 align-middle' />
-            mouses and
-            <span className='icon-[mdi--keyboard] mx-1 h-4 w-4 shrink-0 align-middle' />
-            keyboards are supported.
+          <div className='flex flex-col'>
+            <div className='align-middle'>
+              It&lsquo;s highly recommended to use a
+              <span className='icon-[mdi--controller] mx-1 h-4 w-4 shrink-0 align-middle' />
+              <span className='font-bold'>game controller</span> to experience Retro Assembly, though
+              <span className='icon-[mdi--mouse] mx-1 h-4 w-4 shrink-0 align-middle' />
+              mouses and
+              <span className='icon-[mdi--keyboard] mx-1 h-4 w-4 shrink-0 align-middle' />
+              keyboards are supported.
+            </div>
+            <div className='flex items-center'>
+              You can
+              <BaseDialogTrigger content={<ConfigGamepadDialogContent />}>
+                <button className='rounded border-2 bg-rose-200 px-2 focus:border-rose-700'>
+                  <div className='flex items-center'>
+                    configure your
+                    <span className='icon-[mdi--controller] mx-1 h-4 w-4' />
+                    controllers
+                  </div>
+                </button>
+              </BaseDialogTrigger>
+              <div className='mx-1'> or </div>
+              <BaseDialogTrigger content={<ConfigKeyboardDialogContent />}>
+                <button className='rounded border-2 bg-rose-200 px-2 focus:border-rose-700'>
+                  <div className='flex items-center'>
+                    configure your
+                    <span className='icon-[mdi--keyboard] mx-1 h-4 w-4' />
+                    keyboard
+                  </div>
+                </button>
+              </BaseDialogTrigger>
+              .
+            </div>
           </div>
         </div>
       </BaseCallout>

@@ -8,14 +8,13 @@ export function GamepadMapping() {
   const [gamepads, setGamepads] = useState<Gamepad[]>([])
   const [currentGamePadId, setCurrentGamePadId] = useState<string>()
   const [gamepadMappings, setGamepadMappings] = useState(getGamepadMappings())
-  const currentMapping = find(gamepadMappings, ({ name }) => name === currentGamePadId) ?? gamepadMappings[0]
-
-  function updateMapping(mapping) {
+  const currentGamepadMapping = find(gamepadMappings, ({ name }) => name === currentGamePadId) ?? gamepadMappings[0]
+  function updateGamepadMapping(mapping) {
     if (!currentGamePadId) {
       return
     }
 
-    const index = currentMapping ? gamepadMappings.indexOf(currentMapping) : -1
+    const index = currentGamepadMapping ? gamepadMappings.indexOf(currentGamepadMapping) : -1
     const newMappings = [...gamepadMappings]
 
     if (index > -1) {
@@ -28,7 +27,7 @@ export function GamepadMapping() {
     setGamepadMappings(newMappings)
   }
 
-  function resetMapping() {
+  function resetGamepadMapping() {
     if (currentGamePadId) {
       const newMappings = reject(gamepadMappings, { name: currentGamePadId })
       updateGamepadMappings(newMappings)
@@ -77,9 +76,9 @@ export function GamepadMapping() {
               {currentGamePadId === gamepad.id ? (
                 <GamepadMappingPanel
                   gamepad={gamepad}
-                  mapping={currentMapping?.mapping}
-                  onResetMapping={resetMapping}
-                  onUpdateMapping={updateMapping}
+                  mapping={currentGamepadMapping?.mapping}
+                  onResetMapping={resetGamepadMapping}
+                  onUpdateMapping={updateGamepadMapping}
                 />
               ) : null}
             </div>

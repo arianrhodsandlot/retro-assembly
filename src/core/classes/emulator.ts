@@ -45,6 +45,7 @@ type RetroArchCommand =
 const raUserdataDir = '/home/web_user/retroarch/userdata/'
 const raCoreConfigDir = `${raUserdataDir}config/`
 const raConfigPath = `${raUserdataDir}retroarch.cfg`
+console.log(raConfigPath)
 
 const encoder = new TextEncoder()
 
@@ -398,6 +399,7 @@ export class Emulator {
 
   private async setupFileSystem() {
     const { Module, FS, PATH, ERRNO_CODES } = this.emscripten
+    window.FS = FS
 
     Module.canvas = this.canvas
     Module.preRun = [

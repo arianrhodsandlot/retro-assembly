@@ -39,9 +39,7 @@ async function peekRoms(system: string) {
   if (system === 'history') {
     return await peekHistoryRoms()
   }
-  const roms =  await peekSystemRoms(system)
-  console.log(roms)
-  return roms
+  return await peekSystemRoms(system)
 }
 
 async function getRoms(system: string) {

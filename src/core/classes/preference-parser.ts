@@ -1,8 +1,8 @@
 import mitt from 'mitt'
-import { defaultGamepadMapping } from '../constants/input'
+import { defaultGamepadMapping, defaultKeyboardMapping } from '../constants/input'
 import { getStorageByKey, setStorageByKey } from '../helpers/storage'
 
-type GamepadMapping = Record<string, string>
+type InputMapping = Record<string, string>
 
 interface PreferenceValues {
   configProviderType: string
@@ -11,7 +11,8 @@ interface PreferenceValues {
   configDirectory: string
   stateDirectory: string
   romDirectory: string
-  gamepadMappings: { name: string; mapping: GamepadMapping }[]
+  gamepadMappings: { name: string; mapping: InputMapping }[]
+  keyboardMappings: { mapping: InputMapping }[]
 }
 
 const defaultPreferences: PreferenceValues = {
@@ -22,9 +23,11 @@ const defaultPreferences: PreferenceValues = {
   stateDirectory: '',
   romDirectory: '',
   gamepadMappings: [{ name: '', mapping: defaultGamepadMapping }],
+  keyboardMappings: [{ mapping: defaultKeyboardMapping }],
 }
 
 type PreferenceName = keyof typeof defaultPreferences
+type PreferenceValue = PreferenceValues[PreferenceName]
 
 export class PreferenceParser {
   static storageKey = 'preference'
@@ -38,9 +41,10 @@ export class PreferenceParser {
     this.loadFromStorage()
   }
 
-  static get(name: Exclude<PreferenceName, 'gamepadMappings'>): string
+  static get(name: Exclude<PreferenceName, 'gamepadMappings' | 'keyboardMappings'>): string
   static get(name: 'gamepadMappings'): PreferenceValues['gamepadMappings']
-  static get(name?: any): string | PreferenceValues['gamepadMappings'] {
+  static get(name: 'keyboardMappings'): PreferenceValues['keyboardMappings']
+  static get(name?: any): PreferenceValue {
     const preferenceParser = new PreferenceParser()
     return preferenceParser.get(name)
   }
@@ -58,9 +62,10 @@ export class PreferenceParser {
     this.emitter.off('updated', callback)
   }
 
-  get(name: Exclude<PreferenceName, 'gamepadMappings'>): string
+  get(name: Exclude<PreferenceName, 'gamepadMappings' | 'keyboardMappings'>): string
   get(name: 'gamepadMappings'): PreferenceValues['gamepadMappings']
-  get(name?: any): string | PreferenceValues['gamepadMappings'] {
+  get(name: 'keyboardMappings'): PreferenceValues['keyboardMappings']
+  get(name?: any): PreferenceValue {
     this.loadFromStorage()
     return this.preferenceValues?.[name] || defaultPreferences[name]
   }

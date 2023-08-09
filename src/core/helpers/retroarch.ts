@@ -23,6 +23,20 @@ const defaultRetroarchConfig = {
 
   input_exit_emulator: 'nul',
 
+  input_cheat_index_minus: 'nul', // override default 't',
+  input_cheat_index_plus: 'nul', // override default 'y',
+  input_cheat_toggle: 'nul', // override default 'u',
+  input_frame_advance: 'nul', // override default 'k',
+  input_hold_fast_forward: 'nul', // override default 'l',
+  input_hold_slowmotion: 'nul', // override default 'e',
+  input_netplay_game_watch: 'nul', // override default 'i',
+  input_pause_toggle: 'nul', // override default 'p',
+  input_reset: 'nul', // override default 'h',
+  input_rewind: 'nul', // override default 'r',
+  input_shader_next: 'nul', // override default 'm',
+  input_shader_prev: 'nul', // override default 'n',
+  input_toggle_fullscreen: 'nul', // override default 'f',
+
   input_player1_analog_dpad_mode: 1,
   input_player2_analog_dpad_mode: 1,
   input_player3_analog_dpad_mode: 1,
@@ -80,6 +94,21 @@ export function getRetroarchConfig() {
           inputConfig[configItemName] = code
         }
       }
+    }
+  }
+
+  const keyboardMappings = PreferenceParser.get('keyboardMappings')
+  for (const [index, { mapping }] of keyboardMappings.entries()) {
+    for (const codeKey in mapping) {
+      let buttonName = mapping[codeKey]
+
+      if (buttonName === 'l1') {
+        buttonName = 'l'
+      } else if (buttonName === 'r1') {
+        buttonName = 'r'
+      }
+      const configItemName = `input_player${index + 1}_${buttonName}`
+      inputConfig[configItemName] = codeKey
     }
   }
 

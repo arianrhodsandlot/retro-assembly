@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## 2023-08-09
+### Added
+- Add a configuration panel for mapping keyboard buttons.
+
 ## 2023-08-01
 ### Added
 - Add a demo homescreen for users who want to simply try it

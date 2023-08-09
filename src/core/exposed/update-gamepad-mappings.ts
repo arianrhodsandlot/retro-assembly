@@ -9,7 +9,7 @@ export function updateGamepadMappings(
   }[],
 ) {
   const [firstMapping] = mappings
-  if (!isEqual(firstMapping, defaultGamepadMapping)) {
+  if (!isEqual(firstMapping.mapping, defaultGamepadMapping)) {
     if (firstMapping?.name === '') {
       firstMapping.mapping = defaultGamepadMapping
     } else {

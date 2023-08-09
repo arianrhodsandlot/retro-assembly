@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { compact, find, reject, uniqBy } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import { getGamepadMappings, updateGamepadMappings } from '../../../../core'
+import { BaseCallout } from '../../primitives/base-callout'
 import { GamepadMappingPanel } from './gamepad-mapping-panel'
 
 export function GamepadMapping() {
@@ -85,8 +86,13 @@ export function GamepadMapping() {
           ))
         ) : (
           <div className='flex flex-col items-center justify-center'>
-            <div className='text-lg'>Connect your controller and press any button to begin!</div>
-            <span className='icon-[line-md--loading-loop] mt-4 h-10 w-10 text-rose-700' />
+            <BaseCallout className='flex items-center justify-center'>
+              <span className='icon-[mdi--information-outline] mr-2 h-4 w-4' />
+              Connect your controller and press any button to begin!
+            </BaseCallout>
+            <div className='py-4'>
+              <span className='icon-[line-md--loading-loop] mt-4 h-10 w-10 text-rose-700' />
+            </div>
           </div>
         )}
       </div>

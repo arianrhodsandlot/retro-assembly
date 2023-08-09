@@ -131,7 +131,7 @@ export function GetStarted() {
             <div className='flex items-center'>
               You can
               <BaseDialogTrigger content={<ConfigGamepadDialogContent />}>
-                <button className='rounded border-2 bg-rose-200 px-2 focus:border-rose-700'>
+                <button className='rounded border-2 border-transparent bg-rose-200 px-2 focus:border-rose-700'>
                   <div className='flex items-center'>
                     configure your
                     <span className='icon-[mdi--controller] mx-1 h-4 w-4' />
@@ -141,7 +141,7 @@ export function GetStarted() {
               </BaseDialogTrigger>
               <div className='mx-1'> or </div>
               <BaseDialogTrigger content={<ConfigKeyboardDialogContent />}>
-                <button className='rounded border-2 bg-rose-200 px-2 focus:border-rose-700'>
+                <button className='rounded border-2 border-transparent bg-rose-200 px-2 focus:border-rose-700'>
                   <div className='flex items-center'>
                     configure your
                     <span className='icon-[mdi--keyboard] mx-1 h-4 w-4' />

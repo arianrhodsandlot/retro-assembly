@@ -1,20 +1,20 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { type Target } from 'framer-motion'
 import { useAtom } from 'jotai'
+import type { ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useWindowSize } from 'react-use'
 import { isGameLaunchingAtom } from '../../atoms'
 import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { LoadingScreen } from '../../common/loading-screen'
 
-export function GameEntryPortals({
-  maskContent,
-  maskPosition,
-  onMaskShow,
-}: {
-  maskContent: any
-  maskPosition: any
+interface GameEntryPortalsProps {
+  maskContent?: ReactNode
+  maskPosition?: Target
   onMaskShow: () => Promise<void>
-}) {
+}
+
+export function GameEntryPortals({ maskContent, maskPosition, onMaskShow }: GameEntryPortalsProps) {
   const { width: windowWidth, height: windowHeight } = useWindowSize()
   const [isGameLaunching, setIsGameLaunching] = useAtom(isGameLaunchingAtom)
   const maskInitialStyle = { ...maskPosition, filter: 'brightness(1)' }
@@ -38,7 +38,7 @@ export function GameEntryPortals({
   return createPortal(
     <>
       <AnimatePresence>
-        {maskPosition ? (
+        {maskPosition && maskContent ? (
           <motion.div
             animate={maskExpandedStyle}
             className='absolute z-10 overflow-hidden'

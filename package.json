@@ -47,7 +47,7 @@
     "wouter": "2.11.0"
   },
   "devDependencies": {
-    "@arianrhodsandlot/eslint-config": "0.7.3",
+    "@arianrhodsandlot/eslint-config": "0.8.0",
     "@iconify/json": "2.2.100",
     "@iconify/tailwind": "0.1.3",
     "@sergeymakinen/vite-plugin-html-minimize": "1.0.6",

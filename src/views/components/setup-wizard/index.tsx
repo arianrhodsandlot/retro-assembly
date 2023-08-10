@@ -31,6 +31,7 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
             href='https://discord.gg/RVVAMcCH'
             rel='noreferrer'
             target='_blank'
+            hidden
           >
             <span className='icon-[simple-icons--discord] mr-1 h-5 w-5' />
             Discord

@@ -123,30 +123,26 @@ export function GetStarted() {
               It&lsquo;s highly recommended to use a
               <span className='icon-[mdi--controller] mx-1 h-4 w-4 shrink-0 align-middle' />
               <span className='font-bold'>game controller</span> to experience Retro Assembly, though
-              <span className='icon-[mdi--mouse] mx-1 h-4 w-4 shrink-0 align-middle' />
+              <span className='icon-[mdi--mouse] mx-1 h-4 w-4 shrink-0 scale-90 align-middle' />
               mouses and
               <span className='icon-[mdi--keyboard] mx-1 h-4 w-4 shrink-0 align-middle' />
               keyboards are supported.
             </div>
-            <div className='flex items-center'>
+            <div>
               You can
               <BaseDialogTrigger content={<ConfigGamepadDialogContent />}>
-                <button className='rounded border-2 border-transparent bg-rose-200 px-2 focus:border-rose-700'>
-                  <div className='flex items-center'>
-                    configure your
-                    <span className='icon-[mdi--controller] mx-1 h-4 w-4' />
-                    controllers
-                  </div>
+                <button className='inline rounded border-2 border-rose-100 bg-rose-200 px-2 align-middle focus:border-rose-700'>
+                  configure your
+                  <span className='icon-[mdi--controller] mx-1 h-4 w-4 align-middle' />
+                  controllers
                 </button>
               </BaseDialogTrigger>
-              <div className='mx-1'> or </div>
+              <span className='mx-1'> or </span>
               <BaseDialogTrigger content={<ConfigKeyboardDialogContent />}>
-                <button className='rounded border-2 border-transparent bg-rose-200 px-2 focus:border-rose-700'>
-                  <div className='flex items-center'>
-                    configure your
-                    <span className='icon-[mdi--keyboard] mx-1 h-4 w-4' />
-                    keyboard
-                  </div>
+                <button className='inline rounded border-2 border-rose-100 bg-rose-200 px-2 align-middle focus:border-rose-700'>
+                  configure your
+                  <span className='icon-[mdi--keyboard] mx-1 h-4 w-4 align-middle' />
+                  keyboard
                 </button>
               </BaseDialogTrigger>
               .

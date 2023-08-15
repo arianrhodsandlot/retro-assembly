@@ -27,11 +27,10 @@ export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
             GitHub
           </a>
           <a
-            className='flex items-center justify-center gap-1'
+            className='hidden items-center justify-center gap-1'
             href='https://discord.gg/RVVAMcCH'
             rel='noreferrer'
             target='_blank'
-            hidden
           >
             <span className='icon-[simple-icons--discord] mr-1 h-5 w-5' />
             Discord

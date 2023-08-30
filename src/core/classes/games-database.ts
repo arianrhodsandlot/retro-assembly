@@ -10,7 +10,7 @@ import { type Entry } from './libretrodb/types'
 const cdnHost = 'https://cdn.jsdelivr.net'
 const cdnType = 'gh'
 const dbRepo = 'libretro/libretro-database'
-const dbVersion = '3e7bb'
+const dbVersion = 'ee672'
 
 function getDbUrl(systemFullName: string) {
   const dbPath = `rdb/${systemFullName}.rdb`

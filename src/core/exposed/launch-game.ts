@@ -51,12 +51,15 @@ async function getBiosFiles(rom: Rom) {
     console.warn(error)
   }
   const biosFileAccessors = filter(allBiosFileAccessors, ({ name }) => includes(knownBiosFiles, name))
-  return await Promise.all(
-    biosFileAccessors.map(async (biosFileAccessor) => ({
-      name: biosFileAccessor.name,
-      blob: await biosFileAccessor.getBlob(),
-    })),
+  const biosFiles = await Promise.all(
+    biosFileAccessors.map(async (biosFileAccessor) => {
+      try {
+        const blob = await biosFileAccessor.getBlob()
+        return { name: biosFileAccessor.name, blob }
+      } catch {}
+    }),
   )
+  return biosFiles.filter(Boolean)
 }
 
 async function getAdditionalFiles(rom: Rom) {
@@ -69,7 +72,11 @@ async function getAdditionalFiles(rom: Rom) {
     const parentFileName = `${arcadeGameInfo.parent}.zip`
     const romDirectory = PreferenceParser.get('romDirectory')
     const parentFilePath = join(romDirectory, system, parentFileName)
-    const blob = await globalContext.fileSystem.getContent(parentFilePath)
-    return [{ name: parentFileName, blob }]
+    try {
+      const blob = await globalContext.fileSystem.getContent(parentFilePath)
+      return [{ name: parentFileName, blob }]
+    } catch {
+      return []
+    }
   }
 }

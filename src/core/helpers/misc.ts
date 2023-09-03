@@ -17,9 +17,12 @@ export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxa
   }
 
   const typeUrlPart = `Named_${capitalize(type)}s`
-  return `https://thumbnails.libretro.com/${encodeRFC3986URIComponent(systemFullName)}/${encodeRFC3986URIComponent(
-    typeUrlPart,
-  )}/${encodeRFC3986URIComponent(name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_'))}.png`
+  const normalizedSystemFullName = systemFullName.replaceAll(' ', '_')
+  const host = 'https://cdn.jsdelivr.net'
+  const pathPrefix = `gh/libretro-thumbnails/${normalizedSystemFullName}@master`
+  const normalizedFileName = name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_')
+  const encode = encodeRFC3986URIComponent
+  return `${host}/${pathPrefix}/${encode(typeUrlPart)}/${encode(normalizedFileName)}.png`
 }
 
 export function parseGoodCode(name: string) {

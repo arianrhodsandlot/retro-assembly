@@ -9,8 +9,14 @@ import { type Entry } from './libretrodb/types'
 
 const cdnHost = 'https://cdn.jsdelivr.net'
 const cdnType = 'gh'
+
 const dbRepo = 'libretro/libretro-database'
 const dbVersion = 'ee672'
+
+const arcadeGameListRepo = 'libretro/FBNeo'
+const arcadeGameListVersion = '0deef'
+const arcadeGameListPath = 'gamelist.txt'
+const arcadeGameListUrl = `${cdnHost}/${cdnType}/${arcadeGameListRepo}@${arcadeGameListVersion}/${arcadeGameListPath}`
 
 function getDbUrl(systemFullName: string) {
   const dbPath = `rdb/${systemFullName}.rdb`
@@ -32,13 +38,30 @@ function isSimilarName(name1: string, name2: string) {
   return isEqual(props1, props2)
 }
 
+const requestMap = new Map()
+function requestWithoutDuplicates(url) {
+  const request = requestMap.get(url) ?? ky(url)
+  requestMap.set(url, request)
+  return request
+}
+
+export interface ArcadeGameInfo {
+  fileName: string
+  fullName: string
+  parent: string
+  year: string
+  company: string
+  hardware: string
+}
+
 export class GamesDatabase {
-  private static dbPromises = new Map<string, Promise<GamesDatabase>>()
+  private static gamesDatabaseMap = new Map<string, GamesDatabase>()
 
   private index = new Map<string, Entry<string>[]>()
-  private arcadeFilenameMap: Record<string, string> = {}
+  private arcadeFileNameMap: Record<string, ArcadeGameInfo> = {}
   private system: string
   private readyPromise: Promise<void>
+
   constructor(name: string) {
     if (!name) {
       throw new Error('Invalid system name')
@@ -47,23 +70,35 @@ export class GamesDatabase {
     this.readyPromise = this.load()
   }
 
+  static getInstance(system: string) {
+    const gamesDatabase = GamesDatabase.gamesDatabaseMap.get(system) ?? new GamesDatabase(system)
+    GamesDatabase.gamesDatabaseMap.set(system, gamesDatabase)
+    return gamesDatabase
+  }
+
   static async queryByFileNameFromSystem({ fileName, system }: { fileName: string; system: string }) {
-    const { dbPromises } = GamesDatabase
-    let dbPromise = dbPromises.get(system)
-    if (!dbPromise) {
-      dbPromise = new GamesDatabase(system).ready()
-      dbPromises.set(system, dbPromise)
-    }
-    const db = await dbPromise
+    const db = GamesDatabase.getInstance(system)
+    await db.ready()
     return db.queryByFileName(fileName)
   }
 
+  static async queryArcadeGameInfo(fileName: string) {
+    const system = 'arcade'
+    const db = GamesDatabase.getInstance(system)
+    await db.ready()
+    return db.queryArcadeGameInfo(fileName)
+  }
+
   async load() {
+    await Promise.all([this.loadRdb(), this.loadArcadeGameList()])
+  }
+
+  async loadRdb() {
     const { index, system } = this
     const systemFullName = systemFullNameMap[system]
 
     const dbUrl = getDbUrl(systemFullName)
-    const blob = await ky(dbUrl).blob()
+    const blob = await requestWithoutDuplicates(dbUrl).blob()
     const buffer = await blobToBuffer(blob)
     const db = await Libretrodb.from(buffer, { indexHashes: false })
 
@@ -77,23 +112,28 @@ export class GamesDatabase {
         }
       }
     }
+  }
 
-    if (system === 'arcade') {
-      const gamelistText = await ky('https://cdn.jsdelivr.net/gh/libretro/FBNeo@0deef/gamelist.txt').text()
-      const gamelist = gamelistText
-        .split('\n')
-        .slice(7)
-        .map((row) => row.split('|').map((segment) => segment.trim()))
-      const arcadeFilenameMap = {}
-      for (const row of gamelist) {
-        const [, filename, , fullName] = row
-        if (/^(nes|md|msx|spec|gg|sms|fds|pce|cv)_/.test(filename)) {
-          continue
-        }
-        arcadeFilenameMap[filename] = fullName
-      }
-      this.arcadeFilenameMap = arcadeFilenameMap
+  async loadArcadeGameList() {
+    if (this.system !== 'arcade') {
+      return
     }
+
+    const gamelistText = await ky(arcadeGameListUrl).text()
+    const disabledRomPrefix = /^(nes|md|msx|spec|gg|sms|fds|pce|cv)_/
+    const gamelist = gamelistText
+      .split('\n')
+      .slice(7)
+      .map((row) => row.split('|').map((segment) => segment.trim()))
+    const arcadeFileNameMap = {}
+    for (const row of gamelist) {
+      const [, fileName, , fullName, parent, year, company, hardware] = row
+      if (disabledRomPrefix.test(fileName)) {
+        continue
+      }
+      arcadeFileNameMap[fileName] = { fileName, fullName, parent, year, company, hardware }
+    }
+    this.arcadeFileNameMap = arcadeFileNameMap
   }
 
   async ready() {
@@ -106,10 +146,11 @@ export class GamesDatabase {
   }
 
   queryByFileName(fileName: string) {
-    if (this.system === 'arcade') {
-      const [baseFileName] = fileName.split('.')
-      fileName = this.arcadeFilenameMap[baseFileName]
+    const arcadeGameInfo = this.queryArcadeGameInfo(fileName)
+    if (arcadeGameInfo) {
+      fileName = arcadeGameInfo.fileName
     }
+
     const key = normalizeGameName(fileName)
     const indexed = this.index.get(key)
     if (!indexed) {
@@ -131,5 +172,12 @@ export class GamesDatabase {
       }
     }
     return candidates[0]
+  }
+
+  queryArcadeGameInfo(fileName: string) {
+    if (this.system === 'arcade') {
+      const [baseFileName] = fileName.split('.')
+      return this.arcadeFileNameMap[baseFileName]
+    }
   }
 }

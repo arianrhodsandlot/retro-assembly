@@ -118,12 +118,14 @@ interface EmulatorConstructorOptions {
   rom?: Rom
   style?: Partial<CSSStyleDeclaration>
   biosFiles?: { name: string; blob: Blob }[]
+  additionalFiles?: { name: string; blob: Blob }[]
 }
 
 export class Emulator {
   core = ''
   rom?: Rom
   biosFiles?: { name: string; blob: Blob }[]
+  additionalFiles?: { name: string; blob: Blob }[]
   processStatus: 'initial' | 'ready' | 'terminated' = 'initial'
   gameStatus: 'paused' | 'running' = 'running'
   canvas: HTMLCanvasElement
@@ -133,9 +135,10 @@ export class Emulator {
 
   private hideCursorAbortController: AbortController | undefined
 
-  constructor({ core, rom, style, biosFiles }: EmulatorConstructorOptions) {
+  constructor({ core, rom, style, biosFiles, additionalFiles }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.biosFiles = biosFiles
+    this.additionalFiles = additionalFiles
     this.core = core ?? ''
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
@@ -425,6 +428,17 @@ export class Emulator {
       const data = FS.readFile(fileName, { encoding: 'binary' })
       FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })
       FS.unlink(fileName)
+
+      if (this.additionalFiles) {
+        for (const { name, blob } of this.additionalFiles) {
+          const fileName = name
+          const buffer = await blobToBuffer(blob)
+          FS.createDataFile('/', fileName, buffer, true, false)
+          const data = FS.readFile(fileName, { encoding: 'binary' })
+          FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })
+          FS.unlink(fileName)
+        }
+      }
     }
 
     if (this.biosFiles) {

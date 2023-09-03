@@ -10,17 +10,19 @@ export function GameTitle({ rom }: { rom: Rom }) {
 
   const gameNameState = useAsync(async () => {
     await rom.ready()
-    return rom.goodCode.rom
+    return rom.displayName
   })
+
+  const title = [`File: ${rom.fileAccessor.name}`, `Game: ${rom.standardizedName}`].join('\n')
 
   return (
     <div
       className='relative w-full overflow-hidden bg-slate-200 px-1 py-1 text-center text-xs text-slate-400'
-      title={rom.name}
+      title={title}
     >
       {districts?.map((district) => <DistrictIcon district={district} key={district} />)}
 
-      <span className='align-middle'>{gameNameState.value ?? rom.goodCode.rom}</span>
+      <span className='align-middle'>{gameNameState.value ?? rom.displayName}</span>
 
       {revision !== undefined && (
         <span className='ml-2 inline-block rounded bg-gray-300 px-1'>

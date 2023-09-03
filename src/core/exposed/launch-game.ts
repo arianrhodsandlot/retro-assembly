@@ -23,16 +23,16 @@ export async function launchGame(
     exitGame()
   } catch {}
 
-  const core = systemCoreMap[rom.system]
-  const biosFiles = await getBiosFiles(core)
+  const [biosFiles, additionalFiles] = await Promise.all([getBiosFiles(rom), getAdditionalFiles(rom)])
 
-  const emulator = new Emulator({ rom, biosFiles })
+  const emulator = new Emulator({ rom, biosFiles, additionalFiles })
   globalContext.emulator = emulator
   await emulator.launch(waitForUserInteraction)
   emitter.emit('launched', rom)
 }
 
-async function getBiosFiles(core) {
+async function getBiosFiles(rom: Rom) {
+  const core = systemCoreMap[rom.system]
   if (!globalContext.fileSystem) {
     throw new Error('fileSystem is not available')
   }
@@ -57,4 +57,19 @@ async function getBiosFiles(core) {
       blob: await biosFileAccessor.getBlob(),
     })),
   )
+}
+
+async function getAdditionalFiles(rom: Rom) {
+  if (!globalContext.fileSystem) {
+    throw new Error('fileSystem is not available')
+  }
+
+  const { arcadeGameInfo, system } = rom
+  if (arcadeGameInfo?.parent) {
+    const parentFileName = `${arcadeGameInfo.parent}.zip`
+    const romDirectory = PreferenceParser.get('romDirectory')
+    const parentFilePath = join(romDirectory, system, parentFileName)
+    const blob = await globalContext.fileSystem.getContent(parentFilePath)
+    return [{ name: parentFileName, blob }]
+  }
 }

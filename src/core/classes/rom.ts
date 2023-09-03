@@ -4,7 +4,7 @@ import { isAbsolute, parse, relative } from 'path-browserify'
 import { extSystemMap, systemNamesSorted } from '../constants/systems'
 import { getCover, parseGoodCode } from '../helpers/misc'
 import { type FileAccessor } from './file-system-providers/file-accessor'
-import { GamesDatabase } from './games-database'
+import { ArcadeGameInfo, GamesDatabase } from './games-database'
 import { type Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 
@@ -12,12 +12,11 @@ const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
 
 export class Rom {
   id = ''
-  name = ''
   fileAccessor: FileAccessor
 
   system = ''
   gameInfo: Entry<string> | undefined
-  cover = ''
+  arcadeGameInfo: ArcadeGameInfo | undefined
 
   readyPromise: Promise<void>
 
@@ -25,7 +24,6 @@ export class Rom {
   private gameInfoGoodCode: GoodCodeResult | undefined
 
   private constructor(romFileAccessor: FileAccessor) {
-    this.name = romFileAccessor.name
     this.fileAccessor = romFileAccessor
     this.originalGoodCode = parseGoodCode(romFileAccessor.name)
     this.readyPromise = this.load()
@@ -33,6 +31,21 @@ export class Rom {
 
   get goodCode() {
     return this.gameInfoGoodCode || this.originalGoodCode
+  }
+
+  get standardizedName() {
+    return this.arcadeGameInfo?.fullName || this.gameInfo?.name || this.goodCode.rom
+  }
+
+  get displayName() {
+    return this.goodCode.rom
+  }
+
+  get cover() {
+    if (this.standardizedName) {
+      return getCover({ system: this.system, name: this.standardizedName })
+    }
+    return ''
   }
 
   static fromFileAccessors(files: FileAccessor[]) {
@@ -78,6 +91,12 @@ export class Rom {
   async load() {
     await this.updateSystem()
     await this.updateGameInfo()
+    if (this.system === 'arcade') {
+      await this.updateArcadeGameInfo()
+    }
+
+    const goodCodeName = this.arcadeGameInfo?.fullName || this.gameInfo?.name || this.fileAccessor.name
+    this.gameInfoGoodCode = parseGoodCode(goodCodeName)
   }
 
   async getBlob() {
@@ -85,39 +104,48 @@ export class Rom {
   }
 
   async updateGameInfo() {
-    const { system, name, fileAccessor } = this
+    const {
+      system,
+      fileAccessor: { name },
+    } = this
     if (!system) {
       await this.updateSystem()
     }
 
-    const gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: name, system })
-    if (gameInfo) {
-      this.gameInfo = gameInfo
-      if (gameInfo.name) {
-        this.gameInfoGoodCode = parseGoodCode(gameInfo.name)
-      }
-    }
-    this.cover = getCover({ system, name: gameInfo?.name || fileAccessor.basename })
+    this.gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: name, system })
   }
 
   async updateSystem() {
-    if (!this.name) {
+    const { fileAccessor } = this
+    if (!fileAccessor.name) {
       throw new Error('Invalid file')
     }
 
     let system = this.guessSystemByPath() || this.guessSystemByFileName()
-    if (!system && this.fileAccessor.isLoaded && this.name.endsWith('.zip')) {
+    if (!system && fileAccessor.isLoaded && fileAccessor.name.endsWith('.zip')) {
       system = await this.guessSystemByExtractedContent()
     }
 
     if (!system) {
-      throw new Error(`Unknown system for ${this.name}`)
+      throw new Error(`Unknown system for ${fileAccessor.name}`)
     }
 
     this.system = system
   }
 
-  private guessSystemByFileName(name: string = this.name) {
+  async updateArcadeGameInfo() {
+    if (this.system === 'arcade') {
+      if (this.arcadeGameInfo) {
+        return this.arcadeGameInfo
+      }
+
+      const arcadeGameInfo = await GamesDatabase.queryArcadeGameInfo(this.fileAccessor.name)
+      this.arcadeGameInfo = arcadeGameInfo
+      return arcadeGameInfo
+    }
+  }
+
+  private guessSystemByFileName(name: string = this.fileAccessor.name) {
     const extname = name.split('.').pop()
     if (!extname) {
       return ''

@@ -37,7 +37,7 @@ export function GameEntryContent({ rom }: { rom: any }) {
   }, [])
 
   if (state.loading) {
-    const rotate = pseudoRandomDeg(rom.name)
+    const rotate = pseudoRandomDeg(rom.displayName)
     return (
       <div className='m-auto flex h-full items-center justify-center bg-zinc-300 text-center font-bold'>
         <span
@@ -51,7 +51,7 @@ export function GameEntryContent({ rom }: { rom: any }) {
   if (state.error) {
     return (
       <div className='m-auto flex h-full items-center justify-center bg-zinc-300 text-center font-bold'>
-        <img alt={rom.name} className='w-3/5 object-contain' src={systemContentImageMap[rom.system]} />
+        <img alt={rom.displayName} className='w-3/5 object-contain' src={systemContentImageMap[rom.system]} />
       </div>
     )
   }

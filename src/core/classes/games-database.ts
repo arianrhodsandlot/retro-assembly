@@ -36,6 +36,7 @@ export class GamesDatabase {
   private static dbPromises = new Map<string, Promise<GamesDatabase>>()
 
   private index = new Map<string, Entry<string>[]>()
+  private arcadeFilenameMap: Record<string, string> = {}
   private system: string
   private readyPromise: Promise<void>
   constructor(name: string) {
@@ -58,14 +59,14 @@ export class GamesDatabase {
   }
 
   async load() {
-    const systemFullName = systemFullNameMap[this.system]
+    const { index, system } = this
+    const systemFullName = systemFullNameMap[system]
 
     const dbUrl = getDbUrl(systemFullName)
     const blob = await ky(dbUrl).blob()
     const buffer = await blobToBuffer(blob)
     const db = await Libretrodb.from(buffer, { indexHashes: false })
 
-    const { index } = this
     for (const entry of db.getEntries()) {
       if (entry.name) {
         const key = normalizeGameName(entry.name)
@@ -75,6 +76,23 @@ export class GamesDatabase {
           index.set(key, candidates)
         }
       }
+    }
+
+    if (system === 'arcade') {
+      const gamelistText = await ky('https://cdn.jsdelivr.net/gh/libretro/FBNeo@0deef/gamelist.txt').text()
+      const gamelist = gamelistText
+        .split('\n')
+        .slice(7)
+        .map((row) => row.split('|').map((segment) => segment.trim()))
+      const arcadeFilenameMap = {}
+      for (const row of gamelist) {
+        const [, filename, , fullName] = row
+        if (/^(nes|md|msx|spec|gg|sms|fds|pce|cv)_/.test(filename)) {
+          continue
+        }
+        arcadeFilenameMap[filename] = fullName
+      }
+      this.arcadeFilenameMap = arcadeFilenameMap
     }
   }
 
@@ -88,6 +106,10 @@ export class GamesDatabase {
   }
 
   queryByFileName(fileName: string) {
+    if (this.system === 'arcade') {
+      const [baseFileName] = fileName.split('.')
+      fileName = this.arcadeFilenameMap[baseFileName]
+    }
     const key = normalizeGameName(fileName)
     const indexed = this.index.get(key)
     if (!indexed) {

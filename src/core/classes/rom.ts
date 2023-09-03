@@ -16,17 +16,23 @@ export class Rom {
   fileAccessor: FileAccessor
 
   system = ''
-  goodCode: GoodCodeResult
   gameInfo: Entry<string> | undefined
   cover = ''
 
   readyPromise: Promise<void>
 
+  private originalGoodCode: GoodCodeResult
+  private gameInfoGoodCode: GoodCodeResult | undefined
+
   private constructor(romFileAccessor: FileAccessor) {
     this.name = romFileAccessor.name
     this.fileAccessor = romFileAccessor
-    this.goodCode = parseGoodCode(romFileAccessor.name)
+    this.originalGoodCode = parseGoodCode(romFileAccessor.name)
     this.readyPromise = this.load()
+  }
+
+  get goodCode() {
+    return this.gameInfoGoodCode || this.originalGoodCode
   }
 
   static fromFileAccessors(files: FileAccessor[]) {
@@ -87,6 +93,9 @@ export class Rom {
     const gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: name, system })
     if (gameInfo) {
       this.gameInfo = gameInfo
+      if (gameInfo.name) {
+        this.gameInfoGoodCode = parseGoodCode(gameInfo.name)
+      }
     }
     this.cover = getCover({ system, name: gameInfo?.name || fileAccessor.basename })
   }

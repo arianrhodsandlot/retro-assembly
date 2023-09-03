@@ -1,12 +1,17 @@
 import { uniq } from 'lodash-es'
+import { useAsync } from 'react-use'
 import { Rom } from '../../../../core'
 import { DistrictIcon } from './district-icon'
 
 export function GameTitle({ rom }: { rom: Rom }) {
-  const { goodCode } = rom
-  const { codes } = goodCode
+  const { codes } = rom.goodCode
   const { revision, countries, version = {} } = codes
   const districts = uniq(countries?.map(({ code }) => code))
+
+  const gameNameState = useAsync(async () => {
+    await rom.ready()
+    return rom.goodCode.rom
+  })
 
   return (
     <div
@@ -15,7 +20,7 @@ export function GameTitle({ rom }: { rom: Rom }) {
     >
       {districts?.map((district) => <DistrictIcon district={district} key={district} />)}
 
-      <span className='align-middle'>{goodCode.rom}</span>
+      <span className='align-middle'>{gameNameState.value ?? rom.goodCode.rom}</span>
 
       {revision !== undefined && (
         <span className='ml-2 inline-block rounded bg-gray-300 px-1'>

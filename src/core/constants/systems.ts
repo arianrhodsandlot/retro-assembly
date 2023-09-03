@@ -1,4 +1,5 @@
 export type SystemName =
+  | 'arcade'
   | 'atari2600'
   | 'atari5200'
   | 'atari7800'
@@ -19,6 +20,7 @@ export type SystemName =
 type CoreName =
   | 'a5200'
   | 'atari800'
+  | 'fbneo'
   | 'fceumm'
   | 'gearboy'
   | 'genesis_plus_gx'
@@ -53,9 +55,11 @@ export const systemNamesSorted: SystemName[] = [
   'atari7800',
   'atari5200',
   'vb',
+  'arcade',
 ]
 
 export const systemFullNameMap: Record<SystemName, string> = {
+  arcade: 'FBNeo - Arcade Games',
   atari2600: 'Atari - 2600',
   atari5200: 'Atari - 5200',
   atari7800: 'Atari - 7800',
@@ -75,6 +79,7 @@ export const systemFullNameMap: Record<SystemName, string> = {
 }
 
 export const systemCoreMap: Record<SystemName, CoreName> = {
+  arcade: 'fbneo',
   atari2600: 'stella2014',
   atari5200: 'a5200',
   atari7800: 'prosystem',
@@ -91,6 +96,33 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   vb: 'mednafen_vb',
   wonderswan: 'mednafen_wswan',
   wonderswancolor: 'mednafen_wswan',
+}
+
+export const coreBiosMap = {
+  fbneo: [
+    'neogeo.zip',
+    'neocdz.zip',
+    'decocass.zip',
+    'isgsm.zip',
+    'midssio.zip',
+    'nmk004.zip',
+    'pgm.zip',
+    'skns.zip',
+    'ym2608.zip',
+    'cchip.zip',
+    'bubsys.zip',
+    'namcoc69.zip',
+    'namcoc70.zip',
+    'namcoc75.zip',
+    'coleco.zip',
+    'fdsbios.zip',
+    'msx.zip',
+    'ngp.zip',
+    'spectrum.zip',
+    'spec128.zip',
+    'spec1282a.zip',
+    'channelf.zip',
+  ],
 }
 
 export const extSystemMap: Record<string, SystemName> = {

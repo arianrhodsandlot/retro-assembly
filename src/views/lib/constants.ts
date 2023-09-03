@@ -8,6 +8,8 @@ import wonderswancolorContent from '../../assets/consoles/Bandai - WonderSwan Co
 import wonderswancolor from '../../assets/consoles/Bandai - WonderSwan Color.png'
 import wonderswanContent from '../../assets/consoles/Bandai - WonderSwan-content.png'
 import wonderswan from '../../assets/consoles/Bandai - WonderSwan.png'
+import arcadeContent from '../../assets/consoles/FBNeo - Arcade Games-content.png'
+import arcade from '../../assets/consoles/FBNeo - Arcade Games.png'
 import gwContent from '../../assets/consoles/Handheld Electronic Game-content.png'
 import gw from '../../assets/consoles/Handheld Electronic Game.png'
 import gba from '../../assets/consoles/Nintendo - Game Boy Advance AGB-001 B.png'
@@ -35,6 +37,7 @@ import megadrive from '../../assets/consoles/Sega - Mega Drive - Genesis.png'
 import history from '../../assets/consoles/history.png'
 
 export const systemImageMap = {
+  arcade,
   atari2600,
   atari5200,
   atari7800,
@@ -57,6 +60,7 @@ export const systemImageMap = {
 }
 
 export const systemContentImageMap = {
+  arcade: arcadeContent,
   atari2600: atari2600Content,
   atari5200: atari5200Content,
   atari7800: atari7800Content,

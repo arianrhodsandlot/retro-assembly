@@ -51,7 +51,7 @@ const encoder = new TextEncoder()
 const cdnHost = 'https://cdn.jsdelivr.net'
 const cdnType = 'npm'
 const vendorsRepo = 'retro-assembly-vendors'
-const vendorsVersion = '1.16.0-202308051520'
+const vendorsVersion = '1.16.0-202309022354'
 
 function getCoreWasmUrl(coreFileName: string) {
   const corePath = `dist/cores/${coreFileName}`
@@ -117,11 +117,13 @@ interface EmulatorConstructorOptions {
   core?: string
   rom?: Rom
   style?: Partial<CSSStyleDeclaration>
+  biosFiles?: { name: string; blob: Blob }[]
 }
 
 export class Emulator {
   core = ''
   rom?: Rom
+  biosFiles?: { name: string; blob: Blob }[]
   processStatus: 'initial' | 'ready' | 'terminated' = 'initial'
   gameStatus: 'paused' | 'running' = 'running'
   canvas: HTMLCanvasElement
@@ -131,8 +133,9 @@ export class Emulator {
 
   private hideCursorAbortController: AbortController | undefined
 
-  constructor({ core, rom, style }: EmulatorConstructorOptions) {
+  constructor({ core, rom, style, biosFiles }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
+    this.biosFiles = biosFiles
     this.core = core ?? ''
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
@@ -398,7 +401,6 @@ export class Emulator {
 
   private async setupFileSystem() {
     const { Module, FS, PATH, ERRNO_CODES } = this.emscripten
-    window.FS = FS
 
     Module.canvas = this.canvas
     Module.preRun = [
@@ -412,14 +414,29 @@ export class Emulator {
     FS.mount(emscriptenFS, { root: '/home' }, '/home')
 
     if (this.rom) {
+      FS.mkdirTree(`${raUserdataDir}content/`)
+    }
+
+    if (this.rom) {
       const blob = await this.rom.getBlob()
       const fileName = this.rom.fileAccessor.name
       const buffer = await blobToBuffer(blob)
       FS.createDataFile('/', fileName, buffer, true, false)
       const data = FS.readFile(fileName, { encoding: 'binary' })
-      FS.mkdirTree(`${raUserdataDir}content/`)
       FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })
       FS.unlink(fileName)
+    }
+
+    if (this.biosFiles) {
+      FS.mkdirTree(`${raUserdataDir}system/`)
+      for (const { name, blob } of this.biosFiles) {
+        const fileName = name
+        const buffer = await blobToBuffer(blob)
+        FS.createDataFile('/', fileName, buffer, true, false)
+        const data = FS.readFile(fileName, { encoding: 'binary' })
+        FS.writeFile(`${raUserdataDir}system/${fileName}`, data, { encoding: 'binary' })
+        FS.unlink(fileName)
+      }
     }
   }
 

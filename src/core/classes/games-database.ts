@@ -79,7 +79,11 @@ export class GamesDatabase {
   }
 
   async ready() {
-    await this.readyPromise
+    try {
+      await this.readyPromise
+    } catch (error) {
+      console.warn(error)
+    }
     return this
   }
 

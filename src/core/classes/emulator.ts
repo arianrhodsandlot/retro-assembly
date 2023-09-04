@@ -54,7 +54,7 @@ const vendorsRepo = 'retro-assembly-vendors'
 const vendorsVersion = '1.16.0-202309022354'
 
 function getCoreWasmUrl(coreFileName: string) {
-  const corePath = `dist/cores/${coreFileName}`
+  const corePath = `dist/cores/${coreFileName}_libretro.wasm`
   return `${cdnHost}/${cdnType}/${vendorsRepo}@${vendorsVersion}/${corePath}`
 }
 
@@ -63,7 +63,7 @@ function getCoreJsUrl(coreName: string) {
   return `${cdnHost}/${cdnType}/${vendorsRepo}@${vendorsVersion}/${corePath}`
 }
 
-function getEmscriptenModuleOverrides() {
+function getEmscriptenModuleOverrides(overrides: Partial<EmscriptenModule>) {
   let resolveRunDependenciesPromise: () => void
   const runDependenciesPromise = new Promise<void>((resolve) => {
     resolveRunDependenciesPromise = resolve
@@ -87,16 +87,13 @@ function getEmscriptenModuleOverrides() {
       }
     },
 
-    locateFile(path: string) {
-      return getCoreWasmUrl(path)
-    },
-
     async monitorRunDependencies(left: number) {
       if (left === 0) {
         resolveRunDependenciesPromise()
       }
       return await runDependenciesPromise
     },
+    ...overrides,
   }
 }
 
@@ -380,21 +377,26 @@ export class Emulator {
     // @ts-expect-error for retroarch fast forward
     window.setImmediate ??= window.setTimeout
     const coreJsUrl = getCoreJsUrl(this.core)
-    const jsContentBody = await ky(coreJsUrl).text()
+    const coreWasmUrl = getCoreWasmUrl(this.core)
+    const coreJsRequest = ky(coreJsUrl).text()
+    const coreWasmRequest = ky(coreWasmUrl).arrayBuffer()
+    const requests = [coreJsRequest, coreWasmRequest] as const
+
+    const [jsContentBody, wasmBinary] = await Promise.all(requests)
+
     const jsContent = `
     export function getEmscripten({ Module }) {
       ${jsContentBody}
       return { PATH, FS, ERRNO_CODES, JSEvents, ENV, Module, exit: _emscripten_force_exit }
     }
     `
-    const jsBlob = new Blob([jsContent], {
-      type: 'application/javascript',
-    })
+    const jsBlob = new Blob([jsContent], { type: 'application/javascript' })
     const jsBlobUrl = URL.createObjectURL(jsBlob)
     const { getEmscripten } = await import(/* @vite-ignore */ jsBlobUrl)
     URL.revokeObjectURL(jsBlobUrl)
 
-    this.emscripten = getEmscripten({ Module: getEmscriptenModuleOverrides() })
+    const initialModule = getEmscriptenModuleOverrides({ wasmBinary })
+    this.emscripten = getEmscripten({ Module: initialModule })
     document.body.append(this.canvas)
     document.body.style.setProperty('overflow', 'hidden')
 
@@ -418,6 +420,15 @@ export class Emulator {
 
     if (this.rom) {
       FS.mkdirTree(`${raUserdataDir}content/`)
+    }
+
+    // a hack used for waiting for wasm's instantiation.
+    // it's dirty but it works
+    const maxWaitTime = 100
+    let waitTime = 0
+    while (!Module.asm && waitTime < maxWaitTime) {
+      await delay(10)
+      waitTime += 5
     }
 
     if (this.rom) {

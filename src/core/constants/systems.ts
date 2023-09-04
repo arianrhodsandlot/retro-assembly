@@ -125,6 +125,21 @@ export const coreBiosMap = {
   ],
 }
 
+export const arcadeHardwareBiosMap: Record<string, string[]> = {
+  'Super Kaneko Nova System': ['skns.zip'],
+  'Neo Geo MVS': ['neogeo.zip'],
+  'Neo Geo CDZ': ['neocdz.zip'],
+  PolyGameMaster: ['pgm.zip'],
+  'Cassette System': ['decocass.zip'],
+  'ISG Selection Master Type 2006': ['isgsm.zip'],
+  SSIO: ['midssio.zip'],
+  NMK16: ['nmk004.zip'],
+  'YM2608 Internal ROM': ['ym2608.zip'],
+  'C-Chip Internal ROM': ['cchip.zip'],
+  'NA-1 / NA-2': ['namcoc69.zip', 'namcoc70.zip'],
+  'NB-1 / NB-2': ['namcoc75.zip'],
+}
+
 export const extSystemMap: Record<string, SystemName> = {
   a26: 'atari2600',
   a52: 'atari5200',

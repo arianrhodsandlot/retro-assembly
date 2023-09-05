@@ -8,7 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(async () => {
   const { stdout: revision } = await promisify(exec)('git rev-parse HEAD')
-  const shortVersion = revision.trim().slice(0, 5)
+  const shortVersion = revision.trim().slice(0, 7)
 
   return {
     server: { host: true },

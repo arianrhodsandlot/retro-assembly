@@ -19,7 +19,6 @@ export type SystemName =
 
 type CoreName =
   | 'a5200'
-  | 'atari800'
   | 'fbneo'
   | 'fceumm'
   | 'gearboy'
@@ -161,4 +160,24 @@ export const extSystemMap: Record<string, SystemName> = {
   vboy: 'vb',
   ws: 'wonderswan',
   wsc: 'wonderswancolor',
+}
+
+export const coreFullNameMap: Record<CoreName, string> = {
+  a5200: 'a5200',
+  fbneo: 'FinalBurn Neo',
+  fceumm: 'FCEUmm',
+  gearboy: 'Gearboy',
+  genesis_plus_gx: 'Genesis Plus GX',
+  mednafen_lynx: 'Beetle Lynx',
+  mednafen_vb: 'Beetle VB',
+  mednafen_wswan: 'Beetle WonderSwan',
+  mednafen_ngp: 'Beetle NeoPop',
+  mgba: 'mGBA',
+  mupen64plus_next: 'Mupen64Plus-Next',
+  nestopia: 'Nestopia',
+  pcsx2: 'pcsx2',
+  picodrive: 'PicoDrive',
+  prosystem: 'ProSystem',
+  snes9x: 'Snes9x',
+  stella2014: 'Stella 2014',
 }

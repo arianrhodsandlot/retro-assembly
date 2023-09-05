@@ -6,7 +6,7 @@ import ky from 'ky'
 import { kebabCase } from 'lodash-es'
 import { join } from 'path-browserify'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
-import { systemCoreMap } from '../constants/systems'
+import { coreFullNameMap, systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { blobToBuffer } from '../helpers/file'
 import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
@@ -170,7 +170,8 @@ export class Emulator {
     }
     const { name } = this.rom.fileAccessor
     const baseName = name.slice(0, name.lastIndexOf('.'))
-    return `${raUserdataDir}states/${baseName}.state`
+    const coreFullName = coreFullNameMap[this.core]
+    return `${raUserdataDir}states/${coreFullName}/${baseName}.state`
   }
 
   private get stateThumbnailFileName() {

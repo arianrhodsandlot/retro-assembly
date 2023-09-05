@@ -8,7 +8,7 @@ export async function saveGameState() {
     throw new Error('fileSystem is not valid')
   } else if (!emulator) {
     throw new Error('emulator is not valid')
-  } else if (!emulator.rom?.name) {
+  } else if (!emulator.rom?.fileAccessor.name) {
     throw new Error('emulator rom is not valid')
   }
 
@@ -18,7 +18,7 @@ export async function saveGameState() {
     if (emulator.core && emulator.rom) {
       const coreStateManager = new CoreStateManager({
         core: emulator.core,
-        name: emulator.rom.name,
+        name: emulator.rom.fileAccessor.name,
         directory: stateDirectory,
         fileSystemProvider: fileSystem,
       })

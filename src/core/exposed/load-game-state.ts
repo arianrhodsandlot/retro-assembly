@@ -8,7 +8,7 @@ export async function loadGameState(stateId: string) {
     throw new Error('fileSystem is not valid')
   } else if (!emulator) {
     throw new Error('emulator is not valid')
-  } else if (!emulator.rom?.name) {
+  } else if (!emulator.rom?.fileAccessor.name) {
     throw new Error('emulator rom is not valid')
   }
 

@@ -51,7 +51,7 @@ const encoder = new TextEncoder()
 const cdnHost = 'https://cdn.jsdelivr.net'
 const cdnType = 'npm'
 const vendorsRepo = 'retro-assembly-vendors'
-const vendorsVersion = '1.16.0-202308291944'
+const vendorsVersion = '1.16.0-202308051520'
 
 function getCoreWasmUrl(coreFileName: string) {
   const corePath = `dist/cores/${coreFileName}`

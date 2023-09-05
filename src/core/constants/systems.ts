@@ -3,6 +3,7 @@ export type SystemName =
   | 'atari2600'
   | 'atari5200'
   | 'atari7800'
+  | 'fds'
   | 'gamegear'
   | 'gb'
   | 'gba'
@@ -47,6 +48,7 @@ export const systemNamesSorted: SystemName[] = [
   'atari2600',
   'sms',
   'gamegear',
+  'fds',
   'wonderswan',
   'wonderswancolor',
   'ngp',
@@ -62,6 +64,7 @@ export const systemFullNameMap: Record<SystemName, string> = {
   atari2600: 'Atari - 2600',
   atari5200: 'Atari - 5200',
   atari7800: 'Atari - 7800',
+  fds: 'Nintendo - Family Computer Disk System',
   gamegear: 'Sega - Game Gear',
   gb: 'Nintendo - Game Boy',
   gba: 'Nintendo - Game Boy Advance',
@@ -82,6 +85,7 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   atari2600: 'stella2014',
   atari5200: 'a5200',
   atari7800: 'prosystem',
+  fds: 'fceumm',
   gamegear: 'genesis_plus_gx',
   gb: 'mgba',
   gba: 'mgba',
@@ -97,7 +101,9 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   wonderswancolor: 'mednafen_wswan',
 }
 
-export const coreBiosMap = {
+export const systemsNeedsBios = ['arcade', 'fds']
+
+export const coreBiosMap: Record<string, string[]> = {
   fbneo: [
     'neogeo.zip',
     'neocdz.zip',
@@ -122,6 +128,7 @@ export const coreBiosMap = {
     'spec1282a.zip',
     'channelf.zip',
   ],
+  fceumm: ['disksys.rom'],
 }
 
 export const arcadeHardwareBiosMap: Record<string, string[]> = {
@@ -143,6 +150,7 @@ export const extSystemMap: Record<string, SystemName> = {
   a26: 'atari2600',
   a52: 'atari5200',
   a78: 'atari7800',
+  fds: 'fds',
   gb: 'gb',
   gba: 'gba',
   gbc: 'gbc',

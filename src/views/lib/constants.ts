@@ -12,6 +12,8 @@ import arcadeContent from '../../assets/consoles/FBNeo - Arcade Games-content.pn
 import arcade from '../../assets/consoles/FBNeo - Arcade Games.png'
 import gwContent from '../../assets/consoles/Handheld Electronic Game-content.png'
 import gw from '../../assets/consoles/Handheld Electronic Game.png'
+import fdsContent from '../../assets/consoles/Nintendo - Family Computer Disk System-content.png'
+import fds from '../../assets/consoles/Nintendo - Family Computer Disk System.png'
 import gba from '../../assets/consoles/Nintendo - Game Boy Advance AGB-001 B.png'
 import gbaContent from '../../assets/consoles/Nintendo - Game Boy Advance-content.png'
 import gbcContent from '../../assets/consoles/Nintendo - Game Boy Color-content.png'
@@ -41,6 +43,7 @@ export const systemImageMap = {
   atari2600,
   atari5200,
   atari7800,
+  fds,
   gamegear,
   gb,
   gba,
@@ -64,6 +67,7 @@ export const systemContentImageMap = {
   atari2600: atari2600Content,
   atari5200: atari5200Content,
   atari7800: atari7800Content,
+  fds: fdsContent,
   gamegear: gamegearContent,
   gb: gbContent,
   gba: gbaContent,

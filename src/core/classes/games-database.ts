@@ -1,26 +1,18 @@
 import ky from 'ky'
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { parse } from 'path-browserify'
+import { cdnHost, fbneoInfo, libretroDatabaseInfo } from '../constants/dependencies'
 import { systemFullNameMap } from '../constants/systems'
 import { blobToBuffer } from '../helpers/file'
 import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
 import { type Entry } from './libretrodb/types'
 
-const cdnHost = 'https://cdn.jsdelivr.net'
-const cdnType = 'gh'
-
-const dbRepo = 'libretro/libretro-database'
-const dbVersion = 'ee672'
-
-const arcadeGameListRepo = 'libretro/FBNeo'
-const arcadeGameListVersion = '0deef'
-const arcadeGameListPath = 'gamelist.txt'
-const arcadeGameListUrl = `${cdnHost}/${cdnType}/${arcadeGameListRepo}@${arcadeGameListVersion}/${arcadeGameListPath}`
+const arcadeGameListUrl = `${cdnHost}/gh/${fbneoInfo.name}@${fbneoInfo.version}/gamelist.txt`
 
 function getDbUrl(systemFullName: string) {
   const dbPath = `rdb/${systemFullName}.rdb`
-  return `${cdnHost}/${cdnType}/${dbRepo}@${dbVersion}/${dbPath}`
+  return `${cdnHost}/gh/${libretroDatabaseInfo.name}@${libretroDatabaseInfo.version}/${dbPath}`
 }
 
 function normalizeGameName(originalName: string) {

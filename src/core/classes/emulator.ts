@@ -1,8 +1,11 @@
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { type Buffer } from 'buffer/index'
 import delay from 'delay'
 import ini from 'ini'
 import ky from 'ky'
 import { kebabCase } from 'lodash-es'
 import { join } from 'path-browserify'
+import { cdnHost, vendorsInfo } from '../constants/dependencies'
 import { systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { blobToBuffer } from '../helpers/file'
@@ -48,19 +51,14 @@ const raConfigPath = `${raUserdataDir}retroarch.cfg`
 
 const encoder = new TextEncoder()
 
-const cdnHost = 'https://cdn.jsdelivr.net'
-const cdnType = 'npm'
-const vendorsRepo = 'retro-assembly-vendors'
-const vendorsVersion = '1.16.0-202309022354'
-
 function getCoreWasmUrl(coreFileName: string) {
   const corePath = `dist/cores/${coreFileName}_libretro.wasm`
-  return `${cdnHost}/${cdnType}/${vendorsRepo}@${vendorsVersion}/${corePath}`
+  return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
 }
 
 function getCoreJsUrl(coreName: string) {
   const corePath = `dist/cores/${coreName}_libretro.js`
-  return `${cdnHost}/${cdnType}/${vendorsRepo}@${vendorsVersion}/${corePath}`
+  return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
 }
 
 function getEmscriptenModuleOverrides(overrides: Partial<EmscriptenModule>) {

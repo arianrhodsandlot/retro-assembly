@@ -34,12 +34,13 @@ export async function getHistory() {
     throw new Error('fileSystem is not available')
   }
 
-  const historyBlob = await globalContext.fileSystem.getContentAndCache(getHistoryPath())
-  const history = await parseHistoryContent(historyBlob)
-  if (!history) {
-    throw new Error('invalid history')
+  try {
+    const historyBlob = await globalContext.fileSystem.getContentAndCache(getHistoryPath())
+    return await parseHistoryContent(historyBlob)
+  } catch (error) {
+    console.warn(error)
+    return getEmptyHistory()
   }
-  return history
 }
 
 export async function peekHistory() {
@@ -71,7 +72,9 @@ export async function addHistoryItem(rom: Rom) {
   }
 
   const historyPath = getHistoryPath()
+  console.log(1)
   const history = await getHistory()
+  console.log(2)
   const historyItem = { name: rom.fileAccessor.name, relativePath, lastPlayedDate: Date.now(), playedTimes: 1 }
 
   const playedItem = find(history.items, { relativePath })

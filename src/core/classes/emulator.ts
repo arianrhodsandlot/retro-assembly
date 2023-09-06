@@ -114,6 +114,8 @@ interface EmulatorConstructorOptions {
   style?: Partial<CSSStyleDeclaration>
   biosFiles?: { name: string; blob: Blob }[]
   additionalFiles?: { name: string; blob: Blob }[]
+  coreConfig?: Record<string, Record<string, string>>
+  retroarchConfig?: Record<string, string>
 }
 
 export class Emulator {
@@ -125,12 +127,22 @@ export class Emulator {
   gameStatus: 'paused' | 'running' = 'running'
   canvas: HTMLCanvasElement
   emscripten: any
+  coreConfig: Record<string, Record<string, string>> | undefined
+  retroarchConfig: Record<string, string> | undefined
   private previousActiveElement: Element | null
   private messageQueue: [Uint8Array, number][] = []
 
   private hideCursorAbortController: AbortController | undefined
 
-  constructor({ core, rom, style, biosFiles, additionalFiles }: EmulatorConstructorOptions) {
+  constructor({
+    core,
+    rom,
+    style,
+    biosFiles,
+    additionalFiles,
+    coreConfig,
+    retroarchConfig,
+  }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.biosFiles = biosFiles
     this.additionalFiles = additionalFiles
@@ -142,6 +154,8 @@ export class Emulator {
     this.canvas.height = 900
     this.previousActiveElement = document.activeElement
     this.canvas.tabIndex = 0
+    this.coreConfig = coreConfig
+    this.retroarchConfig = retroarchConfig
     updateStyle(this.canvas, {
       backgroundColor: 'black',
       backgroundImage:
@@ -464,26 +478,38 @@ export class Emulator {
     }
   }
 
-  private writeFile({ path, config }) {
+  private writeConfigFile({ path, config }) {
     const { FS } = this.emscripten
     const dir = path.slice(0, path.lastIndexOf('/'))
     FS.mkdirTree(dir)
+    for (const key in config) {
+      config[key] = `__${config[key]}__`
+    }
     // @ts-expect-error `platform` option is not listed in @types/ini for now
-    FS.writeFile(path, ini.stringify(config, { whitespace: true, platform: 'linux' }))
+    let configContent = ini.stringify(config, { whitespace: true, platform: 'linux' })
+    configContent = configContent.replaceAll('__', '"')
+    FS.writeFile(path, configContent)
   }
 
   private setupRaCoreConfigFile() {
-    const raCoreConfig = defaultRetroarchCoresConfig[this.core]
-    if (raCoreConfig) {
+    window.FS = this.emscripten.FS
+    const raCoreConfig = {
+      ...defaultRetroarchCoresConfig[this.core],
+      // ...this.coreConfig?.[this.core],
+    }
+    if (Object.keys(raCoreConfig)) {
       const coreFullName = coreFullNameMap[this.core]
       const raCoreConfigPath = join(raCoreConfigDir, coreFullName, `${coreFullName}.opt`)
-      this.writeFile({ path: raCoreConfigPath, config: raCoreConfig })
+      this.writeConfigFile({ path: raCoreConfigPath, config: raCoreConfig })
     }
   }
 
   private setupRaConfigFile() {
-    const config = getRetroarchConfig()
-    this.writeFile({ path: raConfigPath, config })
+    const config = {
+      ...getRetroarchConfig(),
+      ...this.retroarchConfig,
+    }
+    this.writeConfigFile({ path: raConfigPath, config })
   }
 
   private runMain() {

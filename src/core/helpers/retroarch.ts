@@ -49,6 +49,7 @@ export const defaultRetroarchCoresConfig = {
   },
   mgba: {
     mgba_gb_colors: 'DMG Green',
+    mgba_skip_bios: 'ON',
   },
 }
 

@@ -10,8 +10,8 @@ A personal retro game collection cabinet in your browser.
 <p align="center"><img src="docs/screenshots/home.png"></p>
 
 ## Usage
-1. Visit [retroassembly.com](https://retroassembly.com)
-2. Pick a method you prefer to provide your ROMs
+1. Visit [retroassembly.com](https://retroassembly.com).
+2. Pick a method you prefer to provide your ROMs. For BIOS files, place them into a directory named `system` inside the directory you are picking.
 3. Start to play!
 
 ## Features
@@ -27,8 +27,6 @@ A personal retro game collection cabinet in your browser.
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
-> ⚠️ As this project is still in an early stage, only some of the most popular consoles are supported.
-> However, more consoles will be supported in the future.
 
 <table>
   <thead>
@@ -168,6 +166,17 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     <tr>
       <td>Neo Geo Pocket</td>
       <td><code>.ngp</code>, <code>.zip</code></td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>Arcade</td>
+      <td><code>.zip</code></td>
+      <td>
+        <b>FBNeo</b>
+        <br>
+        <a href="https://github.com/libretro/FBNeo">libretro core</a>,
+        <a href="https://github.com/finalburnneo/FBNeo">origin</a>
+      </td>
     </tr>
   </tbody>
 </table>

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## 2023-09-06
+### Added
+- Add support for using BIOS files in a `system` directory when using certain cores.
+- Add support for arcade games with FBNeo (BIOS files is needed for some games).
+- Add support for Family Computer Disk System (BIOS files is needed).
+
+### Changed
+- Covers are now loaded from cdn.jsdelivr.net instead of thumbnails.libretro.com.
+
 ## 2023-08-09
 ### Added
 - Add a configuration panel for mapping keyboard buttons.

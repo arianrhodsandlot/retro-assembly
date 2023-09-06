@@ -47,6 +47,9 @@ export const defaultRetroarchCoresConfig = {
   fceumm: {
     fceumm_turbo_enable: 'Both',
   },
+  mgba: {
+    mgba_gb_colors: 'DMG Green',
+  },
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity

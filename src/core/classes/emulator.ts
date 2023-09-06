@@ -472,24 +472,12 @@ export class Emulator {
     FS.writeFile(path, ini.stringify(config, { whitespace: true, platform: 'linux' }))
   }
 
-  private getRaCoreConfig() {
-    return defaultRetroarchCoresConfig[this.core]
-  }
-
   private setupRaCoreConfigFile() {
-    const raCoreConfigPathMap = {
-      nestopia: 'Nestopia/Nestopia.opt',
-      fceumm: 'FCEUmm/FCEUmm.opt',
-      gearboy: 'Gearboy/Gearboy.opt',
-      genesis_plus_gx: 'Genesis Plus GX/Genesis Plus GX.opt',
-    }
-    const raCoreConfigPath = raCoreConfigPathMap[this.core] ?? ''
-    const raCoreConfig = this.getRaCoreConfig()
-    if (raCoreConfigPath && raCoreConfig) {
-      this.writeFile({
-        path: join(raCoreConfigDir, raCoreConfigPath),
-        config: raCoreConfig,
-      })
+    const raCoreConfig = defaultRetroarchCoresConfig[this.core]
+    if (raCoreConfig) {
+      const coreFullName = coreFullNameMap[this.core]
+      const raCoreConfigPath = join(raCoreConfigDir, coreFullName, `${coreFullName}.opt`)
+      this.writeFile({ path: raCoreConfigPath, config: raCoreConfig })
     }
   }
 

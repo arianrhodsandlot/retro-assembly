@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - Covers are now loaded from cdn.jsdelivr.net instead of thumbnails.libretro.com.
+- GB games are now using "DMG Green" as its default color palette.
 
 ## 2023-08-09
 ### Added

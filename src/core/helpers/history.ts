@@ -72,9 +72,7 @@ export async function addHistoryItem(rom: Rom) {
   }
 
   const historyPath = getHistoryPath()
-  console.log(1)
   const history = await getHistory()
-  console.log(2)
   const historyItem = { name: rom.fileAccessor.name, relativePath, lastPlayedDate: Date.now(), playedTimes: 1 }
 
   const playedItem = find(history.items, { relativePath })

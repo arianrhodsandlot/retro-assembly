@@ -31,7 +31,7 @@
     "idb": "7.1.1",
     "idb-keyval": "6.2.1",
     "ini": "4.1.1",
-    "jotai": "2.4.1",
+    "jotai": "2.4.2",
     "jquery": "3.7.1",
     "ky": "1.0.1",
     "lodash-es": "4.17.21",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@arianrhodsandlot/eslint-config": "0.8.2",
-    "@iconify/json": "2.2.112",
+    "@iconify/json": "2.2.113",
     "@iconify/tailwind": "0.1.3",
     "@playwright/test": "1.37.1",
     "@sergeymakinen/vite-plugin-html-minimize": "1.0.6",

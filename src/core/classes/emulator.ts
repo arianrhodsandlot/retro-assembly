@@ -495,7 +495,7 @@ export class Emulator {
     window.FS = this.emscripten.FS
     const raCoreConfig = {
       ...defaultRetroarchCoresConfig[this.core],
-      // ...this.coreConfig?.[this.core],
+      ...this.coreConfig?.[this.core],
     }
     if (Object.keys(raCoreConfig)) {
       const coreFullName = coreFullNameMap[this.core]

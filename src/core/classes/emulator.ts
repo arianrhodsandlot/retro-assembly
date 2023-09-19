@@ -492,7 +492,6 @@ export class Emulator {
   }
 
   private setupRaCoreConfigFile() {
-    window.FS = this.emscripten.FS
     const raCoreConfig = {
       ...defaultRetroarchCoresConfig[this.core],
       ...this.coreConfig?.[this.core],

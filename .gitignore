@@ -1,4 +1,6 @@
-dist
 dev-dist
+dist
 node_modules
+test-results
+tests/fixtures
 vendors

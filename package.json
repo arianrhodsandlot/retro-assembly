@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint src"
+    "preview": "vite build && vite preview",
+    "lint": "eslint src",
+    "test-roms": "./scripts/download-test-roms.ts",
+    "test": "playwright test -c tests/e2e"
   },
   "dependencies": {
     "@fontsource-variable/fredoka": "5.0.8",
@@ -72,6 +74,7 @@
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
     "vite": "4.4.9",
-    "vite-plugin-pwa": "0.16.5"
+    "vite-plugin-pwa": "0.16.5",
+    "zx": "7.2.3"
   }
 }

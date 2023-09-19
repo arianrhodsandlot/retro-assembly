@@ -38,7 +38,7 @@ export function LocalFileButton() {
 
   return (
     <>
-      <BaseButton className='w-60' onClick={onClick}>
+      <BaseButton className='w-60' data-testid='select-a-rom' onClick={onClick}>
         <span className='icon-[mdi--zip-box-outline] h-5 w-5' />
         {state.loading ? (
           <>

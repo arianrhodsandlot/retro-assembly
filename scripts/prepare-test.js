@@ -52,7 +52,7 @@ async function downloadTestRoms() {
 
     const roms = testRomsGroups[systemFullName]
     for (const rom of roms) {
-      if (!(await fs.exists(rom))) {
+      if (!(await fs.exists(path.join(systemRomsDirectory, rom)))) {
         const romUrl = `${testRomsBaseUrl}${encodeURIComponent(systemFullName)}/${encodeURIComponent(rom)}`
         await $`curl ${romUrl} -o ${rom}`
       }

@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite build && vite preview",
     "lint": "eslint src",
-    "test-roms": "./scripts/download-test-roms.ts",
+    "prepare-test": "./scripts/prepare-test.js",
     "test": "playwright test -c tests/e2e"
   },
   "dependencies": {

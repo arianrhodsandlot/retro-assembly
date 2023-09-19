@@ -149,13 +149,13 @@ export class Emulator {
     this.core = core ?? ''
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
-    this.canvas.hidden = true
     this.canvas.width = 900
     this.canvas.height = 900
     this.previousActiveElement = document.activeElement
     this.canvas.tabIndex = 0
     this.coreConfig = coreConfig
     this.retroarchConfig = retroarchConfig
+    this.canvas.dataset.testid = 'emulator'
     updateStyle(this.canvas, {
       backgroundColor: 'black',
       backgroundImage:

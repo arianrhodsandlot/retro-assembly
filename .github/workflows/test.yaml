@@ -4,7 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v2
         with:
@@ -16,6 +16,12 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      - uses: actions/cache@v3
+        with:
+          path: tests/fixtures
+          key: tests/fixtures
+
       - run: pnpm lint
       - run: pnpm playwright install
+      - run: pnpm prepare-test
       - run: pnpm t

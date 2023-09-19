@@ -5,7 +5,7 @@ test('play a single ROM file', async ({ page }) => {
   const fileChooserPromise = page.waitForEvent('filechooser')
   await page.getByTestId('select-a-rom').click()
   const fileChooser = await fileChooserPromise
-  await fileChooser.setFiles('tests/fixtures/roms/nes/240p Test Suite.zip')
+  await fileChooser.setFiles('tests/fixtures/roms/nes/240p Test Suite.nes')
 
   const emulator = page.getByTestId('emulator')
   await page.waitForLoadState('networkidle')

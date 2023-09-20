@@ -1,5 +1,5 @@
-import ky from 'ky'
 import { compact, initial, last } from 'lodash-es'
+import { http } from '../../helpers/http'
 import { GoogleDriveClient } from '../cloude-service/google-drive-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
@@ -43,7 +43,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     }
     const fileId = file.id
     const { access_token: accessToken } = gapi.client.getToken()
-    return await ky(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
+    return await http(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
       searchParams: { alt: 'media' },
     }).blob()
@@ -86,7 +86,7 @@ export class GoogleDriveProvider implements FileSystemProvider {
     form.append('metadata', metadataBlob)
     form.append('file', file)
 
-    await ky.post('https://www.googleapis.com/upload/drive/v3/files', {
+    await http.post('https://www.googleapis.com/upload/drive/v3/files', {
       headers: { Authorization: `Bearer ${accessToken}` },
       searchParams: { uploadType: 'multipart', fields: 'id' },
       body: form,

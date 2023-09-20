@@ -2,13 +2,13 @@
 import { type Buffer } from 'buffer/index'
 import delay from 'delay'
 import ini from 'ini'
-import ky from 'ky'
 import { kebabCase } from 'lodash-es'
 import { join } from 'path-browserify'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
 import { coreFullNameMap, systemCoreMap } from '../constants/systems'
 import { createEmscriptenFS } from '../helpers/emscripten-fs'
 import { blobToBuffer } from '../helpers/file'
+import { http } from '../helpers/http'
 import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
@@ -391,8 +391,8 @@ export class Emulator {
     window.setImmediate ??= window.setTimeout
     const coreJsUrl = getCoreJsUrl(this.core)
     const coreWasmUrl = getCoreWasmUrl(this.core)
-    const coreJsRequest = ky(coreJsUrl).text()
-    const coreWasmRequest = ky(coreWasmUrl).arrayBuffer()
+    const coreJsRequest = http(coreJsUrl).text()
+    const coreWasmRequest = http(coreWasmUrl).arrayBuffer()
     const requests = [coreJsRequest, coreWasmRequest] as const
 
     const [jsContentBody, wasmBinary] = await Promise.all(requests)

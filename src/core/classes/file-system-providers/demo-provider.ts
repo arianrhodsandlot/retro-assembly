@@ -1,7 +1,7 @@
 import type { ZipReader } from '@zip.js/zip.js'
-import ky from 'ky'
 import { noop } from 'lodash-es'
 import { basename } from 'path-browserify'
+import { http } from '../../helpers/http'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 
@@ -88,7 +88,7 @@ export class DemoProvider implements FileSystemProvider {
 
   private async getZipReaderPromise() {
     const { BlobReader, ZipReader } = await import('@zip.js/zip.js')
-    const blob = await ky(this.zipUrl).blob()
+    const blob = await http(this.zipUrl).blob()
     const blobReader = new BlobReader(blob)
     return new ZipReader(blobReader)
   }

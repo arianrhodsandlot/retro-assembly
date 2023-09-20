@@ -1,5 +1,5 @@
-import ky from 'ky'
 import queryString from 'query-string'
+import { http } from '../../helpers/http'
 import { OnedriveClient } from '../cloude-service/onedrive-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
@@ -31,7 +31,7 @@ export class OnedriveProvider implements FileSystemProvider {
 
   async getContent(path: string) {
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.request({ api: `/me/drive/root:${path}` })
-    return await ky(downloadUrl).blob()
+    return await http(downloadUrl).blob()
   }
 
   async getContentAndCache(path: string) {

@@ -1,9 +1,9 @@
-import ky from 'ky'
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { parse } from 'path-browserify'
 import { cdnHost, fbneoInfo, libretroDatabaseInfo } from '../constants/dependencies'
 import { systemFullNameMap } from '../constants/systems'
 import { blobToBuffer } from '../helpers/file'
+import { http } from '../helpers/http'
 import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
 import { type Entry } from './libretrodb/types'
@@ -32,7 +32,7 @@ function isSimilarName(name1: string, name2: string) {
 
 const requestMap = new Map()
 function requestWithoutDuplicates(url) {
-  const request = requestMap.get(url) ?? ky(url)
+  const request = requestMap.get(url) ?? http(url)
   requestMap.set(url, request)
   return request
 }
@@ -111,7 +111,7 @@ export class GamesDatabase {
       return
     }
 
-    const gamelistText = await ky(arcadeGameListUrl).text()
+    const gamelistText = await http(arcadeGameListUrl).text()
     const disabledRomPrefix = /^(nes|md|msx|spec|gg|sms|fds|pce|cv)_/
     const gamelist = gamelistText
       .split('\n')

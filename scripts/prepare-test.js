@@ -1,7 +1,6 @@
-#!/usr/bin/env zx
 import { invert } from 'lodash-es'
-import path from 'path-browserify'
-import { $, cd, fs } from 'zx'
+import { mkdirp } from 'mkdirp'
+import { $, cd, fs, path } from 'zx'
 
 const testRomsBaseUrl = 'https://buildbot.libretro.com/assets/cores/'
 
@@ -42,10 +41,10 @@ const wd = process.cwd()
 async function downloadTestRoms() {
   for (const systemFullName in testRomsGroups) {
     const system = systemFullNameMap[systemFullName]
-    const systemRomsDirectory = path.join(wd, 'tests/fixtures/roms', system)
+    const systemRomsDirectory = path.join(wd, 'tests', 'fixtures', 'roms', system)
 
     if (!(await fs.exists(systemRomsDirectory))) {
-      await $`mkdir -p ${systemRomsDirectory}`
+      await mkdirp(systemRomsDirectory)
     }
 
     cd(systemRomsDirectory)

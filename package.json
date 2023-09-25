@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite build && vite preview",
     "lint": "eslint src",
-    "prepare-test": "./scripts/prepare-test.js",
+    "prepare-test": "node ./scripts/prepare-test.js",
     "test": "playwright test -c tests/e2e"
   },
   "dependencies": {
@@ -69,6 +69,7 @@
     "@vitejs/plugin-react-swc": "3.4.0",
     "autoprefixer": "10.4.16",
     "eslint": "8.50.0",
+    "mkdirp": "3.0.1",
     "postcss": "8.4.30",
     "sass": "1.68.0",
     "tailwindcss": "3.3.3",

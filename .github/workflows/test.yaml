@@ -3,6 +3,10 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment:
+      name: test
+    env:
+      VITE_ONEDRIVE_CLIENT_ID: ${{ vars.VITE_ONEDRIVE_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -18,10 +22,11 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: tests/fixtures
-          key: tests/fixtures
+          path: tests/fixtures/roms
+          key: tests/fixtures/roms
 
       - run: pnpm lint
-      - run: pnpm playwright install
+      - run: env
+      - run: pnpm playwright install chromium
       - run: pnpm prepare-test
       - run: pnpm t

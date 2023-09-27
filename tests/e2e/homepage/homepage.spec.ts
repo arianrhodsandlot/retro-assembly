@@ -12,21 +12,20 @@ function setMockLocalStorage() {
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
-  await page.bringToFront()
 
   const dialog = page.getByRole('dialog')
 
+  const button = page.getByTestId('select-onedrive-directory')
   if (isUpdatingHar) {
     await page.routeFromHAR(harPath, { url: harUrlPattern, update: true, updateMode: 'minimal' })
-    const button = page.getByTestId('select-onedrive-directory')
     await button.click()
     await dialog.getByRole('link').click()
   } else {
     await page.evaluate(setMockLocalStorage)
     await page.routeFromHAR(harPath, { url: harUrlPattern })
-    const button = page.getByTestId('select-onedrive-directory')
     await button.click()
   }
+
   const node = dialog.getByTestId('directory-tree-node')
   await node.filter({ hasText: 'games' }).click()
   await node.filter({ hasText: 'retro-game-roms-test' }).getByRole('button').click()

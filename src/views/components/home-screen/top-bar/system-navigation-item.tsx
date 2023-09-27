@@ -46,6 +46,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
       onClick={() => setCurrentSystemName(system.name)}
       onFocus={onFocus}
       ref={button}
+      title={system.fullName}
     >
       <div className={clsx('relative z-[1] flex items-center justify-center')}>
         <div className={clsx('flex items-center justify-center')}>

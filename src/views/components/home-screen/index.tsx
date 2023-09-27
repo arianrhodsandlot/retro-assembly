@@ -143,7 +143,7 @@ export function HomeScreen() {
           <>
             <div className='h-full w-full' ref={gridContainerRef}>
               <GameEntryGrid
-                className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
+                className='a game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
                 columnCount={columnCount}
                 columnWidth={columnWidth}
                 height={gridHeight}

@@ -12,9 +12,10 @@ export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(fun
   return (
     <button
       ref={ref}
+      type='button'
       {...props}
       className={clsx(
-        'relative h-16 text-sm  transition-[opacity,background-color]',
+        'relative h-16 text-sm transition-[opacity,background-color]',
         'after:absolute after:inset-0 after:z-0 after:transition-[background-color,border-width]',
         { 'after:bg-white': highlighted },
         highlighted ? 'hover:after:bg-white' : 'hover:after:bg-rose-900',

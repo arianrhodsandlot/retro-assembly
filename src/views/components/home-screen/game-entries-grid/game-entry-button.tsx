@@ -19,7 +19,7 @@ export function GameEntryButton({
   ...props
 }: GameEntryButtonProps) {
   return (
-    <button className='group relative' {...props}>
+    <button className='group relative' {...props} data-testid='game-entry-button'>
       <div
         className={clsx(
           'opacity-1 block h-full w-full bg-gray-100 text-left transition-transform group-focus:transform-gpu',

@@ -26,7 +26,6 @@ jobs:
           key: tests/fixtures/roms
 
       - run: pnpm lint
-      - run: env
       - run: pnpm playwright install chromium
       - run: pnpm prepare-test
       - run: pnpm t

@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite build && vite preview",
+    "dev-test": "playwright test -c tests/e2e --headed --ui",
+    "dev": "vite",
     "lint": "eslint src",
     "prepare-test": "node ./scripts/prepare-test.js",
+    "preview": "vite build && vite preview",
     "test": "playwright test -c tests/e2e"
   },
   "dependencies": {

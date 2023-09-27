@@ -98,6 +98,7 @@ export function CloudServiceLoginButton({
   return (
     <div className='flex flex-col items-stretch justify-center gap-y-4 px-10'>
       <BaseButton
+        data-testid='authorize-link'
         href={authorizeUrlState.value}
         onClick={login}
         rel='noreferrer'

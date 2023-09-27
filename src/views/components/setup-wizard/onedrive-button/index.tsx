@@ -33,7 +33,7 @@ export function OnedriveButton() {
         </div>
       }
     >
-      <BaseButton styleType='primary'>
+      <BaseButton data-testid='select-onedrive-directory' styleType='primary'>
         <span className='icon-[logos--microsoft-onedrive] h-5 w-5' />
         OneDrive
       </BaseButton>

@@ -24,7 +24,7 @@ export default defineConfig(async () => {
       htmlMinimize.default(),
       VitePWA({
         registerType: 'autoUpdate',
-        devOptions: { enabled: true },
+        devOptions: { enabled: false },
         manifest: {
           name: 'Retro Assembly',
           short_name: 'Retro Assembly',

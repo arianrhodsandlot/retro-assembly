@@ -2,5 +2,5 @@ dev-dist
 dist
 node_modules
 test-results
-tests/fixtures
+tests/fixtures/roms
 vendors

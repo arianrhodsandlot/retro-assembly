@@ -39,7 +39,10 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
 
   return (
     <div>
-      <div className='flex items-center rounded p-2 py-1 transition-[background-color,color] hover:bg-rose-100 hover:text-rose-700'>
+      <div
+        className='flex items-center rounded p-2 py-1 transition-[background-color,color] hover:bg-rose-100 hover:text-rose-700'
+        data-testid='directory-tree-node'
+      >
         {node.isDirectory ? (
           node.expanded ? (
             <span className='icon-[mdi--folder-open] mr-2 h-6 w-6 text-rose-500' />

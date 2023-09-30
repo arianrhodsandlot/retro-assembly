@@ -59,6 +59,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
         <div className='absolut inset-y-10 flex w-full flex-col justify-center text-xl'>
           <button
             className={menuButtonClassNames}
+            data-testid='menu-item-resume'
             onClick={onResume}
             onFocus={() => setShowStateList(false)}
             ref={firstButtonRef}
@@ -67,14 +68,24 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             Resume
           </button>
 
-          <button className={menuButtonClassNames} onClick={onRestart} onFocus={() => setShowStateList(false)}>
+          <button
+            className={menuButtonClassNames}
+            data-testid='menu-item-restart'
+            onClick={onRestart}
+            onFocus={() => setShowStateList(false)}
+          >
             <span className='icon-[mdi--restart] mr-2 h-6 w-6' />
             Restart
           </button>
 
           {!hideNonEssentialItems && (
             <>
-              <button className={menuButtonClassNames} onClick={onSaveState} onFocus={() => setShowStateList(false)}>
+              <button
+                className={menuButtonClassNames}
+                data-testid='menu-item-save-state'
+                onClick={onSaveState}
+                onFocus={() => setShowStateList(false)}
+              >
                 <span className='icon-[mdi--content-save] mr-2 h-6 w-6' />
                 Save state
               </button>
@@ -83,6 +94,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
                 className={clsx(menuButtonClassNames, {
                   'bg-white text-rose-700': showStateList,
                 })}
+                data-testid='menu-item-load-state'
                 onClick={() => setShouldFocusStatesList(true)}
                 onFocus={onLoadStateButtonFocus}
               >
@@ -90,7 +102,12 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
                 Load state
               </button>
 
-              <button className={menuButtonClassNames} onClick={onSaveAndExit} onFocus={() => setShowStateList(false)}>
+              <button
+                className={menuButtonClassNames}
+                data-testid='menu-item-save-and-exit'
+                onClick={onSaveAndExit}
+                onFocus={() => setShowStateList(false)}
+              >
                 <span className='icon-[mdi--location-exit] mr-2 h-6 w-6' />
                 Save & exit
               </button>

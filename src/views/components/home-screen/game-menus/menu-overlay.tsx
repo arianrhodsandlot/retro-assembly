@@ -51,7 +51,7 @@ export function MenuOverlay() {
   }
 
   return (
-    <div className='menu-overlay h-full w-full py-10'>
+    <div className='menu-overlay h-full w-full py-10' data-testid='menu-overlay'>
       {saveStateState.loading ? (
         <LoadingScreen>
           Saving <BouncingEllipsis /> Please do not turn off your device!

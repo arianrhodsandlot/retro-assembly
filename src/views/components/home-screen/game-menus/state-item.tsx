@@ -15,6 +15,7 @@ export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function 
         'group mt-10 flex max-w-2xl flex-shrink-0 items-center overflow-hidden rounded border-4 border-white bg-black/90 first:mt-0',
         'focus:animate-[pulse-white-border_1.5s_ease-in-out_infinite] focus:text-rose-700',
       )}
+      data-testid='state-item'
       onClick={() => onSelect(state.id)}
       ref={ref}
     >

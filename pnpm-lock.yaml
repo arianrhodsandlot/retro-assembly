@@ -142,6 +142,9 @@ devDependencies:
   '@types/ini':
     specifier: 1.3.31
     version: 1.3.31
+  '@types/is-ci':
+    specifier: 3.0.1
+    version: 3.0.1
   '@types/jquery':
     specifier: 3.5.19
     version: 3.5.19
@@ -175,6 +178,9 @@ devDependencies:
   eslint:
     specifier: 8.50.0
     version: 8.50.0
+  is-ci:
+    specifier: 3.0.1
+    version: 3.0.1
   mkdirp:
     specifier: 3.0.1
     version: 3.0.1
@@ -1822,8 +1828,8 @@ packages:
       '@types/gapi.client.discovery-v1': 0.0.1
     dev: true
 
-  /@maxim_mazurok/gapi.client.drive-v3@0.0.20230920:
-    resolution: {integrity: sha512-phWG1o6tIwpKB35B/xSUllQ4zqLvBgfTkJj1lHMrkXM2ToHNQ/o4H8p+MG5mIP/c+sgi9gcCxgKURkMyhabDsQ==}
+  /@maxim_mazurok/gapi.client.drive-v3@0.0.20230926:
+    resolution: {integrity: sha512-0cEjww5qUrKrmFgKPHJePMjBlEozi6cW8xSNzX3Sz89OEImDMN3X5laW2SqLoJ7GuzRif8s0ahnz21g9OlknfA==}
     dependencies:
       '@types/gapi.client': 1.0.6
       '@types/gapi.client.discovery-v1': 0.0.1
@@ -2554,7 +2560,7 @@ packages:
   /@types/gapi.client.drive-v3@0.0.1:
     resolution: {integrity: sha512-tIvUpcfeTZI5yRYWAPo/kx6w8kAfW8HeOAJPmXlhVpSBUO8R4hUVZiZhuc6PxNtQkI6LKXeyOuJv70Nd3Nb/8g==}
     dependencies:
-      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20230920
+      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20230926
     dev: true
 
   /@types/gapi.client@1.0.6:
@@ -2571,6 +2577,12 @@ packages:
 
   /@types/ini@1.3.31:
     resolution: {integrity: sha512-8ecxxaG4AlVEM1k9+BsziMw8UsX0qy3jYI1ad/71RrDZ+rdL6aZB0wLfAuflQiDhkD5o4yJ0uPK3OSUic3fG0w==}
+    dev: true
+
+  /@types/is-ci@3.0.1:
+    resolution: {integrity: sha512-mnb1ngaGQPm6LFZaNdh3xPOoQMkrQb/KBPhPPN2p2Wk8XgeUqWj6xPnvyQ8rvcK/VFritVmQG8tvQuy7g+9/nQ==}
+    dependencies:
+      ci-info: 3.8.0
     dev: true
 
   /@types/jquery@3.5.19:
@@ -4794,6 +4806,13 @@ packages:
   /is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
+    dev: true
+
+  /is-ci@3.0.1:
+    resolution: {integrity: sha512-ZYvCgrefwqoQ6yTyYUbQu64HsITZ3NfKX1lzaEYdkTDcfKzzCI/wthRRYKkdjHKFVgNiXKAKm65Zo1pk2as/QQ==}
+    hasBin: true
+    dependencies:
+      ci-info: 3.8.0
     dev: true
 
   /is-core-module@2.13.0:

@@ -1,112 +1,8 @@
-// eslint-disable-next-line unicorn/prefer-node-protocol
-import { type Buffer } from 'buffer/index'
 import delay from 'delay'
-import ini from 'ini'
-import { kebabCase } from 'lodash-es'
-import { join } from 'path-browserify'
+import { type Nostalgist } from 'nostalgist'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
-import { coreFullNameMap, systemCoreMap } from '../constants/systems'
-import { createEmscriptenFS } from '../helpers/emscripten-fs'
-import { blobToBuffer } from '../helpers/file'
-import { http } from '../helpers/http'
-import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
+import { systemCoreMap } from '../constants/systems'
 import { type Rom } from './rom'
-
-// Commands reference https://docs.libretro.com/development/retroarch/network-control-interface/
-type RetroArchCommand =
-  | 'FAST_FORWARD'
-  | 'FAST_FORWARD_HOLD'
-  | 'LOAD_STATE'
-  | 'SAVE_STATE'
-  | 'FULLSCREEN_TOGGLE'
-  | 'QUIT'
-  | 'STATE_SLOT_PLUS'
-  | 'STATE_SLOT_MINUS'
-  | 'REWIND'
-  | 'MOVIE_RECORD_TOGGLE'
-  | 'PAUSE_TOGGLE'
-  | 'FRAMEADVANCE'
-  | 'RESET'
-  | 'SHADER_NEXT'
-  | 'SHADER_PREV'
-  | 'CHEAT_INDEX_PLUS'
-  | 'CHEAT_INDEX_MINUS'
-  | 'CHEAT_TOGGLE'
-  | 'SCREENSHOT'
-  | 'MUTE'
-  | 'NETPLAY_FLIP'
-  | 'SLOWMOTION'
-  | 'VOLUME_UP'
-  | 'VOLUME_DOWN'
-  | 'OVERLAY_NEXT'
-  | 'DISK_EJECT_TOGGLE'
-  | 'DISK_NEXT'
-  | 'DISK_PREV'
-  | 'GRAB_MOUSE_TOGGLE'
-  | 'MENU_TOGGLE'
-
-const raUserdataDir = '/home/web_user/retroarch/userdata/'
-const raCoreConfigDir = `${raUserdataDir}config/`
-const raConfigPath = `${raUserdataDir}retroarch.cfg`
-
-const encoder = new TextEncoder()
-
-function getCoreWasmUrl(coreFileName: string) {
-  const corePath = `dist/cores/${coreFileName}_libretro.wasm`
-  return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
-}
-
-function getCoreJsUrl(coreName: string) {
-  const corePath = `dist/cores/${coreName}_libretro.js`
-  return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
-}
-
-function getEmscriptenModuleOverrides(overrides: Partial<EmscriptenModule>) {
-  let resolveRunDependenciesPromise: () => void
-  const runDependenciesPromise = new Promise<void>((resolve) => {
-    resolveRunDependenciesPromise = resolve
-  })
-
-  return {
-    noInitialRun: true,
-    noExitRuntime: false,
-
-    print(...args: unknown[]) {
-      console.info(...args)
-    },
-
-    printErr(...args: unknown[]) {
-      console.error(...args)
-    },
-
-    quit(status: unknown, toThrow: unknown) {
-      if (status) {
-        console.info(status, toThrow)
-      }
-    },
-
-    async monitorRunDependencies(left: number) {
-      if (left === 0) {
-        resolveRunDependenciesPromise()
-      }
-      return await runDependenciesPromise
-    },
-    ...overrides,
-  }
-}
-
-function updateStyle(element: HTMLElement, style: Partial<CSSStyleDeclaration>) {
-  if (!element) {
-    return
-  }
-  for (const rule in style) {
-    if (style[rule]) {
-      element.style.setProperty(kebabCase(rule), style[rule] as string)
-    } else {
-      element.style.removeProperty(rule)
-    }
-  }
-}
 
 interface EmulatorConstructorOptions {
   core?: string
@@ -118,6 +14,22 @@ interface EmulatorConstructorOptions {
   retroarchConfig?: Record<string, string>
 }
 
+const defaultStyle = {
+  backgroundColor: 'black',
+  backgroundImage:
+    'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #222 25%, #222 75%, #000 75%, #000)',
+  backgroundPosition: '0 0,15px 15px',
+  backgroundSize: '30px 30px',
+  cursor: 'default',
+  display: 'block',
+  imageRendering: 'pixelated', // this boosts performance!
+  inset: '0',
+  maxHeight: '100%',
+  maxWidth: '100%',
+  position: 'fixed',
+  zIndex: '10',
+}
+
 export class Emulator {
   core = ''
   rom?: Rom
@@ -126,11 +38,11 @@ export class Emulator {
   processStatus: 'initial' | 'ready' | 'terminated' = 'initial'
   gameStatus: 'paused' | 'running' = 'running'
   canvas: HTMLCanvasElement
-  emscripten: any
+  style: Partial<CSSStyleDeclaration>
+  nostalgist: Nostalgist | undefined
   coreConfig: Record<string, Record<string, string>> | undefined
   retroarchConfig: Record<string, string> | undefined
   private previousActiveElement: Element | null
-  private messageQueue: [Uint8Array, number][] = []
 
   private hideCursorAbortController: AbortController | undefined
 
@@ -156,142 +68,90 @@ export class Emulator {
     this.coreConfig = coreConfig
     this.retroarchConfig = retroarchConfig
     this.canvas.dataset.testid = 'emulator'
-    updateStyle(this.canvas, {
-      backgroundColor: 'black',
-      backgroundImage:
-        'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #222 25%, #222 75%, #000 75%, #000)',
-      backgroundPosition: '0 0,15px 15px',
-      backgroundSize: '30px 30px',
-      cursor: 'default',
-      display: 'block',
-      imageRendering: 'pixelated', // this boosts performance!
-      inset: '0',
-      maxHeight: '100%',
-      maxWidth: '100%',
-      position: 'fixed',
-      visibility: 'hidden',
-      zIndex: '10',
-      ...style,
-    })
+    this.style = { ...defaultStyle, ...style }
 
     this.resizeCanvas = this.resizeCanvas.bind(this)
     this.showCanvasCusor = this.showCanvasCusor.bind(this)
   }
 
-  private get stateFileName() {
-    if (!this.rom) {
-      throw new Error('rom is not ready')
-    }
-    const { name } = this.rom.fileAccessor
-    const baseName = name.slice(0, name.lastIndexOf('.'))
-    const coreFullName = coreFullNameMap[this.core]
-    return `${raUserdataDir}states/${coreFullName}/${baseName}.state`
-  }
-
-  private get stateThumbnailFileName() {
-    return `${this.stateFileName}.png`
-  }
-
   async launch(waitForUserInteraction?: () => Promise<void>) {
-    if (this.rom) {
-      // todo: maybe this is not necessary
-      await this.rom.ready()
-      this.core = systemCoreMap[this.rom.system]
+    if (!this.rom) {
+      throw new Error('invalid rom')
     }
 
-    if (this.isTerminated()) {
-      this.forceExit()
-      return
+    // todo: maybe this is not necessary
+    await this.rom.ready()
+    this.core = systemCoreMap[this.rom.system]
+
+    if (!this.rom) {
+      throw new Error('invalid rom')
     }
 
-    if (!this.core) {
-      throw new Error('Invalid core')
-    }
-    await this.setupEmscripten()
+    const fileName = this.rom.fileAccessor.name
+    const fileContent = await this.rom.getBlob()
 
-    if (this.isTerminated()) {
-      this.forceExit()
-      return
-    }
+    const { Nostalgist } = await import('nostalgist')
 
-    this.setupRaConfigFile()
-    this.setupRaCoreConfigFile()
+    this.nostalgist = await Nostalgist.launch({
+      style: this.style,
+      core: this.core,
+      rom: [
+        { fileName, fileContent },
+        ...(this.additionalFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
+        ...(this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
+      ],
 
-    await waitForUserInteraction?.()
+      async waitForInteraction({ done }) {
+        await waitForUserInteraction?.()
+        done()
+      },
 
-    this.runMain()
+      resolveCoreJs(core) {
+        const corePath = `dist/cores/${core}_libretro.js`
+        return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
+      },
 
-    this.setupDOM()
-    this.canvas.focus()
-
-    this.processStatus = 'ready'
+      resolveCoreWasm(core) {
+        const corePath = `dist/cores/${core}_libretro.wasm`
+        return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
+      },
+    })
   }
 
   resume() {
-    if (this.gameStatus === 'paused') {
-      this.sendCommand('PAUSE_TOGGLE')
-    }
-    this.gameStatus = 'running'
+    this.nostalgist?.resume()
   }
 
   restart() {
-    this.sendCommand('RESET')
-    this.resume()
+    this.nostalgist?.resume()
   }
 
   pause() {
-    if (this.gameStatus === 'running') {
-      this.sendCommand('PAUSE_TOGGLE')
-    }
-    this.gameStatus = 'paused'
+    this.nostalgist?.pause()
   }
 
   async saveState() {
-    this.clearStateFile()
-    if (!this.rom || !this.emscripten) {
-      return
+    if (!this.nostalgist) {
+      throw new Error('invalid nostalgist')
     }
-    this.sendCommand('SAVE_STATE')
-    const shouldSaveThumbnail = true
-    let stateBuffer: Buffer
-    let stateThumbnailBuffer: Buffer | undefined
-    if (shouldSaveThumbnail) {
-      ;[stateBuffer, stateThumbnailBuffer] = await Promise.all([
-        this.waitForEmscriptenFile(this.stateFileName),
-        this.waitForEmscriptenFile(this.stateThumbnailFileName),
-      ])
-    } else {
-      stateBuffer = await this.waitForEmscriptenFile(this.stateFileName)
-    }
-    this.clearStateFile()
+
+    const { state, thumbnail } = await this.nostalgist.saveState()
     return {
       name: this.rom?.fileAccessor.name,
       core: this.core,
       createTime: Date.now(),
-      blob: new Blob([stateBuffer], { type: 'application/octet-stream' }),
-      thumbnailBlob: stateThumbnailBuffer ? new Blob([stateThumbnailBuffer], { type: 'image/png' }) : undefined,
+      blob: state,
+      thumbnailBlob: thumbnail,
     }
   }
 
-  async loadState(blob: Blob) {
-    this.clearStateFile()
-    if (this.emscripten) {
-      const { FS } = this.emscripten
-      const buffer = await blobToBuffer(blob)
-      FS.writeFile(this.stateFileName, buffer)
-      await this.waitForEmscriptenFile(this.stateFileName)
-      this.sendCommand('LOAD_STATE')
-    }
+  loadState(blob: Blob) {
+    this.nostalgist?.loadState(blob)
   }
 
-  exit(statusCode = 0) {
-    this.processStatus = 'terminated'
-    if (this.emscripten) {
-      const { FS, exit, JSEvents } = this.emscripten
-      exit(statusCode)
-      FS.unmount('/home')
-      JSEvents.removeAllEventListeners()
-    }
+  exit() {
+    this.nostalgist?.exit()
+
     this.cleanupDOM()
     // @ts-expect-error try to focus on previous active element
     this.previousActiveElement?.focus?.()
@@ -310,258 +170,13 @@ export class Emulator {
     } catch {}
   }
 
-  private sendCommand(msg: RetroArchCommand) {
-    const bytes = encoder.encode(`${msg}\n`)
-    this.messageQueue.push([bytes, 0])
-  }
-
-  // copied from https://github.com/libretro/RetroArch/pull/15017
-  private stdin() {
-    const { messageQueue } = this
-    // Return ASCII code of character, or null if no input
-    while (messageQueue.length > 0) {
-      const msg = messageQueue[0][0]
-      const index = messageQueue[0][1]
-      if (index >= msg.length) {
-        messageQueue.shift()
-      } else {
-        messageQueue[0][1] = index + 1
-        // assumption: msg is a uint8array
-        return msg[index]
-      }
-    }
-    return null
-  }
-
-  private clearStateFile() {
-    const { FS } = this.emscripten
-    try {
-      FS.unlink(this.stateFileName)
-      FS.unlink(this.stateThumbnailFileName)
-    } catch {}
-  }
-
-  private async waitForEmscriptenFile(fileName) {
-    const { FS } = this.emscripten
-    const maxRetries = 30
-    let buffer
-    let isFinished = false
-    let retryTimes = 0
-    while (retryTimes <= maxRetries && !isFinished) {
-      const delayTime = Math.min(100 * 2 ** retryTimes, 1000)
-      await delay(delayTime)
-      try {
-        const newBuffer = FS.readFile(fileName).buffer
-        isFinished = buffer?.byteLength > 0 && buffer?.byteLength === newBuffer.byteLength
-        buffer = newBuffer
-      } catch (error) {
-        console.warn(error)
-      }
-      retryTimes += 1
-    }
-    if (!isFinished) {
-      throw new Error('fs timeout')
-    }
-    return buffer
-  }
-
-  private isTerminated() {
-    return this.processStatus === 'terminated'
-  }
-
-  private forceExit() {
-    this.processStatus = 'terminated'
-    const { FS, exit, JSEvents } = this.emscripten || {}
-    try {
-      exit(0)
-    } catch {}
-    try {
-      FS.unmount('/home')
-    } catch {}
-    try {
-      JSEvents.removeAllEventListeners()
-    } catch {}
-    try {
-      this.cleanupDOM()
-    } catch {}
-  }
-
-  private async setupEmscripten() {
-    // @ts-expect-error for retroarch fast forward
-    window.setImmediate ??= window.setTimeout
-    const coreJsUrl = getCoreJsUrl(this.core)
-    const coreWasmUrl = getCoreWasmUrl(this.core)
-    const coreJsRequest = http(coreJsUrl).text()
-    const coreWasmRequest = http(coreWasmUrl).arrayBuffer()
-    const requests = [coreJsRequest, coreWasmRequest] as const
-
-    const [jsContentBody, wasmBinary] = await Promise.all(requests)
-
-    const jsContent = `
-    export function getEmscripten({ Module }) {
-      ${jsContentBody}
-      return { PATH, FS, ERRNO_CODES, JSEvents, ENV, Module, exit: _emscripten_force_exit }
-    }
-    `
-    const jsBlob = new Blob([jsContent], { type: 'application/javascript' })
-    const jsBlobUrl = URL.createObjectURL(jsBlob)
-    const { getEmscripten } = await import(/* @vite-ignore */ jsBlobUrl)
-    URL.revokeObjectURL(jsBlobUrl)
-
-    const initialModule = getEmscriptenModuleOverrides({ wasmBinary })
-    this.emscripten = getEmscripten({ Module: initialModule })
-    document.body.append(this.canvas)
-    document.body.style.setProperty('overflow', 'hidden')
-
-    const { Module } = this.emscripten
-    await Promise.all([await this.setupFileSystem(), await Module.monitorRunDependencies()])
-  }
-
-  private async setupFileSystem() {
-    const { Module, FS, PATH, ERRNO_CODES } = this.emscripten
-
-    Module.canvas = this.canvas
-    Module.preRun = [
-      () =>
-        FS.init(() => {
-          return this.stdin()
-        }),
-    ]
-
-    const emscriptenFS = await createEmscriptenFS({ FS, PATH, ERRNO_CODES })
-    FS.mount(emscriptenFS, { root: '/home' }, '/home')
-
-    if (this.rom) {
-      FS.mkdirTree(`${raUserdataDir}content/`)
-    }
-
-    // a hack used for waiting for wasm's instantiation.
-    // it's dirty but it works
-    const maxWaitTime = 100
-    let waitTime = 0
-    while (!Module.asm && waitTime < maxWaitTime) {
-      await delay(10)
-      waitTime += 5
-    }
-
-    if (this.rom) {
-      const blob = await this.rom.getBlob()
-      const fileName = this.rom.fileAccessor.name
-      const buffer = await blobToBuffer(blob)
-      FS.createDataFile('/', fileName, buffer, true, false)
-      const data = FS.readFile(fileName, { encoding: 'binary' })
-      FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })
-      FS.unlink(fileName)
-
-      if (this.additionalFiles) {
-        for (const { name, blob } of this.additionalFiles) {
-          const fileName = name
-          const buffer = await blobToBuffer(blob)
-          FS.createDataFile('/', fileName, buffer, true, false)
-          const data = FS.readFile(fileName, { encoding: 'binary' })
-          FS.writeFile(`${raUserdataDir}content/${fileName}`, data, { encoding: 'binary' })
-          FS.unlink(fileName)
-        }
-      }
-    }
-
-    if (this.biosFiles) {
-      FS.mkdirTree(`${raUserdataDir}system/`)
-      for (const { name, blob } of this.biosFiles) {
-        const fileName = name
-        const buffer = await blobToBuffer(blob)
-        FS.createDataFile('/', fileName, buffer, true, false)
-        const data = FS.readFile(fileName, { encoding: 'binary' })
-        FS.writeFile(`${raUserdataDir}system/${fileName}`, data, { encoding: 'binary' })
-        FS.unlink(fileName)
-      }
-    }
-  }
-
-  private writeConfigFile({ path, config }) {
-    const { FS } = this.emscripten
-    const dir = path.slice(0, path.lastIndexOf('/'))
-    FS.mkdirTree(dir)
-    for (const key in config) {
-      config[key] = `__${config[key]}__`
-    }
-    // @ts-expect-error `platform` option is not listed in @types/ini for now
-    let configContent = ini.stringify(config, { whitespace: true, platform: 'linux' })
-    configContent = configContent.replaceAll('__', '"')
-    FS.writeFile(path, configContent)
-  }
-
-  private setupRaCoreConfigFile() {
-    const raCoreConfig = {
-      ...defaultRetroarchCoresConfig[this.core],
-      ...this.coreConfig?.[this.core],
-    }
-    if (Object.keys(raCoreConfig)) {
-      const coreFullName = coreFullNameMap[this.core]
-      const raCoreConfigPath = join(raCoreConfigDir, coreFullName, `${coreFullName}.opt`)
-      this.writeConfigFile({ path: raCoreConfigPath, config: raCoreConfig })
-    }
-  }
-
-  private setupRaConfigFile() {
-    const config = {
-      ...getRetroarchConfig(),
-      ...this.retroarchConfig,
-    }
-    this.writeConfigFile({ path: raConfigPath, config })
-  }
-
-  private runMain() {
-    const { Module, JSEvents } = this.emscripten
-    const raArgs: string[] = []
-    if (this.rom) {
-      raArgs.push(`/home/web_user/retroarch/userdata/content/${this.rom.fileAccessor.name}`)
-    }
-    Module.callMain(raArgs)
-
-    // Emscripten module register keyboard events to document, which make custome interactions unavilable.
-    // Let's modify the default event liseners
-    const keyboardEvents = new Set(['keyup', 'keydown', 'keypress'])
-    const globalKeyboardEventHandlers = JSEvents.eventHandlers.filter(
-      ({ eventTypeString, target }) => keyboardEvents.has(eventTypeString) && target === document,
-    )
-    for (const globalKeyboardEventHandler of globalKeyboardEventHandlers) {
-      const { eventTypeString, target, handlerFunc } = globalKeyboardEventHandler
-      JSEvents.registerOrRemoveHandler({ eventTypeString, target })
-      JSEvents.registerOrRemoveHandler({
-        ...globalKeyboardEventHandler,
-        handlerFunc: (...args) => {
-          const [event] = args
-          if (event?.target === this.canvas) {
-            handlerFunc(...args)
-          }
-        },
-      })
-    }
-  }
-
   private resizeCanvas() {
     requestAnimationFrame(() => {
-      const { Module } = this.emscripten
-      Module.setCanvasSize(innerWidth, innerHeight)
+      this.nostalgist?.resize({
+        width: innerWidth,
+        height: innerHeight,
+      })
     })
-  }
-
-  private setupDOM() {
-    this.resizeCanvas()
-    this.showCanvasCusor()
-
-    document.body.addEventListener('mousemove', this.showCanvasCusor, false)
-    window.addEventListener('resize', this.resizeCanvas, false)
-    document.body.style.setProperty('overflow', 'hidden')
-    updateStyle(this.canvas, { visibility: 'visible' })
-
-    // tell retroarch that controllers are connected
-    for (const gamepad of navigator.getGamepads?.() ?? []) {
-      if (gamepad) {
-        window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
-      }
-    }
   }
 
   private cleanupDOM() {

@@ -7,6 +7,7 @@ import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
 import { historyDummySystem } from './constants'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
+import { GameLaunching } from './game-launching'
 import { GameMenus } from './game-menus'
 import { HomeScreenLayout } from './home-screen-layout'
 import { InputTips } from './input-tips'
@@ -152,6 +153,8 @@ export function HomeScreen() {
                 rowHeight={columnWidth}
                 width={gridWidth}
               />
+
+              <GameLaunching />
             </div>
 
             <GameMenus />

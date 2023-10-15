@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { type Rom, launchGame } from '../../core'
 
 const isAppleMobile = /iphone|ipad|ipod/i.test(navigator.userAgent)
 const isChromeLike = /chrome/i.test(navigator.userAgent)
@@ -19,9 +20,17 @@ export function useUserInteraction() {
       setFinishInteraction(() => resolve)
     })
   }
+
   function onUserInteract() {
     setShowInteractionButton(false)
     finishInteraction?.()
+  }
+
+  async function launchGame_(rom: Rom | undefined) {
+    if (!rom) {
+      return
+    }
+    await (needsUserInteraction ? launchGame(rom, { waitForUserInteraction }) : launchGame(rom))
   }
 
   return {
@@ -31,5 +40,6 @@ export function useUserInteraction() {
     onUserInteract,
     waitForUserInteraction,
     setNeedsUserInteraction,
+    launchGame: launchGame_,
   }
 }

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test'
 test('play a single ROM file', async ({ page }) => {
   await page.goto('/')
 
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
   await expect(emulator).not.toBeAttached()
 
   const fileChooserPromise = page.waitForEvent('filechooser')

@@ -75,8 +75,8 @@ dependencies:
     specifier: 3.0.1
     version: 3.0.1
   nostalgist:
-    specifier: 0.4.0
-    version: 0.4.0
+    specifier: 0.4.1
+    version: 0.4.1
   p-queue:
     specifier: 7.4.1
     version: 7.4.1
@@ -167,7 +167,7 @@ devDependencies:
     specifier: 10.4.16
     version: 10.4.16(postcss@8.4.31)
   browserfs:
-    specifier: ^1.4.3
+    specifier: 1.4.3
     version: 1.4.3
   eslint:
     specifier: 8.51.0
@@ -5435,8 +5435,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /nostalgist@0.4.0:
-    resolution: {integrity: sha512-EPJcYhN0f1P8HAEnresDq5iZFD9w0ipFubqFMqffgRDO0QkfF6ji7H/QGkPUbOXk/0B7GS+v/gQGGhL//3Vzdg==}
+  /nostalgist@0.4.1:
+    resolution: {integrity: sha512-kubmBx5ZQtYB/i8dFn+Hx/FVnR0kItoT43+e8YzspI4pqqqJl7cbeRTt8VqgcpXZwHgldUiq9R+6oxxnHQa/xg==}
     dev: false
 
   /npm-run-path@4.0.1:

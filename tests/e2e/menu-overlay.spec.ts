@@ -33,7 +33,7 @@ test.beforeEach(async ({ page }) => {
   await expect(dialog).not.toBeVisible()
 
   await page.getByTestId('game-entry-button').click()
-  await page.getByTestId('emulator').waitFor()
+  await page.locator('#canvas').waitFor()
 })
 
 test('open and close menu overlay', async ({ page }) => {
@@ -50,7 +50,7 @@ test('open and close menu overlay', async ({ page }) => {
 
 test('resume', async ({ page }) => {
   const menuOverlay = page.getByTestId('menu-overlay')
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
 
   await page.keyboard.press('Escape')
   await expect(menuOverlay).toBeVisible()
@@ -62,7 +62,7 @@ test('resume', async ({ page }) => {
 
 test('restart', async ({ page }) => {
   const menuOverlay = page.getByTestId('menu-overlay')
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
 
   await page.keyboard.press('Escape')
   await page.getByTestId('menu-item-restart').click()
@@ -76,7 +76,7 @@ test('save state', async ({ page }) => {
   })
 
   const menuOverlay = page.getByTestId('menu-overlay')
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
   const loadingScreen = page.getByTestId('loading-screen')
 
   await expect(loadingScreen).not.toBeAttached()
@@ -93,7 +93,7 @@ test('save state', async ({ page }) => {
 
 test('load state', async ({ page }) => {
   const menuOverlay = page.getByTestId('menu-overlay')
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
 
   await page.keyboard.press('Escape')
   await page.getByTestId('menu-item-load-state').click()
@@ -108,7 +108,7 @@ test('save and exit', async ({ page }) => {
   })
 
   const menuOverlay = page.getByTestId('menu-overlay')
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
   const loadingScreen = page.getByTestId('loading-screen')
 
   await expect(loadingScreen).not.toBeAttached()

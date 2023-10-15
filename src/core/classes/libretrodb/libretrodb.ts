@@ -1,9 +1,8 @@
-// eslint-disable-next-line unicorn/prefer-node-protocol
-import { Buffer } from 'buffer/index'
 import { MAGIC_NUMBER, MPF } from './constants'
 import { FileHandler, SEEK_MODE } from './file-handler'
 import { isRecord } from './is-record'
 import { type Entry } from './types'
+import { Buffer } from'../../helpers/vendors'
 
 export interface Options {
   bufferToString: boolean

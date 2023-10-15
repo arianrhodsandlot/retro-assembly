@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/prefer-node-protocol */
-import { Buffer } from 'buffer/index'
 /*
   Note: the file is fully read in memory (on open) because it's really faster
   than reading small piece on the hard-drive (and the db file is not that heavy)
@@ -11,6 +9,41 @@ export enum SEEK_MODE {
   SEEK_SET = 0,
   SEEK_CUR = 1,
   SEEK_END = 2,
+}
+
+function validateNumber(value, name) {
+  if (typeof value !== 'number') {
+    throw new Error('ERR_INVALID_ARG_TYPE: ' + name)
+  }
+}
+
+function boundsError(value, length, type) {
+  if (Math.floor(value) !== value) {
+    validateNumber(value, type)
+    throw new Error('ERR_OUT_OF_RANGE')
+  }
+
+  if (length < 0) {
+    throw new Error('ERR_BUFFER_OUT_OF_BOUNDS')
+  }
+
+  throw new Error('ERR_OUT_OF_RANGE')
+}
+
+function readBigUInt64BE(buffer, offset) {
+  offset = offset >>> 0
+  validateNumber(offset, 'offset')
+  const first = buffer[offset]
+  const last = buffer[offset + 7]
+  if (first === undefined || last === undefined) {
+    boundsError(offset, buffer.length - 8, undefined)
+  }
+
+  const hi = first * 2 ** 24 + buffer[++offset] * 2 ** 16 + buffer[++offset] * 2 ** 8 + buffer[++offset]
+
+  const lo = buffer[++offset] * 2 ** 24 + buffer[++offset] * 2 ** 16 + buffer[++offset] * 2 ** 8 + last
+
+  return (BigInt(hi) << BigInt(32)) + BigInt(lo)
 }
 
 export class FileHandler {
@@ -57,12 +90,12 @@ export class FileHandler {
   }
 
   readUInt64() {
-    return this.read(8).readBigUInt64BE(0)
+    return readBigUInt64BE(this.read(8), 0)
   }
 
   readUInt(len = 1) {
     const buffer = this.read(len)
-    return len < 7 ? buffer.readUIntBE(0, len) : Number(buffer.readBigUInt64BE(0))
+    return len < 7 ? buffer.readUIntBE(0, len) : Number(readBigUInt64BE(buffer, 0))
   }
 
   readInt(len = 1) {

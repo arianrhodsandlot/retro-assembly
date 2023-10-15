@@ -1,5 +1,5 @@
 import delay from 'delay'
-import { type Nostalgist } from 'nostalgist'
+import { Nostalgist } from 'nostalgist'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
 import { systemCoreMap } from '../constants/systems'
 import { type Rom } from './rom'
@@ -90,16 +90,16 @@ export class Emulator {
     const fileName = this.rom.fileAccessor.name
     const fileContent = await this.rom.getBlob()
 
-    const { Nostalgist } = await import('nostalgist')
-
     this.nostalgist = await Nostalgist.launch({
       style: this.style,
       core: this.core,
       rom: [
         { fileName, fileContent },
         ...(this.additionalFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
-        ...(this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
       ],
+      bios: this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || [],
+
+      respondToGlobalEvents: false,
 
       async waitForInteraction({ done }) {
         await waitForUserInteraction?.()

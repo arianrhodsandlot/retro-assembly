@@ -1,7 +1,7 @@
-// eslint-disable-next-line unicorn/prefer-node-protocol
-import { Buffer } from 'buffer/index'
 import { get, set } from 'idb-keyval'
-import { join } from 'path-browserify'
+import { Buffer, path } from './vendors'
+
+const { join } = path
 
 export async function detectLocalHandleExistence(name: string) {
   const handles = (await get('local-file-system-handles')) ?? {}
@@ -9,13 +9,13 @@ export async function detectLocalHandleExistence(name: string) {
   return Boolean(handle)
 }
 
-export async function detectLocalHandlePermission({ name, mode }: { name: string; mode: string }) {
+export async function detectLocalHandlePermission({ name, mode }: { name: string; mode: 'read' | 'readwrite' }) {
   const handles = await get('local-file-system-handles')
   const permission = await handles?.[name]?.queryPermission({ mode })
   return permission === 'granted'
 }
 
-export async function requestLocalHandle({ name, mode }: { name: string; mode: string }) {
+export async function requestLocalHandle({ name, mode }: { name: string; mode: 'read' | 'readwrite' }) {
   const handles = (await get('local-file-system-handles')) ?? {}
 
   const handle = handles[name]
@@ -30,7 +30,7 @@ export async function requestLocalHandle({ name, mode }: { name: string; mode: s
   }
 }
 
-export async function requestFreshLocalHandle({ name, mode }: { name: string; mode: string }) {
+export async function requestFreshLocalHandle({ name, mode }: { name: string; mode: 'read' | 'readwrite' }) {
   const handle = await window.showDirectoryPicker({ mode })
   const handles = (await get('local-file-system-handles')) ?? {}
   handles[name] = handle

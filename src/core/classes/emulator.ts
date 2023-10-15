@@ -15,18 +15,15 @@ interface EmulatorConstructorOptions {
 }
 
 const defaultStyle = {
-  backgroundColor: 'black',
   backgroundImage:
     'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #222 25%, #222 75%, #000 75%, #000)',
   backgroundPosition: '0 0,15px 15px',
   backgroundSize: '30px 30px',
   cursor: 'default',
-  display: 'block',
-  imageRendering: 'pixelated', // this boosts performance!
-  inset: '0',
-  maxHeight: '100%',
-  maxWidth: '100%',
   position: 'fixed',
+  inset: '0',
+  height: '100%',
+  width: '100%',
   zIndex: '10',
 }
 
@@ -60,14 +57,9 @@ export class Emulator {
     this.additionalFiles = additionalFiles
     this.core = core ?? ''
     this.canvas = document.createElement('canvas')
-    this.canvas.id = 'canvas'
-    this.canvas.width = 900
-    this.canvas.height = 900
     this.previousActiveElement = document.activeElement
-    this.canvas.tabIndex = 0
     this.coreConfig = coreConfig
     this.retroarchConfig = retroarchConfig
-    this.canvas.dataset.testid = 'emulator'
     this.style = { ...defaultStyle, ...style }
 
     this.resizeCanvas = this.resizeCanvas.bind(this)
@@ -92,6 +84,7 @@ export class Emulator {
 
     this.nostalgist = await Nostalgist.launch({
       style: this.style,
+      element: this.canvas,
       core: this.core,
       rom: [
         { fileName, fileContent },

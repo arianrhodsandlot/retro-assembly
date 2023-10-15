@@ -52,7 +52,7 @@ test('navigate systems', async ({ page }) => {
 
 test('launch game', async ({ page }) => {
   const gameEntryButton = page.getByTestId('game-entry-button')
-  const emulator = page.getByTestId('emulator')
+  const emulator = page.locator('#canvas')
   await expect(emulator).not.toBeAttached()
 
   await gameEntryButton.click()

@@ -1,4 +1,5 @@
-import { Arrow, Content, Portal, Provider, Root, TooltipTriggerProps, Trigger } from '@radix-ui/react-tooltip'
+import type { TooltipTriggerProps } from '@radix-ui/react-tooltip'
+import { Arrow, Content, Portal, Provider, Root, Trigger } from '@radix-ui/react-tooltip'
 import { type ReactNode } from 'react'
 
 interface BaseTooltipProps extends TooltipTriggerProps {

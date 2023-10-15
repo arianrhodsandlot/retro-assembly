@@ -109,6 +109,8 @@ export class Emulator {
         return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
       },
     })
+    this.setupDOM()
+    this.processStatus = 'ready'
   }
 
   resume() {
@@ -143,6 +145,8 @@ export class Emulator {
   }
 
   exit() {
+    this.processStatus = 'terminated'
+
     this.nostalgist?.exit()
 
     this.cleanupDOM()
@@ -170,6 +174,21 @@ export class Emulator {
         height: innerHeight,
       })
     })
+  }
+
+  private setupDOM() {
+    this.showCanvasCusor()
+
+    document.body.addEventListener('mousemove', this.showCanvasCusor, false)
+    window.addEventListener('resize', this.resizeCanvas, false)
+    document.body.style.setProperty('overflow', 'hidden')
+
+    // tell retroarch that controllers are connected
+    for (const gamepad of navigator.getGamepads?.() ?? []) {
+      if (gamepad) {
+        window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
+      }
+    }
   }
 
   private cleanupDOM() {

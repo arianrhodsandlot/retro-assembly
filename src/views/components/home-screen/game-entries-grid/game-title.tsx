@@ -1,6 +1,6 @@
 import { uniq } from 'lodash-es'
 import { useAsync } from 'react-use'
-import { Rom } from '../../../../core'
+import type { Rom } from '../../../../core'
 import { DistrictIcon } from './district-icon'
 
 export function GameTitle({ rom }: { rom: Rom }) {

@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { JSX } from 'react'
+import type { JSX } from 'react'
 
 type IntrinsicButtonProps = Partial<JSX.IntrinsicElements['button']>
 

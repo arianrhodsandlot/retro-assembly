@@ -1,7 +1,7 @@
 import { type AnimationDefinition } from 'framer-motion'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { isEqual } from 'lodash-es'
-import { createPortal } from 'react-dom'
+import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { isGameLaunchingAtom, isGameRunningAtom } from '../../atoms'
 import { UserInteractionButton } from '../../common/user-interaction-button'
 import { useUserInteraction } from '../../hooks'
@@ -56,17 +56,20 @@ export function GameLaunching() {
 
     setIsGameLaunching(true)
     setIsGameRunningAtom(true)
+    SpatialNavigation.pause()
     try {
       await launchGame(rom)
       document.body.dispatchEvent(new MouseEvent('mousemove'))
     } catch (error) {
       console.warn(error)
       exit()
+    } finally {
+      SpatialNavigation.resume()
+      setIsGameLaunching(false)
     }
-    setIsGameLaunching(false)
   }
 
-  return createPortal(
+  return (
     <>
       <GameLaunchingImage
         onAnimationComplete={onAnimationComplete}
@@ -84,7 +87,6 @@ export function GameLaunching() {
       <GameLaunchingText show={Boolean(maskStyle.valid && isGameLaunching)} />
 
       {showInteractionButton ? <UserInteractionButton onUserInteract={onUserInteract} /> : null}
-    </>,
-    document.body,
+    </>
   )
 }

@@ -38,6 +38,7 @@ function GameEntry({
   const setMask = useSetAtom(maskAtom)
 
   function onClickGameEntryButton(event: MouseEvent<HTMLButtonElement>) {
+    event.currentTarget.focus()
     setMask({ event, target: event.currentTarget, rom })
   }
 

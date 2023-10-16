@@ -26,7 +26,7 @@ export function GameLaunchingImage({
       {show ? (
         <motion.div
           animate={styles.animate}
-          className='absolute z-10 overflow-hidden'
+          className='absolute z-10 overflow-hidden opacity-10'
           exit={styles.exit}
           initial={styles.initial}
           onAnimationComplete={onAnimationComplete}

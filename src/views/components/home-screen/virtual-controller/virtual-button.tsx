@@ -27,7 +27,7 @@ export function VirtualButton({ name }: VirtualButtonProps) {
     <div
       aria-hidden
       className={clsx(
-        'flex h-full w-full items-center justify-center text-transparent',
+        'flex h-full w-full select-none items-center justify-center text-transparent',
         pressing ? 'bg-white' : 'bg-transparent',
       )}
       onMouseDown={onPress}

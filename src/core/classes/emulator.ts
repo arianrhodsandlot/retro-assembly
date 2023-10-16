@@ -82,16 +82,19 @@ export class Emulator {
     const fileName = this.rom.fileAccessor.name
     const fileContent = await this.rom.getBlob()
 
+    const rom = [
+      { fileName, fileContent },
+      ...(this.additionalFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
+    ]
+    const bios = this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []
     this.nostalgist = await Nostalgist.launch({
       style: this.style,
       element: this.canvas,
       core: this.core,
-      rom: [
-        { fileName, fileContent },
-        ...(this.additionalFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
-      ],
-      bios: this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || [],
-
+      rom,
+      bios,
+      retroarchConfig: this.retroarchConfig,
+      retroarchCoreConfig: this.coreConfig?.[this.core],
       respondToGlobalEvents: false,
 
       async waitForInteraction({ done }) {

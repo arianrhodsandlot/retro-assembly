@@ -75,8 +75,8 @@ dependencies:
     specifier: 3.0.1
     version: 3.0.1
   nostalgist:
-    specifier: 0.4.1
-    version: 0.4.1
+    specifier: 0.4.2
+    version: 0.4.2
   p-queue:
     specifier: 7.4.1
     version: 7.4.1
@@ -5435,8 +5435,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /nostalgist@0.4.1:
-    resolution: {integrity: sha512-kubmBx5ZQtYB/i8dFn+Hx/FVnR0kItoT43+e8YzspI4pqqqJl7cbeRTt8VqgcpXZwHgldUiq9R+6oxxnHQa/xg==}
+  /nostalgist@0.4.2:
+    resolution: {integrity: sha512-M9Lb/RbcGT1eLQw9HJiTgHhwcPR4GoP0joCxygqdF+TGygIizMtgtwlsOKopcJdVo2zXyRuR4d+wAYSmSs05wQ==}
     dev: false
 
   /npm-run-path@4.0.1:

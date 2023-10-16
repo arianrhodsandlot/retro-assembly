@@ -17,14 +17,18 @@ export function MenuEntryButton({ onClick }: { onClick: () => void }) {
       {showMenuEntryButton ? (
         <motion.div
           animate={{ opacity: 1 }}
-          aria-hidden
-          className='fixed bottom-10 right-10 z-20 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-white text-rose-700 shadow-xl'
+          className='pointer-events-none fixed inset-0 z-20 flex justify-center'
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
-          onClick={onClick}
           transition={{ duration: 0.1 }}
         >
-          <span className='icon-[mdi--cog-pause-outline] h-8 w-8' />
+          <div
+            aria-hidden
+            className='mt-20 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-white text-rose-700 shadow-xl'
+            onClick={onClick}
+          >
+            <span className='icon-[mdi--cog-pause-outline] h-8 w-8' />
+          </div>
         </motion.div>
       ) : null}
     </AnimatePresence>

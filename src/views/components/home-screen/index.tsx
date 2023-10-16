@@ -11,6 +11,7 @@ import { GameLaunching } from './game-launching'
 import { GameMenus } from './game-menus'
 import { HomeScreenLayout } from './home-screen-layout'
 import { InputTips } from './input-tips'
+import { VirtualController } from './virtual-controller'
 
 function getColumnCount(width: number) {
   const idealItemWidth = 200
@@ -160,6 +161,8 @@ export function HomeScreen() {
             <GameMenus />
 
             <InputTips />
+
+            <VirtualController />
           </>
         )}
 

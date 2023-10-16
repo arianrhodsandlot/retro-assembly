@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 import { onPress, pauseGame, resumeGame } from '../../../../core'
 import { isGameLaunchedAtom } from '../../atoms'
 import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
@@ -51,7 +50,7 @@ export function GameMenus() {
     return
   }
 
-  return createPortal(
+  return (
     <>
       <MenuEntryButton onClick={toggleMenu} />
 
@@ -68,7 +67,6 @@ export function GameMenus() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </>,
-    document.body,
+    </>
   )
 }

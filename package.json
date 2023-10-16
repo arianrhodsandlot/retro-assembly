@@ -34,7 +34,7 @@
     "ky": "1.0.1",
     "lodash-es": "4.17.21",
     "mitt": "3.0.1",
-    "nostalgist": "0.4.1",
+    "nostalgist": "0.4.2",
     "p-queue": "7.4.1",
     "path-browserify": "1.0.1",
     "query-string": "8.1.0",

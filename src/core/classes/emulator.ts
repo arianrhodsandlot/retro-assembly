@@ -2,6 +2,7 @@ import delay from 'delay'
 import { Nostalgist } from 'nostalgist'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
 import { systemCoreMap } from '../constants/systems'
+import { defaultRetroarchCoresConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
 interface EmulatorConstructorOptions {
@@ -94,7 +95,10 @@ export class Emulator {
       rom,
       bios,
       retroarchConfig: this.retroarchConfig,
-      retroarchCoreConfig: this.coreConfig?.[this.core],
+      retroarchCoreConfig: {
+        ...defaultRetroarchCoresConfig[this.core],
+        ...this.coreConfig?.[this.core],
+      },
       respondToGlobalEvents: false,
 
       async waitForInteraction({ done }) {

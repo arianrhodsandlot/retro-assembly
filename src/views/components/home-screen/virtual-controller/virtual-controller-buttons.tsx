@@ -1,27 +1,47 @@
-import { useSetAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import { useAtom } from 'jotai'
+import { useEffect, useRef, useState } from 'react'
 import { showMenuOverlayAtom } from '../../atoms'
-import { VirtualButton } from './virtual-button'
+import { VirtualControllerLandscape } from './virtual-controller-landscape'
+import { VirtualControllerPortrait } from './virtual-controller-portrait'
+
+function hasGamepads() {
+  return navigator.getGamepads().some(Boolean)
+}
+
+let defaultShow = !hasGamepads()
+
+window.addEventListener('gamepadconnected', () => {
+  defaultShow = !hasGamepads()
+})
+
+window.addEventListener('gamepaddisconnected', () => {
+  defaultShow = !hasGamepads()
+})
 
 export function VirtualControllerButtons() {
-  const [show, setShow] = useState(false)
-  const setShowMenuOverlayAtom = useSetAtom(showMenuOverlayAtom)
+  const [showMenuOverlay, setShowMenuOverlay] = useAtom(showMenuOverlayAtom)
+  const [show, setShow] = useState(defaultShow)
+  const buttonsContainerRef = useRef<HTMLDivElement>(null)
 
   function onTapMenuButton() {
-    setShowMenuOverlayAtom(true)
-    setShow(false)
+    setShowMenuOverlay(true)
   }
 
   useEffect(() => {
     function toggleShow(event: TouchEvent) {
-      if (!(event.target instanceof HTMLCanvasElement)) {
+      let isToggleElement = false
+      if (event.target instanceof HTMLCanvasElement) {
+        isToggleElement = true
+      } else if (event.target instanceof HTMLDivElement) {
+        isToggleElement = Boolean(buttonsContainerRef.current?.contains(event.target))
+      }
+
+      if (!isToggleElement) {
         return
       }
 
-      const shouldToggle = [...event.touches].some(({ clientY }) => clientY < innerHeight / 2)
-      if (shouldToggle) {
-        setShow((value) => !value)
-      }
+      setShow((value) => !value)
     }
 
     document.body.addEventListener('touchstart', toggleShow)
@@ -31,77 +51,33 @@ export function VirtualControllerButtons() {
     }
   }, [])
 
-  if (!show) {
+  useEffect(() => {
+    function onGamepadChange() {
+      setShow(!hasGamepads())
+    }
+    window.addEventListener('gamepadconnected', onGamepadChange)
+    window.addEventListener('gamepaddisconnected', onGamepadChange)
+    return () => {
+      window.removeEventListener('gamepadconnected', onGamepadChange)
+      window.removeEventListener('gamepaddisconnected', onGamepadChange)
+    }
+  }, [])
+
+  if (showMenuOverlay || !show) {
     return null
   }
 
   return (
-    <div className='fixed bottom-0 z-[11] w-full pb-10 portrait:px-4 landscape:px-10'>
-      <div className='flex w-full items-end justify-between'>
-        <div className='flex flex-col items-center overflow-hidden rounded-3xl border-8 border-gray-500 bg-white/60'>
-          <div className='flex'>
-            <div className='h-12 w-12 overflow-hidden'>
-              <VirtualButton name='up,left' />
-            </div>
-            <div className='h-12 w-12 overflow-hidden rounded-t bg-white/80'>
-              <VirtualButton name='up' />
-            </div>
-            <div className='h-12 w-12 overflow-hidden'>
-              <VirtualButton name='up,right' />
-            </div>
-          </div>
-          <div className='flex'>
-            <div className='h-12 w-12 overflow-hidden rounded-l bg-white/80'>
-              <VirtualButton name='left' />
-            </div>
-            <div className='h-12 w-12 overflow-hidden bg-white/80' />
-            <div className='h-12 w-12 overflow-hidden rounded-r bg-white/80'>
-              <VirtualButton name='right' />
-            </div>
-          </div>
-          <div className='flex'>
-            <div className='h-12 w-12 overflow-hidden'>
-              <VirtualButton name='down,left' />
-            </div>
-            <div className='h-12 w-12 overflow-hidden rounded-b bg-white/80 '>
-              <VirtualButton name='down' />
-            </div>
-            <div className='h-12 w-12 overflow-hidden'>
-              <VirtualButton name='down,right' />
-            </div>
-          </div>
-        </div>
-
-        <div className='flex flex-col items-center'>
-          <div className='h-16 w-16 overflow-hidden rounded-full border-8 border-gray-500 bg-white/80'>
-            <VirtualButton name='x' />
-          </div>
-          <div className='flex'>
-            <div className='h-16 w-16 overflow-hidden rounded-full border-8 border-gray-500 bg-white/80'>
-              <VirtualButton name='y' />
-            </div>
-            <div className='h-16 w-16 overflow-hidden' />
-            <div className='h-16 w-16 overflow-hidden rounded-full border-8 border-gray-500 bg-white/80'>
-              <VirtualButton name='a' />
-            </div>
-          </div>
-          <div className='h-16 w-16 overflow-hidden rounded-full border-8 border-gray-500 bg-white/80'>
-            <VirtualButton name='b' />
-          </div>
-        </div>
-      </div>
-
-      <div className='mt-10 flex items-center justify-center gap-10'>
-        <div className='h-8 w-20 overflow-hidden rounded-md border-8 border-gray-500 bg-white/80'>
-          <VirtualButton name='select' />
-        </div>
-        <div className='h-12 w-12 overflow-hidden rounded-full border-8 border-gray-500 bg-white/80'>
-          <VirtualButton onTap={onTapMenuButton} />
-        </div>
-        <div className='h-8 w-20 overflow-hidden rounded-md border-8 border-gray-500 bg-white/80'>
-          <VirtualButton name='start' />
-        </div>
-      </div>
-    </div>
+    <motion.div
+      animate={{ opacity: 1 }}
+      className='touch-none'
+      exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      ref={buttonsContainerRef}
+      transition={{ duration: 0.2 }}
+    >
+      <VirtualControllerPortrait onTapMenuButton={onTapMenuButton} />
+      <VirtualControllerLandscape onTapMenuButton={onTapMenuButton} />
+    </motion.div>
   )
 }

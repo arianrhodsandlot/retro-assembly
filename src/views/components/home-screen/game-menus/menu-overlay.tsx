@@ -1,11 +1,12 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
+import { showMenuOverlayAtom } from '../../atoms'
 import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { LightInputButton } from '../../common/light-input-button'
 import { LoadingScreen } from '../../common/loading-screen'
 import { useExit } from '../hooks'
-import { previousFocusedElementAtom, showMenuOverlayAtom } from './atoms'
+import { previousFocusedElementAtom } from './atoms'
 import { MenuItems } from './menu-items'
 
 export function MenuOverlay() {

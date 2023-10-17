@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import { isUsingDummy, onCancel, resumeGame } from '../../../../core'
 import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
-import { previousFocusedElementAtom, shouldFocusStatesListAtom, showMenuOverlayAtom } from './atoms'
+import { showMenuOverlayAtom } from '../../atoms'
+import { previousFocusedElementAtom, shouldFocusStatesListAtom } from './atoms'
 import { StatesList } from './states-list'
 
 const menuButtonClassNames =

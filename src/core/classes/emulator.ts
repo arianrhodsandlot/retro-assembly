@@ -2,7 +2,7 @@ import delay from 'delay'
 import { Nostalgist } from 'nostalgist'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
 import { systemCoreMap } from '../constants/systems'
-import { defaultRetroarchCoresConfig } from '../helpers/retroarch'
+import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
 interface EmulatorConstructorOptions {
@@ -15,7 +15,7 @@ interface EmulatorConstructorOptions {
   retroarchConfig?: Record<string, string>
 }
 
-const defaultStyle = {
+const defaultStyle: Partial<CSSStyleDeclaration> = {
   backgroundImage:
     'repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #222 25%, #222 75%, #000 75%, #000)',
   backgroundPosition: '0 0,15px 15px',
@@ -88,17 +88,16 @@ export class Emulator {
       ...(this.additionalFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
     ]
     const bios = this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []
+    const retroarchConfig = { ...getRetroarchConfig(), ...this.retroarchConfig }
+    const retroarchCoreConfig = { ...defaultRetroarchCoresConfig[this.core], ...this.coreConfig?.[this.core] }
     this.nostalgist = await Nostalgist.launch({
       style: this.style,
       element: this.canvas,
       core: this.core,
       rom,
       bios,
-      retroarchConfig: this.retroarchConfig,
-      retroarchCoreConfig: {
-        ...defaultRetroarchCoresConfig[this.core],
-        ...this.coreConfig?.[this.core],
-      },
+      retroarchConfig,
+      retroarchCoreConfig,
       respondToGlobalEvents: false,
 
       async waitForInteraction({ done }) {

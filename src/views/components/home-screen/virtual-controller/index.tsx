@@ -3,7 +3,7 @@ import { isGameLaunchedAtom } from '../../atoms'
 import { VirtualControllerButtons } from './virtual-controller-buttons'
 
 function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
 }
 
 export function VirtualController() {

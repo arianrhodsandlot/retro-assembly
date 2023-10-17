@@ -1,9 +1,9 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { exitGame } from '../../../core'
 import { emitter } from '../../lib/emitter'
-import { isGameRunningAtom } from '../atoms'
+import { isGameRunningAtom, showMenuOverlayAtom } from '../atoms'
 import { maskAtom } from './atoms'
-import { previousFocusedElementAtom, showMenuOverlayAtom } from './game-menus/atoms'
+import { previousFocusedElementAtom } from './game-menus/atoms'
 
 export function useExit() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)

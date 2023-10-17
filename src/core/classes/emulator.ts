@@ -25,6 +25,7 @@ const defaultStyle: Partial<CSSStyleDeclaration> = {
   inset: '0',
   height: '100%',
   width: '100%',
+  touchAction: 'none',
   zIndex: '10',
 }
 
@@ -188,6 +189,7 @@ export class Emulator {
     document.body.addEventListener('mousemove', this.showCanvasCusor, false)
     window.addEventListener('resize', this.resizeCanvas, false)
     document.body.style.setProperty('overflow', 'hidden')
+    screen.orientation.addEventListener('change', this.resizeCanvas, false)
 
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
@@ -202,5 +204,6 @@ export class Emulator {
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas.remove()
     document.body.style.removeProperty('overflow')
+    screen.orientation.removeEventListener('change', this.resizeCanvas, false)
   }
 }

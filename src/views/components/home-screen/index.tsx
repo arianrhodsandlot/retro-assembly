@@ -14,7 +14,7 @@ import { InputTips } from './input-tips'
 import { VirtualController } from './virtual-controller'
 
 function getColumnCount(width: number) {
-  const idealItemWidth = 200
+  const idealItemWidth = innerWidth > 800 ? 200 : 150
   const candicates = [20, 16, 10, 8, 5, 4, 2]
   for (const candicate of candicates) {
     if (width / candicate > idealItemWidth) {

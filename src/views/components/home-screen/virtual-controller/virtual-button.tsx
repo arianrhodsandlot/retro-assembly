@@ -1,18 +1,23 @@
 import { clsx } from 'clsx'
-import { motion } from 'framer-motion'
 import { type UIEvent, useState } from 'react'
 import { pressController } from '../../../../core'
 
 interface VirtualButtonProps {
   name?: string
   onTap?: () => void
+  showText?: boolean
 }
 
-export function VirtualButton({ name, onTap }: VirtualButtonProps) {
-  const [pressing, setPressing] = useState(false)
+function onContextMenu(event: UIEvent<HTMLDivElement>) {
+  event.preventDefault()
+  event.stopPropagation()
+}
 
-  function onPress(event: UIEvent<HTMLDivElement>) {
-    event.stopPropagation()
+export function VirtualButton({ name, onTap, showText = false }: VirtualButtonProps) {
+  const [pressing, setPressing] = useState(false)
+  const canPress = Boolean(name || onTap)
+
+  function press() {
     setPressing(true)
     if (name) {
       for (const n of name.split(',')) {
@@ -23,8 +28,7 @@ export function VirtualButton({ name, onTap }: VirtualButtonProps) {
     onTap?.()
   }
 
-  function onRelease(event: UIEvent<HTMLDivElement>) {
-    event.stopPropagation()
+  function release() {
     if (pressing) {
       setPressing(false)
       if (name) {
@@ -35,24 +39,28 @@ export function VirtualButton({ name, onTap }: VirtualButtonProps) {
     }
   }
 
+  function onTouchEnd(event: UIEvent<HTMLDivElement>) {
+    event.stopPropagation()
+    release()
+  }
+
+  function onTouchStart(event: UIEvent<HTMLDivElement>) {
+    event.stopPropagation()
+    press()
+  }
+
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
+    <div
       aria-hidden
       className={clsx(
-        'flex h-full w-full select-none items-center justify-center text-transparent',
-        pressing ? 'bg-white' : 'bg-transparent',
+        'flex h-full w-full select-none items-center justify-center text-xs uppercase',
+        canPress && pressing ? 'bg-white/50 text-black/50' : 'bg-transparent text-white/50',
       )}
-      exit={{ opacity: 0 }}
-      initial={{ opacity: 0 }}
-      onMouseDown={onPress}
-      onMouseLeave={onRelease}
-      onMouseUp={onRelease}
-      onTouchEnd={onRelease}
-      onTouchStart={onPress}
-      transition={{ duration: 0.2 }}
+      onContextMenu={onContextMenu}
+      onTouchEnd={onTouchEnd}
+      onTouchStart={onTouchStart}
     >
-      {name}
-    </motion.div>
+      {showText ? name : ''}
+    </div>
   )
 }

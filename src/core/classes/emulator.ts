@@ -124,7 +124,7 @@ export class Emulator {
   }
 
   restart() {
-    this.nostalgist?.resume()
+    this.nostalgist?.restart()
   }
 
   pause() {

@@ -174,12 +174,11 @@ export class Emulator {
     } catch {}
   }
 
-  private resizeCanvas() {
-    requestAnimationFrame(() => {
-      this.nostalgist?.resize({
-        width: innerWidth,
-        height: innerHeight,
-      })
+  private async resizeCanvas() {
+    await delay(100)
+    this.nostalgist?.resize({
+      width: innerWidth,
+      height: innerHeight,
     })
   }
 

@@ -8,7 +8,7 @@ export function GameLaunchingText({ show }: { show: boolean }) {
       {show ? (
         <motion.div
           animate={{ opacity: 1 }}
-          className='absolute inset-0 z-[11]'
+          className='absolute inset-0 z-[11] select-none'
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
           transition={{ duration: 0.2 }}

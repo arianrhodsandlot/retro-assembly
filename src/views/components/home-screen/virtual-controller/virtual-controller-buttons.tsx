@@ -69,6 +69,7 @@ export function VirtualControllerButtons() {
       className='touch-none'
       exit={{ opacity: 0 }}
       initial={{ opacity: 0 }}
+      onContextMenu={(e) => e.preventDefault()}
       ref={buttonsContainerRef}
       transition={{ duration: 0.2 }}
     >

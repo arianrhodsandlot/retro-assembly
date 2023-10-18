@@ -1,11 +1,11 @@
 import { clsx } from 'clsx'
-import { type UIEvent, useState } from 'react'
+import { type ReactNode, type UIEvent, useState } from 'react'
 import { pressController } from '../../../../core'
 
 interface VirtualButtonProps {
   name?: string
   onTap?: () => void
-  showText?: boolean
+  children?: ReactNode
 }
 
 function onContextMenu(event: UIEvent<HTMLDivElement>) {
@@ -13,7 +13,7 @@ function onContextMenu(event: UIEvent<HTMLDivElement>) {
   event.stopPropagation()
 }
 
-export function VirtualButton({ name, onTap, showText = false }: VirtualButtonProps) {
+export function VirtualButton({ name, onTap, children }: VirtualButtonProps) {
   const [pressing, setPressing] = useState(false)
   const canPress = Boolean(name || onTap)
 
@@ -60,7 +60,7 @@ export function VirtualButton({ name, onTap, showText = false }: VirtualButtonPr
       onTouchEnd={onTouchEnd}
       onTouchStart={onTouchStart}
     >
-      {showText ? name : ''}
+      {children}
     </div>
   )
 }

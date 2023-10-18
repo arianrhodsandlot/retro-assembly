@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { showMenuOverlayAtom } from '../../atoms'
 import { VirtualControllerLandscape } from './virtual-controller-landscape'
@@ -20,16 +20,12 @@ window.addEventListener('gamepaddisconnected', () => {
 })
 
 export function VirtualControllerButtons() {
-  const [showMenuOverlay, setShowMenuOverlay] = useAtom(showMenuOverlayAtom)
+  const showMenuOverlay = useAtomValue(showMenuOverlayAtom)
   const [show, setShow] = useState(defaultShow)
   const buttonsContainerRef = useRef<HTMLDivElement>(null)
 
-  function onTapMenuButton() {
-    setShowMenuOverlay(true)
-  }
-
   useEffect(() => {
-    function toggleShow(event: TouchEvent) {
+    function showVirtualController(event: TouchEvent) {
       let isToggleElement = false
       if (event.target instanceof HTMLCanvasElement) {
         isToggleElement = true
@@ -41,13 +37,13 @@ export function VirtualControllerButtons() {
         return
       }
 
-      setShow((value) => !value)
+      setShow(true)
     }
 
-    document.body.addEventListener('touchstart', toggleShow)
+    document.body.addEventListener('touchstart', showVirtualController)
 
     return () => {
-      document.body.removeEventListener('touchstart', toggleShow)
+      document.body.removeEventListener('touchstart', showVirtualController)
     }
   }, [])
 
@@ -76,8 +72,8 @@ export function VirtualControllerButtons() {
       ref={buttonsContainerRef}
       transition={{ duration: 0.2 }}
     >
-      <VirtualControllerPortrait onTapMenuButton={onTapMenuButton} />
-      <VirtualControllerLandscape onTapMenuButton={onTapMenuButton} />
+      <VirtualControllerPortrait />
+      <VirtualControllerLandscape />
     </motion.div>
   )
 }

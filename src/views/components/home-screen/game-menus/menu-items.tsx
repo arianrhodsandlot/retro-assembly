@@ -1,12 +1,12 @@
 import clsx from 'clsx'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
 import { isUsingDummy, onCancel, resumeGame } from '../../../../core'
 import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { showMenuOverlayAtom } from '../../atoms'
-import { previousFocusedElementAtom, shouldFocusStatesListAtom } from './atoms'
+import { shouldFocusStatesListAtom } from './atoms'
 import { StatesList } from './states-list'
 
 const menuButtonClassNames =
@@ -24,7 +24,6 @@ interface MenuItemsProps {
 export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onExit, onLoadState }: MenuItemsProps) {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const setShouldFocusStatesList = useSetAtom(shouldFocusStatesListAtom)
-  const previousFocusedElement = useAtomValue(previousFocusedElementAtom)
   const [showStateList, setShowStateList] = useState(false)
   const firstButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -39,7 +38,6 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
     const offCancel = onCancel(() => {
       if ($('.menu-overlay-buttons button:focus')) {
         setShowMenuOverlay(false)
-        previousFocusedElement?.focus()
         resumeGame()
       } else {
         SpatialNavigation.move('left')
@@ -50,9 +48,8 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
 
     return () => {
       offCancel()
-      previousFocusedElement?.focus()
     }
-  }, [previousFocusedElement, setShowMenuOverlay])
+  }, [setShowMenuOverlay])
 
   return (
     <div className='flex h-full w-full items-stretch justify-center'>

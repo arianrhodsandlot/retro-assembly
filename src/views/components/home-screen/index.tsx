@@ -1,8 +1,9 @@
-import { useAtom, useSetAtom, useStore } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom, useStore } from 'jotai'
 import { some } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
+import { isGameLaunchedAtom } from '../atoms'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
 import { historyDummySystem } from './constants'
 import { ErrorContent } from './error-content'
@@ -54,6 +55,7 @@ async function getRoms(system: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
+  const isGameLaunched = useAtomValue(isGameLaunchedAtom)
   const store = useStore()
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
@@ -142,32 +144,32 @@ export function HomeScreen() {
     <HomeScreenLayout>
       <>
         {isRomsEmpty || (
-          <>
-            <div className='h-full w-full' ref={gridContainerRef}>
-              <GameEntryGrid
-                className='a game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
-                columnCount={columnCount}
-                columnWidth={columnWidth}
-                height={gridHeight}
-                roms={roms}
-                rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
-                rowHeight={columnWidth}
-                width={gridWidth}
-              />
+          <div className='h-full w-full' ref={gridContainerRef}>
+            <GameEntryGrid
+              className='a game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
+              columnCount={columnCount}
+              columnWidth={columnWidth}
+              height={gridHeight}
+              roms={roms}
+              rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
+              rowHeight={columnWidth}
+              width={gridWidth}
+            />
 
-              <GameLaunching />
-            </div>
-
-            <GameMenus />
-
-            <InputTips />
-
-            <VirtualController />
-          </>
+            <GameLaunching />
+          </div>
         )}
 
         {error ? <ErrorContent error={error} onSolve={retry} /> : null}
       </>
+
+      {isGameLaunched ? (
+        <>
+          <GameMenus />
+          <InputTips />
+          <VirtualController />
+        </>
+      ) : null}
     </HomeScreenLayout>
   )
 }

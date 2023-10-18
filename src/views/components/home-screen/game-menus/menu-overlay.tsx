@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
 import { showMenuOverlayAtom } from '../../atoms'
@@ -6,12 +6,10 @@ import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { LightInputButton } from '../../common/light-input-button'
 import { LoadingScreen } from '../../common/loading-screen'
 import { useExit } from '../hooks'
-import { previousFocusedElementAtom } from './atoms'
 import { MenuItems } from './menu-items'
 
 export function MenuOverlay() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
-  const previousFocusedElement = useAtomValue(previousFocusedElementAtom)
   const { exit } = useExit()
 
   const [saveStateState, saveState] = useAsyncFn(async () => {
@@ -21,7 +19,6 @@ export function MenuOverlay() {
     await saveGameState()
     resumeGame()
     setShowMenuOverlay(false)
-    previousFocusedElement?.focus()
   })
 
   const [loadStateState, loadState] = useAsyncFn(async (stateId: string) => {
@@ -30,19 +27,16 @@ export function MenuOverlay() {
     }
     await loadGameState(stateId)
     setShowMenuOverlay(false)
-    previousFocusedElement?.focus()
     resumeGame()
   })
 
   function resume() {
     setShowMenuOverlay(false)
-    previousFocusedElement?.focus()
     resumeGame()
   }
 
   function restart() {
     setShowMenuOverlay(false)
-    previousFocusedElement?.focus()
     restartGame()
   }
 

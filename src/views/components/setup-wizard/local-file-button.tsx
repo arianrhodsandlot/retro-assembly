@@ -1,11 +1,13 @@
 import fileSelect from 'file-select'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useAsyncFn } from 'react-use'
 import { getSupportedFileExtensions, previewGame } from '../../../core'
-import { isGameRunningAtom } from '../atoms'
+import { isGameLaunchedAtom, isGameRunningAtom } from '../atoms'
 import { BouncingEllipsis } from '../common/bouncing-ellipsis'
 import { UserInteractionButton } from '../common/user-interaction-button'
 import { GameMenus } from '../home-screen/game-menus'
+import { InputTips } from '../home-screen/input-tips'
+import { VirtualController } from '../home-screen/virtual-controller'
 import { useUserInteraction } from '../hooks'
 import { BaseButton } from '../primitives/base-button'
 
@@ -14,6 +16,7 @@ supportedFileExtensions.unshift('zip')
 
 export function LocalFileButton() {
   const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
+  const isGameLaunched = useAtomValue(isGameLaunchedAtom)
   const { mayNeedsUserInteraction, showInteractionButton, onUserInteract, waitForUserInteraction } =
     useUserInteraction()
 
@@ -52,7 +55,13 @@ export function LocalFileButton() {
 
       {showInteractionButton ? <UserInteractionButton onUserInteract={onUserInteract} /> : null}
 
-      <GameMenus />
+      {isGameLaunched ? (
+        <>
+          <GameMenus />
+          <InputTips />
+          <VirtualController />
+        </>
+      ) : null}
     </>
   )
 }

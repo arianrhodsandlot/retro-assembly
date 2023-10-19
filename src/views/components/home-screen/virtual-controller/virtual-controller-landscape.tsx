@@ -11,7 +11,7 @@ export function VirtualControllerLandscape() {
 
   if (hideButtons) {
     return (
-      <div className='fixed inset-0 z-[11] flex w-full justify-end px-10 py-10 portrait:hidden landscape:flex'>
+      <div className='flex h-full w-full justify-end px-10 py-10 portrait:hidden landscape:flex'>
         <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
           <VirtualControllerToggleButton />
         </div>
@@ -20,7 +20,7 @@ export function VirtualControllerLandscape() {
   }
 
   return (
-    <div className='fixed inset-0 z-[11] flex w-full flex-col px-10 py-10 portrait:hidden landscape:flex'>
+    <div className='flex h-full w-full flex-col px-10 py-10 portrait:hidden landscape:flex'>
       <div className='flex items-start justify-between gap-4'>
         <div className='flex flex-col gap-4'>
           <div className='h-12 w-20 overflow-hidden rounded-md border-4 border-dashed border-white/50'>

@@ -40,11 +40,13 @@ export function VirtualButton({ name, onTap, children }: VirtualButtonProps) {
   }
 
   function onTouchEnd(event: UIEvent<HTMLDivElement>) {
+    event.preventDefault()
     event.stopPropagation()
     release()
   }
 
   function onTouchStart(event: UIEvent<HTMLDivElement>) {
+    event.preventDefault()
     event.stopPropagation()
     press()
   }
@@ -53,8 +55,8 @@ export function VirtualButton({ name, onTap, children }: VirtualButtonProps) {
     <div
       aria-hidden
       className={clsx(
-        'flex h-full w-full select-none items-center justify-center text-xs uppercase',
-        canPress && pressing ? 'bg-white/50 text-black/50' : 'bg-transparent text-white/50',
+        'flex h-full w-full touch-none select-none items-center justify-center text-sm font-extrabold uppercase',
+        canPress && pressing ? 'bg-white text-black' : 'bg-transparent text-white/40',
       )}
       onContextMenu={onContextMenu}
       onTouchEnd={onTouchEnd}

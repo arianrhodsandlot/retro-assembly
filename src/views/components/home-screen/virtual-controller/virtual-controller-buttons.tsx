@@ -66,10 +66,11 @@ export function VirtualControllerButtons() {
   return (
     <motion.div
       animate={{ opacity: 1 }}
-      className='touch-none'
+      className='fixed inset-0 z-[11] select-none'
       exit={{ opacity: 0 }}
       initial={{ opacity: 0 }}
       onContextMenu={(e) => e.preventDefault()}
+      onTouchEnd={(e) => e.preventDefault()}
       ref={buttonsContainerRef}
       transition={{ duration: 0.2 }}
     >

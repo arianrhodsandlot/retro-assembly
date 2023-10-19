@@ -1,1 +1,5 @@
-import './index.sass'
+import '@fontsource-variable/fredoka'
+import '@fontsource-variable/outfit'
+import '@fontsource/noto-mono'
+import '@fontsource/noto-sans'
+import './index.css'

@@ -11,7 +11,7 @@ export function VirtualControllerPortrait() {
 
   if (hideButtons) {
     return (
-      <div className='fixed inset-0 z-[11] flex w-full justify-end px-10 py-10 portrait:flex landscape:hidden'>
+      <div className='flex h-full w-full justify-end px-10 py-10 portrait:flex landscape:hidden'>
         <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
           <VirtualControllerToggleButton />
         </div>
@@ -20,7 +20,7 @@ export function VirtualControllerPortrait() {
   }
 
   return (
-    <div className='fixed inset-0 z-[11] flex w-full flex-col px-2 py-10 portrait:flex landscape:hidden'>
+    <div className='flex h-full w-full flex-col px-2 py-10 portrait:flex landscape:hidden'>
       <div className='flex items-end justify-between gap-10'>
         <div className='h-8 w-20 overflow-hidden rounded-md border-4 border-dashed border-white/50'>
           <VirtualButton name='select'>

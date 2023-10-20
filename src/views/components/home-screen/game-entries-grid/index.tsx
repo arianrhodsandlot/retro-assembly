@@ -1,17 +1,16 @@
 import delay from 'delay'
-import { isEqual, map, omit } from 'lodash-es'
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { type Rom } from '../../../../core'
 import { isFocusingHome } from '../utils'
-import { GameEntry } from './game-entry'
+import { GameEntryGridItem } from './game-entry-grid-item'
 import { clearLoadImageQueue } from './utils'
 
 interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
   roms: Rom[]
 }
 
-function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
+export function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   const innerRef = useRef<HTMLDivElement>()
   const { rowCount, columnCount } = props
 
@@ -36,47 +35,8 @@ function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   }, [])
 
   return roms?.length ? (
-    <FixedSizeGrid {...props} innerRef={innerRef}>
-      {({ columnIndex, rowIndex, style }) => {
-        const index = rowIndex * columnCount + columnIndex
-        if (index > roms.length - 1) {
-          return
-        }
-        return (
-          <GameEntry
-            columnCount={columnCount}
-            columnIndex={columnIndex}
-            rom={roms[index]}
-            rowCount={rowCount}
-            rowIndex={rowIndex}
-            style={style}
-          />
-        )
-      }}
+    <FixedSizeGrid {...props} innerRef={innerRef} itemData={{ roms, rowCount, columnCount }}>
+      {GameEntryGridItem}
     </FixedSizeGrid>
   ) : null
 }
-
-function propsAreEqual(prevProps, nextProps) {
-  if (prevProps === nextProps) {
-    return true
-  }
-
-  if (!isEqual(omit(prevProps, 'roms'), omit(nextProps, 'roms'))) {
-    return false
-  }
-
-  const prevRoms = prevProps.roms
-  const nextRoms = nextProps.roms
-  if (prevRoms.length !== nextRoms.length) {
-    return false
-  }
-
-  const prevRomsIds = map(prevRoms, 'id')
-  const nextRomsIds = map(nextRoms, 'id')
-  return prevRomsIds.join(',') === nextRomsIds.join(',')
-}
-
-const MemorizedGameEntryGrid = memo(GameEntryGrid, propsAreEqual)
-
-export { MemorizedGameEntryGrid as GameEntryGrid }

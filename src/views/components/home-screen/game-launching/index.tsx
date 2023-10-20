@@ -70,7 +70,7 @@ export function GameLaunching() {
   }
 
   return (
-    <>
+    <div>
       <GameLaunchingImage
         onAnimationComplete={onAnimationComplete}
         onAnimationStart={onAnimationStart}
@@ -87,6 +87,6 @@ export function GameLaunching() {
       <GameLaunchingText show={Boolean(maskStyle.valid && isGameLaunching)} />
 
       {showInteractionButton ? <UserInteractionButton onUserInteract={onUserInteract} /> : null}
-    </>
+    </div>
   )
 }

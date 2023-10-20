@@ -1,7 +1,7 @@
+import { useAsync } from '@react-hookz/web'
 import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useAsyncFn } from 'react-use'
 import { type CloudService } from '../../../../core'
 import { directoyTreeAtom } from './atoms'
 import { type TreeNode } from './types'
@@ -16,7 +16,7 @@ interface DirectoryTreeNodeParams {
 export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTreeNodeParams) {
   const [tree, setTree] = useAtom(directoyTreeAtom)
 
-  const [state, updateTree] = useAsyncFn(async () => {
+  const [state, { execute: updateTree }] = useAsync(async () => {
     if (tree) {
       await toggleNodeExpanded({ node, cloudService })
       setTree({ ...tree })
@@ -24,7 +24,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
   })
 
   function onClickDirectoryName() {
-    if (state.loading === false) {
+    if (state.status !== 'loading') {
       updateTree()
     }
   }
@@ -82,7 +82,9 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
         </div>
       </div>
 
-      {state.loading ? <span className='icon-[line-md--loading-loop] my-2 ml-10 h-6 w-6 text-rose-700' /> : null}
+      {state.status === 'loading' ? (
+        <span className='icon-[line-md--loading-loop] my-2 ml-10 h-6 w-6 text-rose-700' />
+      ) : null}
 
       {node.expanded ? (
         <div className='pl-6'>

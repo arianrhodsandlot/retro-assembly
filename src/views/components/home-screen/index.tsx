@@ -1,7 +1,8 @@
+import { useMeasure } from '@react-hookz/web'
 import { useAtom, useAtomValue, useSetAtom, useStore } from 'jotai'
 import { some } from 'lodash-es'
 import { useEffect, useState } from 'react'
-import { useAsync, useAsyncRetry, useMeasure } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
 import { isGameLaunchedAtom } from '../atoms'
 import { currentSystemNameAtom, romsAtom, systemsAtom } from './atoms'
@@ -58,8 +59,10 @@ export function HomeScreen() {
   const isGameLaunched = useAtomValue(isGameLaunchedAtom)
   const store = useStore()
   const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
-  const [gridContainerRef, { width: gridWidth, height: gridHeight }] = useMeasure<HTMLDivElement>()
+  const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
+
+  const { width: gridWidth, height: gridHeight } = measurements
 
   const columnCount = getColumnCount(gridWidth)
 
@@ -155,7 +158,7 @@ export function HomeScreen() {
               rowHeight={columnWidth}
               width={gridWidth}
             />
-
+            <InputTips />
             <GameLaunching />
           </div>
         )}
@@ -166,7 +169,6 @@ export function HomeScreen() {
       {isGameLaunched ? (
         <>
           <GameMenus />
-          <InputTips />
           <VirtualController />
         </>
       ) : null}

@@ -1,8 +1,8 @@
+import { useEventListener } from '@react-hookz/web'
 import delay from 'delay'
 import { AnimatePresence, motion } from 'framer-motion'
 import $ from 'jquery'
 import { useRef, useState } from 'react'
-import { useEvent } from 'react-use'
 import { InputTipsContent } from './input-tips-content'
 
 async function hasIntersection(element1: HTMLElement, element2: HTMLElement) {
@@ -28,9 +28,10 @@ export function InputTips() {
   const [shouldMoveToLeft, setShouldMoveToLeft] = useState(false)
   const ref = useRef(null)
 
-  useEvent(
+  useEventListener(
+    document.body,
     'focus',
-    async (e) => {
+    async (e: FocusEvent) => {
       const button = e.target as HTMLButtonElement
       if (!button || !ref.current) {
         return
@@ -47,7 +48,6 @@ export function InputTips() {
         setShouldMoveToLeft(false)
       }
     },
-    document.body,
     { capture: true },
   )
 

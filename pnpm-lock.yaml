@@ -29,6 +29,9 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: 1.0.7
     version: 1.0.7(@types/react-dom@18.2.14)(@types/react@18.2.29)(react-dom@18.2.0)(react@18.2.0)
+  '@react-hookz/web':
+    specifier: 23.1.0
+    version: 23.1.0(react-dom@18.2.0)(react@18.2.0)
   '@zip.js/zip.js':
     specifier: 2.7.30
     version: 2.7.30
@@ -1819,8 +1822,8 @@ packages:
       '@types/gapi.client.discovery-v1': 0.0.3
     dev: true
 
-  /@maxim_mazurok/gapi.client.drive-v3@0.0.20231011:
-    resolution: {integrity: sha512-h+A08aoYI2IL2nnCtrH5RLbPe/P0gznp7BSVKZMyDFVKNYMuwsrO0xWDF6K2IIcZkYRWoHRVyIc/dLWRGwPfJg==}
+  /@maxim_mazurok/gapi.client.drive-v3@0.0.20231017:
+    resolution: {integrity: sha512-nYKFtQ9Wek53103VzamXX0JgfvK89YuIZjaRvYSgRis1yhwziGmmMEhymSNRsw2uVhIuK7HXDLGPFgYP0GNy8w==}
     dependencies:
       '@types/gapi.client': 1.0.7
       '@types/gapi.client.discovery-v1': 0.0.3
@@ -2317,6 +2320,25 @@ packages:
       '@babel/runtime': 7.23.2
     dev: false
 
+  /@react-hookz/deep-equal@1.0.4:
+    resolution: {integrity: sha512-N56fTrAPUDz/R423pag+n6TXWbvlBZDtTehaGFjK0InmN+V2OFWLE/WmORhmn6Ce7dlwH5+tQN1LJFw3ngTJVg==}
+    dev: false
+
+  /@react-hookz/web@23.1.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-fvbURdsa1ukttbLR1ASE/XmqXP09vZ1PiCYppYeR1sNMzCrdkG0iBnjxniFSVjJ8gIw2fRs6nqMTbeBz2uAkuA==}
+    peerDependencies:
+      js-cookie: ^3.0.5
+      react: ^16.8 || ^17 || ^18
+      react-dom: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      js-cookie:
+        optional: true
+    dependencies:
+      '@react-hookz/deep-equal': 1.0.4
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@rollup/plugin-babel@5.3.1(@babel/core@7.23.2)(rollup@2.79.1):
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
@@ -2550,7 +2572,7 @@ packages:
   /@types/gapi.client.drive-v3@0.0.3:
     resolution: {integrity: sha512-61jlYBTz9GSFNkl0RgM2jD7TXkayWgb50XKimnVMtM7s2ymZhxxaAE4pr6u4j6z0pfpt54MHTjUxXZ7V3u5LFQ==}
     dependencies:
-      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20231011
+      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20231017
     dev: true
 
   /@types/gapi.client@1.0.7:

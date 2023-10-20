@@ -1,7 +1,8 @@
+import { useIntervalEffect } from '@react-hookz/web'
 import clsx from 'clsx'
 import mitt from 'mitt'
 import { useRef, useState } from 'react'
-import { useAsync, useAsyncFn, useInterval } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
@@ -37,7 +38,7 @@ export function CloudServiceLoginButton({
   const authorizeWindow = useRef<Window | null>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
 
-  useInterval(() => {
+  useIntervalEffect(() => {
     const newIsAuthWindowOpening = authorizeWindow.current ? !authorizeWindow.current?.closed : false
     setIsAuthWindowOpening(newIsAuthWindowOpening)
     if (isAuthWindowOpening && !newIsAuthWindowOpening) {

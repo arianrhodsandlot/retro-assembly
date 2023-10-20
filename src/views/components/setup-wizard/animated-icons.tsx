@@ -1,13 +1,13 @@
+import { useIntervalEffect } from '@react-hookz/web'
 import clsx from 'clsx'
 import delay from 'delay'
 import { useState } from 'react'
-import { useInterval } from 'react-use'
 
 export function AnimatedIcons({ wait = 0, children }: { wait?: number; children: any }) {
   const [frames, setFrames] = useState(0)
   const [enableAnimation, setEnableAnimation] = useState(true)
 
-  useInterval(async () => {
+  useIntervalEffect(async () => {
     if (wait) {
       await delay(wait)
     }

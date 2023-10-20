@@ -1,8 +1,8 @@
-import { useIntervalEffect } from '@react-hookz/web'
+import { useAsync as useAsyncFn, useIntervalEffect } from '@react-hookz/web'
 import clsx from 'clsx'
 import mitt from 'mitt'
 import { useRef, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsync } from 'react-use'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
@@ -46,7 +46,7 @@ export function CloudServiceLoginButton({
     }
   }, 100)
 
-  const [needsLoginState, checkNeedsLogin] = useAsyncFn(async () => {
+  const [needsLoginState, { execute: checkNeedsLogin }] = useAsyncFn(async () => {
     const promise = new Promise<boolean>((resolve) => {
       async function onStorage(event: StorageEvent) {
         if (event.key === getTokenStorageKey(cloudService)) {
@@ -84,8 +84,8 @@ export function CloudServiceLoginButton({
     }
   }
 
-  const loginPending = needsLoginState.loading || isAuthWindowOpening
-  const loginSuccess = !needsLoginState.loading && needsLoginState.value === false
+  const loginPending = needsLoginState.status === 'loading' || isAuthWindowOpening
+  const loginSuccess = needsLoginState.status !== 'loading' && needsLoginState.result === false
   const showLoading = loginPending || loginSuccess
 
   if (showLoading) {

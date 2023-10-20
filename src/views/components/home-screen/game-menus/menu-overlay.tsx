@@ -1,5 +1,5 @@
+import { useAsync as useAsyncFn } from '@react-hookz/web'
 import { useSetAtom } from 'jotai'
-import { useAsyncFn } from 'react-use'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
 import { showMenuOverlayAtom } from '../../atoms'
 import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
@@ -12,8 +12,8 @@ export function MenuOverlay() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const { exit } = useExit()
 
-  const [saveStateState, saveState] = useAsyncFn(async () => {
-    if (saveStateState.loading) {
+  const [saveStateState, { execute: saveState }] = useAsyncFn(async () => {
+    if (saveStateState.status === 'loading') {
       return
     }
     await saveGameState()
@@ -21,8 +21,8 @@ export function MenuOverlay() {
     setShowMenuOverlay(false)
   })
 
-  const [loadStateState, loadState] = useAsyncFn(async (stateId: string) => {
-    if (loadStateState.loading) {
+  const [loadStateState, { execute: loadState }] = useAsyncFn(async (stateId: string) => {
+    if (loadStateState.status === 'loading') {
       return
     }
     await loadGameState(stateId)
@@ -47,11 +47,11 @@ export function MenuOverlay() {
 
   return (
     <div className='menu-overlay h-full w-full py-10' data-testid='menu-overlay'>
-      {saveStateState.loading ? (
+      {saveStateState.status === 'loading' ? (
         <LoadingScreen>
           Saving <BouncingEllipsis /> Please do not turn off your device!
         </LoadingScreen>
-      ) : loadStateState.loading ? (
+      ) : loadStateState.status === 'loading' ? (
         <LoadingScreen>
           Loading selected state
           <BouncingEllipsis />

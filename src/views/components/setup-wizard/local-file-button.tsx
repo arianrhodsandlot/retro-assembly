@@ -1,6 +1,6 @@
+import { useAsync } from '@react-hookz/web'
 import fileSelect from 'file-select'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useAsyncFn } from 'react-use'
 import { getSupportedFileExtensions, previewGame } from '../../../core'
 import { isGameLaunchedAtom, isGameRunningAtom } from '../atoms'
 import { BouncingEllipsis } from '../common/bouncing-ellipsis'
@@ -20,7 +20,7 @@ export function LocalFileButton() {
   const { mayNeedsUserInteraction, showInteractionButton, onUserInteract, waitForUserInteraction } =
     useUserInteraction()
 
-  const [state, run] = useAsyncFn(async () => {
+  const [state, { execute }] = useAsync(async () => {
     const file: File = await fileSelect({
       accept: supportedFileExtensions.map((extension) => `.${extension}`),
     })
@@ -34,8 +34,8 @@ export function LocalFileButton() {
   })
 
   function onClick() {
-    if (!state.loading) {
-      run()
+    if (state.status !== 'loading') {
+      execute()
     }
   }
 
@@ -43,7 +43,7 @@ export function LocalFileButton() {
     <>
       <BaseButton className='w-60' data-testid='select-a-rom' onClick={onClick}>
         <span className='icon-[mdi--zip-box-outline] h-5 w-5' />
-        {state.loading ? (
+        {state.status === 'loading' ? (
           <>
             Loading
             <BouncingEllipsis />

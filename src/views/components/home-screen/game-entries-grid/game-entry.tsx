@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
 import $ from 'jquery'
-import { type CSSProperties, type FocusEvent, type MouseEvent, memo } from 'react'
+import { type CSSProperties, type FocusEvent, type MouseEvent } from 'react'
 import { type Rom } from '../../../../core'
 import { maskAtom } from '../atoms'
 import { GameEntryButton } from './game-entry-button'
@@ -20,7 +20,7 @@ function onFocus(e: FocusEvent<HTMLButtonElement, Element>) {
   }
 }
 
-function GameEntry({
+export function GameEntry({
   rom,
   columnIndex,
   rowIndex,
@@ -66,25 +66,3 @@ function GameEntry({
     </GameEntryButton>
   )
 }
-
-function arePropsEqual(oldProps, newProps) {
-  if (oldProps === newProps) {
-    return true
-  }
-
-  if (oldProps.rom.id !== newProps.rom.id) {
-    return false
-  }
-
-  for (const key of ['columnCount', 'columnIndex', 'rowCount', 'rowIndex']) {
-    if (oldProps[key] !== newProps[key]) {
-      return false
-    }
-  }
-
-  return true
-}
-
-const MemoedGameEntry = memo(GameEntry, arePropsEqual)
-
-export { MemoedGameEntry as GameEntry }

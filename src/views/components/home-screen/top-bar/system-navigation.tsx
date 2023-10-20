@@ -5,25 +5,14 @@ import { useCallback, useEffect, useMemo } from 'react'
 import type { SystemName } from '../../../../core'
 import { onPress } from '../../../../core'
 import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
+import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { isGameIdleAtom } from '../../atoms'
 import { currentSystemNameAtom, systemsAtom } from '../atoms'
 import { historyDummySystem } from '../constants'
+import { isFocusingHome } from '../utils'
 import { SystemNavigationItem } from './system-navigation-item'
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
-
-function isFocusingHome() {
-  if (!document.activeElement) {
-    return false
-  }
-
-  const homeScreenLayout = document.querySelector('.home-screen-layout')
-  if (!homeScreenLayout) {
-    return false
-  }
-
-  return $.contains(homeScreenLayout, document.activeElement)
-}
 
 export function SystemNavigation() {
   const systems = useAtomValue(systemsAtom)
@@ -32,7 +21,7 @@ export function SystemNavigation() {
   const allSystems = useMemo(() => [historyDummySystem, ...systems], [systems])
   const showHistory = useMemo(() => !isUsingDemo(), [])
 
-  const shouldSwitchSystem = isFocusingHome() && isGameIdle
+  const shouldSwitchSystem = isFocusingHome() && !SpatialNavigation.isPaused() && isGameIdle
   const currentSystemIndex = findIndex(allSystems, { name: currentSystemName as SystemName })
 
   const selectPrevSystem = useCallback(() => {

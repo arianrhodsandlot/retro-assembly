@@ -3,6 +3,7 @@ import { isEqual, map, omit } from 'lodash-es'
 import { memo, useCallback, useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { type Rom } from '../../../../core'
+import { isFocusingHome } from '../utils'
 import { GameEntry } from './game-entry'
 import { clearLoadImageQueue } from './utils'
 
@@ -15,6 +16,9 @@ function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   const { rowCount, columnCount } = props
 
   const focusFirstButton = useCallback(async () => {
+    if (!isFocusingHome()) {
+      return
+    }
     if (roms?.length) {
       await delay(0)
       innerRef.current?.querySelector('button')?.focus()

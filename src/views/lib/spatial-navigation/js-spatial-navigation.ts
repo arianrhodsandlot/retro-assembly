@@ -1032,6 +1032,10 @@ export const SpatialNavigation = {
     _pause = false
   },
 
+  isPaused() {
+    return _pause
+  },
+
   // focus([silent])
   // focus(<sectionId>, [silent])
   // focus(<extSelector>, [silent])
@@ -1077,6 +1081,10 @@ export const SpatialNavigation = {
   // move(<direction>)
   // move(<direction>, <selector>)
   move(direction, selector?) {
+    if (_pause) {
+      return false
+    }
+
     direction = direction.toLowerCase()
     if (!REVERSE[direction]) {
       return false

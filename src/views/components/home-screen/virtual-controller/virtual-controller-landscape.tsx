@@ -31,20 +31,23 @@ export function VirtualControllerLandscape() {
           </div>
         </div>
 
-        <div className='flex flex-1 items-center justify-center gap-4'>
+        <div className='flex flex-col gap-6'>
+          <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
+            <VirtualControllerMenuButton />
+          </div>
           <div className='h-8 w-20 overflow-hidden rounded-md border-4 border-dashed border-white/50'>
             <VirtualButton name='select'>
               <span className='icon-[mdi--minus-thick] h-6 w-6' />
             </VirtualButton>
           </div>
+        </div>
 
-          <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
-            <VirtualControllerMenuButton />
-          </div>
+        <div className='flex-1' />
+
+        <div className='flex flex-col items-end gap-6'>
           <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
             <VirtualControllerToggleButton />
           </div>
-
           <div className='h-8 w-20 overflow-hidden rounded-md border-4 border-dashed border-white/50'>
             <VirtualButton name='start'>
               <span className='icon-[mdi--play] h-6 w-6' />

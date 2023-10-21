@@ -3,7 +3,7 @@ import { promisify } from 'node:util'
 import htmlMinimize from '@sergeymakinen/vite-plugin-html-minimize'
 import react from '@vitejs/plugin-react-swc'
 import { formatISO } from 'date-fns'
-import { defineConfig, splitVendorChunkPlugin } from 'vite'
+import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(async () => {
@@ -16,10 +16,32 @@ export default defineConfig(async () => {
       GIT_VERSION: JSON.stringify(shortVersion),
       BUILD_TIME: JSON.stringify(formatISO(new Date())),
     },
-    build: { rollupOptions: { input: ['index.html', 'privacy-policy.html'] } },
+    build: {
+      rollupOptions: {
+        input: ['index.html', 'privacy-policy.html'],
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              const namedChunks = ['nostalgist', 'jquery', 'dropbox', '@microsoft/microsoft-graph-client']
+              for (const namedChunk of namedChunks) {
+                if (id.includes(`/${namedChunk}/`)) {
+                  return namedChunk.replace('@', '').replace('/', '-')
+                }
+              }
+              const frameworkPackages = ['react', 'react-dom', '@radix-ui', 'framer-motion', 'react-window', 'wouter']
+              for (const frameworkPackage of frameworkPackages) {
+                if (id.includes(`/${frameworkPackage}/`)) {
+                  return 'framework'
+                }
+              }
+              return 'library'
+            }
+          },
+        },
+      },
+    },
     plugins: [
       react(),
-      splitVendorChunkPlugin(),
       // @ts-expect-error the package provided a wrong type decleration
       htmlMinimize.default(),
       VitePWA({

@@ -35,7 +35,7 @@ export class OnedriveProvider implements FileSystemProvider {
   }
 
   async getContentAndCache(path: string) {
-    const cacheKey = { name: `${this.constructor.name}.peekContent`, path }
+    const cacheKey = { name: 'OnedriveProvider.peekContent', path }
     const blob = await this.getContent(path)
 
     const text = await blob.text()
@@ -46,7 +46,7 @@ export class OnedriveProvider implements FileSystemProvider {
   }
 
   async peekContent(path: string) {
-    const cacheKey = { name: `${this.constructor.name}.peekContent`, path }
+    const cacheKey = { name: 'OnedriveProvider.peekContent', path }
     const rawCache = await RequestCache.get(cacheKey)
     return rawCache?.value
   }
@@ -80,7 +80,7 @@ export class OnedriveProvider implements FileSystemProvider {
     } while (listNextPage)
 
     if (children?.length) {
-      RequestCache.set({ name: `${this.constructor.name}.peek`, path }, children)
+      RequestCache.set({ name: 'OnedriveProvider.peek', path }, children)
     }
 
     return children.map(
@@ -95,7 +95,7 @@ export class OnedriveProvider implements FileSystemProvider {
   }
 
   async peek(path: string) {
-    const rawCache = await RequestCache.get({ name: `${this.constructor.name}.peek`, path })
+    const rawCache = await RequestCache.get({ name: 'OnedriveProvider.peek', path })
     const children = rawCache?.value
     const fileAccessors: FileAccessor[] | undefined = children?.map(
       (item) =>

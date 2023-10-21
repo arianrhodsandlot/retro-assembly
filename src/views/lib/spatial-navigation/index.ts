@@ -54,6 +54,13 @@ SpatialNavigation.add({
   leaveFor: { up: '', down: '', left: '', right: '' },
 })
 
+SpatialNavigation.add({
+  id: 'canvas',
+  selector: '#canvas',
+  enterTo: 'default-element',
+  leaveFor: { up: '', down: '', left: '', right: '' },
+})
+
 function getCurrentFocusedElement() {
   const { activeElement, body } = document
   if (activeElement && activeElement !== body) {

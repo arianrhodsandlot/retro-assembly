@@ -20,5 +20,5 @@ export async function loadGameState(stateId: string) {
     fileSystemProvider: fileSystem,
   })
   const state = await coreStateManager.getStateContent(stateId)
-  await emulator.loadState(state)
+  emulator.loadState(state)
 }

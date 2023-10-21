@@ -81,7 +81,7 @@ export function GameLaunching() {
           animate: maskStyle.expanded,
         }}
       >
-        <GameEntryContent rom={rom} />
+        {rom ? <GameEntryContent rom={rom} /> : null}
       </GameLaunchingImage>
 
       <GameLaunchingText show={Boolean(maskStyle.valid && isGameLaunching)} />

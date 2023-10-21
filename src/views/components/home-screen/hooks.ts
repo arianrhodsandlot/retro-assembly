@@ -1,4 +1,4 @@
-import { useSetAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { exitGame } from '../../../core'
 import { emitter } from '../../lib/emitter'
 import { isGameRunningAtom, showMenuOverlayAtom } from '../atoms'
@@ -7,13 +7,13 @@ import { maskAtom } from './atoms'
 export function useExit() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
-  const setMask = useSetAtom(maskAtom)
+  const [mask, setMask] = useAtom(maskAtom)
 
   function exit() {
     exitGame()
     setShowMenuOverlay(false)
     setIsGameRunningAtom(false)
-    setMask(undefined)
+    setMask({ rom: mask?.rom })
     emitter.emit('exit')
   }
 

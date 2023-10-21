@@ -22,11 +22,16 @@ export function GameEntryContent({ rom }: { rom: Rom }) {
       throw new Error('skip load cover')
     }
     await rom.ready()
-    const { cover } = rom
+    const { covers } = rom
     const abortController = new AbortController()
     abortControllerRef.current = abortController
-    await loadImageWithLimit(cover, abortController.signal)
-    return cover
+    for (const cover of covers) {
+      try {
+        await loadImageWithLimit(cover, abortController.signal)
+        return cover
+      } catch {}
+    }
+    throw new Error('invalid cover')
   }, [rom])
 
   useEffect(() => {

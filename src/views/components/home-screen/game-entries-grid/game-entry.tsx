@@ -7,7 +7,7 @@ import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameTitle } from './game-title'
 
-function onFocus(e: FocusEvent<HTMLButtonElement, Element>) {
+function scrollAsNeeded(e: FocusEvent<HTMLButtonElement, Element>) {
   const $focusedElement = $(e.currentTarget)
   const $outer = $focusedElement.offsetParent()
   const outerScrollTop = $outer.scrollTop()
@@ -54,7 +54,7 @@ export function GameEntry({
       isLastColumn={isLastColumn}
       isLastRow={isLastRow}
       onClick={onClickGameEntryButton}
-      onFocus={onFocus}
+      onFocus={scrollAsNeeded}
       style={style}
     >
       <div className='flex h-full flex-col'>

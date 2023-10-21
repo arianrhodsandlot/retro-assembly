@@ -7,7 +7,7 @@ function encodeRFC3986URIComponent(str) {
   return encodeURIComponent(str).replaceAll(/[!'()*]/g, (c) => `%${c.codePointAt(0)?.toString(16).toUpperCase()}`)
 }
 
-export function getCover({ system, name, type = system === 'gw' ? 'snap' : 'boxart' }) {
+export function getCover({ system, name, type = 'boxart' }) {
   if (!name || !system) {
     return ''
   }

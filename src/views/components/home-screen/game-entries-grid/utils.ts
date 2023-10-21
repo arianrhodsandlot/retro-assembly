@@ -1,10 +1,14 @@
 import ky from 'ky'
 import PQueue from 'p-queue'
+import store2 from 'store2'
 
 const queue = new PQueue({ concurrency: 5 })
 
-const validImages = {}
-const invalidImages = {}
+const cacheKey = 'image-load-status-record'
+
+const record = store2.session.get(cacheKey) || {}
+const validImages = record?.validImages || {}
+const invalidImages = record?.invalidImages || {}
 async function loadImage(src: string, signal: AbortSignal) {
   if (src in validImages) {
     return
@@ -18,6 +22,7 @@ async function loadImage(src: string, signal: AbortSignal) {
   } catch (error: any) {
     if (typeof error?.response?.status === 'number') {
       invalidImages[src] = true
+      store2.session.set(cacheKey, { ...record, invalidImages })
     }
     throw error
   }
@@ -27,6 +32,7 @@ async function loadImage(src: string, signal: AbortSignal) {
   return await new Promise<void>((resolve, reject) => {
     img.addEventListener('load', () => {
       validImages[src] = true
+      store2.session.set(cacheKey, { ...record, validImages })
       resolve()
     })
     img.addEventListener('error', (error) => {

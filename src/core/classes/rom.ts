@@ -42,9 +42,13 @@ export class Rom {
     return this.goodCode.rom
   }
 
-  get cover() {
+  get covers() {
     if (this.standardizedName) {
-      return getCover({ system: this.system, name: this.standardizedName })
+      return [
+        getCover({ system: this.system, name: this.standardizedName, type: 'boxart' }),
+        getCover({ system: this.system, name: this.standardizedName, type: 'title' }),
+        getCover({ system: this.system, name: this.standardizedName, type: 'snap' }),
+      ]
     }
     return ''
   }

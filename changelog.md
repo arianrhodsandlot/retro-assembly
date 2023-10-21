@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## 2023-10-21
+### Added
+- Add support for virtual controller on touch screen.
+
 ## 2023-09-06
 ### Added
 - Add support for using BIOS files in a `system` directory when using certain cores.

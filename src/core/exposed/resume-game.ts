@@ -8,5 +8,4 @@ export function resumeGame() {
   }
 
   emulator.resume()
-  emulator.canvas.focus()
 }

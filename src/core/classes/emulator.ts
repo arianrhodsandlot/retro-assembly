@@ -27,6 +27,7 @@ const defaultStyle: Partial<CSSStyleDeclaration> = {
   width: '100%',
   touchAction: 'none',
   zIndex: '10',
+  opacity: '1',
 }
 
 export class Emulator {

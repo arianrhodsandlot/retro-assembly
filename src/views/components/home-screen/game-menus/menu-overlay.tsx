@@ -1,6 +1,8 @@
 import { useAsync as useAsyncFn } from '@react-hookz/web'
 import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../core'
+import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { showMenuOverlayAtom } from '../../atoms'
 import { BouncingEllipsis } from '../../common/bouncing-ellipsis'
 import { LightInputButton } from '../../common/light-input-button'
@@ -25,25 +27,35 @@ export function MenuOverlay() {
     if (loadStateState.status === 'loading') {
       return
     }
+    SpatialNavigation.focus('canvas')
     await loadGameState(stateId)
     setShowMenuOverlay(false)
     resumeGame()
   })
 
   function resume() {
+    SpatialNavigation.focus('canvas')
     setShowMenuOverlay(false)
     resumeGame()
   }
 
   function restart() {
+    SpatialNavigation.focus('canvas')
     setShowMenuOverlay(false)
     restartGame()
   }
 
   async function saveAndExit() {
+    SpatialNavigation.focus('canvas')
     await saveState()
     exit()
   }
+
+  useEffect(() => {
+    return () => {
+      SpatialNavigation.focus('canvas')
+    }
+  })
 
   return (
     <div className='menu-overlay h-full w-full py-10' data-testid='menu-overlay'>

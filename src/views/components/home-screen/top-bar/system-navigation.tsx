@@ -1,5 +1,4 @@
 import { useAtom, useAtomValue } from 'jotai'
-import $ from 'jquery'
 import { findIndex, first, last } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
 import type { SystemName } from '../../../../core'

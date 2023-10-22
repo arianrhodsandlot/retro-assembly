@@ -10,8 +10,8 @@ import { InputHelpButton } from './input-help-button'
 import { TopBarButton } from './top-bar-button'
 
 export function TopBarDropdown() {
-  const elementRef = useRef(null)
-  const dropdownItemsContainerRef = useRef(null)
+  const elementRef = useRef<HTMLDivElement>(null)
+  const dropdownItemsContainerRef = useRef<HTMLDivElement>(null)
   const offCancelRef = useRef<() => void>()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
@@ -20,8 +20,7 @@ export function TopBarDropdown() {
       return
     }
 
-    const isFocusingDropdownItems =
-      dropdownItemsContainerRef.current && $.contains(dropdownItemsContainerRef.current, event.target)
+    const isFocusingDropdownItems = dropdownItemsContainerRef.current?.contains(event.target)
     if (isFocusingDropdownItems) {
       closeDropdown()
     }
@@ -31,8 +30,7 @@ export function TopBarDropdown() {
     // if we do not wait for a delay, `document.activeElement` will always be "body"
     await delay(0)
 
-    const shouldKeepOpen =
-      elementRef.current && document.activeElement && $.contains(elementRef.current, document.activeElement)
+    const shouldKeepOpen = elementRef.current?.contains(document.activeElement)
 
     if (shouldKeepOpen) {
       return
@@ -45,8 +43,7 @@ export function TopBarDropdown() {
   async function openDropdown() {
     setIsDropdownOpen(true)
     const offCancel = onCancel(() => {
-      const shouldClose =
-        elementRef.current && document.activeElement && $.contains(elementRef.current, document.activeElement)
+      const shouldClose = elementRef.current?.contains(document.activeElement)
       if (shouldClose) {
         closeDropdown()
       }
@@ -69,7 +66,7 @@ export function TopBarDropdown() {
       return
     }
     await delay(0)
-    if ($.contains(elementRef.current, document.activeElement)) {
+    if (elementRef.current.contains(document.activeElement)) {
       const button = $('button:first', elementRef.current)
       button.trigger('focus')
     }

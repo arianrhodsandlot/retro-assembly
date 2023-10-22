@@ -131,10 +131,9 @@ export function HomeScreen() {
   }, [setCurrentSystemName])
 
   const isRomsEmpty = !roms?.length
-  const loading = (romsState.loading && !peekRomsState.loading && isRomsEmpty) || systemsState.loading
-  const error = systemsState.error || romsState.error
+  const showLoading = romsState.loading && !peekRomsState.loading && isRomsEmpty
 
-  if (loading) {
+  if (showLoading) {
     return (
       <HomeScreenLayout>
         <span className='icon-[line-md--loading-loop] h-16 w-16 text-rose-700' />
@@ -143,6 +142,7 @@ export function HomeScreen() {
   }
 
   const columnWidth = gridWidth / columnCount
+  const error = romsState.loading ? undefined : systemsState.error || romsState.error
   return (
     <HomeScreenLayout>
       <>

@@ -1,5 +1,7 @@
 import { isUsingDropbox, isUsingGoogleDrive, isUsingOnedrive } from '../../../../core'
+import { ReturnToHomeButton } from '../../common/return-to-home-button'
 import { BaseButton } from '../../primitives/base-button'
+import { BaseCallout } from '../../primitives/base-callout'
 import { BaseDialogContent } from '../../primitives/base-dialog-content'
 import { CloudServiceLogin } from './cloud-service-login'
 import { LocalFilePermision } from './local-file-permision'
@@ -37,16 +39,23 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     }
   }
 
-  console.warn(error, error.stack)
-
   // todo: needs better error text
   return (
     <BaseDialogContent>
-      <div className='flex flex-col items-stretch'>
-        <div>Failed to load games.</div>
-        <BaseButton className='mt-2' onClick={onSolve}>
+      <div className='flex w-80 flex-col items-stretch gap-2'>
+        <BaseCallout>
+          <div className='flex items-start'>
+            <div>
+              <span className='icon-[mdi--bell] mr-2 mt-[2px] h-4 w-4 ' />
+            </div>
+            <div>Failed to load games.</div>
+          </div>
+        </BaseCallout>
+        <BaseButton className='mt-2' onClick={onSolve} styleType='primary'>
+          <span className='icon-[mdi--reload] h-6 w-6' />
           Retry
         </BaseButton>
+        <ReturnToHomeButton />
       </div>
     </BaseDialogContent>
   )

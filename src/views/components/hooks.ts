@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { type Rom, launchGame } from '../../core'
+import { useLocation } from 'wouter'
+import { type Rom, launchGame, teardown } from '../../core'
 
 const isAppleMobile = /iphone|ipad|ipod/i.test(navigator.userAgent)
 const isChromeLike = /chrome/i.test(navigator.userAgent)
@@ -42,4 +43,15 @@ export function useUserInteraction() {
     setNeedsUserInteraction,
     launchGame: launchGame_,
   }
+}
+
+export function useTeardown() {
+  const [, setLocation] = useLocation()
+
+  function teardown_() {
+    teardown()
+    setLocation('/', { replace: true })
+  }
+
+  return { teardown: teardown_ }
 }

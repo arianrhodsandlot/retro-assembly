@@ -1,12 +1,13 @@
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { findIndex, first, last } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
+import { useLocation, useParams } from 'wouter'
 import type { SystemName } from '../../../../core'
 import { onPress } from '../../../../core'
 import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { isGameIdleAtom } from '../../atoms'
-import { currentSystemNameAtom, systemsAtom } from '../atoms'
+import { systemsAtom } from '../atoms'
 import { historyDummySystem } from '../constants'
 import { isFocusingHome } from '../utils'
 import { SystemNavigationItem } from './system-navigation-item'
@@ -14,36 +15,37 @@ import { SystemNavigationItem } from './system-navigation-item'
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function SystemNavigation() {
+  const [, setLocation] = useLocation()
+  const params = useParams()
   const systems = useAtomValue(systemsAtom)
   const isGameIdle = useAtomValue(isGameIdleAtom)
-  const [currentSystemName, setCurrentSystemName] = useAtom(currentSystemNameAtom)
   const allSystems = useMemo(() => [historyDummySystem, ...systems], [systems])
   const showHistory = useMemo(() => !isUsingDemo(), [])
 
   const shouldSwitchSystem = isFocusingHome() && !SpatialNavigation.isPaused() && isGameIdle
-  const currentSystemIndex = findIndex(allSystems, { name: currentSystemName as SystemName })
+  const currentSystemIndex = findIndex(allSystems, { name: params.system as SystemName })
 
   const selectPrevSystem = useCallback(() => {
     if (!shouldSwitchSystem) {
       return
     }
     const newCurrentSystem = allSystems[currentSystemIndex - 1] ?? last(allSystems)
-    setCurrentSystemName(newCurrentSystem.name)
-  }, [currentSystemIndex, setCurrentSystemName, allSystems, shouldSwitchSystem])
+    setLocation(`/system/${newCurrentSystem.name}`, { replace: true })
+  }, [currentSystemIndex, setLocation, allSystems, shouldSwitchSystem])
 
   const selectNextSystem = useCallback(() => {
     if (!shouldSwitchSystem) {
       return
     }
     const newCurrentSystem = allSystems[currentSystemIndex + 1] ?? first(allSystems)
-    setCurrentSystemName(newCurrentSystem.name)
-  }, [currentSystemIndex, setCurrentSystemName, allSystems, shouldSwitchSystem])
+    setLocation(`/system/${newCurrentSystem.name}`, { replace: true })
+  }, [currentSystemIndex, setLocation, allSystems, shouldSwitchSystem])
 
   useEffect(() => {
-    if (currentSystemName) {
-      localStorage.setItem(lastSelectedSystemStorageKey, currentSystemName)
+    if (params.system) {
+      localStorage.setItem(lastSelectedSystemStorageKey, params.system)
     }
-  }, [currentSystemName])
+  }, [params.system])
 
   useEffect(() => onPress('l1', selectPrevSystem), [selectPrevSystem])
   useEffect(() => onPress('r1', selectNextSystem), [selectNextSystem])

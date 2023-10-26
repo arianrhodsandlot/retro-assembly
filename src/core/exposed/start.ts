@@ -10,19 +10,19 @@ export async function start() {
   const type = PreferenceParser.get('romProviderType')
   switch (type) {
     case 'demo':
-      globalContext.fileSystem = await DemoProvider.getSingleton()
+      globalContext.fileSystem = DemoProvider.getSingleton()
       break
     case 'local':
-      globalContext.fileSystem = await LocalProvider.getSingleton()
+      globalContext.fileSystem = LocalProvider.getSingleton()
       break
     case 'onedrive':
-      globalContext.fileSystem = await OnedriveProvider.getSingleton()
+      globalContext.fileSystem = OnedriveProvider.getSingleton()
       break
     case 'google-drive':
       globalContext.fileSystem = await GoogleDriveProvider.getSingleton()
       break
     case 'dropbox':
-      globalContext.fileSystem = await DropboxProvider.getSingleton()
+      globalContext.fileSystem = DropboxProvider.getSingleton()
       break
     default:
       throw new Error('unknown rom provider type')

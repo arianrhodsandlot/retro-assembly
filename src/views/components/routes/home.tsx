@@ -1,39 +1,21 @@
-import { useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { detectNeedsSetup, start, teardown } from '../../../core'
-import { emitter } from '../../lib/emitter'
-import { HomeScreen } from '../home-screen'
+import { useLocation } from 'wouter'
+import { detectNeedsSetup, start } from '../../../core'
 import SetupWizard from '../setup-wizard'
 
 export function Home() {
-  const [isStarted, setIsStarted] = useState(false)
+  const [, setLocation] = useLocation()
 
   const preparationState = useAsyncRetry(async () => {
     const needsSetup = await detectNeedsSetup()
     if (needsSetup === false) {
       await start()
-      setIsStarted(true)
+      setLocation('/system/recent-system', { replace: true })
     }
     return needsSetup
   })
 
-  useEffect(() => {
-    async function reload() {
-      setIsStarted(false)
-      await teardown()
-      preparationState.retry()
-    }
-
-    emitter.on('reload', reload)
-    return () => {
-      emitter.off('reload', reload)
-    }
-  }, [preparationState])
-
-  return (
-    <>
-      {isStarted ? <HomeScreen /> : false}
-      {preparationState.value ? <SetupWizard onSetup={() => preparationState.retry()} /> : false}
-    </>
-  )
+  if (preparationState.value) {
+    return <SetupWizard onSetup={() => preparationState.retry()} />
+  }
 }

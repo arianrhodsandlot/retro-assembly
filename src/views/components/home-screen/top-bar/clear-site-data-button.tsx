@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import { isUsingDropbox, isUsingLocal, isUsingOnedrive } from '../../../../core'
 import { isUsingGoogleDrive } from '../../../../core/exposed/is-using-google-drive'
-import { emitter } from '../../../lib/emitter'
+import { useTeardown } from '../../hooks'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
 import { ClearSiteDataDialogContent } from './clear-site-data-dialog-content'
 import { TopBarButton } from './top-bar-button'
 
 export function ClearSiteDataButton() {
+  const { teardown } = useTeardown()
   const [confirmMessage, setConfirmMessage] = useState('')
   const [open, setOpen] = useState(false)
 
   function onConfirm() {
-    emitter.emit('reload')
+    teardown()
     setOpen(false)
   }
 

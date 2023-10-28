@@ -20,7 +20,7 @@ export default function App() {
       <Route path='/auth/dropbox'>
         <AuthDropbox />
       </Route>
-      <Route path='/system/:system'>
+      <Route path='/system/:system?'>
         <System />
       </Route>
       <Route path='/system/:system/rom/:rom'>

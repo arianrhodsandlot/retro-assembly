@@ -10,7 +10,7 @@ export function Home() {
     const needsSetup = await detectNeedsSetup()
     if (needsSetup === false) {
       await start()
-      setLocation('/system/recent-system', { replace: true })
+      setLocation('/system', { replace: true })
     }
     return needsSetup
   })

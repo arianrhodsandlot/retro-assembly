@@ -58,7 +58,7 @@ export function HomeScreen() {
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
   const [, setLocation] = useLocation()
-  const [match] = useRoute('/system/:system')
+  const [match] = useRoute('/system/:system?')
   const currentSystemRef = useRef(params.system)
 
   const { width: gridWidth, height: gridHeight } = measurements
@@ -72,7 +72,7 @@ export function HomeScreen() {
   // load systems from cache
   useAsync(async () => {
     const systems = await peekSystems()
-    if (!systems) {
+    if (!systems?.length) {
       return
     }
     const newCurrentSystemName = getNewCurrentSystemName(systems)
@@ -98,6 +98,11 @@ export function HomeScreen() {
   const systemsState = useAsyncRetry(async () => {
     const systems = await getSystems()
     setSystems(systems)
+    const newCurrentSystemName = getNewCurrentSystemName(systems)
+    setSystems(systems)
+    if (match) {
+      setLocation(`/system/${newCurrentSystemName}`, { replace: true })
+    }
     updateRetrying()
   }, [setSystems])
 

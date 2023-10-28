@@ -6,7 +6,7 @@ import { type CloudService } from '.'
 export async function listDirectory({ path, type }: { path: string; type: CloudService }) {
   switch (type) {
     case 'onedrive': {
-      const onedrive = await OnedriveProvider.getSingleton()
+      const onedrive = OnedriveProvider.getSingleton()
       return await onedrive.list(path)
     }
     case 'google-drive': {
@@ -14,7 +14,7 @@ export async function listDirectory({ path, type }: { path: string; type: CloudS
       return await googleDrive.list(path)
     }
     case 'dropbox': {
-      const dropboxProvider = await DropboxProvider.getSingleton()
+      const dropboxProvider = DropboxProvider.getSingleton()
       return await dropboxProvider.list(path)
     }
     default:

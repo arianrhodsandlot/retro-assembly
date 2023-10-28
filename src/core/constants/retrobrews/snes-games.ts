@@ -1,0 +1,16 @@
+export const snesGames = [
+  'astrohawk.smc',
+  'blt.sfc',
+  'bucket.smc',
+  'furryrpg.sfc',
+  'hilda.sfc',
+  'horizontal-shooter.sfc',
+  'jetpilotrising.sfc',
+  'megafamilybros.smc',
+  'nwarpdaisakusen.smc',
+  'questformoney.sfc',
+  'rockfall.smc',
+  'saf.smc',
+  'superbossgaiden.sfc',
+  'tchouv2.smc',
+]

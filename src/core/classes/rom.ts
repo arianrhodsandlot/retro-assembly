@@ -9,7 +9,7 @@ import { GamesDatabase } from './games-database'
 import { type Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 
-const allowedExtensions = new Set(['zip', ...Object.keys(extSystemMap)])
+const allowedExtensions = new Set(['zip', 'bin', ...Object.keys(extSystemMap)])
 
 export class Rom {
   id = ''

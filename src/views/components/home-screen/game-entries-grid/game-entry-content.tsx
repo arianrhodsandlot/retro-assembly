@@ -15,16 +15,24 @@ function pseudoRandomDeg(seed: string) {
 
 export function GameEntryContent({ rom }: { rom: Rom }) {
   const abortControllerRef = useRef<AbortController>()
-  const skipLoadCover = useMemo(() => isUsingDemo(), [])
+  const usingDemo = useMemo(() => isUsingDemo(), [])
 
   const state = useAsync(async () => {
-    if (skipLoadCover) {
-      throw new Error('skip load cover')
-    }
-    await rom.ready()
-    const { covers } = rom
     const abortController = new AbortController()
     abortControllerRef.current = abortController
+    if (usingDemo) {
+      let { system, fileAccessor } = rom
+      if (system === 'megadrive') {
+        system = 'md'
+      }
+      const repo = `${system}-games`
+      const cover = `https://cdn.jsdelivr.net/gh/retrobrews/${repo}@master/${fileAccessor.basename}.png`
+      await loadImageWithLimit(cover, abortController.signal)
+      return cover
+    }
+
+    await rom.ready()
+    const { covers } = rom
     for (const cover of covers) {
       try {
         await loadImageWithLimit(cover, abortController.signal)

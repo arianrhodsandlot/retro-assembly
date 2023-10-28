@@ -7,6 +7,7 @@ import { getBiosFiles } from '../helpers/bios'
 import { emitter } from '../internal/emitter'
 import { globalContext } from '../internal/global-context'
 import { exitGame } from './exit-game'
+import { isUsingDemo } from '.'
 
 export async function launchGame(
   rom: Rom,
@@ -51,6 +52,11 @@ async function getEmulatorConfig() {
   }
 
   let config = { retroarch: undefined, retroarchCore: undefined }
+
+  if (isUsingDemo()) {
+    return config
+  }
+
   try {
     const blob = await globalContext.fileSystem.getContent(getConfigPath())
     const configContent = await blob.text()

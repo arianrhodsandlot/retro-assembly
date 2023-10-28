@@ -2,7 +2,7 @@ import { useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { type CSSProperties, type FocusEvent, type MouseEvent } from 'react'
 import { type Rom } from '../../../../core'
-import { maskAtom } from '../atoms'
+import { launchingMaskAtom } from '../atoms'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'
 import { GameTitle } from './game-title'
@@ -35,7 +35,7 @@ export function GameEntry({
   columnCount: number
   style: CSSProperties
 }) {
-  const setMask = useSetAtom(maskAtom)
+  const setMask = useSetAtom(launchingMaskAtom)
 
   function onClickGameEntryButton(event: MouseEvent<HTMLButtonElement>) {
     event.currentTarget.focus()

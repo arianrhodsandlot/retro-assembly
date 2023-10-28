@@ -6,7 +6,6 @@ import type { SystemName } from '../../../../core'
 import { onPress } from '../../../../core'
 import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
-import { isGameIdleAtom } from '../../atoms'
 import { systemsAtom } from '../atoms'
 import { historyDummySystem } from '../constants'
 import { isFocusingHome } from '../utils'
@@ -18,11 +17,10 @@ export function SystemNavigation() {
   const [, setLocation] = useLocation()
   const params = useParams()
   const systems = useAtomValue(systemsAtom)
-  const isGameIdle = useAtomValue(isGameIdleAtom)
   const allSystems = useMemo(() => [historyDummySystem, ...systems], [systems])
   const showHistory = useMemo(() => !isUsingDemo(), [])
 
-  const shouldSwitchSystem = isFocusingHome() && !SpatialNavigation.isPaused() && isGameIdle
+  const shouldSwitchSystem = isFocusingHome() && !SpatialNavigation.isPaused()
   const currentSystemIndex = findIndex(allSystems, { name: params.system as SystemName })
 
   const selectPrevSystem = useCallback(() => {

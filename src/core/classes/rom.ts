@@ -64,14 +64,6 @@ export class Rom {
     return roms
   }
 
-  static fromFile(romFile: FileAccessor) {
-    if (Rom.isValidFileName(romFile.name)) {
-      const rom = new Rom(romFile)
-      rom.id = rom.fileAccessor.path || rom.fileAccessor.name
-      return rom
-    }
-  }
-
   static fromFileAccessor(romFileAccessor: FileAccessor) {
     if (Rom.isValidFileName(romFileAccessor.name)) {
       const rom = new Rom(romFileAccessor)

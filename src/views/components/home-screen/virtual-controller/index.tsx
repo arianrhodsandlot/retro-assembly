@@ -1,5 +1,3 @@
-import { useAtomValue } from 'jotai'
-import { isGameLaunchedAtom } from '../../atoms'
 import { VirtualControllerButtons } from './virtual-controller-buttons'
 
 function isTouchDevice() {
@@ -7,13 +5,7 @@ function isTouchDevice() {
 }
 
 export function VirtualController() {
-  const isGameLaunched = useAtomValue(isGameLaunchedAtom)
-
   if (!isTouchDevice()) {
-    return null
-  }
-
-  if (!isGameLaunched) {
     return null
   }
 

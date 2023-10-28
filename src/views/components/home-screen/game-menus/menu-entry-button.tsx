@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
-import { detectHasRunningGame } from '../../../../core'
-import { isGameRunningAtom, showMenuOverlayAtom } from '../../atoms'
+import { showMenuOverlayAtom } from '../../atoms'
 import { useMouseMoving } from './hooks'
 
 function isTouchDevice() {
@@ -9,11 +8,10 @@ function isTouchDevice() {
 }
 
 export function MenuEntryButton({ onClick }: { onClick: () => void }) {
-  const isGameRunning = useAtomValue(isGameRunningAtom)
   const showMenuOverlay = useAtomValue(showMenuOverlayAtom)
   const { isMouseMoving } = useMouseMoving({ timeout: 3000 })
 
-  const showMenuEntryButton = isGameRunning && detectHasRunningGame() && isMouseMoving && !showMenuOverlay
+  const showMenuEntryButton = isMouseMoving && !showMenuOverlay
 
   if (isTouchDevice()) {
     return null

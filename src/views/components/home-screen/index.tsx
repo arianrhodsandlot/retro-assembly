@@ -1,20 +1,17 @@
 import { useMeasure } from '@react-hookz/web'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { some } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
-import { useLocation, useParams } from 'wouter'
+import { useLocation, useParams, useRoute } from 'wouter'
 import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
-import { isGameLaunchedAtom } from '../atoms'
 import { romsAtom, systemsAtom } from './atoms'
 import { historyDummySystem } from './constants'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { GameLaunching } from './game-launching'
-import { GameMenus } from './game-menus'
 import { HomeScreenLayout } from './home-screen-layout'
 import { InputTips } from './input-tips'
-import { VirtualController } from './virtual-controller'
 
 function getColumnCount(width: number) {
   const idealItemWidth = innerWidth > 800 ? 200 : 150
@@ -57,11 +54,11 @@ async function getRoms(system: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
-  const isGameLaunched = useAtomValue(isGameLaunchedAtom)
   const params = useParams()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
   const [, setLocation] = useLocation()
+  const [match] = useRoute('/system/:system')
   const currentSystemRef = useRef(params.system)
 
   const { width: gridWidth, height: gridHeight } = measurements
@@ -80,7 +77,9 @@ export function HomeScreen() {
     }
     const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
-    setLocation(`/system/${newCurrentSystemName}`, { replace: true })
+    if (match) {
+      setLocation(`/system/${newCurrentSystemName}`, { replace: true })
+    }
   }, [setSystems])
 
   // load roms from cache
@@ -145,33 +144,24 @@ export function HomeScreen() {
   const error = romsState.loading ? undefined : systemsState.error || romsState.error
   return (
     <HomeScreenLayout>
-      <>
-        {isRomsEmpty || (
-          <div className='h-full w-full' ref={gridContainerRef}>
-            <GameEntryGrid
-              className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
-              columnCount={columnCount}
-              columnWidth={columnWidth}
-              height={gridHeight}
-              roms={roms}
-              rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
-              rowHeight={columnWidth}
-              width={gridWidth}
-            />
-            <InputTips />
-            <GameLaunching />
-          </div>
-        )}
+      {isRomsEmpty || (
+        <div className='h-full w-full' ref={gridContainerRef}>
+          <GameEntryGrid
+            className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
+            columnCount={columnCount}
+            columnWidth={columnWidth}
+            height={gridHeight}
+            roms={roms}
+            rowCount={Math.ceil(roms?.length ? roms.length / columnCount : 0)}
+            rowHeight={columnWidth}
+            width={gridWidth}
+          />
+          <InputTips />
+          <GameLaunching />
+        </div>
+      )}
 
-        {error ? <ErrorContent error={error} onSolve={retry} /> : null}
-      </>
-
-      {isGameLaunched ? (
-        <>
-          <GameMenus />
-          <VirtualController />
-        </>
-      ) : null}
+      {error ? <ErrorContent error={error} onSolve={retry} /> : null}
     </HomeScreenLayout>
   )
 }

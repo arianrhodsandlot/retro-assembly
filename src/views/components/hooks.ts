@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useAsync } from '@react-hookz/web'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'wouter'
 import { type Rom, launchGame, teardown } from '../../core'
 
@@ -54,4 +55,18 @@ export function useTeardown() {
   }
 
   return { teardown: teardown_ }
+}
+
+// eslint-disable-next-line func-style
+export const useAsyncExecute: typeof useAsync = function useAsyncExecute(
+  asyncFn: (...params: unknown[]) => Promise<unknown>,
+  initialValue?: unknown,
+) {
+  const hooks = useAsync(asyncFn, initialValue)
+
+  const [, { execute }] = hooks
+  useEffect(() => {
+    execute()
+  }, [execute])
+  return hooks
 }

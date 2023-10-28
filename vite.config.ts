@@ -1,6 +1,5 @@
 import { exec } from 'node:child_process'
 import { promisify } from 'node:util'
-import htmlMinimize from '@sergeymakinen/vite-plugin-html-minimize'
 import react from '@vitejs/plugin-react-swc'
 import { formatISO } from 'date-fns'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
@@ -20,8 +19,6 @@ export default defineConfig(async () => {
     plugins: [
       react(),
       splitVendorChunkPlugin(),
-      // @ts-expect-error the package provided a wrong type decleration
-      htmlMinimize.default(),
       VitePWA({
         registerType: 'autoUpdate',
         devOptions: { enabled: false },

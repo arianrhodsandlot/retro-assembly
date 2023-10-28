@@ -24,7 +24,7 @@ export default function App() {
         <System />
       </Route>
       <Route path='/system/:system/rom/:rom'>
-        <Home />
+        <System />
       </Route>
     </Switch>
   )

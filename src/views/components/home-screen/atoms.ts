@@ -10,4 +10,4 @@ interface MaskAtomValue {
   target?: HTMLButtonElement
   rom?: Rom
 }
-export const maskAtom = atom<MaskAtomValue | undefined>(undefined)
+export const launchingMaskAtom = atom<MaskAtomValue | undefined>(undefined)

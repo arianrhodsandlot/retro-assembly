@@ -1,12 +1,14 @@
-import { useAsync } from '@react-hookz/web'
-import { useEffect } from 'react'
-import { useLocation } from 'wouter'
+import { useLocation, useParams } from 'wouter'
 import { detectNeedsSetup, start } from '../../../core'
 import { HomeScreen } from '../home-screen'
+import { useAsyncExecute } from '../hooks'
+import { RomScreen } from '../rom-screen'
 
 export function System() {
   const [, setLocation] = useLocation()
-  const [state, { execute }] = useAsync(async () => {
+  const params = useParams()
+
+  const [state] = useAsyncExecute(async () => {
     const needsSetup = await detectNeedsSetup()
     if (needsSetup) {
       setLocation('/', { replace: true })
@@ -15,11 +17,12 @@ export function System() {
     await start()
   })
 
-  useEffect(() => {
-    execute()
-  }, [execute])
-
   if (state.status === 'success') {
-    return <HomeScreen />
+    return (
+      <>
+        <HomeScreen />
+        {params.rom ? <RomScreen /> : null}
+      </>
+    )
   }
 }

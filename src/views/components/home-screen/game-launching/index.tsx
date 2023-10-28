@@ -1,15 +1,11 @@
 import { type AnimationDefinition } from 'framer-motion'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { isEqual } from 'lodash-es'
-import { SpatialNavigation } from '../../../lib/spatial-navigation'
-import { isGameLaunchingAtom, isGameRunningAtom } from '../../atoms'
-import { UserInteractionButton } from '../../common/user-interaction-button'
+import { useLocation, useParams } from 'wouter'
 import { useUserInteraction } from '../../hooks'
-import { maskAtom } from '../atoms'
+import { launchingMaskAtom } from '../atoms'
 import { GameEntryContent } from '../game-entries-grid/game-entry-content'
-import { useExit } from '../hooks'
 import { GameLaunchingImage } from './game-launching-image'
-import { GameLaunchingText } from './game-launching-text'
 
 function getMaskStyle(target: HTMLButtonElement | undefined) {
   const boundingClientRect = target?.getBoundingClientRect()
@@ -25,14 +21,12 @@ function getMaskStyle(target: HTMLButtonElement | undefined) {
 }
 
 export function GameLaunching() {
-  const { mayNeedsUserInteraction, showInteractionButton, setNeedsUserInteraction, onUserInteract, launchGame } =
-    useUserInteraction()
-  const setIsGameRunningAtom = useSetAtom(isGameRunningAtom)
-  const { exit } = useExit()
-  const mask = useAtomValue(maskAtom)
+  const { mayNeedsUserInteraction, setNeedsUserInteraction } = useUserInteraction()
+  const [, setLocation] = useLocation()
+  const params = useParams()
+  const launchingMask = useAtomValue(launchingMaskAtom)
 
-  const { rom, target, event } = mask || {}
-  const [isGameLaunching, setIsGameLaunching] = useAtom(isGameLaunchingAtom)
+  const { rom, target, event } = launchingMask || {}
 
   const maskStyle = getMaskStyle(target)
 
@@ -49,44 +43,30 @@ export function GameLaunching() {
     }
   }
 
-  async function onAnimationComplete(definition: AnimationDefinition) {
+  function onAnimationComplete(definition: AnimationDefinition) {
+    if (!rom) {
+      throw new Error('invalid rom')
+    }
+
     if (!isEqual(definition, maskStyle.expanded)) {
       return
     }
 
-    setIsGameLaunching(true)
-    setIsGameRunningAtom(true)
-    SpatialNavigation.pause()
-    try {
-      await launchGame(rom)
-      document.body.dispatchEvent(new MouseEvent('mousemove'))
-    } catch (error) {
-      console.warn(error)
-      exit()
-    } finally {
-      SpatialNavigation.resume()
-      setIsGameLaunching(false)
-    }
+    setLocation(`/system/${params.system}/rom/${encodeURIComponent(rom?.fileAccessor.name)}`, { replace: true })
   }
 
   return (
-    <div>
-      <GameLaunchingImage
-        onAnimationComplete={onAnimationComplete}
-        onAnimationStart={onAnimationStart}
-        show={Boolean(maskStyle.valid && rom)}
-        styles={{
-          initial: maskStyle.initial,
-          exit: maskStyle.initial,
-          animate: maskStyle.expanded,
-        }}
-      >
-        {rom ? <GameEntryContent rom={rom} /> : null}
-      </GameLaunchingImage>
-
-      <GameLaunchingText show={Boolean(maskStyle.valid && isGameLaunching)} />
-
-      {showInteractionButton ? <UserInteractionButton onUserInteract={onUserInteract} /> : null}
-    </div>
+    <GameLaunchingImage
+      onAnimationComplete={onAnimationComplete}
+      onAnimationStart={onAnimationStart}
+      show={Boolean(maskStyle.valid && rom)}
+      styles={{
+        initial: maskStyle.initial,
+        exit: maskStyle.initial,
+        animate: maskStyle.expanded,
+      }}
+    >
+      {rom ? <GameEntryContent rom={rom} /> : null}
+    </GameLaunchingImage>
   )
 }

@@ -37,6 +37,7 @@ export async function launchGame(
   globalContext.emulator = emulator
   await emulator.launch(waitForUserInteraction)
   emitter.emit('launched', rom)
+  document.body.dispatchEvent(new MouseEvent('mousemove'))
 }
 
 function getConfigPath() {

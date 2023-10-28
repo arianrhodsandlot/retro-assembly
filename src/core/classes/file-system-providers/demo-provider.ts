@@ -1,10 +1,5 @@
 import { noop } from 'lodash-es'
-import { atari2600Games } from '../../constants/retrobrews/atari2600-games'
-import { gbaGames } from '../../constants/retrobrews/gba-games'
-import { gbcGames } from '../../constants/retrobrews/gbc-games'
-import { mdGames } from '../../constants/retrobrews/md-games'
-import { nesGames } from '../../constants/retrobrews/nes-games'
-import { snesGames } from '../../constants/retrobrews/snes-games'
+import { retrobrewsGames } from '../../constants/retrobrews'
 import { http } from '../../helpers/http'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
@@ -62,30 +57,16 @@ export class DemoProvider implements FileSystemProvider {
   }
 
   async list(path = '') {
-    await noop()
+    const createFileAccessor = ({ fileName, name }) =>
+      new FileAccessor({ name: fileName, directory: path, type: 'file', fileSystemProvider: this, meta: { name } })
+
+    await Promise.resolve()
+    if (path in retrobrewsGames) {
+      const games = retrobrewsGames[path]
+      return games.map((game) => createFileAccessor(game))
+    }
+
     const directories = ['atari2600', 'gba', 'gbc', 'megadrive', 'nes', 'snes']
-    if (path === 'atari2600') {
-      return atari2600Games.map(
-        (name) => new FileAccessor({ name, directory: path, type: 'file', fileSystemProvider: this }),
-      )
-    }
-    if (path === 'gba') {
-      return gbaGames.map((name) => new FileAccessor({ name, directory: path, type: 'file', fileSystemProvider: this }))
-    }
-    if (path === 'gbc') {
-      return gbcGames.map((name) => new FileAccessor({ name, directory: path, type: 'file', fileSystemProvider: this }))
-    }
-    if (path === 'megadrive') {
-      return mdGames.map((name) => new FileAccessor({ name, directory: path, type: 'file', fileSystemProvider: this }))
-    }
-    if (path === 'nes') {
-      return nesGames.map((name) => new FileAccessor({ name, directory: path, type: 'file', fileSystemProvider: this }))
-    }
-    if (path === 'snes') {
-      return snesGames.map(
-        (name) => new FileAccessor({ name, directory: path, type: 'file', fileSystemProvider: this }),
-      )
-    }
     return directories.map(
       (directory: string) =>
         new FileAccessor({ name: directory, directory: '', type: 'directory', fileSystemProvider: this }),

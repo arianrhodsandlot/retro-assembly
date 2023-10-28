@@ -1,12 +1,14 @@
 import { useLocation, useParams } from 'wouter'
-import { detectNeedsSetup, start } from '../../../core'
+import { detectNeedsSetup, isUsingDemo, start } from '../../../core'
 import { HomeScreen } from '../home-screen'
 import { useAsyncExecute } from '../hooks'
+import { Intro } from '../intro'
 import { RomScreen } from '../rom-screen'
 
 export function System() {
   const [, setLocation] = useLocation()
   const params = useParams()
+  const usingDemo = isUsingDemo()
 
   const [state] = useAsyncExecute(async () => {
     const needsSetup = await detectNeedsSetup()
@@ -21,6 +23,7 @@ export function System() {
     return (
       <>
         <HomeScreen />
+        {usingDemo ? <Intro /> : null}
         {params.rom ? <RomScreen /> : null}
       </>
     )

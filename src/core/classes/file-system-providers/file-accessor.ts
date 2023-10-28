@@ -6,6 +6,7 @@ export interface FileAccessorOptions {
   directory: string
   type: string
   temporaryUrl?: string
+  meta?: any
   fileSystemProvider: FileSystemProvider
 }
 
@@ -17,19 +18,22 @@ export class FileAccessor {
   readonly basename: string
   readonly extname: string
 
+  public readonly meta: any
+
   private type: string
   private temporaryUrl: string
   private blobUrl: string | undefined
   private blob: Blob | undefined
   private fileSystemProvider: FileSystemProvider
 
-  constructor({ name, directory, type, temporaryUrl = '', fileSystemProvider }: FileAccessorOptions) {
+  constructor({ name, directory, type, temporaryUrl = '', meta, fileSystemProvider }: FileAccessorOptions) {
     this.name = name
     this.directory = directory
     this.type = type
     this.temporaryUrl = temporaryUrl
     this.fileSystemProvider = fileSystemProvider
     this.path = join(directory, name)
+    this.meta = meta
     const { name: base, ext } = parse(name)
     this.basename = base
     this.extname = ext.slice(1)

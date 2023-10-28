@@ -16,9 +16,9 @@ interface PreferenceValues {
 }
 
 const defaultPreferences: PreferenceValues = {
-  configProviderType: 'local',
-  stateProviderType: 'local',
-  romProviderType: 'local',
+  configProviderType: 'demo',
+  stateProviderType: 'demo',
+  romProviderType: 'demo',
   configDirectory: '',
   stateDirectory: '',
   romDirectory: '',

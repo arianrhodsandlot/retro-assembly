@@ -1,11 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { detectHasRunningGame } from '../../../../core'
+import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { isGameRunningAtom, showMenuOverlayAtom } from '../../atoms'
 import { useMouseMoving } from './hooks'
 
 function isTouchDevice() {
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
+function focusCanvas() {
+  SpatialNavigation.focus('canvas')
 }
 
 export function MenuEntryButton({ onClick }: { onClick: () => void }) {
@@ -27,6 +32,7 @@ export function MenuEntryButton({ onClick }: { onClick: () => void }) {
           className='fixed inset-0 z-20 flex items-end justify-center bg-gradient-to-b from-transparent from-80% to-black/80'
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
+          onClick={focusCanvas}
           transition={{ duration: 0.1 }}
         >
           <div

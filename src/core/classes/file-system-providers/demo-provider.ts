@@ -1,10 +1,11 @@
 import { noop } from 'lodash-es'
+import { cdnHost } from '../../constants/dependencies'
 import { retrobrewsGames } from '../../constants/retrobrews'
 import { http } from '../../helpers/http'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
 
-const cdnBaseUrl = 'https://cdn.jsdelivr.net/gh'
+const cdnBaseUrl = `${cdnHost}/gh`
 
 export class DemoProvider implements FileSystemProvider {
   static getSingleton() {

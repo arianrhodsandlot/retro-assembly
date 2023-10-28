@@ -1,6 +1,7 @@
 import { isThisYear, isToday, lightFormat } from 'date-fns'
 import { parse } from 'goodcodes-parser'
 import { capitalize } from 'lodash-es'
+import { cdnHost } from '../constants/dependencies'
 import { systemFullNameMap } from '../constants/systems'
 
 function encodeRFC3986URIComponent(str) {
@@ -18,11 +19,10 @@ export function getCover({ system, name, type = 'boxart' }) {
 
   const typeUrlPart = `Named_${capitalize(type)}s`
   const normalizedSystemFullName = systemFullName.replaceAll(' ', '_')
-  const host = 'https://cdn.jsdelivr.net'
   const pathPrefix = `gh/libretro-thumbnails/${normalizedSystemFullName}@master`
   const normalizedFileName = name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_')
   const encode = encodeRFC3986URIComponent
-  return `${host}/${pathPrefix}/${encode(typeUrlPart)}/${encode(normalizedFileName)}.png`
+  return `${cdnHost}/${pathPrefix}/${encode(typeUrlPart)}/${encode(normalizedFileName)}.png`
 }
 
 export function parseGoodCode(name: string) {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { type Rom, isUsingDemo } from '../../../../core'
+import { cdnHost } from '../../../../core/constants/dependencies'
 import { systemContentImageMap } from '../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
 import { loadImageWithLimit } from './utils'
@@ -26,7 +27,7 @@ export function GameEntryContent({ rom }: { rom: Rom }) {
         system = 'md'
       }
       const repo = `${system}-games`
-      const cover = `https://cdn.jsdelivr.net/gh/retrobrews/${repo}@master/${fileAccessor.basename}.png`
+      const cover = `${cdnHost}/gh/retrobrews/${repo}@master/${fileAccessor.basename}.png`
       await loadImageWithLimit(cover, abortController.signal)
       return cover
     }

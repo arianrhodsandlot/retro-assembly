@@ -1,4 +1,12 @@
+import { useGamepads } from '../../hooks'
+
 export function InputTipsContent() {
+  const { connected } = useGamepads()
+
+  if (!connected) {
+    return
+  }
+
   return (
     <div className='flex gap-3 bg-black/90 px-4 py-2 font-["Noto_Mono",ui-monospace,monospace] text-sm text-white shadow shadow-black'>
       <div className='flex items-center justify-center gap-2'>

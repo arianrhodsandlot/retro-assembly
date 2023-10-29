@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { pauseGame, resumeGame } from '../../../../core'
-import { showMenuOverlayAtom } from '../../atoms'
+import { showMenuOverlayAtom } from '../atoms'
 import { VirtualButton } from './virtual-button'
 
 export function VirtualControllerMenuButton() {

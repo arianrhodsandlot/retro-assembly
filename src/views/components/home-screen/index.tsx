@@ -4,7 +4,15 @@ import { some } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useLocation, useParams, useRoute } from 'wouter'
-import { getHistoryRoms, getSystemRoms, getSystems, peekHistoryRoms, peekSystemRoms, peekSystems } from '../../../core'
+import {
+  getHistoryRoms,
+  getSystemRoms,
+  getSystems,
+  isUsingDemo,
+  peekHistoryRoms,
+  peekSystemRoms,
+  peekSystems,
+} from '../../../core'
 import { romsAtom, systemsAtom } from './atoms'
 import { historyDummySystem } from './constants'
 import { ErrorContent } from './error-content'
@@ -27,6 +35,9 @@ function getColumnCount(width: number) {
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
 function getNewCurrentSystemName(systems) {
+  if (isUsingDemo()) {
+    return 'nes'
+  }
   if (!systems?.length) {
     return ''
   }

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
-import { showMenuOverlayAtom } from '../../atoms'
+import { showMenuOverlayAtom } from '../atoms'
 import { useMouseMoving } from './hooks'
 
 function isTouchDevice() {

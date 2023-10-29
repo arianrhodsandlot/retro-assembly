@@ -11,3 +11,4 @@ interface MaskAtomValue {
   rom?: Rom
 }
 export const launchingMaskAtom = atom<MaskAtomValue | undefined>(undefined)
+export const showMenuOverlayAtom = atom(false)

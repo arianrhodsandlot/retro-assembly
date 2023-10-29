@@ -2,7 +2,7 @@ import ky from 'ky'
 import PQueue from 'p-queue'
 import store2 from 'store2'
 
-const queue = new PQueue({ concurrency: 5 })
+const queue = new PQueue({ concurrency: 6 })
 
 const cacheKey = 'image-load-status-record'
 

@@ -25,7 +25,7 @@ export function GoogleDriveButton() {
   return (
     <BaseDialogTrigger
       content={
-        <div className='w-96 max-w-full'>
+        <div className='w-80 max-w-full'>
           <GoogleDriveDirectoryPicker isValidating={state.status === 'loading'} onSelect={onSelect} />
         </div>
       }

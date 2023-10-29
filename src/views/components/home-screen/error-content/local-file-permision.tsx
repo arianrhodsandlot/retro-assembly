@@ -11,7 +11,7 @@ export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
   }
 
   return (
-    <div className='w-96 max-w-full'>
+    <div className='w-80 max-w-full'>
       <div className='flex items-center text-lg font-bold'>
         <span className='icon-[mdi--alert] mr-2 h-5 w-5 text-yellow-400' />
         <h3>Local file permission is needed</h3>

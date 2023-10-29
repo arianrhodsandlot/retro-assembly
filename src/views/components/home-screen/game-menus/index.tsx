@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { onPress, pauseGame, resumeGame } from '../../../../core'
-import { showMenuOverlayAtom } from '../../atoms'
+import { showMenuOverlayAtom } from '../atoms'
 import { MenuEntryButton } from './menu-entry-button'
 import { MenuOverlay } from './menu-overlay'
 

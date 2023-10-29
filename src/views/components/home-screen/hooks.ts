@@ -1,8 +1,7 @@
 import { useAtom, useSetAtom } from 'jotai'
 import { useLocation, useParams } from 'wouter'
 import { exitGame } from '../../../core'
-import { showMenuOverlayAtom } from '../atoms'
-import { launchingMaskAtom } from './atoms'
+import { launchingMaskAtom, showMenuOverlayAtom } from './atoms'
 
 export function useExit() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)

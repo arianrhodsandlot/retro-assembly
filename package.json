@@ -18,6 +18,7 @@
     "@fontsource/roboto": "5.0.8",
     "@microsoft/microsoft-graph-client": "3.0.7",
     "@radix-ui/react-dialog": "1.0.5",
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-tooltip": "1.0.7",
     "@react-hookz/web": "23.1.0",
     "@zip.js/zip.js": "2.7.30",

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
-import { showMenuOverlayAtom } from '../../atoms'
+import { showMenuOverlayAtom } from '../atoms'
 import { VirtualControllerLandscape } from './virtual-controller-landscape'
 import { VirtualControllerPortrait } from './virtual-controller-portrait'
 

@@ -4,7 +4,6 @@ import { AuthGoogleDrive } from './routes/auth/google-drive'
 import { AuthOnedrive } from './routes/auth/onedrive'
 import { Home } from './routes/home'
 import { LibrarySystemRom } from './routes/library/rom'
-import { LibrarySystem } from './routes/library/system'
 
 export default function App() {
   return (
@@ -14,7 +13,7 @@ export default function App() {
       </Route>
 
       <Route path='/library/:library/system/:system?'>
-        <LibrarySystem />
+        <LibrarySystemRom />
       </Route>
       <Route path='/library/:library/system/:system/rom/:rom'>
         <LibrarySystemRom />

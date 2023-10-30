@@ -1,9 +1,10 @@
-import { Route, Switch } from 'wouter'
+import { Redirect, Route, Switch } from 'wouter'
 import { AuthDropbox } from './routes/auth/dropbox'
 import { AuthGoogleDrive } from './routes/auth/google-drive'
 import { AuthOnedrive } from './routes/auth/onedrive'
 import { Home } from './routes/home'
-import { System } from './routes/system'
+import { LibrarySystemRom } from './routes/library/rom'
+import { LibrarySystem } from './routes/library/system'
 
 export default function App() {
   return (
@@ -13,10 +14,10 @@ export default function App() {
       </Route>
 
       <Route path='/library/:library/system/:system?'>
-        <System />
+        <LibrarySystem />
       </Route>
       <Route path='/library/:library/system/:system/rom/:rom'>
-        <System />
+        <LibrarySystemRom />
       </Route>
 
       <Route path='/auth/onedrive'>
@@ -27,6 +28,10 @@ export default function App() {
       </Route>
       <Route path='/auth/dropbox'>
         <AuthDropbox />
+      </Route>
+
+      <Route>
+        <Redirect to='/' />
       </Route>
     </Switch>
   )

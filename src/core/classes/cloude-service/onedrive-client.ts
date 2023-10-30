@@ -1,4 +1,4 @@
-import type { Client, GraphRequest } from '@microsoft/microsoft-graph-client'
+import { type Client, type GraphRequest } from '@microsoft/microsoft-graph-client'
 import queryString from 'query-string'
 import { Auth } from './auth'
 import { type CloudServiceClient } from './cloud-service-client'

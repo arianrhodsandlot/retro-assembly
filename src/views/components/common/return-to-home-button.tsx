@@ -1,4 +1,4 @@
-import { useTeardown } from '../hooks'
+import { useTeardown } from '../hooks/use-teardown'
 import { BaseButton } from '../primitives/base-button'
 
 export function ReturnToHomeButton() {

@@ -1,11 +1,10 @@
 import { useAsync as useAsyncFn, useIntervalEffect } from '@react-hookz/web'
 import clsx from 'clsx'
 import mitt from 'mitt'
-import type { MouseEvent } from 'react'
+import { type MouseEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
-import { useAsyncExecute } from '../hooks'
+import { useAsyncExecute } from '../hooks/use-async-execute'
 import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
 

@@ -113,6 +113,9 @@ export function HomeScreen() {
 
   // load systems from remote
   const systemsState = useAsyncRetry(async () => {
+    if (params.rom) {
+      return
+    }
     const systems = await getSystems()
     const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
@@ -124,6 +127,9 @@ export function HomeScreen() {
 
   // load roms from remote
   const romsState = useAsyncRetry(async () => {
+    if (params.rom) {
+      return
+    }
     if (params.system) {
       const { system, roms } = await getRoms(params.system)
       const currentSystem = currentSystemRef.current

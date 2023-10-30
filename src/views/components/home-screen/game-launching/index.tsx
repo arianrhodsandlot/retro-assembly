@@ -1,10 +1,10 @@
 import { type AnimationDefinition } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { isEqual } from 'lodash-es'
-import { useLocation, useParams } from 'wouter'
 import { useUserInteraction } from '../../hooks'
 import { launchingMaskAtom } from '../atoms'
 import { GameEntryContent } from '../game-entries-grid/game-entry-content'
+import { useRouterHelpers } from '../hooks'
 import { GameLaunchingImage } from './game-launching-image'
 
 function getMaskStyle(target: HTMLButtonElement | undefined) {
@@ -22,8 +22,7 @@ function getMaskStyle(target: HTMLButtonElement | undefined) {
 
 export function GameLaunching() {
   const { mayNeedsUserInteraction, setNeedsUserInteraction } = useUserInteraction()
-  const [, setLocation] = useLocation()
-  const params = useParams()
+  const { navigateToRom } = useRouterHelpers()
   const launchingMask = useAtomValue(launchingMaskAtom)
 
   const { rom, target, event } = launchingMask || {}
@@ -52,7 +51,7 @@ export function GameLaunching() {
       return
     }
 
-    setLocation(`/system/${params.system}/rom/${encodeURIComponent(rom?.fileAccessor.name)}`, { replace: true })
+    navigateToRom(rom?.fileAccessor.name)
   }
 
   return (

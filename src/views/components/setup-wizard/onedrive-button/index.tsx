@@ -1,22 +1,23 @@
 import { useAsync } from '@react-hookz/web'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { updatePreference, validateRomDirectory } from '../../../../core'
+import { useSetAtom } from 'jotai'
+import { start, updatePreference, validateRomDirectory } from '../../../../core'
+import { useRouterHelpers } from '../../home-screen/hooks'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
-import { isInvalidDialogOpenAtom, onSetupAtom } from '../atoms'
+import { isInvalidDialogOpenAtom } from '../atoms'
 import { OnedriveDirectoryPicker } from './onedrive-directory-picker'
 
 export function OnedriveButton() {
-  const onSetup = useAtomValue(onSetupAtom)
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
+  const { navigateToLibrary } = useRouterHelpers()
 
   const [state, { execute: onSelect }] = useAsync(async (romDirectory: string) => {
     const isValid = await validateRomDirectory({ directory: romDirectory, type: 'onedrive' })
 
     if (isValid) {
       await updatePreference({ fileSystem: 'onedrive', directory: romDirectory })
-      onSetup?.()
-      setIsInvalidDialogOpen(false)
+      await start()
+      navigateToLibrary('onedrive')
     } else {
       setIsInvalidDialogOpen(true)
     }
@@ -25,7 +26,7 @@ export function OnedriveButton() {
   return (
     <BaseDialogTrigger
       content={
-        <div className='w-80 max-w-full'>
+        <div className='w-96 max-w-full'>
           <OnedriveDirectoryPicker isValidating={state.status === 'loading'} onSelect={onSelect} />
         </div>
       }

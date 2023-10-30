@@ -11,6 +11,14 @@ export default function App() {
       <Route path='/'>
         <Home />
       </Route>
+
+      <Route path='/library/:library/system/:system?'>
+        <System />
+      </Route>
+      <Route path='/library/:library/system/:system/rom/:rom'>
+        <System />
+      </Route>
+
       <Route path='/auth/onedrive'>
         <AuthOnedrive />
       </Route>
@@ -19,12 +27,6 @@ export default function App() {
       </Route>
       <Route path='/auth/dropbox'>
         <AuthDropbox />
-      </Route>
-      <Route path='/system/:system?'>
-        <System />
-      </Route>
-      <Route path='/system/:system/rom/:rom'>
-        <System />
       </Route>
     </Switch>
   )

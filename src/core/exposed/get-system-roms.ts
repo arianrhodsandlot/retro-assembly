@@ -4,12 +4,12 @@ import { Rom } from '../classes/rom'
 import { globalContext } from '../internal/global-context'
 
 export async function getSystemRoms(system: string) {
-  const { fileSystem } = globalContext
+  const { fileSystem, isDemoRunning } = globalContext
   if (!fileSystem) {
     throw new Error('fileSystem is not available')
   }
 
-  const romDirectory = PreferenceParser.get('romDirectory')
+  const romDirectory = isDemoRunning ? '' : PreferenceParser.get('romDirectory')
   const systemRomsDirectory = join(romDirectory, system)
   const files = await fileSystem.list(systemRomsDirectory)
   return Rom.fromFileAccessors(files)

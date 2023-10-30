@@ -1,6 +1,5 @@
-import { PreferenceParser } from '../classes/preference-parser'
+import { getProvider } from './get-provider'
 
 export function isUsingGoogleDrive() {
-  const romProviderType = PreferenceParser.get('romProviderType')
-  return romProviderType === 'google-drive'
+  return getProvider() === 'google-drive'
 }

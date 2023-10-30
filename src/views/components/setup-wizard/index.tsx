@@ -1,18 +1,9 @@
-import { useSetAtom } from 'jotai'
-import { useEffect } from 'react'
-import { onSetupAtom } from './atoms'
 import { GetStarted } from './get-started'
 import { Header } from './header'
 
 const backgroundImage =
   'repeating-linear-gradient(45deg, #fafafa 25%, transparent 25%, transparent 75%, #fafafa 75%, #fafafa), repeating-linear-gradient(45deg, #fafafa 25%, white 25%, white 75%, #fafafa 75%, #fafafa)'
-export default function SetupWizard({ onSetup }: { onSetup: () => void }) {
-  const setOnSetup = useSetAtom(onSetupAtom)
-
-  useEffect(() => {
-    setOnSetup(() => onSetup)
-  }, [onSetup, setOnSetup])
-
+export default function SetupWizard() {
   return (
     <div className='min-h-screen bg-white  bg-[length:30px_30px] bg-[0_0,15px_15px]' style={{ backgroundImage }}>
       <div className='hero relative h-[600px] max-h-[50vh] min-h-[450px]'>

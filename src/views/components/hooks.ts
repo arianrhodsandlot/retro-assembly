@@ -1,7 +1,7 @@
 import { useAsync } from '@react-hookz/web'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'wouter'
 import { type Rom, launchGame, teardown } from '../../core'
+import { useRouterHelpers } from './home-screen/hooks'
 
 const isAppleMobile = /iphone|ipad|ipod/i.test(navigator.userAgent)
 const isChromeLike = /chrome/i.test(navigator.userAgent)
@@ -47,11 +47,11 @@ export function useUserInteraction() {
 }
 
 export function useTeardown() {
-  const [, setLocation] = useLocation()
+  const { navigateToHome } = useRouterHelpers()
 
-  function teardown_() {
-    teardown()
-    setLocation('/', { replace: true })
+  async function teardown_() {
+    await teardown()
+    navigateToHome()
   }
 
   return { teardown: teardown_ }

@@ -1,9 +1,11 @@
 import { useAsync as useAsyncFn, useIntervalEffect } from '@react-hookz/web'
 import clsx from 'clsx'
 import mitt from 'mitt'
-import { useRef, useState } from 'react'
+import type { MouseEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
+import { useAsyncExecute } from '../hooks'
 import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
 
@@ -34,7 +36,7 @@ export function CloudServiceLoginButton({
   showReturnHome = false,
   onLogin,
 }: CloudServiceLoginButtonProps) {
-  const authorizeUrlState = useAsync(async () => await getAuthorizeUrl(cloudService))
+  const [authorizeUrlState] = useAsyncExecute(async () => await getAuthorizeUrl(cloudService))
   const authorizeWindow = useRef<Window | null>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
 
@@ -72,17 +74,22 @@ export function CloudServiceLoginButton({
     return await promise
   })
 
-  async function login(event) {
-    event.preventDefault()
-    const authUrl = event.currentTarget.href
-    if (authUrl) {
-      authorizeWindow.current = openAuthWindow(authUrl)
+  const [, { execute: login }] = useAsyncFn(async (event?: MouseEvent<HTMLButtonElement>) => {
+    event?.preventDefault()
+    if (authorizeUrlState.result) {
+      authorizeWindow.current = openAuthWindow(authorizeUrlState.result)
       const needsLogin = await checkNeedsLogin()
       if (needsLogin === false) {
         onLogin()
       }
     }
-  }
+  })
+
+  useEffect(() => {
+    if (authorizeUrlState.result) {
+      login()
+    }
+  }, [login, authorizeUrlState.result])
 
   const loginPending = needsLoginState.status === 'loading' || isAuthWindowOpening
   const loginSuccess = needsLoginState.status !== 'loading' && needsLoginState.result === false
@@ -100,7 +107,7 @@ export function CloudServiceLoginButton({
     <div className='flex flex-col items-stretch justify-center gap-y-4 px-10'>
       <BaseButton
         data-testid='authorize-link'
-        href={authorizeUrlState.value}
+        href={authorizeUrlState.result}
         onClick={login}
         rel='noreferrer'
         styleType='primary'

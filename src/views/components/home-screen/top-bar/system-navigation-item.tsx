@@ -3,12 +3,13 @@ import delay from 'delay'
 import { AnimatePresence, motion } from 'framer-motion'
 import $ from 'jquery'
 import { type FocusEvent, useEffect, useRef } from 'react'
-import { Link, useParams } from 'wouter'
+import { Link } from 'wouter'
 import { systemImageMap } from '../../../lib/constants'
+import { useRouterHelpers } from '../hooks'
 import { TopBarButton } from './top-bar-button'
 
 export function SystemNavigationItem({ system }: { system: any }) {
-  const params = useParams()
+  const { params, linkToSystem } = useRouterHelpers()
   const button = useRef<HTMLButtonElement>(null)
 
   const isSelected = system.name === params.system
@@ -38,7 +39,7 @@ export function SystemNavigationItem({ system }: { system: any }) {
   }, [isSelected])
 
   return (
-    <Link href={`/system/${system.name}`} replace>
+    <Link href={`${linkToSystem(system.name)}`} replace>
       <TopBarButton
         className='flex-shrink-0 px-8'
         highlighted={isSelected}

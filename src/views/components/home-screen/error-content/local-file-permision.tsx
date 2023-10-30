@@ -25,8 +25,8 @@ export function LocalFilePermision({ onSolve }: { onSolve: () => void }) {
           <span className='icon-[mdi--information-outline] -mt-1 h-6 w-6' />
           <div>
             <div>
-              We have to ask you to grant permission to read your ROMs again, even though you have already done so last
-              time.
+              We have to ask you to grant permission to read your ROMs again, even though you have already done this
+              last time.
             </div>
             <div className='mt-2'>This is due to a restriction of the security policy of your browser.</div>
           </div>

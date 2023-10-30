@@ -1,6 +1,5 @@
-import { PreferenceParser } from '../classes/preference-parser'
+import { getProvider } from './get-provider'
 
 export function isUsingLocal() {
-  const romProviderType = PreferenceParser.get('romProviderType')
-  return romProviderType === 'local'
+  return getProvider() === 'local'
 }

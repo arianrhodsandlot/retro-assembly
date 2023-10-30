@@ -1,12 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import logo from '../../assets/logo/logo-512x512.png'
+import { useRouterHelpers } from './home-screen/hooks'
 import { BaseDialogTrigger } from './primitives/base-dialog-trigger'
 import { AnimatedIcons } from './setup-wizard/animated-icons'
 import { GetStarted } from './setup-wizard/get-started'
 
 export function Intro() {
-  const [visible, setVisible] = useState(true)
+  const { isHome, navigateToSystem } = useRouterHelpers()
+
+  function onClickTryPublicLibrary() {
+    navigateToSystem()
+  }
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -17,7 +22,7 @@ export function Intro() {
 
   return (
     <AnimatePresence>
-      {visible ? (
+      {isHome ? (
         <motion.div
           animate={{ opacity: 1, scale: 1 }}
           className='absolute inset-0 z-10 flex flex-col overflow-auto bg-black/70 text-center text-white'
@@ -67,13 +72,13 @@ export function Intro() {
             <div>
               <button
                 className='flex w-80 max-w-full items-center justify-center rounded-full border-4 border-rose-700 bg-white py-4 text-rose-700'
-                onClick={() => setVisible(false)}
+                onClick={onClickTryPublicLibrary}
               >
                 <span className='icon-[mdi--play] h-6 w-6' />
-                <div className='ml-2'>Try the public library</div>
+                <div className='ml-2'>Try public library</div>
               </button>
               <div className='mt-2 text-xs text-white/60'>
-                Enjoy free (legal) retro games from&nbsp;
+                Enjoy free (<b>legal</b>) retro games from&nbsp;
                 <a className='underline' href='https://retrobrews.github.io/' rel='noreferrer' target='_blank'>
                   retrobrews
                 </a>
@@ -104,11 +109,35 @@ export function Intro() {
             </div>
           </div>
 
-          <div className='flex items-center justify-center gap-2 pb-4 text-sm'>
+          <div className='flex items-center justify-center gap-2 text-xs'>
+            <div>
+              <span>Version</span>
+              <a
+                className='ml-1 underline'
+                href={`https://github.com/arianrhodsandlot/retro-assembly/tree/${GIT_VERSION}`}
+                rel='noreferrer'
+                target='_blank'
+              >
+                {GIT_VERSION}
+              </a>
+            </div>
+            ·
+            <div>
+              <span>Last Updated</span>
+              <span className='ml-1'>{BUILD_TIME}</span>
+            </div>
+          </div>
+
+          <div className='mb-2 mt-1 flex items-center justify-center gap-2 text-xs'>
             <span>© 2023</span>
-            <a href='https://github.com/arianrhodsandlot' rel='noreferrer' target='_blank'>
+            <a className='underline' href='https://github.com/arianrhodsandlot' rel='noreferrer' target='_blank'>
               arianrhodsandlot
             </a>
+            ·
+            <a className='underline' href='/privacy-policy.html' target='_blank'>
+              Privacy Policy
+            </a>
+            ·
             <a
               className='flex items-center justify-center gap-1'
               href='mailto:theguidanceofawhitetower@gmail.com'
@@ -126,7 +155,7 @@ export function Intro() {
               <span className='icon-[simple-icons--github] mr-1 h-4 w-4' />
             </a>
             <a
-              className='flex items-center justify-center gap-1'
+              className='hidden items-center justify-center gap-1'
               href='https://discord.gg/RVVAMcCH'
               rel='noreferrer'
               target='_blank'
@@ -134,7 +163,7 @@ export function Intro() {
               <span className='icon-[simple-icons--discord] mr-1 h-4 w-4' />
             </a>
             <a
-              className='flex items-center justify-center gap-1'
+              className='hidden items-center justify-center gap-1'
               href='https://twitter.com/arianrhodsand'
               rel='noreferrer'
               target='_blank'

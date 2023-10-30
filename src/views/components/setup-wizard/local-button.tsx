@@ -1,11 +1,12 @@
-import { useAtomValue, useSetAtom } from 'jotai'
-import { updatePreference, validateRomDirectory } from '../../../core'
+import { useSetAtom } from 'jotai'
+import { start, updatePreference, validateRomDirectory } from '../../../core'
+import { useRouterHelpers } from '../home-screen/hooks'
 import { BaseButton } from '../primitives/base-button'
-import { isInvalidDialogOpenAtom, onSetupAtom } from './atoms'
+import { isInvalidDialogOpenAtom } from './atoms'
 
 export function LocalButton() {
-  const onSetup = useAtomValue(onSetupAtom)
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
+  const { navigateToLibrary } = useRouterHelpers()
 
   async function selectLocalDirectory() {
     try {
@@ -14,7 +15,9 @@ export function LocalButton() {
       const isValid = await validateRomDirectory({ type: 'local', handle })
       if (isValid) {
         await updatePreference({ fileSystem: 'local', directory: '', handle })
-        onSetup?.()
+        setIsInvalidDialogOpen(false)
+        await start()
+        navigateToLibrary('local')
       } else {
         setIsInvalidDialogOpen(true)
       }

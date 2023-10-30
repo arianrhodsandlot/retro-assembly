@@ -1,21 +1,33 @@
-import { useAsyncRetry } from 'react-use'
-import { useLocation } from 'wouter'
-import { detectNeedsSetup, start } from '../../../core'
-import SetupWizard from '../setup-wizard'
+import { isUsingDropbox, isUsingGoogleDrive, isUsingLocal, isUsingOnedrive, start } from '../../../core'
+import { HomeScreen } from '../home-screen'
+import { useRouterHelpers } from '../home-screen/hooks'
+import { useAsyncExecute } from '../hooks'
+import { Intro } from '../intro'
 
 export function Home() {
-  const [, setLocation] = useLocation()
+  const { navigateToLibrary } = useRouterHelpers()
 
-  const preparationState = useAsyncRetry(async () => {
-    const needsSetup = await detectNeedsSetup()
-    if (needsSetup === false) {
-      await start()
-      setLocation('/system', { replace: true })
+  const [state] = useAsyncExecute(async () => {
+    if (isUsingOnedrive()) {
+      navigateToLibrary('onedrive')
+    } else if (isUsingGoogleDrive()) {
+      navigateToLibrary('google-drive')
+    } else if (isUsingDropbox()) {
+      navigateToLibrary('dropbox')
+    } else if (isUsingLocal()) {
+      navigateToLibrary('local')
+    } else {
+      await start('public')
+      return { showHome: true }
     }
-    return needsSetup
   })
 
-  if (preparationState.value) {
-    return <SetupWizard onSetup={() => preparationState.retry()} />
+  if (state.result?.showHome) {
+    return (
+      <>
+        <HomeScreen />
+        <Intro />
+      </>
+    )
   }
 }

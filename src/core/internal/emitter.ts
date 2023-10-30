@@ -9,7 +9,7 @@ export const emitter = mitt<{
 
 emitter.on('launched', async (rom) => {
   const romProviderType = PreferenceParser.get('romProviderType')
-  if (romProviderType === 'demo') {
+  if (romProviderType === 'public') {
     return
   }
   await addHistoryItem(rom)

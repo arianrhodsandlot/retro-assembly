@@ -39,6 +39,8 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
     }
   }
 
+  console.warn(error)
+
   // todo: needs better error text
   return (
     <BaseDialogContent>

@@ -1,6 +1,5 @@
-import { PreferenceParser } from '../classes/preference-parser'
+import { getProvider } from './get-provider'
 
 export function isUsingOnedrive() {
-  const romProviderType = PreferenceParser.get('romProviderType')
-  return romProviderType === 'onedrive'
+  return getProvider() === 'onedrive'
 }

@@ -1,6 +1,5 @@
-import { PreferenceParser } from '../classes/preference-parser'
+import { getProvider } from './get-provider'
 
 export function isUsingDemo() {
-  const romProviderType = PreferenceParser.get('romProviderType')
-  return romProviderType === 'demo'
+  return getProvider() === 'public'
 }

@@ -9,8 +9,8 @@ export function isPreferenceValid() {
   const stateDirectory = preference.get('stateDirectory')
   const romDirectory = preference.get('romDirectory')
 
-  if (romProviderType === 'demo') {
-    return true
+  if (romProviderType === 'public') {
+    return false
   }
 
   const values = [configProviderType, stateProviderType, romProviderType, configDirectory, stateDirectory]

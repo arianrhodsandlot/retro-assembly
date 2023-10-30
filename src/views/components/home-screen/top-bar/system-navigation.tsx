@@ -1,21 +1,20 @@
 import { useAtomValue } from 'jotai'
 import { findIndex, first, last } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
-import { useLocation, useParams } from 'wouter'
 import type { SystemName } from '../../../../core'
 import { onPress } from '../../../../core'
 import { isUsingDemo } from '../../../../core/exposed/is-using-demo'
 import { SpatialNavigation } from '../../../lib/spatial-navigation'
 import { systemsAtom } from '../atoms'
 import { historyDummySystem } from '../constants'
+import { useRouterHelpers } from '../hooks'
 import { isFocusingHome } from '../utils'
 import { SystemNavigationItem } from './system-navigation-item'
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function SystemNavigation() {
-  const [, setLocation] = useLocation()
-  const params = useParams()
+  const { params, navigateToSystem } = useRouterHelpers()
   const systems = useAtomValue(systemsAtom)
   const allSystems = useMemo(() => [historyDummySystem, ...systems], [systems])
   const showHistory = useMemo(() => !isUsingDemo(), [])
@@ -28,19 +27,19 @@ export function SystemNavigation() {
       return
     }
     const newCurrentSystem = allSystems[currentSystemIndex - 1] ?? last(allSystems)
-    setLocation(`/system/${newCurrentSystem.name}`, { replace: true })
-  }, [currentSystemIndex, setLocation, allSystems, shouldSwitchSystem])
+    navigateToSystem(newCurrentSystem.name)
+  }, [currentSystemIndex, navigateToSystem, allSystems, shouldSwitchSystem])
 
   const selectNextSystem = useCallback(() => {
     if (!shouldSwitchSystem) {
       return
     }
     const newCurrentSystem = allSystems[currentSystemIndex + 1] ?? first(allSystems)
-    setLocation(`/system/${newCurrentSystem.name}`, { replace: true })
-  }, [currentSystemIndex, setLocation, allSystems, shouldSwitchSystem])
+    navigateToSystem(newCurrentSystem.name)
+  }, [currentSystemIndex, navigateToSystem, allSystems, shouldSwitchSystem])
 
   useEffect(() => {
-    if (params.system) {
+    if (!isUsingDemo() && params.system) {
       localStorage.setItem(lastSelectedSystemStorageKey, params.system)
     }
   }, [params.system])

@@ -1,6 +1,5 @@
-import { PreferenceParser } from '../classes/preference-parser'
+import { getProvider } from './get-provider'
 
 export function isUsingDropbox() {
-  const romProviderType = PreferenceParser.get('romProviderType')
-  return romProviderType === 'dropbox'
+  return getProvider() === 'dropbox'
 }

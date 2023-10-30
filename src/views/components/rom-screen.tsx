@@ -1,5 +1,5 @@
-import { useLocation, useParams } from 'wouter'
-import { detectNeedsSetup, getRom, start } from '../../core'
+import { useParams } from 'wouter'
+import { getRom, start } from '../../core'
 import { SpatialNavigation } from '../lib/spatial-navigation'
 import { UserInteractionButton } from './common/user-interaction-button'
 import { GameLaunchingText } from './home-screen/game-launching/game-launching-text'
@@ -11,16 +11,10 @@ import { useAsyncExecute, useUserInteraction } from './hooks'
 export function RomScreen() {
   const { showInteractionButton, onUserInteract, launchGame } = useUserInteraction()
 
-  const [, setLocation] = useLocation()
   const params = useParams()
   const { exit } = useExit()
 
   const [state] = useAsyncExecute(async () => {
-    const needsSetup = await detectNeedsSetup()
-    if (needsSetup) {
-      setLocation('/', { replace: true })
-      throw new Error('needs setup')
-    }
     await start()
     const rom = getRom({ system: params.system, rom: params.rom })
 

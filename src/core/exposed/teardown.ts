@@ -1,6 +1,6 @@
 import { clear } from 'idb-keyval'
 import { RequestCache } from '../classes/request-cache'
-import { globalContext } from '../internal/global-context'
+import { start } from '.'
 
 async function clearIdbKeyval() {
   try {
@@ -17,5 +17,5 @@ async function clearReqiestCache() {
 export async function teardown() {
   await Promise.all([clearIdbKeyval(), clearReqiestCache()])
   localStorage.clear()
-  globalContext.fileSystem = undefined
+  await start('public')
 }

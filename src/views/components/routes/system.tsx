@@ -1,29 +1,34 @@
-import { useLocation, useParams } from 'wouter'
-import { detectNeedsSetup, isUsingDemo, start } from '../../../core'
+import { useAsync } from '@react-hookz/web'
+import { useEffect } from 'react'
+import { getProvider, isUsingDemo, start } from '../../../core'
 import { HomeScreen } from '../home-screen'
-import { useAsyncExecute } from '../hooks'
+import { useRouterHelpers } from '../home-screen/hooks'
 import { Intro } from '../intro'
 import { RomScreen } from '../rom-screen'
 
 export function System() {
-  const [, setLocation] = useLocation()
-  const params = useParams()
-  const usingDemo = isUsingDemo()
+  const { params, navigateToSystem, navigateToHome } = useRouterHelpers()
 
-  const [state] = useAsyncExecute(async () => {
-    const needsSetup = await detectNeedsSetup()
-    if (needsSetup) {
-      setLocation('/', { replace: true })
-      throw new Error('needs setup')
+  const [state, { execute }] = useAsync(async () => {
+    const provider = getProvider()
+    if (provider === params.library) {
+      await start()
+    } else if (isUsingDemo()) {
+      navigateToHome()
+    } else {
+      navigateToSystem(undefined, provider)
     }
-    await start()
   })
+
+  useEffect(() => {
+    execute()
+  }, [execute, params.library])
 
   if (state.status === 'success') {
     return (
       <>
         <HomeScreen />
-        {usingDemo ? <Intro /> : null}
+        <Intro />
         {params.rom ? <RomScreen /> : null}
       </>
     )

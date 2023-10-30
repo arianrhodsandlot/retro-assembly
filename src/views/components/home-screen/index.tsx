@@ -3,8 +3,8 @@ import { useAtom, useSetAtom } from 'jotai'
 import { some } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
-import { useLocation, useParams, useRoute } from 'wouter'
 import {
+  type SystemName,
   getHistoryRoms,
   getSystemRoms,
   getSystems,
@@ -19,6 +19,7 @@ import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { GameLaunching } from './game-launching'
 import { HomeScreenLayout } from './home-screen-layout'
+import { useRouterHelpers } from './hooks'
 import { InputTips } from './input-tips'
 
 function getColumnCount(width: number) {
@@ -33,20 +34,6 @@ function getColumnCount(width: number) {
 }
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
-
-function getNewCurrentSystemName(systems) {
-  if (isUsingDemo()) {
-    return 'nes'
-  }
-  if (!systems?.length) {
-    return ''
-  }
-  const lastSelectedSystem = localStorage.getItem(lastSelectedSystemStorageKey)
-  const allSystems = [historyDummySystem, ...systems]
-  const isLastSelectedSystemValid = some(allSystems, { name: lastSelectedSystem })
-  const defaultSystemName = systems[0].name
-  return isLastSelectedSystemValid ? lastSelectedSystem : defaultSystemName
-}
 
 async function peekRoms(system: string) {
   if (system === 'history') {
@@ -65,16 +52,35 @@ async function getRoms(system: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setSystems = useSetAtom(systemsAtom)
-  const params = useParams()
+  const {
+    params,
+    navigateToSystem,
+    wouter: { useRoute },
+  } = useRouterHelpers()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
-  const [, setLocation] = useLocation()
-  const [match] = useRoute('/system/:system?')
+  const [match] = useRoute('/library/:library/system/:system?')
   const currentSystemRef = useRef(params.system)
 
   const { width: gridWidth, height: gridHeight } = measurements
 
   const columnCount = getColumnCount(gridWidth)
+
+  function getNewCurrentSystemName(systems: { name: SystemName; fullName: string }[]) {
+    if (!systems?.length) {
+      return ''
+    }
+    const system = params.system || localStorage.getItem(lastSelectedSystemStorageKey)
+    const allSystems = [historyDummySystem, ...systems]
+    const isSystemValid = some(allSystems, { name: system })
+    if (isSystemValid) {
+      return system
+    }
+    if (isUsingDemo()) {
+      return 'nes'
+    }
+    return systems[0].name
+  }
 
   useEffect(() => {
     currentSystemRef.current = params.system
@@ -88,8 +94,8 @@ export function HomeScreen() {
     }
     const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
-    if (match) {
-      setLocation(`/system/${newCurrentSystemName}`, { replace: true })
+    if (newCurrentSystemName && match) {
+      navigateToSystem(newCurrentSystemName)
     }
   }, [setSystems])
 
@@ -108,11 +114,10 @@ export function HomeScreen() {
   // load systems from remote
   const systemsState = useAsyncRetry(async () => {
     const systems = await getSystems()
-    setSystems(systems)
     const newCurrentSystemName = getNewCurrentSystemName(systems)
     setSystems(systems)
-    if (match) {
-      setLocation(`/system/${newCurrentSystemName}`, { replace: true })
+    if (newCurrentSystemName && match) {
+      navigateToSystem(newCurrentSystemName)
     }
     updateRetrying()
   }, [setSystems])

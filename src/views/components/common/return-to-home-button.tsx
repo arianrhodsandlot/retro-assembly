@@ -7,7 +7,7 @@ export function ReturnToHomeButton() {
   return (
     <BaseButton onClick={teardown}>
       <span className='icon-[mdi--home] h-6 w-6 text-rose-700' />
-      Return to home page
+      Return home
     </BaseButton>
   )
 }

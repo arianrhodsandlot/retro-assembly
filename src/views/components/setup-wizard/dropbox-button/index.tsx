@@ -1,22 +1,24 @@
 import { useAsync } from '@react-hookz/web'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { updatePreference, validateRomDirectory } from '../../../../core'
+import { useSetAtom } from 'jotai'
+import { start, updatePreference, validateRomDirectory } from '../../../../core'
+import { useRouterHelpers } from '../../home-screen/hooks'
 import { BaseButton } from '../../primitives/base-button'
 import { BaseDialogTrigger } from '../../primitives/base-dialog-trigger'
-import { isInvalidDialogOpenAtom, onSetupAtom } from '../atoms'
+import { isInvalidDialogOpenAtom } from '../atoms'
 import { DropboxDirectoryPicker } from './dropbox-directory-picker'
 
 export function DropboxButton() {
-  const onSetup = useAtomValue(onSetupAtom)
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
+  const { navigateToLibrary } = useRouterHelpers()
 
   const [state, { execute: onSelect }] = useAsync(async (romDirectory: string) => {
     const isValid = await validateRomDirectory({ directory: romDirectory, type: 'dropbox' })
 
     if (isValid) {
       await updatePreference({ fileSystem: 'dropbox', directory: romDirectory })
-      onSetup?.()
       setIsInvalidDialogOpen(false)
+      await start()
+      navigateToLibrary('dropbox')
     } else {
       setIsInvalidDialogOpen(true)
     }

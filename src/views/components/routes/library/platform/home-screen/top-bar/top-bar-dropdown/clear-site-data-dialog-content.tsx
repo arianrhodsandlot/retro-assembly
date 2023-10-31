@@ -1,7 +1,7 @@
 import { DialogClose } from '@radix-ui/react-dialog'
 import { type ReactNode, useEffect } from 'react'
-import { isUsingDemo } from '../../../../../../../core'
-import { BaseButton } from '../../../../../primitives/base-button'
+import { isUsingDemo } from '../../../../../../../../core'
+import { BaseButton } from '../../../../../../primitives/base-button'
 
 export function ClearSiteDataDialogContent({ children, onConfirm }: { children: ReactNode; onConfirm: () => void }) {
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { platformImageMap } from '../../../../../../lib/constants'
-import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'
+import { platformImageMap } from '../../../../../../../lib/constants'
+import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
 
 interface PlatformNavigationMobileProps {
   platforms: { name: string; fullName: string }[]

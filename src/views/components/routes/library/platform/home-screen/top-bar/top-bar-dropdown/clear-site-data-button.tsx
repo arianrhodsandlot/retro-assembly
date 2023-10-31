@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { isUsingDropbox, isUsingLocal, isUsingOnedrive } from '../../../../../../../core'
-import { isUsingGoogleDrive } from '../../../../../../../core/exposed/is-using-google-drive'
-import { useTeardown } from '../../../../../hooks/use-teardown'
-import { BaseDialogTrigger } from '../../../../../primitives/base-dialog-trigger'
+import { isUsingDropbox, isUsingLocal, isUsingOnedrive } from '../../../../../../../../core'
+import { isUsingGoogleDrive } from '../../../../../../../../core/exposed/is-using-google-drive'
+import { useTeardown } from '../../../../../../hooks/use-teardown'
+import { BaseDialogTrigger } from '../../../../../../primitives/base-dialog-trigger'
+import { TopBarButton } from '../top-bar-button'
 import { ClearSiteDataDialogContent } from './clear-site-data-dialog-content'
-import { TopBarButton } from './top-bar-button'
 
 export function ClearSiteDataButton() {
   const { teardown } = useTeardown()

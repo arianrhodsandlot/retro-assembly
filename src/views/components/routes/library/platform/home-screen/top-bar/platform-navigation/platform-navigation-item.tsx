@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import $ from 'jquery'
 import { type FocusEvent, useEffect, useRef } from 'react'
 import { Link } from 'wouter'
-import { platformImageMap } from '../../../../../../lib/constants'
-import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'
-import { TopBarButton } from './top-bar-button'
+import { platformImageMap } from '../../../../../../../lib/constants'
+import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
+import { TopBarButton } from '../top-bar-button'
 
 interface PlatformNavigationItemProps {
   platform: {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { BaseDialogTrigger } from '../../../../../primitives/base-dialog-trigger'
+import { BaseDialogTrigger } from '../../../../../../primitives/base-dialog-trigger'
+import { TopBarButton } from '../top-bar-button'
 import { ConfigKeyboardDialogContent } from './config-keyboard-dialog-content'
-import { TopBarButton } from './top-bar-button'
 
 export function ConfigKeyboardButton() {
   const [open, setOpen] = useState(false)

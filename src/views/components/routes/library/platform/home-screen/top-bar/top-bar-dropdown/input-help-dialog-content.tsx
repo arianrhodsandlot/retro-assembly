@@ -1,6 +1,6 @@
 import { DialogClose } from '@radix-ui/react-dialog'
-import { DarkInputButton } from '../../../../../common/dark-input-button'
-import { BaseButton } from '../../../../../primitives/base-button'
+import { DarkInputButton } from '../../../../../../common/dark-input-button'
+import { BaseButton } from '../../../../../../primitives/base-button'
 
 export function InputHelpDialogContent() {
   return (

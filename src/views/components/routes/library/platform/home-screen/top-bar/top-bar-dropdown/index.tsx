@@ -2,12 +2,13 @@ import { clsx } from 'clsx'
 import delay from 'delay'
 import $ from 'jquery'
 import { useRef, useState } from 'react'
-import { onCancel } from '../../../../../../../core'
+import { onCancel } from '../../../../../../../../core'
+import { TopBarButton } from '../top-bar-button'
+import { AboutButton } from './about-button'
 import { ClearSiteDataButton } from './clear-site-data-button'
 import { ConfigGamepadButton } from './config-gamepad-button'
 import { ConfigKeyboardButton } from './config-keyboard-button'
 import { InputHelpButton } from './input-help-button'
-import { TopBarButton } from './top-bar-button'
 
 export function TopBarDropdown() {
   const elementRef = useRef<HTMLDivElement>(null)
@@ -97,6 +98,7 @@ export function TopBarDropdown() {
         <ConfigKeyboardButton />
         <ConfigGamepadButton />
         <ClearSiteDataButton />
+        <AboutButton />
       </div>
     </div>
   )

@@ -1,7 +1,11 @@
+import { useAsync } from '@react-hookz/web'
+import delay from 'delay'
 import { isEqual, map, omit } from 'lodash-es'
 import { memo, useEffect, useRef } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { type Rom } from '../../../../../../../core'
+import { useFocusingHome } from '../hooks/use-focusing-home'
+import { useGamepads } from '../input-tips/hooks/use-gamepads'
 import { GameEntryGridItem } from './game-entry-grid-item'
 import { clearLoadImageQueue } from './utils'
 
@@ -12,6 +16,22 @@ interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
 function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   const innerRef = useRef<HTMLDivElement>()
   const { rowCount, columnCount } = props
+  const { connected } = useGamepads()
+  const focusingHome = useFocusingHome()
+
+  const [, { execute: focusFirstGame }] = useAsync(async () => {
+    if (!connected || !focusingHome) {
+      return
+    }
+    if (roms?.length) {
+      await delay(0)
+      innerRef.current?.querySelector('button')?.focus()
+    }
+  })
+
+  useEffect(() => {
+    focusFirstGame()
+  }, [focusFirstGame, roms])
 
   useEffect(() => {
     return () => {

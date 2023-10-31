@@ -8,18 +8,23 @@ import { SpatialNavigation } from '../../../../../../lib/spatial-navigation'
 import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'
 import { platformsAtom } from '../atoms'
 import { historyDummyPlatform } from '../constants'
-import { isFocusingHome } from '../utils'
+import { useFocusingHome } from '../hooks/use-focusing-home'
 import { PlatformNavigationItem } from './platform-navigation-item'
 
 const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function PlatformNavigation() {
-  const { params, navigateToPlatform: navigateToSystem } = useRouterHelpers()
+  const usingDemo = isUsingDemo()
+  const { params, isPlatformRoute, navigateToPlatform } = useRouterHelpers()
+  const focusingHome = useFocusingHome()
   const platforms = useAtomValue(platformsAtom)
-  const allPlatforms = useMemo(() => [historyDummyPlatform, ...platforms], [platforms])
+  const allPlatforms = useMemo(
+    () => (usingDemo ? platforms : [historyDummyPlatform, ...platforms]),
+    [usingDemo, platforms],
+  )
   const showHistory = useMemo(() => !isUsingDemo(), [])
 
-  const shouldSwitchPlatform = isFocusingHome() && !SpatialNavigation.isPaused()
+  const shouldSwitchPlatform = isPlatformRoute && focusingHome && !SpatialNavigation.isPaused()
   const currentSystemIndex = findIndex(allPlatforms, { name: params.platform as PlatformName })
 
   const selectPrevSystem = useCallback(() => {
@@ -27,16 +32,16 @@ export function PlatformNavigation() {
       return
     }
     const newCurrentSystem = allPlatforms[currentSystemIndex - 1] ?? last(allPlatforms)
-    navigateToSystem(newCurrentSystem.name)
-  }, [currentSystemIndex, navigateToSystem, allPlatforms, shouldSwitchPlatform])
+    navigateToPlatform(newCurrentSystem.name)
+  }, [currentSystemIndex, navigateToPlatform, allPlatforms, shouldSwitchPlatform])
 
   const selectNextSystem = useCallback(() => {
     if (!shouldSwitchPlatform) {
       return
     }
     const newCurrentSystem = allPlatforms[currentSystemIndex + 1] ?? first(allPlatforms)
-    navigateToSystem(newCurrentSystem.name)
-  }, [currentSystemIndex, navigateToSystem, allPlatforms, shouldSwitchPlatform])
+    navigateToPlatform(newCurrentSystem.name)
+  }, [currentSystemIndex, navigateToPlatform, allPlatforms, shouldSwitchPlatform])
 
   useEffect(() => {
     if (!isUsingDemo() && params.platform) {

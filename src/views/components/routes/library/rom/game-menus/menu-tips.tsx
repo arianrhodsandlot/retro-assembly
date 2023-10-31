@@ -24,6 +24,10 @@ const keyboardTips = (
   </div>
 )
 
+function isTouchDevice() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
 export function MenuTips() {
   const { connected } = useGamepads()
   const usingDemo = isUsingDemo()
@@ -33,7 +37,7 @@ export function MenuTips() {
       <span className='icon-[mdi--lightbulb-on-outline] mt-1 h-4 w-4' />
       <div>
         {usingDemo ? demoTips : null}
-        {connected ? controllerTips : keyboardTips}
+        {connected ? controllerTips : isTouchDevice() ? keyboardTips : null}
       </div>
     </div>
   )

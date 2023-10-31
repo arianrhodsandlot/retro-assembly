@@ -3,7 +3,7 @@ import { VirtualButton } from './virtual-button'
 export function VirtualControllerDPad() {
   return (
     <div className='flex flex-col items-center overflow-hidden rounded-full border-4 border-dashed border-white/50'>
-      <div className='flex '>
+      <div className='flex'>
         <div className='h-12 w-12 overflow-hidden border-4 border-dashed border-white/50'>
           <VirtualButton name='up,left' />
         </div>

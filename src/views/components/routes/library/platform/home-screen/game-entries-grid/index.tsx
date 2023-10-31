@@ -15,6 +15,7 @@ interface GameEntryGridProps extends Omit<FixedSizeGrid['props'], 'children'> {
 
 function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   const innerRef = useRef<HTMLDivElement>()
+  const gridRef = useRef<any>()
   const { rowCount, columnCount } = props
   const { connected } = useGamepads()
   const focusingHome = useFocusingHome()
@@ -30,6 +31,7 @@ function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   })
 
   useEffect(() => {
+    gridRef.current.scrollTo({ scrollLeft: 0, scrollTop: 0 })
     focusFirstGame()
   }, [focusFirstGame, roms])
 
@@ -40,7 +42,7 @@ function GameEntryGrid({ roms, ...props }: GameEntryGridProps) {
   }, [])
 
   return roms?.length ? (
-    <FixedSizeGrid {...props} innerRef={innerRef} itemData={{ roms, rowCount, columnCount }}>
+    <FixedSizeGrid ref={gridRef} {...props} innerRef={innerRef} itemData={{ roms, rowCount, columnCount }}>
       {GameEntryGridItem}
     </FixedSizeGrid>
   ) : null

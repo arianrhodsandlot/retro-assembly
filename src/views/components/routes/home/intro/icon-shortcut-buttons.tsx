@@ -13,7 +13,7 @@ export function IconShortcutButtons() {
     <div className='mt-2 flex items-center justify-center gap-4 text-xs text-white/60'>
       {isOnedriveEnabled ? (
         <OnedriveButton>
-          <button>
+          <button data-testid='select-onedrive-directory'>
             <span className='icon-[logos--microsoft-onedrive] h-4 w-4' />
           </button>
         </OnedriveButton>

@@ -1,4 +1,6 @@
 import { useLocation, useParams, useRoute, useRouter } from 'wouter'
+import { isUsingDemo } from '../../../core'
+import { routes } from '../../lib/routes'
 
 const encode = encodeURIComponent
 
@@ -6,10 +8,17 @@ export function useRouterHelpers() {
   const [location, setLocation] = useLocation()
   const params = useParams()
   const router = useRouter()
-  const [isHome] = useRoute('/')
+
+  const [isHomeRoute] = useRoute(routes.home)
+  const [isPlatformRoute] = useRoute(routes.platform)
+  const [isRomRoute] = useRoute(routes.rom)
+
   const wouter = { location, setLocation, router, params, useRoute }
 
-  const { library = 'public', platform = isHome ? 'nes' : '', rom } = params
+  let { library = 'public', platform = '', rom } = params
+  if (isHomeRoute && isUsingDemo()) {
+    platform ||= 'nes'
+  }
   const normalizedParams = { library, platform, rom }
 
   function replactLocation(to: string) {
@@ -53,7 +62,9 @@ export function useRouterHelpers() {
 
   return {
     params: normalizedParams,
-    isHome,
+    isHomeRoute,
+    isPlatformRoute,
+    isRomRoute,
     linkToLibrary,
     linkToPlatform,
     linkToRom,

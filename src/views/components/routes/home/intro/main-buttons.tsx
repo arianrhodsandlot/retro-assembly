@@ -1,14 +1,16 @@
-import { useRouterHelpers } from '../../../hooks/use-router-helpers'
+import { useSetAtom } from 'jotai'
 import { BaseDialogTrigger } from '../../../primitives/base-dialog-trigger'
+import { introVisibleAtom } from './atoms'
 import { ContinueModalContent } from './continue-modal-content'
 import { IconShortcutButtons } from './icon-shortcut-buttons'
 
 export function MainButtons() {
-  const { navigateToPlatform: navigateToSystem } = useRouterHelpers()
+  const setIntroVisible = useSetAtom(introVisibleAtom)
 
   function onClickTryPublicLibrary() {
-    navigateToSystem()
+    setIntroVisible(false)
   }
+
   return (
     <div className='flex flex-1 flex-col items-center justify-center pb-10'>
       <div>
@@ -20,7 +22,7 @@ export function MainButtons() {
           <div className='ml-2'>Try public library</div>
         </button>
         <div className='mt-2 text-xs text-white/60'>
-          Enjoy free (<b>legal</b>) retro games from&nbsp;
+          Enjoy free (<b>legal</b>) games from&nbsp;
           <a className='underline' href='https://retrobrews.github.io/' rel='noreferrer' target='_blank'>
             retrobrews
           </a>

@@ -1,22 +1,22 @@
 import { Redirect, Route, Switch } from 'wouter'
+import { routes } from '../lib/routes'
 import { AuthDropbox } from './routes/auth/dropbox'
 import { AuthGoogleDrive } from './routes/auth/google-drive'
 import { AuthOnedrive } from './routes/auth/onedrive'
-import { Home } from './routes/home'
-import { LibraryPlatformRom } from './routes/library/rom'
+import { UniversalHomeRoute } from './routes/universal-home-route'
 
 export default function App() {
   return (
     <Switch>
-      <Route path='/'>
-        <Home />
+      <Route path={routes.home}>
+        <UniversalHomeRoute />
       </Route>
 
-      <Route path='/library/:library/platform/:platform?'>
-        <LibraryPlatformRom />
+      <Route path={routes.platform}>
+        <UniversalHomeRoute />
       </Route>
-      <Route path='/library/:library/platform/:platform/rom/:rom'>
-        <LibraryPlatformRom />
+      <Route path={routes.rom}>
+        <UniversalHomeRoute />
       </Route>
 
       <Route path='/auth/onedrive'>
@@ -30,7 +30,7 @@ export default function App() {
       </Route>
 
       <Route>
-        <Redirect to='/' />
+        <Redirect to={routes.home} />
       </Route>
     </Switch>
   )

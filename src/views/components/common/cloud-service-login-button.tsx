@@ -1,5 +1,5 @@
 import { useAsync as useAsyncFn, useIntervalEffect } from '@react-hookz/web'
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import mitt from 'mitt'
 import { type MouseEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'

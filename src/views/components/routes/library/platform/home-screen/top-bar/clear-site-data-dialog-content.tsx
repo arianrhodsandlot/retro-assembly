@@ -19,7 +19,7 @@ export function ClearSiteDataDialogContent({ children, onConfirm }: { children: 
         </div>
         <div className='mt-4'>{children}</div>
       </div>
-      <div className='mt-8 flex items-center justify-center gap-5'>
+      <div className='flex-center mt-8 gap-5'>
         <BaseButton onClick={onConfirm} styleType='primary'>
           <span className='icon-[mdi--check] h-5 w-5' />
           Confirm

@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import { type JSX, createElement, forwardRef } from 'react'
 
 type ButtonProps = JSX.IntrinsicElements['button']
@@ -27,6 +27,6 @@ export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(functio
       ref,
       ...props,
     },
-    <div className='relative flex items-center justify-center gap-2'>{children}</div>,
+    <div className='flex-center relative gap-2'>{children}</div>,
   )
 })

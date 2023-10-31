@@ -187,7 +187,7 @@ export function InputMappingPanel({
 
       <div className={clsx('mt-2 flex justify-end text-sm', { 'scale-0': waitingButton })}>
         <button
-          className='flex items-center justify-center gap-1 rounded border border-rose-800 bg-white px-2 py-1 text-rose-700'
+          className='flex-center gap-1 rounded border border-rose-800 bg-white px-2 py-1 text-rose-700'
           onClick={onResetMapping}
           tabIndex={-1}
         >

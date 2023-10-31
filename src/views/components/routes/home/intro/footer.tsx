@@ -1,7 +1,7 @@
 export function Footer() {
   return (
     <>
-      <div className='flex items-center justify-center gap-2 text-xs'>
+      <div className='flex-center gap-2 text-xs'>
         <div>
           <span>Version</span>
           <a
@@ -20,7 +20,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className='mb-2 mt-1 flex items-center justify-center gap-2 text-xs'>
+      <div className='flex-center mb-2 mt-1 gap-2 text-xs'>
         <span>© 2023</span>
         <a className='underline' href='https://github.com/arianrhodsandlot' rel='noreferrer' target='_blank'>
           arianrhodsandlot
@@ -31,7 +31,7 @@ export function Footer() {
         </a>
         ·
         <a
-          className='flex items-center justify-center gap-1'
+          className='flex-center gap-1'
           href='mailto:theguidanceofawhitetower@gmail.com'
           rel='noreferrer'
           target='_blank'
@@ -39,7 +39,7 @@ export function Footer() {
           <span className='icon-[simple-icons--gmail] mr-1 h-4 w-4' />
         </a>
         <a
-          className='flex items-center justify-center gap-1'
+          className='flex-center gap-1'
           href='https://github.com/arianrhodsandlot/retro-assembly'
           rel='noreferrer'
           target='_blank'

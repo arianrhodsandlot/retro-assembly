@@ -1,5 +1,5 @@
 import { useIntervalEffect } from '@react-hookz/web'
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import delay from 'delay'
 import { useState } from 'react'
 

@@ -7,7 +7,7 @@ export function ConfigGamepadDialogContent() {
     <div>
       <GamepadMapping />
 
-      <div className='mt-8 flex items-center justify-center gap-5'>
+      <div className='flex-center mt-8 gap-5'>
         <DialogClose asChild>
           <BaseButton styleType='primary'>
             <span className='icon-[mdi--close] h-5 w-5' />

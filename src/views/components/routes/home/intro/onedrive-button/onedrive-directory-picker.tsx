@@ -22,7 +22,7 @@ export function OnedriveDirectoryPicker({
 
   if (isValidating || state.loading) {
     return (
-      <div className='flex items-center justify-center py-6'>
+      <div className='flex-center py-6'>
         <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />
       </div>
     )

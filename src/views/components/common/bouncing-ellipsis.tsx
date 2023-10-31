@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 
 type DivProps = JSX.IntrinsicElements['div']
 type BouncingEllipsisProps = DivProps

@@ -5,12 +5,12 @@ export function Banner() {
   return (
     <div className='m-auto mb-10 mt-10 w-full max-w-none pt-20 sm:max-w-4xl sm:pt-40'>
       <div className='bg-white/70 pb-10 pt-12 text-rose-700 backdrop-blur-sm'>
-        <div className='m-auto flex items-center justify-center gap-4 font-bold'>
+        <div className='flex-center m-auto gap-4 font-bold'>
           <img alt='Retro Assembly' className='h-16 w-16 rounded-full' src={logo} />
           <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider sm:text-6xl'>Retro Assemly</div>
         </div>
         <div className='mt-4 flex flex-col items-center justify-center gap-2 text-xs tracking-wider sm:flex-row sm:gap-0'>
-          <span className='flex items-center justify-center px-1'>
+          <span className='flex-center px-1'>
             A personal&nbsp;
             <AnimatedIcons>
               <div className='icon-[mdi--space-invaders] h-4 w-4' />
@@ -24,7 +24,7 @@ export function Banner() {
             </AnimatedIcons>
             retro game collection cabinet
           </span>
-          <span className='flex items-center justify-center px-1'>
+          <span className='flex-center px-1'>
             in your&nbsp;
             <AnimatedIcons wait={500}>
               <span className='icon-[simple-icons--googlechrome] h-4 w-4' />

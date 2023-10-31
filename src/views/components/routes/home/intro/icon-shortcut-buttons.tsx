@@ -11,7 +11,7 @@ const isDropboxEnabled = isCloudServiceEnabled('dropbox')
 
 export function IconShortcutButtons() {
   return (
-    <div className='mt-2 flex items-center justify-center gap-4 text-xs text-white/60'>
+    <div className='flex-center mt-2 gap-4 text-xs text-white/60'>
       {isOnedriveEnabled ? (
         <OnedriveButton>
           <IconShortcutButton type='onedrive'>

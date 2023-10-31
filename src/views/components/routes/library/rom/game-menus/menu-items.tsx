@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import { useSetAtom } from 'jotai'
 import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'

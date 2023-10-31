@@ -43,7 +43,7 @@ export function ContinueModalContent() {
         <div className='flex flex-col items-center gap-6'>
           {isAnyCloudServiceEnabled ? (
             <div className='flex flex-col items-center'>
-              <div className='flex items-center justify-center gap-2 text-center font-bold'>
+              <div className='flex-center gap-2 text-center font-bold'>
                 <span className='icon-[mdi--cube-outline] h-6 w-6' />
                 Select a cloud directory
                 {directoryInstructionToolTip}
@@ -62,7 +62,7 @@ export function ContinueModalContent() {
 
           {isLocalDirectorySelectorEnabled() ? (
             <div>
-              <div className='flex items-center justify-center gap-2 text-center font-bold'>
+              <div className='flex-center gap-2 text-center font-bold'>
                 <span className='icon-[mdi--cube-outline] h-6 w-6' />
                 Select a local directory
                 {directoryInstructionToolTip}

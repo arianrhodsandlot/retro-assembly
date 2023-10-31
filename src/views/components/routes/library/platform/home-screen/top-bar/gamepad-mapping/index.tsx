@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import { compact, find, reject, uniqBy } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import { getGamepadMappings, updateGamepadMappings } from '../../../../../../../../core'
@@ -86,7 +86,7 @@ export function GamepadMapping() {
           ))
         ) : (
           <div className='flex flex-col items-center justify-center'>
-            <BaseCallout className='flex items-center justify-center'>
+            <BaseCallout className='flex-center'>
               <span className='icon-[mdi--information-outline] mr-2 h-4 w-4' />
               Connect your controller and press any button to begin!
             </BaseCallout>

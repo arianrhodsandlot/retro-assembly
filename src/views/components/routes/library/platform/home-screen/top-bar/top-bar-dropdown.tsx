@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import delay from 'delay'
 import $ from 'jquery'
 import { useRef, useState } from 'react'

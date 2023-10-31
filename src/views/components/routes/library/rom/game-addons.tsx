@@ -4,7 +4,7 @@ import { SpatialNavigation } from '../../../../lib/spatial-navigation'
 import { UserInteractionButton } from '../../../common/user-interaction-button'
 import { useAsyncExecute } from '../../../hooks/use-async-execute'
 import { useUserInteraction } from '../hooks/use-user-interaction'
-import { GameLaunchingText } from '../system/home-screen/game-launching/game-launching-text'
+import { GameLaunchingText } from '../platform/home-screen/game-launching/game-launching-text'
 import { GameMenus } from './game-menus'
 import { useExit } from './hooks/use-exit'
 import { VirtualController } from './virtual-controller'
@@ -17,7 +17,7 @@ export function GameAddons() {
 
   const [state] = useAsyncExecute(async () => {
     await start()
-    const rom = getRom({ system: params.system, rom: params.rom })
+    const rom = getRom({ platform: params.platform, rom: params.rom })
 
     SpatialNavigation.pause()
     try {

@@ -1,7 +1,7 @@
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
 import { type Rom } from '../classes/rom'
-import { arcadeHardwareBiosMap } from '../constants/systems'
+import { arcadeHardwareBiosMap } from '../constants/platforms'
 import { globalContext } from '../internal/global-context'
 
 export function getArcadeBiosNames(rom: Rom) {
@@ -27,11 +27,11 @@ export async function getAdditionalFiles(rom: Rom) {
     throw new Error('fileSystem is not available')
   }
 
-  const { arcadeGameInfo, system } = rom
+  const { arcadeGameInfo, platform } = rom
   if (arcadeGameInfo?.parent) {
     const parentFileName = `${arcadeGameInfo.parent}.zip`
     const romDirectory = PreferenceParser.get('romDirectory')
-    const parentFilePath = join(romDirectory, system, parentFileName)
+    const parentFilePath = join(romDirectory, platform, parentFileName)
     try {
       const blob = await globalContext.fileSystem.getContent(parentFilePath)
       return [{ name: parentFileName, blob }]

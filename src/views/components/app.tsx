@@ -3,7 +3,7 @@ import { AuthDropbox } from './routes/auth/dropbox'
 import { AuthGoogleDrive } from './routes/auth/google-drive'
 import { AuthOnedrive } from './routes/auth/onedrive'
 import { Home } from './routes/home'
-import { LibrarySystemRom } from './routes/library/rom'
+import { LibraryPlatformRom } from './routes/library/rom'
 
 export default function App() {
   return (
@@ -12,11 +12,11 @@ export default function App() {
         <Home />
       </Route>
 
-      <Route path='/library/:library/system/:system?'>
-        <LibrarySystemRom />
+      <Route path='/library/:library/platform/:platform?'>
+        <LibraryPlatformRom />
       </Route>
-      <Route path='/library/:library/system/:system/rom/:rom'>
-        <LibrarySystemRom />
+      <Route path='/library/:library/platform/:platform/rom/:rom'>
+        <LibraryPlatformRom />
       </Route>
 
       <Route path='/auth/onedrive'>

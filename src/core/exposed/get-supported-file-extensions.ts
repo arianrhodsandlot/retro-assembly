@@ -1,5 +1,5 @@
-import { extSystemMap } from '../constants/systems'
+import { extPlatformMap } from '../constants/platforms'
 
 export function getSupportedFileExtensions() {
-  return Object.keys(extSystemMap)
+  return Object.keys(extPlatformMap)
 }

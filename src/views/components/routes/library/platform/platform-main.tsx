@@ -4,8 +4,8 @@ import { getProvider, isUsingDemo, start } from '../../../../../core'
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
 import { HomeScreen } from './home-screen'
 
-export function LibrarySystem() {
-  const { params, navigateToSystem, navigateToHome } = useRouterHelpers()
+export function LibraryPlatform() {
+  const { params, navigateToPlatform: navigateToSystem, navigateToHome } = useRouterHelpers()
 
   const [state, { execute }] = useAsync(async () => {
     const provider = getProvider()

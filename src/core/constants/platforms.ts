@@ -1,4 +1,4 @@
-export type SystemName =
+export type PlatformName =
   | 'arcade'
   | 'atari2600'
   | 'atari5200'
@@ -37,8 +37,8 @@ type CoreName =
   | 'snes9x'
   | 'stella2014'
 
-// systems are sorted based upon their popularity, see https://en.wikipedia.org/wiki/List_of_best-selling_game_consoles
-export const systemNamesSorted: SystemName[] = [
+// platforms are sorted based upon their popularity, see https://en.wikipedia.org/wiki/List_of_best-selling_game_consoles
+export const platformNamesSorted: PlatformName[] = [
   'gb',
   'gbc',
   'gba',
@@ -59,7 +59,7 @@ export const systemNamesSorted: SystemName[] = [
   'arcade',
 ]
 
-export const systemFullNameMap: Record<SystemName, string> = {
+export const platformFullNameMap: Record<PlatformName, string> = {
   arcade: 'FBNeo - Arcade Games',
   atari2600: 'Atari - 2600',
   atari5200: 'Atari - 5200',
@@ -80,7 +80,7 @@ export const systemFullNameMap: Record<SystemName, string> = {
   wonderswancolor: 'Bandai - WonderSwan Color',
 }
 
-export const systemCoreMap: Record<SystemName, CoreName> = {
+export const platformCoreMap: Record<PlatformName, CoreName> = {
   arcade: 'fbneo',
   atari2600: 'stella2014',
   atari5200: 'a5200',
@@ -101,7 +101,7 @@ export const systemCoreMap: Record<SystemName, CoreName> = {
   wonderswancolor: 'mednafen_wswan',
 }
 
-export const systemsNeedsBios = ['arcade', 'fds']
+export const platformNeedsBios = ['arcade', 'fds']
 
 export const coreBiosMap: Record<string, string[]> = {
   fbneo: [
@@ -146,7 +146,7 @@ export const arcadeHardwareBiosMap: Record<string, string[]> = {
   'NB-1 / NB-2': ['namcoc75.zip'],
 }
 
-export const extSystemMap: Record<string, SystemName> = {
+export const extPlatformMap: Record<string, PlatformName> = {
   a26: 'atari2600',
   a52: 'atari5200',
   a78: 'atari7800',

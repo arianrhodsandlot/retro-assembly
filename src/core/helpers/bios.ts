@@ -2,7 +2,7 @@ import { compact } from 'lodash-es'
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
 import { type Rom } from '../classes/rom'
-import { coreBiosMap, systemCoreMap, systemsNeedsBios } from '../constants/systems'
+import { coreBiosMap, platformCoreMap, platformNeedsBios } from '../constants/platforms'
 import { globalContext } from '../internal/global-context'
 import { getArcadeBiosNames } from './arcade'
 
@@ -11,13 +11,13 @@ export async function getBiosFiles(rom: Rom) {
     throw new Error('fileSystem is not available')
   }
 
-  if (!systemsNeedsBios.includes(rom.system)) {
+  if (!platformNeedsBios.includes(rom.platform)) {
     return
   }
 
-  const core = systemCoreMap[rom.system]
+  const core = platformCoreMap[rom.platform]
 
-  const biosNames = rom.system === 'arcade' ? getArcadeBiosNames(rom) : coreBiosMap[core]
+  const biosNames = rom.platform === 'arcade' ? getArcadeBiosNames(rom) : coreBiosMap[core]
 
   const biosFilesRequests = biosNames.map((biosName) => getArcadeBiosFile(biosName))
   const biosFiles = await Promise.all(biosFilesRequests)

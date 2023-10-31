@@ -1,7 +1,7 @@
 import { type GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
 import { isAbsolute, parse, relative } from 'path-browserify'
-import { extSystemMap, systemNamesSorted } from '../constants/systems'
+import { extPlatformMap, platformNamesSorted } from '../constants/platforms'
 import { getCover, parseGoodCode } from '../helpers/misc'
 import { type FileAccessor } from './file-system-providers/file-accessor'
 import { type ArcadeGameInfo } from './games-database'
@@ -9,13 +9,13 @@ import { GamesDatabase } from './games-database'
 import { type Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 
-const allowedExtensions = new Set(['zip', 'bin', ...Object.keys(extSystemMap)])
+const allowedExtensions = new Set(['zip', 'bin', ...Object.keys(extPlatformMap)])
 
 export class Rom {
   id = ''
   fileAccessor: FileAccessor
 
-  system = ''
+  platform = ''
   gameInfo: Entry<string> | undefined
   arcadeGameInfo: ArcadeGameInfo | undefined
 
@@ -45,9 +45,9 @@ export class Rom {
   get covers() {
     if (this.standardizedName) {
       return [
-        getCover({ system: this.system, name: this.standardizedName, type: 'boxart' }),
-        getCover({ system: this.system, name: this.standardizedName, type: 'title' }),
-        getCover({ system: this.system, name: this.standardizedName, type: 'snap' }),
+        getCover({ platform: this.platform, name: this.standardizedName, type: 'boxart' }),
+        getCover({ platform: this.platform, name: this.standardizedName, type: 'title' }),
+        getCover({ platform: this.platform, name: this.standardizedName, type: 'snap' }),
       ]
     }
     return ''
@@ -57,7 +57,7 @@ export class Rom {
     const roms: Rom[] = []
     for (const file of files) {
       const rom = Rom.fromFileAccessor(file)
-      if (rom?.system) {
+      if (rom?.platform) {
         roms.push(rom)
       }
     }
@@ -72,8 +72,8 @@ export class Rom {
     }
   }
 
-  static groupBySystem(roms: Rom[]) {
-    return groupBy(roms, 'system')
+  static groupByPlatform(roms: Rom[]) {
+    return groupBy(roms, 'platform')
   }
 
   private static isValidFileName(name: string) {
@@ -86,9 +86,9 @@ export class Rom {
   }
 
   async load() {
-    await this.updateSystem()
+    await this.updatePlatform()
     await this.updateGameInfo()
-    if (this.system === 'arcade') {
+    if (this.platform === 'arcade') {
       await this.updateArcadeGameInfo()
     }
 
@@ -101,9 +101,9 @@ export class Rom {
   }
 
   async updateGameInfo() {
-    const { system, fileAccessor } = this
-    if (!system) {
-      await this.updateSystem()
+    const { platform, fileAccessor } = this
+    if (!platform) {
+      await this.updatePlatform()
     }
 
     if (fileAccessor.meta?.name) {
@@ -111,29 +111,29 @@ export class Rom {
       return
     }
 
-    this.gameInfo = await GamesDatabase.queryByFileNameFromSystem({ fileName: fileAccessor.name, system })
+    this.gameInfo = await GamesDatabase.queryByFileNameFromPlatform({ fileName: fileAccessor.name, platform })
   }
 
-  async updateSystem() {
+  async updatePlatform() {
     const { fileAccessor } = this
     if (!fileAccessor.name) {
       throw new Error('Invalid file')
     }
 
-    let system = this.guessSystemByPath() || this.guessSystemByFileName()
-    if (!system && fileAccessor.isLoaded && fileAccessor.name.endsWith('.zip')) {
-      system = await this.guessSystemByExtractedContent()
+    let platform = this.guessPlatformByPath() || this.guessPlatformByFileName()
+    if (!platform && fileAccessor.isLoaded && fileAccessor.name.endsWith('.zip')) {
+      platform = await this.guessPlatformByExtractedContent()
     }
 
-    if (!system) {
+    if (!platform) {
       throw new Error(`Unknown system for ${fileAccessor.name}`)
     }
 
-    this.system = system
+    this.platform = platform
   }
 
   async updateArcadeGameInfo() {
-    if (this.system === 'arcade') {
+    if (this.platform === 'arcade') {
       if (this.arcadeGameInfo) {
         return this.arcadeGameInfo
       }
@@ -144,15 +144,15 @@ export class Rom {
     }
   }
 
-  private guessSystemByFileName(name: string = this.fileAccessor.name) {
+  private guessPlatformByFileName(name: string = this.fileAccessor.name) {
     const extname = name.split('.').pop()
     if (!extname) {
       return ''
     }
-    return extSystemMap[extname] ?? ''
+    return extPlatformMap[extname] ?? ''
   }
 
-  private async guessSystemByExtractedContent() {
+  private async guessPlatformByExtractedContent() {
     const { BlobReader, ZipReader } = await import('@zip.js/zip.js')
     if (!this.fileAccessor.isLoaded) {
       return ''
@@ -163,7 +163,7 @@ export class Rom {
     try {
       const entries = await zipReader.getEntries()
       for (const { filename } of entries) {
-        const system = this.guessSystemByFileName(filename)
+        const system = this.guessPlatformByFileName(filename)
         if (system) {
           return system
         }
@@ -174,14 +174,14 @@ export class Rom {
     return ''
   }
 
-  private guessSystemByPath() {
+  private guessPlatformByPath() {
     const romDirectory = PreferenceParser.get('romDirectory')
     if (this.fileAccessor.path?.startsWith(romDirectory)) {
       const relativePath = isAbsolute(this.fileAccessor.path)
         ? relative(romDirectory, this.fileAccessor.path)
         : this.fileAccessor.path
       const { dir } = parse(relativePath)
-      if ((systemNamesSorted as string[]).includes(dir)) {
+      if ((platformNamesSorted as string[]).includes(dir)) {
         return dir
       }
     }

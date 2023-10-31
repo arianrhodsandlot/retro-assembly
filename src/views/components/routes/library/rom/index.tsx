@@ -1,13 +1,13 @@
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
-import { LibrarySystem } from '../system/system-main'
+import { LibraryPlatform } from '../platform/platform-main'
 import { GameAddons } from './game-addons'
 
-export function LibrarySystemRom() {
+export function LibraryPlatformRom() {
   const { params } = useRouterHelpers()
 
   return (
     <>
-      <LibrarySystem />
+      <LibraryPlatform />
       {params.rom ? <GameAddons /> : null}
     </>
   )

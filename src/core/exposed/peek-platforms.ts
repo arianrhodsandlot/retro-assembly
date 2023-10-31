@@ -1,9 +1,9 @@
 import { intersection } from 'lodash-es'
 import { PreferenceParser } from '../classes/preference-parser'
-import { systemFullNameMap, systemNamesSorted } from '../constants/systems'
+import { platformFullNameMap, platformNamesSorted } from '../constants/platforms'
 import { globalContext } from '../internal/global-context'
 
-export async function peekSystems() {
+export async function peekPlatforms() {
   const { fileSystem } = globalContext
   if (!fileSystem) {
     throw new Error('fileSystem is not available')
@@ -12,9 +12,9 @@ export async function peekSystems() {
   const romDirectory = PreferenceParser.get('romDirectory')
   const directories = await fileSystem.peek(romDirectory)
   const directoryNames = directories?.map(({ name }) => name)
-  const systemNames = intersection(systemNamesSorted, directoryNames)
-  return (systemNames as typeof systemNamesSorted).map((systemName) => ({
-    name: systemName,
-    fullName: systemFullNameMap[systemName],
+  const platformNames = intersection(platformNamesSorted, directoryNames)
+  return (platformNames as typeof platformNamesSorted).map((platformName) => ({
+    name: platformName,
+    fullName: platformFullNameMap[platformName],
   }))
 }

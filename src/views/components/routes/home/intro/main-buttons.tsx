@@ -4,7 +4,7 @@ import { ContinueModalContent } from './continue-modal-content'
 import { IconShortcutButtons } from './icon-shortcut-buttons'
 
 export function MainButtons() {
-  const { navigateToSystem } = useRouterHelpers()
+  const { navigateToPlatform: navigateToSystem } = useRouterHelpers()
 
   function onClickTryPublicLibrary() {
     navigateToSystem()

@@ -12,8 +12,8 @@ SpatialNavigation.add({
 })
 
 SpatialNavigation.add({
-  id: 'system-navigation',
-  selector: '.system-navigation button',
+  id: 'platform-navigation',
+  selector: '.platform-navigation button',
   enterTo: 'last-focused',
   navigableFilter(element: HTMLElement) {
     const boundingClientRect = element.getBoundingClientRect()

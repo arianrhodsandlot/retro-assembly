@@ -7,7 +7,7 @@ import { showMenuOverlayAtom } from '../atoms'
 export function useExit() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const [mask, setMask] = useAtom(launchingMaskAtom)
-  const { navigateToSystem } = useRouterHelpers()
+  const { navigateToPlatform: navigateToSystem } = useRouterHelpers()
 
   function exit() {
     exitGame()

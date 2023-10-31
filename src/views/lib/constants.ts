@@ -38,7 +38,7 @@ import megadriveContent from '../../assets/consoles/Sega - Mega Drive - Genesis-
 import megadrive from '../../assets/consoles/Sega - Mega Drive - Genesis.png'
 import history from '../../assets/consoles/history.png'
 
-export const systemImageMap = {
+export const platformImageMap = {
   arcade,
   atari2600,
   atari5200,
@@ -62,7 +62,7 @@ export const systemImageMap = {
   history,
 }
 
-export const systemContentImageMap = {
+export const platformContentImageMap = {
   arcade: arcadeContent,
   atari2600: atari2600Content,
   atari5200: atari5200Content,

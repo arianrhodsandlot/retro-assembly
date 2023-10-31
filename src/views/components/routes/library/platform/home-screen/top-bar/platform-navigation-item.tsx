@@ -4,17 +4,17 @@ import { AnimatePresence, motion } from 'framer-motion'
 import $ from 'jquery'
 import { type FocusEvent, useEffect, useRef } from 'react'
 import { Link } from 'wouter'
-import { systemImageMap } from '../../../../../../lib/constants'
+import { platformImageMap } from '../../../../../../lib/constants'
 import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'
 import { TopBarButton } from './top-bar-button'
 
-export function SystemNavigationItem({ system }: { system: any }) {
-  const { params, linkToSystem } = useRouterHelpers()
+export function PlatformNavigationItem({ platform }: { platform: any }) {
+  const { params, linkToPlatform } = useRouterHelpers()
   const button = useRef<HTMLButtonElement>(null)
 
-  const isSelected = system.name === params.system
-  const shortName = system.fullName.split(' - ')[1]
-  const displayName = !shortName || /^\d+$/.test(shortName) ? system.fullName : shortName
+  const isSelected = platform.name === params.platform
+  const shortName = platform.fullName.split(' - ')[1]
+  const displayName = !shortName || /^\d+$/.test(shortName) ? platform.fullName : shortName
 
   async function onFocus(e: FocusEvent<HTMLButtonElement>) {
     const $focusedElement = $(e.currentTarget)
@@ -39,22 +39,22 @@ export function SystemNavigationItem({ system }: { system: any }) {
   }, [isSelected])
 
   return (
-    <Link href={`${linkToSystem(system.name)}`} replace>
+    <Link href={`${linkToPlatform(platform.name)}`} replace>
       <TopBarButton
         className='flex-shrink-0 px-8'
         highlighted={isSelected}
-        key={system.name}
+        key={platform.name}
         onFocus={onFocus}
         ref={button}
-        title={system.fullName}
+        title={platform.fullName}
       >
         <div className={clsx('relative z-[1] flex items-center justify-center')}>
           <div className={clsx('flex items-center justify-center')}>
             <img
-              alt={system.fullName}
+              alt={platform.fullName}
               className={clsx('drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)]')}
               height={36}
-              src={systemImageMap[system.name]}
+              src={platformImageMap[platform.name]}
               width={36}
             />
           </div>

@@ -3,19 +3,20 @@ import { useAtom, useSetAtom } from 'jotai'
 import { some } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
+import { useRoute } from 'wouter'
 import {
-  type SystemName,
+  type PlatformName,
   getHistoryRoms,
-  getSystemRoms,
-  getSystems,
+  getPlatformRoms,
+  getPlatforms,
   isUsingDemo,
   peekHistoryRoms,
-  peekSystemRoms,
-  peekSystems,
+  peekPlatformRoms,
+  peekPlatforms,
 } from '../../../../../../core'
 import { useRouterHelpers } from '../../../../hooks/use-router-helpers'
-import { romsAtom, systemsAtom } from './atoms'
-import { historyDummySystem } from './constants'
+import { platformsAtom, romsAtom } from './atoms'
+import { historyDummyPlatform } from './constants'
 import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { GameLaunching } from './game-launching'
@@ -33,123 +34,119 @@ function getColumnCount(width: number) {
   return candicates.at(-1) as number
 }
 
-const lastSelectedSystemStorageKey = 'last-selected-system'
+const lastSelectedPlatformStorageKey = 'last-selected-system'
 
-async function peekRoms(system: string) {
-  if (system === 'history') {
-    return { system, roms: await peekHistoryRoms() }
+async function peekRoms(platform: string) {
+  if (platform === 'history') {
+    return { platform, roms: await peekHistoryRoms() }
   }
-  return { system, roms: await peekSystemRoms(system) }
+  return { platform, roms: await peekPlatformRoms(platform) }
 }
 
-async function getRoms(system: string) {
-  if (system === 'history') {
-    return { system, roms: await getHistoryRoms() }
+async function getRoms(platform: string) {
+  if (platform === 'history') {
+    return { platform, roms: await getHistoryRoms() }
   }
-  return { system, roms: await getSystemRoms(system) }
+  return { platform, roms: await getPlatformRoms(platform) }
 }
 
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
-  const setSystems = useSetAtom(systemsAtom)
-  const {
-    params,
-    navigateToSystem,
-    wouter: { useRoute },
-  } = useRouterHelpers()
+  const setPlatforms = useSetAtom(platformsAtom)
+  const { params, navigateToPlatform } = useRouterHelpers()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
-  const [match] = useRoute('/library/:library/system/:system?')
-  const currentSystemRef = useRef(params.system)
+  const [match] = useRoute('/library/:library/platform/:platform?')
+  const currentPlatformRef = useRef(params.platform)
 
   const { width: gridWidth, height: gridHeight } = measurements
 
   const columnCount = getColumnCount(gridWidth)
 
-  function getNewCurrentSystemName(systems: { name: SystemName; fullName: string }[]) {
-    if (!systems?.length) {
+  function getNewCurrentPlatformName(platforms: { name: PlatformName; fullName: string }[]) {
+    if (!platforms?.length) {
       return ''
     }
-    const system = params.system || localStorage.getItem(lastSelectedSystemStorageKey)
-    const allSystems = [historyDummySystem, ...systems]
-    const isSystemValid = some(allSystems, { name: system })
-    if (isSystemValid) {
-      return system
+    const platform = params.platform || localStorage.getItem(lastSelectedPlatformStorageKey)
+    const allPlatforms = [historyDummyPlatform, ...platforms]
+    const isPlatformValid = some(allPlatforms, { name: platform })
+    if (isPlatformValid) {
+      return platform
     }
     if (isUsingDemo()) {
       return 'nes'
     }
-    return systems[0].name
+    return platforms[0].name
   }
 
   useEffect(() => {
-    currentSystemRef.current = params.system
-  }, [params.system])
+    currentPlatformRef.current = params.platform
+  }, [params.platform])
 
-  // load systems from cache
+  // load platforms from cache
   useAsync(async () => {
-    const systems = await peekSystems()
-    if (!systems?.length) {
+    const platforms = await peekPlatforms()
+    if (!platforms?.length) {
       return
     }
-    const newCurrentSystemName = getNewCurrentSystemName(systems)
-    setSystems(systems)
-    if (newCurrentSystemName && match) {
-      navigateToSystem(newCurrentSystemName)
+    const newCurrentPlatformName = getNewCurrentPlatformName(platforms)
+    setPlatforms(platforms)
+    if (newCurrentPlatformName && match) {
+      navigateToPlatform(newCurrentPlatformName)
     }
-  }, [setSystems])
+  }, [setPlatforms])
 
   // load roms from cache
   const peekRomsState = useAsync(async () => {
     setRoms([])
-    if (params.system) {
-      const { system, roms } = await peekRoms(params.system)
-      const currentSystem = currentSystemRef.current
-      if (system === currentSystem && roms) {
+    if (params.platform) {
+      const { platform, roms } = await peekRoms(params.platform)
+      const currentPlatform = currentPlatformRef.current
+      if (platform === currentPlatform && roms) {
         setRoms(roms)
       }
     }
-  }, [params.system])
+  }, [params.platform])
 
-  // load systems from remote
-  const systemsState = useAsyncRetry(async () => {
+  // load platforms from remote
+  const platformsState = useAsyncRetry(async () => {
     if (params.rom) {
       return
     }
-    const systems = await getSystems()
-    const newCurrentSystemName = getNewCurrentSystemName(systems)
-    setSystems(systems)
-    if (newCurrentSystemName && match) {
-      navigateToSystem(newCurrentSystemName)
+    const platforms = await getPlatforms()
+    const newCurrentPlatformName = getNewCurrentPlatformName(platforms)
+    setPlatforms(platforms)
+    if (newCurrentPlatformName && match) {
+      navigateToPlatform(newCurrentPlatformName)
     }
     updateRetrying()
-  }, [setSystems])
+  }, [setPlatforms])
 
   // load roms from remote
   const romsState = useAsyncRetry(async () => {
     if (params.rom) {
       return
     }
-    if (params.system) {
-      const { system, roms } = await getRoms(params.system)
-      const currentSystem = currentSystemRef.current
-      if (system === currentSystem) {
+    if (params.platform) {
+      const { platform, roms } = await getRoms(params.platform)
+      const currentPlatform = currentPlatformRef.current
+      if (platform === currentPlatform) {
         setRoms(roms)
       }
     }
     updateRetrying()
-  }, [params.system])
+  }, [params.platform])
 
   function updateRetrying() {
     if (isRetrying) {
-      setIsRetrying(systemsState.loading || romsState.loading)
+      setIsRetrying(platformsState.loading || romsState.loading)
     }
   }
 
   function retry() {
     setIsRetrying(true)
-    if (systemsState.error) {
-      systemsState.retry()
+    if (platformsState.error) {
+      platformsState.retry()
     }
     if (romsState.error) {
       romsState.retry()
@@ -168,7 +165,7 @@ export function HomeScreen() {
   }
 
   const columnWidth = gridWidth / columnCount
-  const error = romsState.loading ? undefined : systemsState.error || romsState.error
+  const error = romsState.loading ? undefined : platformsState.error || romsState.error
   return (
     <HomeScreenLayout>
       {isRomsEmpty || (

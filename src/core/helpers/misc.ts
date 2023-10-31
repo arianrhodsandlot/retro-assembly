@@ -2,24 +2,24 @@ import { isThisYear, isToday, lightFormat } from 'date-fns'
 import { parse } from 'goodcodes-parser'
 import { capitalize } from 'lodash-es'
 import { cdnHost } from '../constants/dependencies'
-import { systemFullNameMap } from '../constants/systems'
+import { platformFullNameMap } from '../constants/platforms'
 
 function encodeRFC3986URIComponent(str) {
   return encodeURIComponent(str).replaceAll(/[!'()*]/g, (c) => `%${c.codePointAt(0)?.toString(16).toUpperCase()}`)
 }
 
-export function getCover({ system, name, type = 'boxart' }) {
-  if (!name || !system) {
+export function getCover({ platform, name, type = 'boxart' }) {
+  if (!name || !platform) {
     return ''
   }
-  const systemFullName = systemFullNameMap[system]
-  if (!systemFullName) {
+  const platformFullName = platformFullNameMap[platform]
+  if (!platformFullName) {
     return ''
   }
 
   const typeUrlPart = `Named_${capitalize(type)}s`
-  const normalizedSystemFullName = systemFullName.replaceAll(' ', '_')
-  const pathPrefix = `gh/libretro-thumbnails/${normalizedSystemFullName}@master`
+  const normalizedPlatformFullName = platformFullName.replaceAll(' ', '_')
+  const pathPrefix = `gh/libretro-thumbnails/${normalizedPlatformFullName}@master`
   const normalizedFileName = name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_')
   const encode = encodeRFC3986URIComponent
   return `${cdnHost}/${pathPrefix}/${encode(typeUrlPart)}/${encode(normalizedFileName)}.png`

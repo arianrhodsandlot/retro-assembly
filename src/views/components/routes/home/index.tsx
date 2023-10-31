@@ -1,7 +1,7 @@
 import { isUsingDropbox, isUsingGoogleDrive, isUsingLocal, isUsingOnedrive, start } from '../../../../core'
 import { useAsyncExecute } from '../../hooks/use-async-execute'
 import { useRouterHelpers } from '../../hooks/use-router-helpers'
-import { HomeScreen } from '../library/system/home-screen'
+import { HomeScreen } from '../library/platform/home-screen'
 import { Intro } from './intro'
 
 export function Home() {

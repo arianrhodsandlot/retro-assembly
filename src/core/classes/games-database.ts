@@ -1,7 +1,7 @@
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { parse } from 'path-browserify'
 import { cdnHost, fbneoInfo, libretroDatabaseInfo } from '../constants/dependencies'
-import { systemFullNameMap } from '../constants/systems'
+import { platformFullNameMap } from '../constants/platforms'
 import { blobToBuffer } from '../helpers/file'
 import { http } from '../helpers/http'
 import { parseGoodCode } from '../helpers/misc'
@@ -10,8 +10,8 @@ import { type Entry } from './libretrodb/types'
 
 const arcadeGameListUrl = `${cdnHost}/gh/${fbneoInfo.name}@${fbneoInfo.version}/gamelist.txt`
 
-function getDbUrl(systemFullName: string) {
-  const dbPath = `rdb/${systemFullName}.rdb`
+function getDbUrl(platformFullName: string) {
+  const dbPath = `rdb/${platformFullName}.rdb`
   return `${cdnHost}/gh/${libretroDatabaseInfo.name}@${libretroDatabaseInfo.version}/${dbPath}`
 }
 
@@ -51,32 +51,32 @@ export class GamesDatabase {
 
   private index = new Map<string, Entry<string>[]>()
   private arcadeFileNameMap: Record<string, ArcadeGameInfo> = {}
-  private system: string
+  private platform: string
   private readyPromise: Promise<void>
 
   constructor(name: string) {
     if (!name) {
-      throw new Error('Invalid system name')
+      throw new Error('Invalid platform name')
     }
-    this.system = name
+    this.platform = name
     this.readyPromise = this.load()
   }
 
-  static getInstance(system: string) {
-    const gamesDatabase = GamesDatabase.gamesDatabaseMap.get(system) ?? new GamesDatabase(system)
-    GamesDatabase.gamesDatabaseMap.set(system, gamesDatabase)
+  static getInstance(platform: string) {
+    const gamesDatabase = GamesDatabase.gamesDatabaseMap.get(platform) ?? new GamesDatabase(platform)
+    GamesDatabase.gamesDatabaseMap.set(platform, gamesDatabase)
     return gamesDatabase
   }
 
-  static async queryByFileNameFromSystem({ fileName, system }: { fileName: string; system: string }) {
-    const db = GamesDatabase.getInstance(system)
+  static async queryByFileNameFromPlatform({ fileName, platform }: { fileName: string; platform: string }) {
+    const db = GamesDatabase.getInstance(platform)
     await db.ready()
     return db.queryByFileName(fileName)
   }
 
   static async queryArcadeGameInfo(fileName: string) {
-    const system = 'arcade'
-    const db = GamesDatabase.getInstance(system)
+    const platform = 'arcade'
+    const db = GamesDatabase.getInstance(platform)
     await db.ready()
     return db.queryArcadeGameInfo(fileName)
   }
@@ -86,10 +86,10 @@ export class GamesDatabase {
   }
 
   async loadRdb() {
-    const { index, system } = this
-    const systemFullName = systemFullNameMap[system]
+    const { index, platform } = this
+    const platformFullName = platformFullNameMap[platform]
 
-    const dbUrl = getDbUrl(systemFullName)
+    const dbUrl = getDbUrl(platformFullName)
     const blob = await requestWithoutDuplicates(dbUrl).blob()
     const buffer = await blobToBuffer(blob)
     const db = await Libretrodb.from(buffer, { indexHashes: false })
@@ -107,7 +107,7 @@ export class GamesDatabase {
   }
 
   async loadArcadeGameList() {
-    if (this.system !== 'arcade') {
+    if (this.platform !== 'arcade') {
       return
     }
 
@@ -167,7 +167,7 @@ export class GamesDatabase {
   }
 
   queryArcadeGameInfo(fileName: string) {
-    if (this.system === 'arcade') {
+    if (this.platform === 'arcade') {
       const [baseFileName] = fileName.split('.')
       return this.arcadeFileNameMap[baseFileName]
     }

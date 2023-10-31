@@ -9,24 +9,24 @@ export function useRouterHelpers() {
   const [isHome] = useRoute('/')
   const wouter = { location, setLocation, router, params, useRoute }
 
-  const { library = 'public', system = isHome ? 'nes' : '', rom } = params
-  const normalizedParams = { library, system, rom }
+  const { library = 'public', platform = isHome ? 'nes' : '', rom } = params
+  const normalizedParams = { library, platform, rom }
 
   function replactLocation(to: string) {
     setLocation(to, { replace: true })
   }
 
   function linkToLibrary(library: string = normalizedParams.library) {
-    return `/library/${encode(library)}/system`
+    return `/library/${encode(library)}/platform`
   }
 
-  function linkToSystem(system: string = normalizedParams.system, library: string = normalizedParams.library) {
-    return `/library/${encode(library)}/system/${encode(system)}`
+  function linkToPlatform(platform: string = normalizedParams.platform, library: string = normalizedParams.library) {
+    return `/library/${encode(library)}/platform/${encode(platform)}`
   }
 
   function linkToRom(rom: string) {
-    const { library, system } = normalizedParams
-    return `/library/${encode(library)}/system/${encode(system)}/rom/${encode(rom)}`
+    const { library, platform } = normalizedParams
+    return `/library/${encode(library)}/platform/${encode(platform)}/rom/${encode(rom)}`
   }
 
   function navigateToLibrary(library: string = normalizedParams.library) {
@@ -34,8 +34,11 @@ export function useRouterHelpers() {
     replactLocation(link)
   }
 
-  function navigateToSystem(system: string = normalizedParams.system, library: string = normalizedParams.library) {
-    const link = linkToSystem(system, library)
+  function navigateToPlatform(
+    platform: string = normalizedParams.platform,
+    library: string = normalizedParams.library,
+  ) {
+    const link = linkToPlatform(platform, library)
     replactLocation(link)
   }
 
@@ -52,10 +55,10 @@ export function useRouterHelpers() {
     params: normalizedParams,
     isHome,
     linkToLibrary,
-    linkToSystem,
+    linkToPlatform,
     linkToRom,
     navigateToLibrary,
-    navigateToSystem,
+    navigateToPlatform,
     navigateToRom,
     navigateToHome,
     replactLocation,

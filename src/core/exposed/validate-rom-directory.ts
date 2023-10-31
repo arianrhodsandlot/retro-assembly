@@ -4,7 +4,7 @@ import { type FileAccessor } from '../classes/file-system-providers/file-accesso
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
-import { systemNamesSorted } from '../constants/systems'
+import { platformNamesSorted } from '../constants/platforms'
 import { type CloudService } from '.'
 
 interface ValidateRomDirectoryParamsForLocalType {
@@ -56,5 +56,5 @@ export async function validateRomDirectory(params: ValidateRomDirectoryParams) {
       throw new Error('invalid type:', type)
   }
 
-  return directories.some((directory) => (systemNamesSorted as string[]).includes(directory.name))
+  return directories.some((directory) => (platformNamesSorted as string[]).includes(directory.name))
 }

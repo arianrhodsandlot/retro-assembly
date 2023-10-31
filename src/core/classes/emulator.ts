@@ -1,7 +1,7 @@
 import delay from 'delay'
 import { Nostalgist } from 'nostalgist'
 import { cdnHost, vendorsInfo } from '../constants/dependencies'
-import { systemCoreMap } from '../constants/systems'
+import { platformCoreMap } from '../constants/platforms'
 import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
 
@@ -76,7 +76,7 @@ export class Emulator {
 
     // todo: maybe this is not necessary
     await this.rom.ready()
-    this.core = systemCoreMap[this.rom.system]
+    this.core = platformCoreMap[this.rom.platform]
 
     if (!this.rom) {
       throw new Error('invalid rom')

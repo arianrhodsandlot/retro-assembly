@@ -1,7 +1,7 @@
-import { getSupportedSystemNames } from '../../../../../core'
+import { getSupportedPlatformNames } from '../../../../../core'
 import { BaseCallout } from '../../../primitives/base-callout'
 
-const supportedSystemNames = [...getSupportedSystemNames()].sort()
+const supportedSystemNames = [...getSupportedPlatformNames()].sort()
 
 export function DirectoryInstruction() {
   return (

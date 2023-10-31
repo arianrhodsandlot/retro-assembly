@@ -34,7 +34,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('navigate systems', async ({ page }) => {
-  const navigation = page.getByTestId('system-navigation')
+  const navigation = page.getByTestId('platform-navigation')
   const gbNavigationButton = navigation.getByTitle('Nintendo - Game Boy', { exact: true })
   const gbaNavigationButton = navigation.getByTitle('Nintendo - Game Boy Advance', { exact: true })
   const gameEntryButton = page.getByTestId('game-entry-button')

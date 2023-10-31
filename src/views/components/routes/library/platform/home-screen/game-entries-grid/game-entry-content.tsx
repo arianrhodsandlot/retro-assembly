@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { type Rom, isUsingDemo } from '../../../../../../../core'
 import { cdnHost } from '../../../../../../../core/constants/dependencies'
-import { systemContentImageMap } from '../../../../../../lib/constants'
+import { platformContentImageMap } from '../../../../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
 import { loadImageWithLimit } from './utils'
 
@@ -22,11 +22,11 @@ export function GameEntryContent({ rom }: { rom: Rom }) {
     const abortController = new AbortController()
     abortControllerRef.current = abortController
     if (usingDemo) {
-      let { system, fileAccessor } = rom
-      if (system === 'megadrive') {
-        system = 'md'
+      let { platform, fileAccessor } = rom
+      if (platform === 'megadrive') {
+        platform = 'md'
       }
-      const repo = `${system}-games`
+      const repo = `${platform}-games`
       const cover = `${cdnHost}/gh/retrobrews/${repo}@master/${fileAccessor.basename}.png`
       await loadImageWithLimit(cover, abortController.signal)
       return cover
@@ -65,7 +65,7 @@ export function GameEntryContent({ rom }: { rom: Rom }) {
   if (state.error) {
     return (
       <div className='m-auto flex h-full items-center justify-center bg-zinc-300 text-center font-bold'>
-        <img alt={rom.displayName} className='w-3/5 object-contain' src={systemContentImageMap[rom.system]} />
+        <img alt={rom.displayName} className='w-3/5 object-contain' src={platformContentImageMap[rom.platform]} />
       </div>
     )
   }

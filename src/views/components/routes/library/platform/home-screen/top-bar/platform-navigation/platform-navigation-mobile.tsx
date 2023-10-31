@@ -18,7 +18,7 @@ export function PlatformNavigationMobile({ platforms, current }: PlatformNavigat
   const dropdownEnabled = platforms.length > 1
 
   return (
-    <div className='platform-navigation-mobile flex-center relative flex-1 overflow-hidden'>
+    <div className='platform-navigation-mobile flex-center relative flex-1 overflow-hidden sm:hidden'>
       <button className='flex-center w-full'>
         <img
           alt={current.fullName}

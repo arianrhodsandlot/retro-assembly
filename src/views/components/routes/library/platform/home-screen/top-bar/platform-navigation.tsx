@@ -22,7 +22,6 @@ export function PlatformNavigation() {
     () => (usingDemo ? platforms : [historyDummyPlatform, ...platforms]),
     [usingDemo, platforms],
   )
-  const showHistory = useMemo(() => !isUsingDemo(), [])
 
   const shouldSwitchPlatform = isPlatformRoute && focusingHome && !SpatialNavigation.isPaused()
   const currentSystemIndex = findIndex(allPlatforms, { name: params.platform as PlatformName })
@@ -54,7 +53,6 @@ export function PlatformNavigation() {
 
   return (
     <div className='platform-navigation flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
-      {showHistory ? <PlatformNavigationItem platform={historyDummyPlatform} /> : null}
       {allPlatforms.map((platform) => (
         <PlatformNavigationItem key={platform.name} platform={platform} />
       ))}

@@ -4,11 +4,11 @@ import { useEffect } from 'react'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../../../core'
 import { SpatialNavigation } from '../../../../../lib/spatial-navigation'
 import { BouncingEllipsis } from '../../../../common/bouncing-ellipsis'
-import { LightInputButton } from '../../../../common/light-input-button'
 import { LoadingScreen } from '../../../../common/loading-screen'
 import { showMenuOverlayAtom } from '../atoms'
 import { useExit } from '../hooks/use-exit'
 import { MenuItems } from './menu-items'
+import { MenuTips } from './menu-tips'
 
 export function MenuOverlay() {
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
@@ -78,19 +78,7 @@ export function MenuOverlay() {
             onSaveAndExit={saveAndExit}
             onSaveState={saveState}
           />
-          <div className='absolute bottom-10 right-10 flex gap-3'>
-            <span className='icon-[mdi--lightbulb-on-outline] mt-1 h-4 w-4' />
-            <div>
-              <div className='flex items-center gap-2'>
-                Press<LightInputButton>L1</LightInputButton>+<LightInputButton>R1</LightInputButton>or
-                <LightInputButton>ESC</LightInputButton>to open/hide this menu.
-              </div>
-              <div className='flex items-center gap-2'>
-                Press<LightInputButton>select</LightInputButton>+<LightInputButton>L1</LightInputButton>to rewind while
-                playing.
-              </div>
-            </div>
-          </div>
+          <MenuTips />
         </>
       )}
     </div>

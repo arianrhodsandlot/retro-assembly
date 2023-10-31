@@ -9,6 +9,7 @@ interface StateItemProps {
 
 export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function StateItem({ state, onSelect }, ref) {
   const thumbnailUrlState = useAsync(async () => await state.thumbnail?.getUrl())
+
   return (
     <button
       className={clsx(

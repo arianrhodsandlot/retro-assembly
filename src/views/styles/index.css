@@ -14,14 +14,8 @@ body {
   @apply outline-none;
 }
 
-.hero:before {
-  @apply absolute inset-0 bg-rose-700 content-[''];
-}
-
-.hero:after {
-  @apply absolute inset-0 animate-[animated-background_10s_linear_infinite] bg-repeat opacity-10 content-[''];
-  background-size: 20rem;
-  background-image: url('../../assets/hero-background.png');
+.flex-center {
+  @apply flex items-center justify-center
 }
 
 @keyframes animated-background {

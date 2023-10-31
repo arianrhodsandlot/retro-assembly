@@ -1,6 +1,7 @@
 import { isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../../../core'
 import { DropboxButton } from './dropbox-button'
 import { GoogleDriveButton } from './google-drive-button'
+import { IconShortcutButton } from './icon-shortcut-button'
 import { LocalButton } from './local-button'
 import { OnedriveButton } from './onedrive-button'
 
@@ -13,30 +14,30 @@ export function IconShortcutButtons() {
     <div className='mt-2 flex items-center justify-center gap-4 text-xs text-white/60'>
       {isOnedriveEnabled ? (
         <OnedriveButton>
-          <button data-testid='select-onedrive-directory'>
+          <IconShortcutButton type='onedrive'>
             <span className='icon-[logos--microsoft-onedrive] h-4 w-4' />
-          </button>
+          </IconShortcutButton>
         </OnedriveButton>
       ) : null}
       {isGoogleDriveEnabled ? (
         <GoogleDriveButton>
-          <button>
+          <IconShortcutButton type='google-drive'>
             <span className='icon-[logos--google-drive] h-4 w-4' />
-          </button>
+          </IconShortcutButton>
         </GoogleDriveButton>
       ) : null}
       {isDropboxEnabled ? (
         <DropboxButton>
-          <button>
+          <IconShortcutButton type='dropbox'>
             <span className='icon-[logos--dropbox] h-4 w-4' />
-          </button>
+          </IconShortcutButton>
         </DropboxButton>
       ) : null}
       {isLocalDirectorySelectorEnabled() ? (
         <LocalButton>
-          <button>
+          <IconShortcutButton type='local'>
             <span className='icon-[flat-color-icons--opened-folder] h-4 w-4' />
-          </button>
+          </IconShortcutButton>
         </LocalButton>
       ) : null}
     </div>

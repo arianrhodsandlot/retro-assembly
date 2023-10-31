@@ -2,6 +2,7 @@ import { type TargetAndTransition } from 'framer-motion'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
+import { SpatialNavigation } from '../../../../lib/spatial-navigation'
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
 import { introVisibleAtom } from './atoms'
 import { Banner } from './banner'
@@ -13,7 +14,9 @@ export function Intro() {
   const { navigateToPlatform } = useRouterHelpers()
 
   function onAnimationComplete(animation: TargetAndTransition) {
-    if (!animation.opacity) {
+    if (animation.opacity) {
+      SpatialNavigation.focus('intro')
+    } else {
       navigateToPlatform()
     }
   }
@@ -34,7 +37,7 @@ export function Intro() {
       {introVisible ? (
         <motion.div
           animate={{ opacity: 1, scale: 1 }}
-          className='absolute inset-0 z-10 flex flex-col overflow-auto bg-black/70 text-center text-white'
+          className='intro absolute inset-0 z-10 flex flex-col overflow-auto bg-black/70 text-center text-white'
           exit={{ opacity: 0, scale: 1.2 }}
           initial={{ opacity: 0, scale: 1.2 }}
           onAnimationComplete={onAnimationComplete}

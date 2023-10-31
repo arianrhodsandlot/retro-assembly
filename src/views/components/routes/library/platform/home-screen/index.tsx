@@ -8,6 +8,7 @@ import {
   getHistoryRoms,
   getPlatformRoms,
   getPlatforms,
+  isUsingDemo,
   peekHistoryRoms,
   peekPlatformRoms,
   peekPlatforms,
@@ -66,7 +67,8 @@ export function HomeScreen() {
       return ''
     }
     const newCurrentPlatform = params.platform || localStorage.getItem(lastSelectedPlatformStorageKey)
-    const allPlatforms = [historyDummyPlatform, ...platforms]
+    const usingDemo = isUsingDemo()
+    const allPlatforms = usingDemo ? platforms : [historyDummyPlatform, ...platforms]
     const isPlatformValid = some(allPlatforms, { name: newCurrentPlatform })
     return isPlatformValid ? newCurrentPlatform : platforms[0].name
   }

@@ -55,7 +55,7 @@ export function PlatformNavigation() {
   return (
     <div className='platform-navigation flex flex-1 flex-nowrap overflow-x-auto overflow-y-hidden'>
       {showHistory ? <PlatformNavigationItem platform={historyDummyPlatform} /> : null}
-      {platforms.map((platform) => (
+      {allPlatforms.map((platform) => (
         <PlatformNavigationItem key={platform.name} platform={platform} />
       ))}
     </div>

@@ -19,6 +19,9 @@ export function useRouterHelpers() {
   if (isHomeRoute && isUsingDemo()) {
     platform ||= 'nes'
   }
+  library = decodeURIComponent(library)
+  platform = decodeURIComponent(platform)
+  rom &&= decodeURIComponent(rom)
   const normalizedParams = { library, platform, rom }
 
   function replactLocation(to: string) {

@@ -1,6 +1,6 @@
 import { getRom, start } from '../../../../../core'
 import { SpatialNavigation } from '../../../../lib/spatial-navigation'
-import { UserInteractionButton } from '../../../common/user-interaction-button'
+import { UserInteractionButton } from './user-interaction-button'
 import { useAsyncExecute } from '../../../hooks/use-async-execute'
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
 import { useUserInteraction } from '../hooks/use-user-interaction'

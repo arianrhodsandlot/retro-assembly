@@ -8,3 +8,4 @@ interface MaskAtomValue {
   rom?: Rom
 }
 export const launchingMaskAtom = atom<MaskAtomValue | undefined>(undefined)
+export const needsUserInteractionAtom = atom(true)

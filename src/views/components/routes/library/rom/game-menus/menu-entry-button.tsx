@@ -1,12 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { SpatialNavigation } from '../../../../../lib/spatial-navigation'
+import { isTouchDevice } from '../../lib/utils'
 import { showMenuOverlayAtom } from '../atoms'
 import { useMouseMoving } from './hooks/use-mouse-moving'
-
-function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
-}
 
 function focusCanvas() {
   SpatialNavigation.focus('canvas')

@@ -1,5 +1,6 @@
 import { isUsingDemo } from '../../../../../../core'
 import { LightInputButton } from '../../../../common/light-input-button'
+import { isTouchDevice } from '../../lib/utils'
 import { useGamepads } from '../../platform/home-screen/input-tips/hooks/use-gamepads'
 
 const demoTips = (
@@ -23,10 +24,6 @@ const keyboardTips = (
     Press <LightInputButton>ESC</LightInputButton>to open/hide this menu.
   </div>
 )
-
-function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
-}
 
 export function MenuTips() {
   const { connected } = useGamepads()

@@ -1,17 +1,13 @@
+import { useAtom } from 'jotai'
 import { useState } from 'react'
 import { type Rom, launchGame } from '../../../../../core'
-
-const isAppleMobile = /iphone|ipad|ipod/i.test(navigator.userAgent)
-const isChromeLike = /chrome/i.test(navigator.userAgent)
-const isMacLike = /macintosh/i.test(navigator.userAgent)
-const isAppleMobileDesktopMode =
-  !isChromeLike && isMacLike && /safari/i.test(navigator.userAgent) && screen.height <= 1366
-const mayNeedsUserInteraction = isAppleMobile || isAppleMobileDesktopMode
+import { SpatialNavigation } from '../../../../lib/spatial-navigation'
+import { needsUserInteractionAtom } from '../atoms'
 
 export function useUserInteraction() {
   const [showInteractionButton, setShowInteractionButton] = useState(false)
   const [finishInteraction, setFinishInteraction] = useState<() => void>()
-  const [needsUserInteraction, setNeedsUserInteraction] = useState(false)
+  const [needsUserInteraction, setNeedsUserInteraction] = useAtom(needsUserInteractionAtom)
 
   async function waitForUserInteraction() {
     setShowInteractionButton(true)
@@ -24,6 +20,7 @@ export function useUserInteraction() {
   function onUserInteract() {
     setShowInteractionButton(false)
     finishInteraction?.()
+    SpatialNavigation.focus('canvas')
   }
 
   async function launchGame_(rom: Rom | undefined) {
@@ -34,7 +31,6 @@ export function useUserInteraction() {
   }
 
   return {
-    mayNeedsUserInteraction,
     needsUserInteraction,
     showInteractionButton,
     onUserInteract,

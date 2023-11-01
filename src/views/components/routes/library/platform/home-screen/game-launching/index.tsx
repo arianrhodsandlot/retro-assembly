@@ -4,7 +4,10 @@ import { isEqual } from 'lodash-es'
 import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'
 import { launchingMaskAtom } from '../../../atoms'
 import { useUserInteraction } from '../../../hooks/use-user-interaction'
+import { mayNeedsUserInteraction } from '../../../lib/env'
+import { isTouchDevice } from '../../../lib/utils'
 import { GameEntryContent } from '../game-entries-grid/game-entry-content'
+import { useGamepads } from '../input-tips/hooks/use-gamepads'
 import { GameLaunchingImage } from './game-launching-image'
 
 function getMaskStyle(target: HTMLButtonElement | undefined) {
@@ -21,9 +24,10 @@ function getMaskStyle(target: HTMLButtonElement | undefined) {
 }
 
 export function GameLaunching() {
-  const { mayNeedsUserInteraction, setNeedsUserInteraction } = useUserInteraction()
+  const { setNeedsUserInteraction } = useUserInteraction()
   const { navigateToRom } = useRouterHelpers()
   const launchingMask = useAtomValue(launchingMaskAtom)
+  const { connected } = useGamepads()
 
   const { rom, target, event } = launchingMask || {}
 
@@ -35,11 +39,14 @@ export function GameLaunching() {
       return
     }
 
+    let needsUserInteraction = mayNeedsUserInteraction
     if (event?.clientX || event?.clientY) {
-      setNeedsUserInteraction(false)
-    } else {
-      setNeedsUserInteraction(mayNeedsUserInteraction)
+      needsUserInteraction = false
+      // eslint-disable-next-line sonarjs/no-duplicated-branches
+    } else if (!isTouchDevice() && connected) {
+      needsUserInteraction = false
     }
+    setNeedsUserInteraction(needsUserInteraction)
   }
 
   function onAnimationComplete(definition: AnimationDefinition) {

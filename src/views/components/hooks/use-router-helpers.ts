@@ -36,8 +36,8 @@ export function useRouterHelpers() {
     return `/library/${encode(library)}/platform/${encode(platform)}`
   }
 
-  function linkToRom(rom: string) {
-    const { library, platform } = normalizedParams
+  function linkToRom(rom: string, platform: string) {
+    const { library } = normalizedParams
     return `/library/${encode(library)}/platform/${encode(platform)}/rom/${encode(rom)}`
   }
 
@@ -54,8 +54,8 @@ export function useRouterHelpers() {
     replactLocation(link)
   }
 
-  function navigateToRom(rom: string) {
-    const link = linkToRom(rom)
+  function navigateToRom(rom: string, platform: string) {
+    const link = linkToRom(rom, platform)
     replactLocation(link)
   }
 

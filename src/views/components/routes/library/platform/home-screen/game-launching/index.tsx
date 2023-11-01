@@ -51,7 +51,9 @@ export function GameLaunching() {
       return
     }
 
-    navigateToRom(rom?.fileAccessor.name)
+    if (rom) {
+      navigateToRom(rom.fileAccessor.name, rom.platform)
+    }
   }
 
   return (

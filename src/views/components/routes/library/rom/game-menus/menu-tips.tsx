@@ -30,11 +30,11 @@ export function MenuTips() {
   const usingDemo = isUsingDemo()
 
   return (
-    <div className='flex gap-3 px-10 pb-10 sm:absolute'>
+    <div className='flex gap-3 px-10 pb-10 sm:absolute sm:bottom-0 sm:right-0'>
       <span className='icon-[mdi--lightbulb-on-outline] mt-1 h-4 w-4 shrink-0' />
       <div>
         {usingDemo ? demoTips : null}
-        {connected ? controllerTips : isTouchDevice() ? keyboardTips : null}
+        {connected ? controllerTips : isTouchDevice() ? null : keyboardTips}
       </div>
     </div>
   )

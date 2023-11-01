@@ -1,12 +1,12 @@
 import { getRom, start } from '../../../../../core'
 import { SpatialNavigation } from '../../../../lib/spatial-navigation'
-import { UserInteractionButton } from './user-interaction-button'
 import { useAsyncExecute } from '../../../hooks/use-async-execute'
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
 import { useUserInteraction } from '../hooks/use-user-interaction'
-import { GameLaunchingText } from '../platform/home-screen/game-launching/game-launching-text'
+import { GameLaunchingText } from './game-launching-text'
 import { GameMenus } from './game-menus'
 import { useExit } from './hooks/use-exit'
+import { UserInteractionButton } from './user-interaction-button'
 import { VirtualController } from './virtual-controller'
 
 export function GameAddons() {

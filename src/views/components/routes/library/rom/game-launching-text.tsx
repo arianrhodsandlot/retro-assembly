@@ -1,5 +1,5 @@
-import { BouncingEllipsis } from '../../../../../common/bouncing-ellipsis'
-import { LoadingScreen } from '../../../../../common/loading-screen'
+import { BouncingEllipsis } from '../../../common/bouncing-ellipsis'
+import { LoadingScreen } from '../../../common/loading-screen'
 
 export function GameLaunchingText() {
   return (

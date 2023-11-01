@@ -20,6 +20,7 @@ import { ErrorContent } from './error-content'
 import { GameEntryGrid } from './game-entries-grid'
 import { GameLaunching } from './game-launching'
 import { HomeScreenLayout } from './home-screen-layout'
+import { useCurrentPlatformName } from './hooks/use-current-platform'
 import { InputTips } from './input-tips'
 
 function getColumnCount(width: number) {
@@ -55,8 +56,9 @@ export function HomeScreen() {
   const { params, isPlatformRoute, navigateToPlatform } = useRouterHelpers()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
+  const currentPlatformName = useCurrentPlatformName()
 
-  const currentPlatformRef = useRef(params.platform)
+  const currentPlatformRef = useRef(currentPlatformName)
 
   const { width: gridWidth, height: gridHeight } = measurements
 
@@ -66,7 +68,7 @@ export function HomeScreen() {
     if (!platforms?.length) {
       return ''
     }
-    const newCurrentPlatform = params.platform || localStorage.getItem(lastSelectedPlatformStorageKey)
+    const newCurrentPlatform = currentPlatformName || localStorage.getItem(lastSelectedPlatformStorageKey)
     const usingDemo = isUsingDemo()
     const allPlatforms = usingDemo ? platforms : [historyDummyPlatform, ...platforms]
     const isPlatformValid = some(allPlatforms, { name: newCurrentPlatform })
@@ -74,8 +76,8 @@ export function HomeScreen() {
   }
 
   useEffect(() => {
-    currentPlatformRef.current = params.platform
-  }, [params.platform])
+    currentPlatformRef.current = currentPlatformName
+  }, [currentPlatformName])
 
   // load platforms from cache
   useAsync(async () => {
@@ -93,14 +95,13 @@ export function HomeScreen() {
   // load roms from cache
   const peekRomsState = useAsync(async () => {
     setRoms([])
-    if (params.platform) {
-      const { platform: romsPlatform, roms } = await peekRoms(params.platform)
-      const currentPlatform = currentPlatformRef.current
-      if (romsPlatform === currentPlatform && roms) {
+    if (currentPlatformName) {
+      const { platform: romsPlatform, roms } = await peekRoms(currentPlatformName)
+      if (romsPlatform === currentPlatformRef.current && roms) {
         setRoms(roms)
       }
     }
-  }, [params.platform])
+  }, [currentPlatformName])
 
   // load platforms from remote
   const platformsState = useAsyncRetry(async () => {
@@ -121,15 +122,14 @@ export function HomeScreen() {
     if (params.rom) {
       return
     }
-    if (params.platform) {
-      const { platform: romsPlatform, roms } = await getRoms(params.platform)
-      const currentPlatform = currentPlatformRef.current
-      if (romsPlatform === currentPlatform) {
+    if (currentPlatformName) {
+      const { platform: romsPlatform, roms } = await getRoms(currentPlatformName)
+      if (romsPlatform === currentPlatformRef.current) {
         setRoms(roms)
       }
     }
     updateRetrying()
-  }, [params.platform])
+  }, [currentPlatformName])
 
   function updateRetrying() {
     if (isRetrying) {

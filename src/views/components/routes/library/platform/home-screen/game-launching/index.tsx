@@ -1,8 +1,8 @@
 import { type AnimationDefinition } from 'framer-motion'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { isEqual } from 'lodash-es'
 import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'
-import { launchingMaskAtom } from '../../../atoms'
+import { launchingFromHistoryAtom, launchingMaskAtom } from '../../../atoms'
 import { useUserInteraction } from '../../../hooks/use-user-interaction'
 import { mayNeedsUserInteraction } from '../../../lib/env'
 import { isTouchDevice } from '../../../lib/utils'
@@ -25,8 +25,9 @@ function getMaskStyle(target: HTMLButtonElement | undefined) {
 
 export function GameLaunching() {
   const { setNeedsUserInteraction } = useUserInteraction()
-  const { navigateToRom } = useRouterHelpers()
+  const { navigateToRom, isPlatformRoute, params } = useRouterHelpers()
   const launchingMask = useAtomValue(launchingMaskAtom)
+  const setLaunchingFromHistory = useSetAtom(launchingFromHistoryAtom)
   const { connected } = useGamepads()
 
   const { rom, target, event } = launchingMask || {}
@@ -47,9 +48,14 @@ export function GameLaunching() {
       needsUserInteraction = false
     }
     setNeedsUserInteraction(needsUserInteraction)
+    setLaunchingFromHistory(params.platform === 'history')
   }
 
   function onAnimationComplete(definition: AnimationDefinition) {
+    if (!isPlatformRoute) {
+      return
+    }
+
     if (!rom) {
       throw new Error('invalid rom')
     }
@@ -63,16 +69,14 @@ export function GameLaunching() {
     }
   }
 
+  const styles = { initial: maskStyle.initial, exit: maskStyle.initial, animate: maskStyle.expanded }
+
   return (
     <GameLaunchingImage
       onAnimationComplete={onAnimationComplete}
       onAnimationStart={onAnimationStart}
       show={Boolean(maskStyle.valid && rom)}
-      styles={{
-        initial: maskStyle.initial,
-        exit: maskStyle.initial,
-        animate: maskStyle.expanded,
-      }}
+      styles={styles}
     >
       {rom ? <GameEntryContent rom={rom} /> : null}
     </GameLaunchingImage>

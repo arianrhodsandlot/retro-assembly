@@ -9,3 +9,4 @@ interface MaskAtomValue {
 }
 export const launchingMaskAtom = atom<MaskAtomValue | undefined>(undefined)
 export const needsUserInteractionAtom = atom(true)
+export const launchingFromHistoryAtom = atom(false)

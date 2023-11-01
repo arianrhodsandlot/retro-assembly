@@ -18,6 +18,7 @@ export function GameTitle({ rom }: { rom: Rom }) {
   return (
     <div
       className='relative w-full overflow-hidden bg-slate-200 px-1 py-1 text-center text-xs text-slate-400'
+      data-display-name={gameNameState.value ?? rom.displayName}
       title={title}
     >
       {districts?.map((district) => <DistrictIcon district={district} key={district} />)}

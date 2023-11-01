@@ -8,6 +8,7 @@ import { SpatialNavigation } from '../../../../../../../lib/spatial-navigation'
 import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
 import { platformsAtom } from '../../atoms'
 import { historyDummyPlatform } from '../../constants'
+import { useCurrentPlatformName } from '../../hooks/use-current-platform'
 import { useFocusingHome } from '../../hooks/use-focusing-home'
 import { PlatformNavigationDesktop } from './platform-navigation-desktop'
 import { PlatformNavigationMobile } from './platform-navigation-mobile'
@@ -16,7 +17,7 @@ const lastSelectedSystemStorageKey = 'last-selected-system'
 
 export function PlatformNavigation() {
   const usingDemo = isUsingDemo()
-  const { params, isPlatformRoute, navigateToPlatform } = useRouterHelpers()
+  const { isPlatformRoute, navigateToPlatform } = useRouterHelpers()
   const focusingHome = useFocusingHome()
   const platforms = useAtomValue(platformsAtom)
   const allPlatforms = useMemo(
@@ -24,9 +25,11 @@ export function PlatformNavigation() {
     [usingDemo, platforms],
   )
 
+  const currentPlatformName = useCurrentPlatformName()
+
   const shouldSwitchPlatform = isPlatformRoute && focusingHome && !SpatialNavigation.isPaused()
-  const currentPlatform = find(allPlatforms, { name: params.platform as PlatformName })
-  const currentPlatformIndex = findIndex(allPlatforms, { name: params.platform as PlatformName })
+  const currentPlatform = find(allPlatforms, { name: currentPlatformName as PlatformName })
+  const currentPlatformIndex = findIndex(allPlatforms, { name: currentPlatformName as PlatformName })
 
   const selectPrevSystem = useCallback(() => {
     if (!shouldSwitchPlatform) {
@@ -45,10 +48,10 @@ export function PlatformNavigation() {
   }, [currentPlatformIndex, navigateToPlatform, allPlatforms, shouldSwitchPlatform])
 
   useEffect(() => {
-    if (!isUsingDemo() && params.platform) {
-      localStorage.setItem(lastSelectedSystemStorageKey, params.platform)
+    if (!isUsingDemo() && currentPlatformName) {
+      localStorage.setItem(lastSelectedSystemStorageKey, currentPlatformName)
     }
-  }, [params.platform])
+  }, [currentPlatformName])
 
   useEffect(() => onPress('l1', selectPrevSystem), [selectPrevSystem])
   useEffect(() => onPress('r1', selectNextSystem), [selectNextSystem])

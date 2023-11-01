@@ -69,7 +69,7 @@ export function MenuOverlay() {
           <BouncingEllipsis />
         </LoadingScreen>
       ) : (
-        <>
+        <div className='absolute inset-0 flex flex-col'>
           <MenuItems
             onExit={exit}
             onLoadState={loadState}
@@ -79,7 +79,7 @@ export function MenuOverlay() {
             onSaveState={saveState}
           />
           <MenuTips />
-        </>
+        </div>
       )}
     </div>
   )

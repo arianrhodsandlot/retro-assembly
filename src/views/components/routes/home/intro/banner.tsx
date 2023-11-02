@@ -42,6 +42,8 @@ export function Banner() {
           className='github-fork-ribbon origin-top-right scale-75'
           data-ribbon='Star me on GitHub'
           href='https://github.com/arianrhodsandlot/retro-assembly'
+          rel='noreferrer'
+          target='_blank'
           title='Star me on GitHub'
         >
           Star me on GitHub

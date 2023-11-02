@@ -1,5 +1,6 @@
 import { useAsync } from '@react-hookz/web'
 import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { getProvider, isUsingDemo, start } from '../../../../core'
 import { useRouterHelpers } from '../../hooks/use-router-helpers'
 import { Intro } from '../home/intro'
@@ -41,6 +42,9 @@ export function UniversalHomeRoute() {
   if (isHomeRoute) {
     return (
       <>
+        <Helmet>
+          <title>Retro Assembly</title>
+        </Helmet>
         <HomeScreen />
         <Intro />
       </>
@@ -48,12 +52,22 @@ export function UniversalHomeRoute() {
   }
 
   if (isPlatformRoute) {
-    return <HomeScreen />
+    return (
+      <>
+        <Helmet>
+          <title>{params.platform} - Retro Assembly</title>
+        </Helmet>
+        <HomeScreen />
+      </>
+    )
   }
 
   if (isRomRoute) {
     return (
       <>
+        <Helmet>
+          <title>{params.rom} - Retro Assembly</title>
+        </Helmet>
         <HomeScreen />
         <GameAddons />
       </>

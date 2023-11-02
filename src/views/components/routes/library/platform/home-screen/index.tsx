@@ -1,8 +1,7 @@
-import { useMeasure } from '@react-hookz/web'
+import { useAsync, useMeasure } from '@react-hookz/web'
 import { useAtom, useSetAtom } from 'jotai'
 import { some } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
-import { useAsync, useAsyncRetry } from 'react-use'
 import {
   type PlatformName,
   getHistoryRoms,
@@ -53,7 +52,7 @@ async function getRoms(platform: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setPlatforms = useSetAtom(platformsAtom)
-  const { params, isPlatformRoute, navigateToPlatform } = useRouterHelpers()
+  const { isPlatformRoute, isRomRoute, navigateToPlatform } = useRouterHelpers()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
   const currentPlatformName = useCurrentPlatformName()
@@ -79,8 +78,7 @@ export function HomeScreen() {
     currentPlatformRef.current = currentPlatformName
   }, [currentPlatformName])
 
-  // load platforms from cache
-  useAsync(async () => {
+  const [, { execute: loadPlatformsFromCache }] = useAsync(async () => {
     const platforms = await peekPlatforms()
     if (!platforms?.length) {
       return
@@ -90,10 +88,10 @@ export function HomeScreen() {
     if (newCurrentPlatformName && isPlatformRoute) {
       navigateToPlatform(newCurrentPlatformName)
     }
-  }, [setPlatforms, params.library])
+  })
 
   // load roms from cache
-  const peekRomsState = useAsync(async () => {
+  const [peekRomsState, { execute: loadRomsFromCache }] = useAsync(async () => {
     setRoms([])
     if (currentPlatformName) {
       const { platform: romsPlatform, roms } = await peekRoms(currentPlatformName)
@@ -101,13 +99,10 @@ export function HomeScreen() {
         setRoms(roms)
       }
     }
-  }, [currentPlatformName])
+  })
 
   // load platforms from remote
-  const platformsState = useAsyncRetry(async () => {
-    if (params.rom) {
-      return
-    }
+  const [platformsState, { execute: loadPlatformsFromRemote }] = useAsync(async () => {
     const platforms = await getPlatforms()
     const newCurrentPlatformName = getNewCurrentPlatformName(platforms)
     setPlatforms(platforms)
@@ -115,13 +110,10 @@ export function HomeScreen() {
       navigateToPlatform(newCurrentPlatformName)
     }
     updateRetrying()
-  }, [setPlatforms, params.library])
+  })
 
   // load roms from remote
-  const romsState = useAsyncRetry(async () => {
-    if (params.rom) {
-      return
-    }
+  const [romsState, { execute: loadRomsFromRemote }] = useAsync(async () => {
     if (currentPlatformName) {
       const { platform: romsPlatform, roms } = await getRoms(currentPlatformName)
       if (romsPlatform === currentPlatformRef.current) {
@@ -129,26 +121,42 @@ export function HomeScreen() {
       }
     }
     updateRetrying()
-  }, [currentPlatformName])
+  })
 
   function updateRetrying() {
     if (isRetrying) {
-      setIsRetrying(platformsState.loading || romsState.loading)
+      setIsRetrying(platformsState.status === 'loading' || romsState.status === 'loading')
     }
   }
 
   function retry() {
     setIsRetrying(true)
     if (platformsState.error) {
-      platformsState.retry()
+      loadPlatformsFromRemote()
     }
     if (romsState.error) {
-      romsState.retry()
+      loadRomsFromRemote()
     }
   }
 
+  useEffect(() => {
+    loadPlatformsFromCache()
+    loadRomsFromCache()
+  }, [loadPlatformsFromCache, loadRomsFromCache])
+
+  useEffect(() => {
+    if (!currentPlatformName) {
+      return
+    }
+    if (isRomRoute) {
+      return
+    }
+    loadPlatformsFromRemote()
+    loadRomsFromRemote()
+  }, [currentPlatformName, isRomRoute, loadPlatformsFromRemote, loadRomsFromRemote])
+
   const isRomsEmpty = !roms?.length
-  const showLoading = romsState.loading && !peekRomsState.loading && isRomsEmpty
+  const showLoading = romsState.status === 'loading' && peekRomsState.status !== 'loading' && isRomsEmpty
 
   if (showLoading) {
     return (
@@ -159,7 +167,7 @@ export function HomeScreen() {
   }
 
   const columnWidth = gridWidth / columnCount
-  const error = romsState.loading ? undefined : platformsState.error || romsState.error
+  const error = romsState.status === 'loading' ? undefined : platformsState.error || romsState.error
   return (
     <HomeScreenLayout>
       {isRomsEmpty || (

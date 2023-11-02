@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { platformImageMap } from '../../../../../../../lib/constants'
 import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
+import { getPlatformDisplayName } from './utils'
 
 interface PlatformNavigationMobileProps {
   platforms: { name: string; fullName: string }[]
@@ -27,7 +28,9 @@ export function PlatformNavigationMobile({ platforms, current }: PlatformNavigat
           src={platformImageMap[current.name]}
           width={28}
         />
-        <div className='ml-2 overflow-hidden text-ellipsis whitespace-nowrap'>{current?.fullName}</div>
+        <div className='ml-2 overflow-hidden text-ellipsis whitespace-nowrap'>
+          {current ? getPlatformDisplayName(current.fullName) : ''}
+        </div>
         {dropdownEnabled ? <span className='icon-[mdi--menu-down] h-8 w-8 shrink-0' /> : null}
       </button>
 
@@ -40,7 +43,7 @@ export function PlatformNavigationMobile({ platforms, current }: PlatformNavigat
         >
           {platforms.map((platform) => (
             <option key={platform.name} value={platform.name}>
-              {platform.fullName}
+              {getPlatformDisplayName(platform.fullName)}
             </option>
           ))}
         </select>

@@ -25,7 +25,7 @@ export function useRouterHelpers() {
   const normalizedParams = { library, platform, rom }
 
   function replactLocation(to: string) {
-    setLocation(to, { replace: true })
+    setLocation(to, { replace: false })
   }
 
   function linkToLibrary(library: string = normalizedParams.library) {

@@ -92,15 +92,7 @@ export function CloudServiceLoginButton({
 
   const loginPending = needsLoginState.status === 'loading' || isAuthWindowOpening
   const loginSuccess = needsLoginState.status !== 'loading' && needsLoginState.result === false
-  const showLoading = loginPending || loginSuccess
-
-  if (showLoading) {
-    return (
-      <div className='flex h-12 items-center justify-center'>
-        <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />
-      </div>
-    )
-  }
+  const showLoading = authorizeWindow.current && (loginPending || loginSuccess)
 
   return (
     <div className='flex flex-col items-stretch justify-center gap-y-4 px-10'>
@@ -122,6 +114,7 @@ export function CloudServiceLoginButton({
           })}
         />
         Sign in with {cloudServiceMap[cloudService]}
+        {showLoading ? <span className='icon-[line-md--loading-loop] h-5 w-5' /> : null}
       </BaseButton>
       {showReturnHome ? <ReturnToHomeButton /> : null}
     </div>

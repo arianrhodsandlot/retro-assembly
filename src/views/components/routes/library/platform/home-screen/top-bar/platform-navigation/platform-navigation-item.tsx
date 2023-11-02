@@ -6,6 +6,7 @@ import { Link } from 'wouter'
 import { platformImageMap } from '../../../../../../../lib/constants'
 import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
 import { TopBarButton } from '../top-bar-button'
+import { getPlatformDisplayName } from './utils'
 
 interface PlatformNavigationItemProps {
   platform: {
@@ -18,9 +19,6 @@ interface PlatformNavigationItemProps {
 export function PlatformNavigationItem({ platform, highlighted = false }: PlatformNavigationItemProps) {
   const { linkToPlatform } = useRouterHelpers()
   const button = useRef<HTMLButtonElement>(null)
-
-  const shortName = platform.fullName.split(' - ')[1]
-  const displayName = !shortName || /^\d+$/.test(shortName) ? platform.fullName : shortName
 
   async function onFocus(e: FocusEvent<HTMLButtonElement>) {
     const $focusedElement = $(e.currentTarget)
@@ -72,7 +70,9 @@ export function PlatformNavigationItem({ platform, highlighted = false }: Platfo
                 exit={{ width: 0 }}
                 initial={{ width: 0 }}
               >
-                <div className='hidden pl-4 font-bold tracking-wider text-rose-700 md:block'>{displayName}</div>
+                <div className='hidden pl-4 font-bold tracking-wider text-rose-700 md:block'>
+                  {getPlatformDisplayName(platform.fullName)}
+                </div>
               </motion.div>
             ) : null}
           </AnimatePresence>

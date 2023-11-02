@@ -24,10 +24,6 @@ export function useRouterHelpers() {
   rom &&= decodeURIComponent(rom)
   const normalizedParams = { library, platform, rom }
 
-  function replactLocation(to: string) {
-    setLocation(to, { replace: false })
-  }
-
   function linkToLibrary(library: string = normalizedParams.library) {
     return `/library/${encode(library)}/platform`
   }
@@ -43,7 +39,7 @@ export function useRouterHelpers() {
 
   function navigateToLibrary(library: string = normalizedParams.library) {
     const link = linkToLibrary(library)
-    replactLocation(link)
+    setLocation(link)
   }
 
   function navigateToPlatform(
@@ -51,16 +47,38 @@ export function useRouterHelpers() {
     library: string = normalizedParams.library,
   ) {
     const link = linkToPlatform(platform, library)
-    replactLocation(link)
+    setLocation(link)
   }
 
   function navigateToRom(rom: string, platform: string) {
     const link = linkToRom(rom, platform)
-    replactLocation(link)
+    setLocation(link)
   }
 
   function navigateToHome() {
-    replactLocation('/')
+    setLocation('/')
+  }
+
+  function redirectToLibrary(library: string = normalizedParams.library) {
+    const link = linkToLibrary(library)
+    setLocation(link, { replace: true })
+  }
+
+  function redirectToPlatform(
+    platform: string = normalizedParams.platform,
+    library: string = normalizedParams.library,
+  ) {
+    const link = linkToPlatform(platform, library)
+    setLocation(link, { replace: true })
+  }
+
+  function redirectToRom(rom: string, platform: string) {
+    const link = linkToRom(rom, platform)
+    setLocation(link, { replace: true })
+  }
+
+  function redirectToHome() {
+    setLocation('/', { replace: true })
   }
 
   return {
@@ -75,7 +93,10 @@ export function useRouterHelpers() {
     navigateToPlatform,
     navigateToRom,
     navigateToHome,
-    replactLocation,
+    redirectToLibrary,
+    redirectToPlatform,
+    redirectToRom,
+    redirectToHome,
     wouter,
   }
 }

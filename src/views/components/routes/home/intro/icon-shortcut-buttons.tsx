@@ -19,19 +19,19 @@ export function IconShortcutButtons() {
           </IconShortcutButton>
         </OnedriveButton>
       ) : null}
-      {isGoogleDriveEnabled ? (
-        <GoogleDriveButton>
-          <IconShortcutButton type='google-drive'>
-            <span className='icon-[logos--google-drive] h-4 w-4' />
-          </IconShortcutButton>
-        </GoogleDriveButton>
-      ) : null}
       {isDropboxEnabled ? (
         <DropboxButton>
           <IconShortcutButton type='dropbox'>
             <span className='icon-[logos--dropbox] h-4 w-4' />
           </IconShortcutButton>
         </DropboxButton>
+      ) : null}
+      {isGoogleDriveEnabled ? (
+        <GoogleDriveButton>
+          <IconShortcutButton type='google-drive'>
+            <span className='icon-[logos--google-drive] h-4 w-4' />
+          </IconShortcutButton>
+        </GoogleDriveButton>
       ) : null}
       {isLocalDirectorySelectorEnabled() ? (
         <LocalButton>

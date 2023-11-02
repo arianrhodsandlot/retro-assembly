@@ -32,7 +32,7 @@ test.beforeEach(async ({ page }) => {
 
   await expect(dialog).not.toBeVisible()
 
-  await page.getByTestId('game-entry-button').click()
+  await page.getByTestId('game-entry-button').first().click()
   await page.locator('#canvas').waitFor()
 })
 

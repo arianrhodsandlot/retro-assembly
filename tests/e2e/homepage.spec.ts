@@ -37,7 +37,7 @@ test('navigate systems', async ({ page }) => {
   const navigation = page.getByTestId('platform-navigation')
   const gbNavigationButton = navigation.getByTitle('Nintendo - Game Boy', { exact: true })
   const gbaNavigationButton = navigation.getByTitle('Nintendo - Game Boy Advance', { exact: true })
-  const gameEntryButton = page.getByTestId('game-entry-button')
+  const gameEntryButton = page.getByTestId('game-entry-button').first()
 
   await expect(gbNavigationButton).toHaveText('Game Boy')
   await expect(gbaNavigationButton).toBeEmpty()
@@ -51,7 +51,7 @@ test('navigate systems', async ({ page }) => {
 })
 
 test('launch game', async ({ page }) => {
-  const gameEntryButton = page.getByTestId('game-entry-button')
+  const gameEntryButton = page.getByTestId('game-entry-button').first()
   const emulator = page.locator('#canvas')
   await expect(emulator).not.toBeAttached()
 

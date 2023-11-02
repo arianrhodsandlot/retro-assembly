@@ -54,8 +54,13 @@ export function ContinueModalContent() {
               </div>
               <div className='mt-4 flex w-60 flex-col justify-between gap-y-3'>
                 {isOnedriveEnabled ? <OnedriveButton /> : null}
-                {isGoogleDriveEnabled ? <GoogleDriveButton /> : null}
                 {isDropboxEnabled ? <DropboxButton /> : null}
+                {isGoogleDriveEnabled ? (
+                  <>
+                    <GoogleDriveButton />
+                    <div className='-mt-3 text-xs'>Not encouraged because of its strict verification process</div>
+                  </>
+                ) : null}
               </div>
             </div>
           ) : null}

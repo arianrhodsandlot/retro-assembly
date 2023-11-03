@@ -7,7 +7,10 @@
 ## Overview
 A personal retro game collection cabinet in your browser.
 
-<p align="center"><img src="docs/screenshots/home.png"></p>
+<p align="center">
+  <img src="docs/screenshots/home.png" width="400">
+  <img src="docs/screenshots/platform.png" width="400">
+</p>
 
 ## Usage
 1. Visit [retroassembly.com](https://retroassembly.com).

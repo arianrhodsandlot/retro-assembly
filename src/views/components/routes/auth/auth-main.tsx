@@ -42,7 +42,7 @@ export function AuthMain({ cloudService }: AuthMainProps) {
   return (
     <AuthLayout>
       <span className='icon-[mdi--account-check] h-6 w-6' />
-      You are now authenticated with Retro Assembly.
+      You are now authenticated with RetroAssembly.
     </AuthLayout>
   )
 }

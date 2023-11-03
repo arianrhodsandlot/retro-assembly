@@ -2,31 +2,29 @@
   <img src="public/assets/logo/logo-512x512.png" alt="logo" width="120" height="120">
 </p>
 
-<h1 align="center">Retro Assembly</h1>
+<h1 align="center">RetroAssembly</h1>
 
 ## Overview
 A personal retro game collection cabinet in your browser.
 
 <p align="center">
-  <img src="docs/screenshots/home.png" width="400">
-  <img src="docs/screenshots/platform.png" width="400">
+  <img src="docs/screenshots/overview.png" >
 </p>
+
+## Features
++ 📁 Import a directory from your cloud drive or local directory, then a game list will appear
++ 🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen.
++ 🖼️ Automatically grab game cover images
++ 🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles
++ 📱 Virtual controller for mobile devices
++ ⏳ Of course, rewinding!
++ 💾 Save states and sync them to with different devices (if using a cloud disk we support)
++ ...
 
 ## Usage
 1. Visit [retroassembly.com](https://retroassembly.com).
 2. Pick a method you prefer to provide your ROMs. For BIOS files, place them into a directory named `system` inside the directory you are picking.
 3. Start to play!
-
-## Features
-|Description|Screenshot|
-|---|---|
-|📁 Import a directory from your OneDrive/Google Drive or disk, then a game list will appear|<img src="docs/screenshots/features/import.gif" width="200" />|
-|🖼️ Automatically grab game cover images|<img src="docs/screenshots/features/cover.gif" width="200" />|
-|🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles |<img src="docs/screenshots/features/joystick.gif" width="200" />|
-|⏳ Of course, rewinding|<img src="docs/screenshots/features/rewind.gif" width="200" />|
-|💾 Save states and sync them to with different devices (if using a cloud disk we support)|<img src="docs/screenshots/features/save.gif" width="200" />|
-|🗎 Play a single ROM file without initializing a game library|<img src="docs/screenshots/features/single.gif" width="200" />|
-|🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen. Notice: a joystick is necessary.  |<img src="docs/screenshots/features/add-to-home-screen.png" width="200" />|
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
@@ -184,15 +182,14 @@ We support mainstream fourth-generation and earlier consoles as well as some han
   </tbody>
 </table>
 
-Emulator are built based on RetroArch. See [Retro Assembly vendors](https://github.com/arianrhodsandlot/retro-assembly-vendors) for details.
+Emulator are built based on RetroArch. See [RetroAssembly vendors](https://github.com/arianrhodsandlot/retro-assembly-vendors) for details.
 
 ## Development
-It's quite easy to develop Retro Assembly. All we need is the latest [Node.js](https://nodejs.org) and [pnpm](https://pnpm.io).
+It's quite easy to develop RetroAssembly. All we need is the latest [Node.js](https://nodejs.org) and [pnpm](https://pnpm.io).
 
 Simply run `pnpm install` to setup dependencies, then run `pnpm dev` to launch the development server.
 
-## Architecture
-(Working in progress)
+The cloud services are available only if related environment variables are set.
 
 ## Alternatives
 + [Afterplay.io](https://afterplay.io)

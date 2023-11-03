@@ -6,7 +6,7 @@ export function Banner() {
     <div className='m-auto mb-10 mt-10 w-full max-w-none pt-20 sm:max-w-4xl sm:pt-40'>
       <div className='relative bg-white/70 pb-10 pt-12 text-rose-700 backdrop-blur-sm'>
         <div className='flex-center m-auto gap-4 font-bold'>
-          <img alt='Retro Assembly' className='h-16 w-16 rounded-full' src={logo} />
+          <img alt='RetroAssembly' className='h-16 w-16 rounded-full' src={logo} />
           <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider sm:text-6xl'>Retro Assemly</div>
         </div>
         <div className='mt-4 flex flex-col items-center justify-center gap-2 text-xs tracking-wider sm:flex-row sm:gap-0'>

@@ -23,8 +23,8 @@ export default defineConfig(async () => {
         registerType: 'autoUpdate',
         devOptions: { enabled: false },
         manifest: {
-          name: 'Retro Assembly',
-          short_name: 'Retro Assembly',
+          name: 'RetroAssembly',
+          short_name: 'RetroAssembly',
           description: 'A personal retro game collection cabinet in your browser',
           theme_color: '#be123c',
           icons: [

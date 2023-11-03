@@ -1,5 +1,5 @@
 <!--
-Before you create a new issue, please make sure that you are reporting a real bug related to Retro Assembly, not a bug regarding emulators (which should be reported to upstream repositories)
+Before you create a new issue, please make sure that you are reporting a real bug related to RetroAssembly, not a bug regarding emulators (which should be reported to upstream repositories)
 For feature requests or suggestions, please create a discussion instead. Visit https://github.com/arianrhodsandlot/retro-assembly/discussions/new?category=ideas to create a discussion.
 -->
 

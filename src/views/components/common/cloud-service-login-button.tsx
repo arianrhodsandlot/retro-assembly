@@ -95,7 +95,7 @@ export function CloudServiceLoginButton({
   const showLoading = authorizeWindow.current && (loginPending || loginSuccess)
 
   return (
-    <div className='flex flex-col items-stretch justify-center gap-y-4 px-10'>
+    <div className='flex flex-col items-stretch justify-center gap-y-4 px-10 text-sm'>
       <BaseButton
         data-testid='authorize-link'
         href={authorizeUrlState.result}
@@ -107,14 +107,14 @@ export function CloudServiceLoginButton({
         target='_blank'
       >
         <span
-          className={clsx('mr-2 inline-block h-5 w-5', {
+          className={clsx('mr-2 inline-block h-5 w-5 shrink-0', {
             'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
             'icon-[logos--google-icon]': cloudService === 'google-drive',
             'icon-[logos--dropbox]': cloudService === 'dropbox',
           })}
         />
-        Sign in with {cloudServiceMap[cloudService]}
-        {showLoading ? <span className='icon-[line-md--loading-loop] h-5 w-5' /> : null}
+        <span className='shrink-0'>Sign in with {cloudServiceMap[cloudService]}</span>
+        {showLoading ? <span className='icon-[line-md--loading-loop] h-5 w-5 shrink-0' /> : null}
       </BaseButton>
       {showReturnHome ? <ReturnToHomeButton /> : null}
     </div>

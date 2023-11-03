@@ -55,7 +55,7 @@ export function UniversalHomeRoute() {
     return (
       <>
         <Helmet>
-          <title>{params.platform} - RetroAssembly</title>
+          <title>{params.platform ? `${params.platform} - RetroAssembly` : 'RetroAssembly'}</title>
         </Helmet>
         <HomeScreen />
       </>
@@ -66,7 +66,7 @@ export function UniversalHomeRoute() {
     return (
       <>
         <Helmet>
-          <title>{params.rom} - RetroAssembly</title>
+          <title>{params.rom ? `${params.rom} - RetroAssembly` : 'RetroAssembly'}</title>
         </Helmet>
         <HomeScreen />
         <GameAddons />

@@ -41,30 +41,6 @@ export function ContinueModalContent() {
     <div className='get-started container m-auto flex max-w-5xl flex-col px-4 text-rose-700'>
       <div className='get-started-content w-full rounded-xl'>
         <div className='flex flex-col items-center gap-6'>
-          {isAnyCloudServiceEnabled ? (
-            <div className='flex flex-col items-center'>
-              <div className='flex-center gap-2 text-center font-bold'>
-                <span className='icon-[mdi--cube-outline] h-6 w-6' />
-                Select a cloud directory
-                {directoryInstructionToolTip}
-              </div>
-              <div className='mt-2 flex items-start justify-center text-xs'>
-                <span className='icon-[mdi--thumb-up] mr-2 mt-1 h-3 w-3' />
-                <div>Synchronize your games and saves across multiple devices.</div>
-              </div>
-              <div className='mt-4 flex w-60 flex-col justify-between gap-y-3'>
-                {isOnedriveEnabled ? <OnedriveButton /> : null}
-                {isDropboxEnabled ? <DropboxButton /> : null}
-                {isGoogleDriveEnabled ? (
-                  <>
-                    <GoogleDriveButton />
-                    <div className='-mt-3 text-xs'>Not encouraged because of its strict verification process</div>
-                  </>
-                ) : null}
-              </div>
-            </div>
-          ) : null}
-
           {isLocalDirectorySelectorEnabled() ? (
             <div>
               <div className='flex-center gap-2 text-center font-bold'>
@@ -74,6 +50,40 @@ export function ContinueModalContent() {
               </div>
               <div className='mt-4 flex justify-center'>
                 <LocalButton />
+              </div>
+            </div>
+          ) : null}
+
+          {isAnyCloudServiceEnabled ? (
+            <div className='flex flex-col items-center'>
+              <div className='flex-center gap-2 text-center font-bold'>
+                <span className='icon-[mdi--cube-outline] h-6 w-6' />
+                Select a cloud directory
+                {directoryInstructionToolTip}
+              </div>
+              <div className='mt-2 flex items-start justify-center text-xs'>
+                <div>Synchronize your games and saves across multiple devices.</div>
+              </div>
+              <div className='mt-4 flex w-60 flex-col justify-between gap-y-3'>
+                {isOnedriveEnabled ? (
+                  <>
+                    <OnedriveButton />
+                    <div className='-mt-2 flex items-start gap-2 text-xs'>
+                      <span className='icon-[mdi--alert-box-outline] h-4 w-4 shrink-0' />
+                      May need to login again after 24h.
+                    </div>
+                  </>
+                ) : null}
+                {isDropboxEnabled ? <DropboxButton /> : null}
+                {isGoogleDriveEnabled ? (
+                  <>
+                    <GoogleDriveButton />
+                    <div className='-mt-2 flex items-start gap-2 text-xs'>
+                      <span className='icon-[mdi--alert-decagram-outline] h-4 w-4 shrink-0' />
+                      Not encouraged because it only provides limited usage(100 users) for unverified apps.
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
           ) : null}

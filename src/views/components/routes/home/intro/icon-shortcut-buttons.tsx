@@ -12,6 +12,13 @@ const isDropboxEnabled = isCloudServiceEnabled('dropbox')
 export function IconShortcutButtons() {
   return (
     <div className='flex-center mt-2 gap-4 text-xs text-white/60'>
+      {isLocalDirectorySelectorEnabled() ? (
+        <LocalButton>
+          <IconShortcutButton type='local'>
+            <span className='icon-[flat-color-icons--opened-folder] h-4 w-4' />
+          </IconShortcutButton>
+        </LocalButton>
+      ) : null}
       {isOnedriveEnabled ? (
         <OnedriveButton>
           <IconShortcutButton type='onedrive'>
@@ -32,13 +39,6 @@ export function IconShortcutButtons() {
             <span className='icon-[logos--google-drive] h-4 w-4' />
           </IconShortcutButton>
         </GoogleDriveButton>
-      ) : null}
-      {isLocalDirectorySelectorEnabled() ? (
-        <LocalButton>
-          <IconShortcutButton type='local'>
-            <span className='icon-[flat-color-icons--opened-folder] h-4 w-4' />
-          </IconShortcutButton>
-        </LocalButton>
       ) : null}
     </div>
   )

@@ -82,7 +82,7 @@ We support mainstream fourth-generation and earlier consoles as well as some han
     </tr>
     <tr>
       <td>Super Nintendo Entertainment System / Super Famicom</td>
-      <td><code>.sfc</code>, <code>.zip</code></td>
+      <td><code>.sfc</code>, <code>.smc</code>, <code>.zip</code></td>
       <td>
         <b>Snes9x</b>
         <br>

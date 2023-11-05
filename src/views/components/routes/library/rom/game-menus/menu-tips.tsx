@@ -14,7 +14,7 @@ const controllerTips = (
       <LightInputButton>ESC</LightInputButton>to open/hide this menu.
     </div>
     <div className='flex items-center gap-2'>
-      Press<LightInputButton>select</LightInputButton>+<LightInputButton>L1</LightInputButton>to rewind while playing.
+      Press<LightInputButton>select</LightInputButton>+<LightInputButton>L2</LightInputButton>to rewind while playing.
     </div>
   </>
 )

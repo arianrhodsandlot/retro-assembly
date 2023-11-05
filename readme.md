@@ -31,10 +31,15 @@ A personal retro game collection cabinet in your browser.
 
   <img src="docs/screenshots/features/save.gif" width="300" >
 + 📱 Virtual controller for mobile devices
-+ 🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen.
+
+  <img src="docs/screenshots/features/virtual-controller.png" width="300" >
++ ⌛ Rewind with a controller button combination (<kbd>select</kbd> + <kbd>L2</kbd>)
+
+  <img src="docs/screenshots/features/rewind.gif" width="300" >
++ 🍎 Super convenient for iOS and iPadOS, no AltStore or jailbreak required. Either play directly in your browser or add it to home screen.
 
 ## Motivation
-### I love retro games and emulators
+### Retro games and emulators
 I love retro games and emulators. I used to be addicted to configuring my emulators on desktops, laptops, phones, and tablets...
 
 I also spent a lot of time on flashing images for my Raspberry Pi and other hardwares. You may already hear of something like Lakka, RetroPie, Batocera.linux, EmuELEC, etc.
@@ -45,17 +50,17 @@ However, I faced some problems with these software and system. Although maybe so
 
 ### My problems with RetroArch / Pegasus / BizHawk / RetroPie / standalone emulators etc
 
-1. #### I spent a lot of time on configuring them.
+1. #### I spent a lot of time on configuring them
     I had been spending too much time configuring these software and system, as well as much time on configuring and updating the emulators. But as comparisons, I spent only a little time on playing the games.
 
     As I tried to update my configuations for several times, sometimes the systems would be broken by my invalid configuations and I have to reinstall them, and then my saves got lost, as a result.
 
-2. #### I could not synchronize my progress easily.
+2. #### I could not synchronize my progress easily
     After saving my game progress on my PC, I am unable to continue it directly on my phone. Maybe copying save files manually would work, but it could be very annoying if I had to do that every time.
 
 Then I began searching for a software that could solve these problems, but the results were not ideal.
 
-### Searching for projects that can deal with my problems
+### Searching for projects that can deal with my problems (but failed)
 Some of the emulator related softwares only work on a certain platform. While some of them, like RetroArch, are cross platform applications; however, it is difficult to install them on an iPhone or iPad. Synchronizing progress is also a painful problem.
 
 Again, I began searching for some web based projects other than native programs. I don't want to use commercial websites providing illegal ROMs because I want to use my own. Another reason for not using them is that I don't want to put my save files on their servers since they may disappear some day. I want to keep the ownership.

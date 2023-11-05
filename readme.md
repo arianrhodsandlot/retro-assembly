@@ -12,12 +12,18 @@ A personal retro game collection cabinet in your browser.
 
 ## Usage
 1. Visit [retroassembly.com](https://retroassembly.com).
-2. Pick a method you prefer to provide your ROMs. For BIOS files, place them into a directory named `system` inside the directory you are picking. You can also try the public library first.
-3. Start to play!
+2. Pick a method you prefer to provide your ROMs. For BIOS files, place them into a directory named `system` inside the directory you are picking.
+
+   You can also try the public library first if you do not have one now.
+5. Start to play!
 
 ## Features
 + 📁 Import a directory from your local directory or cloud drive, then a game list will appear
+
+  <img src="docs/screenshots/features/list.gif" width="300" >
 + 🖼️ Automatically grab game boxarts.
+
+  <img src="docs/screenshots/features/boxarts.gif" width="300" >
 + 🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles
 
   <img src="docs/screenshots/features/joystick.gif" width="300" >

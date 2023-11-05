@@ -1,30 +1,74 @@
 <p align="center">
   <img src="public/assets/logo/logo-512x512.png" alt="logo" width="120" height="120">
+  <h1 align="center">RetroAssembly</h1>
 </p>
-
-<h1 align="center">RetroAssembly</h1>
 
 ## Overview
 A personal retro game collection cabinet in your browser.
 
 <p align="center">
-  <img src="docs/screenshots/overview.png" >
+  <img src="docs/screenshots/with-frames.png" width="500" >
 </p>
-
-## Features
-+ 📁 Import a directory from your cloud drive or local directory, then a game list will appear
-+ 🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen.
-+ 🖼️ Automatically grab game cover images
-+ 🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles
-+ 📱 Virtual controller for mobile devices
-+ ⏳ Of course, rewinding!
-+ 💾 Save states and sync them to with different devices (if using a cloud disk we support)
-+ ...
 
 ## Usage
 1. Visit [retroassembly.com](https://retroassembly.com).
-2. Pick a method you prefer to provide your ROMs. For BIOS files, place them into a directory named `system` inside the directory you are picking.
+2. Pick a method you prefer to provide your ROMs. For BIOS files, place them into a directory named `system` inside the directory you are picking. You can also try the public library first.
 3. Start to play!
+
+## Features
++ 📁 Import a directory from your local directory or cloud drive, then a game list will appear
++ 🖼️ Automatically grab game boxarts.
++ 🎮 Joystick friendly, no need to switch between joysticks and mouse while navigating through different games or consoles
+
+  <img src="docs/screenshots/features/joystick.gif" width="300" >
++ 💾 Save states and sync them to with different devices (if using a cloud disk we support)
+
+  <img src="docs/screenshots/features/save.gif" width="300" >
++ 📱 Virtual controller for mobile devices
++ 🍎 Super convenient for iOS/iPadOS, no AltStore/jailbreak required. Either play directly in your browser or add it to home screen.
+
+## Motivation
+### I love retro games and emulators
+I love retro games and emulators. I used to be addicted to configuring my emulators on desktops, laptops, phones, and tablets...
+
+I also spent a lot of time on flashing images for my Raspberry Pi and other hardwares. You may already hear of something like Lakka, RetroPie, Batocera.linux, EmuELEC, etc.
+
+I loved these.
+
+However, I faced some problems with these software and system. Although maybe some of them are not the problems with these software programs, they may be my own issues.
+
+### My problems with RetroArch / Pegasus / BizHawk / RetroPie / standalone emulators etc
+
+1. #### I spent a lot of time on configuring them.
+    I had been spending too much time configuring these software and system, as well as much time on configuring and updating the emulators. But as comparisons, I spent only a little time on playing the games.
+
+    As I tried to update my configuations for several times, sometimes the systems would be broken by my invalid configuations and I have to reinstall them, and then my saves got lost, as a result.
+
+2. #### I could not synchronize my progress easily.
+    After saving my game progress on my PC, I am unable to continue it directly on my phone. Maybe copying save files manually would work, but it could be very annoying if I had to do that every time.
+
+Then I began searching for a software that could solve these problems, but the results were not ideal.
+
+### Searching for projects that can deal with my problems
+Some of the emulator related softwares only work on a certain platform. While some of them, like RetroArch, are cross platform applications; however, it is difficult to install them on an iPhone or iPad. Synchronizing progress is also a painful problem.
+
+Again, I began searching for some web based projects other than native programs. I don't want to use commercial websites providing illegal ROMs because I want to use my own. Another reason for not using them is that I don't want to put my save files on their servers since they may disappear some day. I want to keep the ownership.
+
+I found some decent projects (see [Alternatives](#alternatives)), but none of them met all my expectations. Here are some of my expectations:
+
++ It should be web based. So I can use it on every device with a web browser: phones, tablets, even Chromebooks.
++ It should be super easy to use. Give it a ROM directory, and everything else will function properly.
++ It should show some boxarts instead of plain game titles. I don't want to download them manually, they should be shown automatically.
++ It should help me keep my progress files synchronized.
++ It should be joystick friendly. Navigating through games should be as smooth as on a video game console, and keyboards and mouses should be optional. This way, when I exit a game and start another, I can keep my hands on my controller.
++ It should have touch control support. When I am outside, I can enjoy playing games on my phone using my fingers. Though it's not that efficient.
+
+### Creating RetroAssembly
+Finally, I realized that although I don't know much about emulator development, I do have some experience with web development. And I have heard that there are already Emscripten builds of RetroArch that can run within browsers. I believe I can utilize this to create my own project.
+
+Then I began working on this project called RetroAssembly. The meaning of this project name is to assemble all my retro games here (it has nothing to do with WebAssembly though WebAssembly is used by RetroArch Emscripten builds under the hood😆). In addition to that, I have also created a JavaScript library [Nostalgist.js](https://github.com/arianrhodsandlot/nostalgist) during the development of RetroAssembly.
+
+I've used RetroAssembly personally for months and all works well. Now, I shared it to you, and hope it can make you enjoy retro games more easily and smoothly.
 
 ## Supported Consoles
 We support mainstream fourth-generation and earlier consoles as well as some handhelds. The detailed list is as follows.
@@ -189,7 +233,10 @@ It's quite easy to develop RetroAssembly. All we need is the latest [Node.js](ht
 
 Simply run `pnpm install` to setup dependencies, then run `pnpm dev` to launch the development server.
 
-The cloud services are available only if related environment variables are set.
+The cloud services are available only if related environment variables are set. For know, these keys are private and the project can only be debugged with local directories. I'm still planning to improve this...
+
+## Feedbacks and contributions
+All kinds of feedbacks and contributions are welcome. You can issue new posts on the issue page or the discussion page.
 
 ## Alternatives
 + [Afterplay.io](https://afterplay.io)

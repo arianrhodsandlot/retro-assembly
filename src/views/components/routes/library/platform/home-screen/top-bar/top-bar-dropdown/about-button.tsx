@@ -11,7 +11,7 @@ export function AboutButton() {
         <div className='w-72 text-rose-700'>
           <div className='flex-center m-auto gap-4 font-bold'>
             <img alt='RetroAssembly' className='h-12 w-12 rounded-full' src={logo} />
-            <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider'>Retro Assemly</div>
+            <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider'>RetroAssemly</div>
           </div>
           <div className='mt-4 text-center text-sm'>A personal retro game collection cabinet in your browser</div>
           <div className='flex-center mt-6 flex-col gap-2 text-xs'>

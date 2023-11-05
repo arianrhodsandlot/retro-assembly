@@ -7,7 +7,7 @@ export function Banner() {
       <div className='relative bg-white/70 pb-10 pt-12 text-rose-700 backdrop-blur-sm'>
         <div className='flex-center m-auto gap-4 font-bold'>
           <img alt='RetroAssembly' className='h-16 w-16 rounded-full' src={logo} />
-          <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider sm:text-6xl'>Retro Assemly</div>
+          <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider sm:text-6xl'>RetroAssemly</div>
         </div>
         <div className='mt-4 flex flex-col items-center justify-center gap-2 text-xs tracking-wider sm:flex-row sm:gap-0'>
           <span className='flex-center px-1'>

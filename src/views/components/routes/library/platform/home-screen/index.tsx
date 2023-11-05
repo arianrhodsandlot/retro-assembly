@@ -52,7 +52,7 @@ async function getRoms(platform: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setPlatforms = useSetAtom(platformsAtom)
-  const { params, isPlatformRoute, isRomRoute, redirectToPlatform } = useRouterHelpers()
+  const { params, isPlatformRoute, redirectToPlatform } = useRouterHelpers()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
   const currentPlatformName = useCurrentPlatformName()
@@ -128,39 +128,46 @@ export function HomeScreen() {
     }
   }
 
-  function retry() {
+  async function retry() {
     setIsRetrying(true)
     if (platformsState.error) {
-      loadPlatformsFromRemote()
+      await loadPlatformsFromRemote()
     }
     if (romsState.error) {
-      loadRomsFromRemote()
+      await loadRomsFromRemote()
     }
   }
 
   const loadPlatformsAndRomsFromCache = useCallback(
-    function () {
-      loadPlatformsFromCache()
-      loadRomsFromCache()
+    async function () {
+      await loadPlatformsFromCache()
+      await loadRomsFromCache()
     },
     [loadPlatformsFromCache, loadRomsFromCache],
   )
 
   const loadPlatformsAndRomsFromRemote = useCallback(
-    function () {
-      loadPlatformsFromRemote()
-      loadRomsFromRemote()
+    async function () {
+      await loadPlatformsFromRemote()
+      await loadRomsFromRemote()
     },
     [loadPlatformsFromRemote, loadRomsFromRemote],
   )
 
   useEffect(() => {
-    loadPlatformsAndRomsFromCache()
-    if (isRomRoute) {
-      return
-    }
-    loadPlatformsAndRomsFromRemote()
-  }, [params.library, currentPlatformName, isRomRoute, loadPlatformsAndRomsFromCache, loadPlatformsAndRomsFromRemote])
+    ;(async () => {
+      await loadPlatformsAndRomsFromCache()
+      if (isPlatformRoute) {
+        await loadPlatformsAndRomsFromRemote()
+      }
+    })()
+  }, [
+    params.library,
+    currentPlatformName,
+    isPlatformRoute,
+    loadPlatformsAndRomsFromCache,
+    loadPlatformsAndRomsFromRemote,
+  ])
 
   const isRomsEmpty = !roms?.length
   const showLoading = romsState.status === 'loading' && peekRomsState.status !== 'loading' && isRomsEmpty

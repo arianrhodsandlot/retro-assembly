@@ -1,7 +1,7 @@
 import { useAsync, useMeasure } from '@react-hookz/web'
 import { useAtom, useSetAtom } from 'jotai'
 import { some } from 'lodash-es'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   type PlatformName,
   getHistoryRoms,
@@ -139,18 +139,29 @@ export function HomeScreen() {
     }
   }
 
-  useEffect(() => {
-    loadPlatformsFromCache()
-    loadRomsFromCache()
-  }, [loadPlatformsFromCache, loadRomsFromCache])
+  const loadPlatformsAndRomsFromCache = useCallback(
+    function () {
+      loadPlatformsFromCache()
+      loadRomsFromCache()
+    },
+    [loadPlatformsFromCache, loadRomsFromCache],
+  )
+
+  const loadPlatformsAndRomsFromRemote = useCallback(
+    function () {
+      loadPlatformsFromRemote()
+      loadRomsFromRemote()
+    },
+    [loadPlatformsFromRemote, loadRomsFromRemote],
+  )
 
   useEffect(() => {
+    loadPlatformsAndRomsFromCache()
     if (isRomRoute) {
       return
     }
-    loadPlatformsFromRemote()
-    loadRomsFromRemote()
-  }, [params.library, currentPlatformName, isRomRoute, loadPlatformsFromRemote, loadRomsFromRemote])
+    loadPlatformsAndRomsFromRemote()
+  }, [params.library, currentPlatformName, isRomRoute, loadPlatformsAndRomsFromCache, loadPlatformsAndRomsFromRemote])
 
   const isRomsEmpty = !roms?.length
   const showLoading = romsState.status === 'loading' && peekRomsState.status !== 'loading' && isRomsEmpty

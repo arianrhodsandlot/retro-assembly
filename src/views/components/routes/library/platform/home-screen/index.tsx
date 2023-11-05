@@ -92,11 +92,10 @@ export function HomeScreen() {
 
   // load roms from cache
   const [peekRomsState, { execute: loadRomsFromCache }] = useAsync(async () => {
-    setRoms([])
     if (currentPlatformName) {
       const { platform: romsPlatform, roms } = await peekRoms(currentPlatformName)
-      if (romsPlatform === currentPlatformRef.current && roms) {
-        setRoms(roms)
+      if (romsPlatform === currentPlatformRef.current) {
+        setRoms(roms?.length ? roms : [])
       }
     }
   })

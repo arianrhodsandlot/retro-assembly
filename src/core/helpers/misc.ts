@@ -40,3 +40,18 @@ export function humanizeDate(date: Date) {
   }
   return lightFormat(date, 'yyyy-MM-dd HH:mm')
 }
+
+export async function getScript(url: string) {
+  const script = document.createElement('script')
+  script.src = url
+  document.body.append(script)
+  await new Promise<void>((resolve, reject) => {
+    script.addEventListener('load', function () {
+      resolve()
+    })
+    script.addEventListener('error', function (error) {
+      reject(error)
+    })
+  })
+  script.remove()
+}

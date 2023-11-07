@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import { getScript } from 'jquery'
 import queryString from 'query-string'
 import { Auth } from './auth'
 import { type CloudServiceClient } from './cloud-service-client'
@@ -48,7 +48,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
 
   static async loadGapi() {
     if (!('gapi' in window)) {
-      await $.getScript('https://apis.google.com/js/api.js')
+      await getScript('https://apis.google.com/js/api.js')
     }
     if (!gapi.client) {
       await new Promise((resolve) => gapi.load('client', resolve))

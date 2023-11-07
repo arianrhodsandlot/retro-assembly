@@ -1,7 +1,5 @@
-import delay from 'delay'
-import { AnimatePresence, motion } from 'framer-motion'
-import $ from 'jquery'
-import { type FocusEvent, useEffect, useRef } from 'react'
+import { AnimatePresence, type TargetAndTransition, motion } from 'framer-motion'
+import { useRef } from 'react'
 import { Link } from 'wouter'
 import { platformImageMap } from '../../../../../../../lib/constants'
 import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
@@ -18,38 +16,32 @@ interface PlatformNavigationItemProps {
 
 export function PlatformNavigationItem({ platform, highlighted = false }: PlatformNavigationItemProps) {
   const { linkToPlatform } = useRouterHelpers()
-  const button = useRef<HTMLButtonElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
-  async function onFocus(e: FocusEvent<HTMLButtonElement>) {
-    const $focusedElement = $(e.currentTarget)
-    const $outer = $focusedElement.parent()
-    if (highlighted) {
-      await delay(300)
+  function onFocus() {
+    const target = buttonRef.current
+    const container = target?.parentElement
+    if (!target || !container) {
+      return
     }
-    const outerScrollLeft = $outer.scrollLeft()
-    const outerWidth = $outer.width()
-    const focusedElementWidth = $focusedElement.width()
-    if (outerScrollLeft !== undefined && outerWidth !== undefined && focusedElementWidth !== undefined) {
-      const offsetLeft = $focusedElement.position().left + outerScrollLeft
-      const scrollLeft = offsetLeft - outerWidth + focusedElementWidth
-      $outer.stop().animate({ scrollLeft }, 300)
+    const left = target.offsetLeft - container.offsetLeft - target.clientWidth
+    container.scroll({ left: left >= 0 ? left : 0, behavior: 'smooth' })
+  }
+
+  function onAnimationComplete(definition: TargetAndTransition) {
+    if (highlighted && definition.width === 'auto') {
+      onFocus()
     }
   }
 
-  useEffect(() => {
-    if (highlighted) {
-      button.current?.focus()
-    }
-  }, [highlighted])
-
   return (
-    <Link href={`${linkToPlatform(platform.name)}`} replace>
+    // @ts-expect-error Link can accept ref
+    <Link href={`${linkToPlatform(platform.name)}`} ref={buttonRef} replace>
       <TopBarButton
         className='flex-shrink-0 px-8'
         highlighted={highlighted}
         key={platform.name}
         onFocus={onFocus}
-        ref={button}
         title={platform.fullName}
       >
         <div className='flex-center relative z-[1]'>
@@ -69,6 +61,7 @@ export function PlatformNavigationItem({ platform, highlighted = false }: Platfo
                 className='box-content overflow-hidden whitespace-nowrap'
                 exit={{ width: 0 }}
                 initial={{ width: 0 }}
+                onAnimationComplete={onAnimationComplete}
               >
                 <div className='hidden pl-4 font-bold tracking-wider text-rose-700 md:block'>
                   {getPlatformDisplayName(platform.fullName)}

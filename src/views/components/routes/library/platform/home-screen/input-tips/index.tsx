@@ -1,7 +1,6 @@
 import { useEventListener } from '@react-hookz/web'
 import delay from 'delay'
 import { AnimatePresence, motion } from 'framer-motion'
-import $ from 'jquery'
 import { useRef, useState } from 'react'
 import { InputTipsContent } from './input-tips-content'
 
@@ -36,7 +35,7 @@ export function InputTips() {
       if (!button || !ref.current) {
         return
       }
-      const gameEntryGrid = $(button).parentsUntil('.game-entry-grid').get(0)
+      const gameEntryGrid = button.parentElement?.parentElement
       if (!gameEntryGrid) {
         return
       }

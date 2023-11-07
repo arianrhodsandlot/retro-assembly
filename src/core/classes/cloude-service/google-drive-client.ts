@@ -1,5 +1,5 @@
-import { getScript } from 'jquery'
 import queryString from 'query-string'
+import { getScript } from '../../helpers/misc'
 import { Auth } from './auth'
 import { type CloudServiceClient } from './cloud-service-client'
 

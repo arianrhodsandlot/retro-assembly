@@ -97,7 +97,7 @@ export function HomeScreen() {
       if (romsPlatform === currentPlatformRef.current) {
         if (newRoms?.length) {
           setRoms(newRoms)
-        } else if (!roms?.length) {
+        } else {
           setRoms([])
         }
       }

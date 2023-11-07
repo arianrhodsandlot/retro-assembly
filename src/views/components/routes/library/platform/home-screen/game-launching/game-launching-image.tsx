@@ -31,7 +31,7 @@ export function GameLaunchingImage({
           initial={styles.initial}
           onAnimationComplete={onAnimationComplete}
           onAnimationStart={onAnimationStart}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.4 }}
         >
           {children}
         </motion.div>

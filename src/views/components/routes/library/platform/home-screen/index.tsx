@@ -93,9 +93,13 @@ export function HomeScreen() {
   // load roms from cache
   const [peekRomsState, { execute: loadRomsFromCache }] = useAsync(async () => {
     if (currentPlatformName) {
-      const { platform: romsPlatform, roms } = await peekRoms(currentPlatformName)
+      const { platform: romsPlatform, roms: newRoms } = await peekRoms(currentPlatformName)
       if (romsPlatform === currentPlatformRef.current) {
-        setRoms(roms?.length ? roms : [])
+        if (newRoms?.length) {
+          setRoms(newRoms)
+        } else if (!roms?.length) {
+          setRoms([])
+        }
       }
     }
   })
@@ -155,11 +159,13 @@ export function HomeScreen() {
   )
 
   useEffect(() => {
+    if (isRomRoute) {
+      return
+    }
+
     ;(async () => {
       await loadPlatformsAndRomsFromCache()
-      if (!isRomRoute) {
-        await loadPlatformsAndRomsFromRemote()
-      }
+      await loadPlatformsAndRomsFromRemote()
     })()
   }, [params.library, currentPlatformName, isRomRoute, loadPlatformsAndRomsFromCache, loadPlatformsAndRomsFromRemote])
 

@@ -13,14 +13,17 @@ import { GameLaunchingImage } from './game-launching-image'
 function getMaskStyle(target: HTMLButtonElement | undefined) {
   const boundingClientRect = target?.getBoundingClientRect()
   const { y, x, width, height } = boundingClientRect || {}
+  const isValidBounding =
+    typeof y === 'number' && typeof x === 'number' && typeof width === 'number' && typeof height === 'number'
   let maskPosition = {}
-  if (boundingClientRect) {
+  if (isValidBounding) {
     maskPosition =
       width && height ? { top: y, left: x, width, height } : { top: '50%', left: '50%', width: '0', height: '0' }
   }
   const initial = { ...maskPosition, filter: 'brightness(1)' }
   const expanded = { ...maskPosition, top: 0, left: 0, width: '100%', height: '100%', filter: 'brightness(0)' }
-  return { valid: Boolean(boundingClientRect), initial, expanded }
+  const exit = isValidBounding ? { width: 0, height: 0, left: x + width / 2, top: y + height / 2, opacity: 0 } : initial
+  return { valid: isValidBounding, initial, exit, expanded }
 }
 
 export function GameLaunching() {
@@ -69,7 +72,11 @@ export function GameLaunching() {
     }
   }
 
-  const styles = { initial: maskStyle.initial, exit: maskStyle.initial, animate: maskStyle.expanded }
+  const styles = {
+    initial: maskStyle.initial,
+    exit: maskStyle.exit,
+    animate: maskStyle.expanded,
+  }
 
   return (
     <GameLaunchingImage

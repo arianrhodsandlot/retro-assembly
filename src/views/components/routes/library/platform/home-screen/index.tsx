@@ -130,10 +130,10 @@ export function HomeScreen() {
 
   async function retry() {
     setIsRetrying(true)
-    if (platformsState.error) {
+    if (platformsState.status !== 'success') {
       await loadPlatformsFromRemote()
     }
-    if (romsState.error) {
+    if (romsState.status !== 'success') {
       await loadRomsFromRemote()
     }
   }

@@ -1,5 +1,4 @@
 import { useSetAtom } from 'jotai'
-import $ from 'jquery'
 import { type CSSProperties, type FocusEvent, type MouseEvent } from 'react'
 import { type Rom } from '../../../../../../../core'
 import { launchingMaskAtom } from '../../../atoms'
@@ -8,15 +7,14 @@ import { GameEntryContent } from './game-entry-content'
 import { GameTitle } from './game-title'
 
 function scrollAsNeeded(e: FocusEvent<HTMLButtonElement, Element>) {
-  const $focusedElement = $(e.currentTarget)
-  const $outer = $focusedElement.offsetParent()
-  const outerScrollTop = $outer.scrollTop()
-  const outerHeight = $outer.height()
-  const focusedElementHeight = $focusedElement.height()
-  if (outerScrollTop && outerHeight && focusedElementHeight) {
-    const offsetTop = $focusedElement.position().top + outerScrollTop
-    const scrollTop = offsetTop - outerHeight / 2 + focusedElementHeight / 2
-    $outer.stop().animate({ scrollTop }, { duration: 40 })
+  const target = e.currentTarget
+  const container = e.currentTarget.offsetParent
+  if (!container) {
+    return
+  }
+  const top = target.offsetTop - target.clientHeight
+  if (top >= 0) {
+    container.scrollTo({ top, behavior: 'smooth' })
   }
 }
 

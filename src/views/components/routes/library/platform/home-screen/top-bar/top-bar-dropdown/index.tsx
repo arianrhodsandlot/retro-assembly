@@ -1,6 +1,5 @@
 import { clsx } from 'clsx'
 import delay from 'delay'
-import $ from 'jquery'
 import { useRef, useState } from 'react'
 import { onCancel } from '../../../../../../../../core'
 import { TopBarButton } from '../top-bar-button'
@@ -55,8 +54,7 @@ export function TopBarDropdown() {
     await delay(0)
 
     if (elementRef.current) {
-      const button = $('button:eq(1)', elementRef.current)
-      button.trigger('focus')
+      elementRef.current.parentElement?.querySelector<HTMLButtonElement>('button[aria-haspopup]')?.focus()
     }
   }
 
@@ -68,8 +66,7 @@ export function TopBarDropdown() {
     }
     await delay(0)
     if (elementRef.current.contains(document.activeElement)) {
-      const button = $('button:first', elementRef.current)
-      button.trigger('focus')
+      elementRef.current.querySelector('button')?.focus()
     }
   }
 

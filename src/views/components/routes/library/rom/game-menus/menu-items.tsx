@@ -1,6 +1,5 @@
 import { clsx } from 'clsx'
 import { useSetAtom } from 'jotai'
-import $ from 'jquery'
 import { useEffect, useRef, useState } from 'react'
 import { isUsingDemo, onCancel, resumeGame } from '../../../../../../core'
 import { SpatialNavigation } from '../../../../../lib/spatial-navigation'
@@ -35,7 +34,8 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
 
   useEffect(() => {
     const offCancel = onCancel(() => {
-      if ($('.menu-overlay-buttons button:focus')) {
+      const buttonContainer = document.activeElement?.parentElement?.parentElement
+      if (buttonContainer?.classList.contains('menu-overlay-buttons')) {
         setShowMenuOverlay(false)
         resumeGame()
       } else {

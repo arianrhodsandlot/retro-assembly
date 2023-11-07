@@ -52,7 +52,7 @@ async function getRoms(platform: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setPlatforms = useSetAtom(platformsAtom)
-  const { params, isPlatformRoute, redirectToPlatform } = useRouterHelpers()
+  const { params, isPlatformRoute, isRomRoute, redirectToPlatform } = useRouterHelpers()
   const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
   const currentPlatformName = useCurrentPlatformName()
@@ -157,17 +157,11 @@ export function HomeScreen() {
   useEffect(() => {
     ;(async () => {
       await loadPlatformsAndRomsFromCache()
-      if (isPlatformRoute) {
+      if (!isRomRoute) {
         await loadPlatformsAndRomsFromRemote()
       }
     })()
-  }, [
-    params.library,
-    currentPlatformName,
-    isPlatformRoute,
-    loadPlatformsAndRomsFromCache,
-    loadPlatformsAndRomsFromRemote,
-  ])
+  }, [params.library, currentPlatformName, isRomRoute, loadPlatformsAndRomsFromCache, loadPlatformsAndRomsFromRemote])
 
   const isRomsEmpty = !roms?.length
   const showLoading = romsState.status === 'loading' && peekRomsState.status !== 'loading' && isRomsEmpty

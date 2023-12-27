@@ -53,6 +53,35 @@ export const defaultRetroarchCoresConfig = {
   },
 }
 
+function getEmptyInputConfig() {
+  const gamepadButtonNames = [
+    'a',
+    'b',
+    'x',
+    'y',
+    'l',
+    'l2',
+    'l3',
+    'r',
+    'r2',
+    'r3',
+    'up',
+    'down',
+    'left',
+    'right',
+    'select',
+    'start',
+  ]
+  const inputConfig = {}
+  for (const gamepadButtonName of gamepadButtonNames) {
+    for (let i = 0; i < 4; i++) {
+      inputConfig[`input_player${i + 1}_${gamepadButtonName}`] = ''
+      inputConfig[`input_player${i + 1}_${gamepadButtonName}_btn`] = ''
+    }
+  }
+  return inputConfig
+}
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export function getRetroarchConfig() {
   const gamepadMappings = PreferenceParser.get('gamepadMappings')
@@ -63,7 +92,7 @@ export function getRetroarchConfig() {
     gamepadMappingsMap.set(name, mapping)
   }
 
-  const inputConfig = {}
+  const inputConfig = getEmptyInputConfig()
   if (compact(gamepads).length > 0) {
     for (const [index, gamepad] of gamepads.entries()) {
       const mapping = gamepadMappingsMap.get(gamepad?.id ?? '')

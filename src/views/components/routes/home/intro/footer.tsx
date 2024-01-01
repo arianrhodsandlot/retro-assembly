@@ -25,7 +25,7 @@ export function Footer() {
       </div>
 
       <div className='flex-center mb-4 mt-1 gap-2 text-xs'>
-        <span>© 2023</span>
+        <span>© 2024</span>
         <a className='underline' href='https://github.com/arianrhodsandlot' rel='noreferrer' target='_blank'>
           arianrhodsandlot
         </a>

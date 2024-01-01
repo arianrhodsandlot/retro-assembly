@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAsync } from 'react-use'
 
 interface StateItemProps {
@@ -8,6 +9,7 @@ interface StateItemProps {
 }
 
 export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function StateItem({ state, onSelect }, ref) {
+  const { t } = useTranslation()
   const thumbnailUrlState = useAsync(async () => await state.thumbnail?.getUrl())
 
   return (
@@ -38,7 +40,7 @@ export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function 
         )}
       </div>
       <div className={clsx('flex h-36 flex-1 items-center border-l-4 border-l-white px-6', 'group-focus:bg-white')}>
-        Saved at {state.createTime.humanized}
+        {t('Saved at')} {state.createTime.humanized}
       </div>
     </button>
   )

@@ -1,58 +1,61 @@
 import { DialogClose } from '@radix-ui/react-dialog'
+import { useTranslation } from 'react-i18next'
 import { DarkInputButton } from '../../../../../../common/dark-input-button'
 import { BaseButton } from '../../../../../../primitives/base-button'
 
 export function InputHelpDialogContent() {
+  const { t } = useTranslation()
+
   return (
     <div className='w-96'>
       <div>
         <h3 className='flex items-center gap-2 font-semibold'>
           <span className='icon-[mdi--apps-box] h-5 w-5' />
-          UI controls
+          {t('UI controls')}
         </h3>
         <div className='mt-2 flex flex-wrap gap-x-4 gap-y-2 px-8'>
           <div className='flex items-center gap-2'>
-            Move
+            {t('Move')}
             <span className='icon-[mdi--gamepad] h-5 w-5' /> / <DarkInputButton>↑ ↓ → ← </DarkInputButton>
           </div>
           <div className='flex items-center gap-2'>
-            Confirm
+            {t('Confirm')}
             <span className='icon-[mdi--gamepad-circle-right] h-5 w-5' />/<DarkInputButton>Enter</DarkInputButton>
           </div>
           <div className='flex items-center gap-2'>
-            Cancel
+            {t('Cancel')}
             <span className='icon-[mdi--gamepad-circle-down] h-5 w-5' />
           </div>
           <div className='flex items-center gap-2'>
-            Previous console
+            {t('Previous console')}
             <DarkInputButton>L1</DarkInputButton>
           </div>
           <div className='flex items-center gap-2'>
-            Next console
+            {t('Next console')}
             <DarkInputButton>R1</DarkInputButton>
           </div>
         </div>
 
         <h3 className='mt-4 flex items-center gap-2 font-semibold'>
           <span className='icon-[mdi--fit-to-screen-outline] h-5 w-5' />
-          In game shortcuts
+          {t('In game shortcuts')}
         </h3>
         <div className='mt-2 flex flex-wrap gap-x-4 gap-y-2 px-8'>
           <div className='flex items-center gap-2'>
-            Show/hide menu
+            {t('Show/hide menu')}
             <div className='flex items-center gap-2'>
               <DarkInputButton>L1</DarkInputButton>+<DarkInputButton>R1</DarkInputButton> /{' '}
               <DarkInputButton>ESC</DarkInputButton>
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            Rewind
+            {t('Rewind')}
             <div className='flex items-center gap-2'>
               <DarkInputButton>select</DarkInputButton>+<DarkInputButton>L1</DarkInputButton>
             </div>
           </div>
           <div className='flex items-center gap-2'>
-            Fast forward
+            {t('Fast forward')}
             <div className='flex items-center gap-2'>
               <DarkInputButton>select</DarkInputButton>+<DarkInputButton>R1</DarkInputButton>
             </div>
@@ -62,7 +65,7 @@ export function InputHelpDialogContent() {
 
       <h3 className='mt-4 flex items-center gap-2 font-semibold'>
         <span className='icon-[mdi--keyboard] h-5 w-5' />
-        Gameplay controller-keyboard mappings
+        {t('Gameplay controller-keyboard mappings')}
       </h3>
       <div className='mt-2 flex flex-wrap gap-x-4 gap-y-2 px-8'>
         <div className='flex items-center gap-2'>
@@ -104,7 +107,7 @@ export function InputHelpDialogContent() {
         <DialogClose asChild>
           <BaseButton styleType='primary'>
             <span className='icon-[mdi--hand-okay] h-5 w-5' />
-            OK
+            {t('OK')}
           </BaseButton>
         </DialogClose>
       </div>

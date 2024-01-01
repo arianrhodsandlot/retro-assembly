@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isUsingDropbox, isUsingLocal, isUsingOnedrive } from '../../../../../../../../core'
 import { isUsingGoogleDrive } from '../../../../../../../../core/exposed/is-using-google-drive'
 import { useTeardown } from '../../../../../../hooks/use-teardown'
@@ -7,6 +8,7 @@ import { TopBarButton } from '../top-bar-button'
 import { ClearSiteDataDialogContent } from './clear-site-data-dialog-content'
 
 export function ClearSiteDataButton() {
+  const { t } = useTranslation()
   const { teardown } = useTeardown()
   const [confirmMessage, setConfirmMessage] = useState('')
   const [open, setOpen] = useState(false)
@@ -52,7 +54,7 @@ export function ClearSiteDataButton() {
       <TopBarButton>
         <div className='flex items-center gap-2 px-4'>
           <span className='icon-[mdi--power] relative z-[1] h-8 w-8' />
-          Logout
+          {t('Logout')}
         </div>
       </TopBarButton>
     </BaseDialogTrigger>

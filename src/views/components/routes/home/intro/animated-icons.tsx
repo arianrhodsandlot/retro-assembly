@@ -24,7 +24,7 @@ export function AnimatedIcons({ wait = 0, children }: { wait?: number; children:
   }, 1500)
 
   return (
-    <div className='relative mr-2 h-4 w-4 overflow-hidden'>
+    <div className='relative mx-2 h-4 w-4 overflow-hidden'>
       <div
         className={clsx('absolute flex flex-col', {
           'transition-transform duration-300': enableAnimation,

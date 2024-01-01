@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import { useTranslation } from 'react-i18next'
 import { BaseCallout } from '../primitives/base-callout'
 import { BouncingEllipsis } from './bouncing-ellipsis'
 
@@ -17,6 +18,8 @@ export function InputMappingPanel({
   waitForButtonPressed,
   onResetMapping,
 }: InputMappingPanelProps) {
+  const { t } = useTranslation()
+
   function getCode(buttonName: string) {
     if (waitingButton === buttonName) {
       return ''
@@ -34,7 +37,7 @@ export function InputMappingPanel({
     <BaseCallout className='mx-1 rounded-t-none border-t-0'>
       <div className='text-sm'>
         <div className={clsx('text-center text-xs transition-opacity', { 'opacity-0': !waitingButton })}>
-          Press a button on your controller <BouncingEllipsis />
+          {t('Press a button on your controller')} <BouncingEllipsis />
         </div>
 
         <div className='mt-1 flex justify-between'>
@@ -192,7 +195,7 @@ export function InputMappingPanel({
           tabIndex={-1}
         >
           <span className='icon-[mdi--reload-alert] h-4 w-4' />
-          Reset to default
+          {t('Reset to default')}
         </button>
       </div>
     </BaseCallout>

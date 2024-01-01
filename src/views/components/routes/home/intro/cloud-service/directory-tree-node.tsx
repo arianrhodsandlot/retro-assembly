@@ -2,6 +2,7 @@ import { useAsync } from '@react-hookz/web'
 import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { type CloudService } from '../../../../../../core'
 import { directoyTreeAtom } from './atoms'
 import { type TreeNode } from './types'
@@ -14,6 +15,7 @@ interface DirectoryTreeNodeParams {
 }
 
 export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTreeNodeParams) {
+  const { t } = useTranslation()
   const [tree, setTree] = useAtom(directoyTreeAtom)
 
   const [state, { execute: updateTree }] = useAsync(async () => {
@@ -64,7 +66,9 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
           >
             <div className='overflow-hidden text-ellipsis whitespace-nowrap'>{node.name}</div>
             {!node.hasChildren && node.isDirectory ? (
-              <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>an empty directory</div>
+              <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>
+                {t('an empty directory')}
+              </div>
             ) : null}
           </div>
           {node.hasChildren ? (
@@ -76,7 +80,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
               onClick={() => onSelect(node.path)}
             >
               <span className='icon-[mdi--check] mr-1 h-4 w-4' />
-              Proceed
+              {t('Proceed')}
             </button>
           ) : null}
         </div>

@@ -1,0 +1,107 @@
+import type { Translation } from './types'
+
+const translation: Translation = {
+  'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
+    'Gra może zostać uruchomiona dopiero po dotknięciu ekranu, a nie po kliknięciu przycisku na padzie.',
+  'A personal retro game collection cabinet in your browser':
+    'Osobista szafka z kolekcją gier retro w Twojej przeglądarce',
+  About: 'O',
+  'an empty directory': 'pusty katalog',
+  'Are you sure to logout?': 'Czy na pewno się wylogujesz?',
+  'built with your own ROM files': 'zbudowany z własnych plików ROM',
+  Cancle: 'Anuluj',
+  'Choose one like this!': 'Wybierz taki!',
+  'Click here to launch the game': 'Kliknij tutaj, aby uruchomić grę',
+  Close: 'Zamknąć',
+  'Configure gamepads': 'Skonfiguruj gamepady',
+  'Configure Keyboards': 'Skonfiguruj klawiatury',
+  Confirm: 'Potwierdzać',
+  'Connect your controller and press any button to begin':
+    'Podłącz kontroler i naciśnij dowolny przycisk, aby rozpocząć',
+  'Continue with your own library': 'Kontynuuj z własną biblioteką',
+  'Enjoy legal free games.': 'Ciesz się legalnymi, darmowymi grami.',
+  Exit: 'Wyjście',
+  'Failed to load games.': 'Nie udało się załadować gier.',
+  'Failed to load state list': 'Nie udało się załadować listy stanów',
+  'Fast forward': 'Szybkie przewijanie do przodu',
+  'Gameplay controller-keyboard mappings': 'Mapowania kontrolera rozgrywki i klawiatury',
+  'Games are loaded from': 'Gry są ładowane z',
+  'Grant permission': 'Dać pozwolenie',
+  'Here is an example:': 'Oto przykład:',
+  'In game shortcuts': 'W skrótach gry',
+  'Input help': 'Wprowadź pomoc',
+  Keyboard: 'Klawiatura',
+  'Last Updated': 'Ostatnio zaktualizowany',
+  'Load state': 'Stan obciążenia',
+  'Loading selected state': 'Ładowanie wybranego stanu',
+  Loading: 'Ładowanie',
+  'Local file permission is needed': 'Wymagane jest pozwolenie na plik lokalny',
+  'Login fail. Error:': 'Błąd logowania.  {{ message }}',
+  Logout: 'Wyloguj',
+  'May need to login again after 24h.': 'Może być konieczne ponowne zalogowanie się po 24 godzinach.',
+  Move: 'Przenosić',
+  'Next console': 'Następna konsola',
+  'Not encouraged because it only provides limited usage(100 users) for unverified apps.':
+    'Nie jest to zalecane, ponieważ zapewnia ograniczone użycie (100 użytkowników) dla niezweryfikowanych aplikacji.',
+  'Notice:': 'Ogłoszenie:',
+  OK: 'OK',
+  or: 'Lub',
+  'Please do not turn off your device!': 'Proszę nie wyłączać urządzenia!',
+  'Press a button on your controller': 'Naciśnij przycisk na kontrolerze',
+  Press: 'Naciskać',
+  'Previous console': 'Poprzednia konsola',
+  'Privacy Policy': 'Polityka prywatności',
+  Proceed: 'Przystępować',
+  'Reset to default': 'Przywróć ustawienia domyślne',
+  Restart: 'Uruchom ponownie',
+  Resume: 'Wznawiać',
+  Retry: 'Spróbować ponownie',
+  'Return home': 'Powrót do domu',
+  Rewind: 'Przewijanie do tyłu',
+  'Save & exit': 'Ratować',
+  'Save state': 'Zapisz stan',
+  'Saved at': 'Zapisano o godz',
+  Saving: 'Oszczędność',
+  'Select a cloud directory': 'Wybierz katalog w chmurze',
+  'Select a directory to initialize your game library.':
+    'Wybierz katalog, w którym chcesz zainicjować bibliotekę gier.',
+  'select a directory': 'wybierz katalog',
+  'Select a local directory': 'Wybierz katalog lokalny',
+  'Show/hide menu': 'Pokaż/ukryj menu',
+  'Sign in with': 'Zaloguj się korzystając z {{ service }}',
+  'Some actions are not available while playing the public library.':
+    'Niektóre czynności nie są dostępne podczas korzystania z biblioteki publicznej.',
+  'Star me on GitHub': 'Oznacz mnie gwiazdką na GitHubie',
+  'Synchronize your games and saves across multiple devices.': 'Synchronizuj swoje gry i zapisy na wielu urządzeniach.',
+  'Tap here to launch the game': 'Kliknij tutaj, aby uruchomić grę',
+  'The directory you choose should match a certain structure:':
+    'Wybrany katalog powinien odpowiadać określonej strukturze:',
+  'The directory you choose should match a certain structure.': 'Wybrany katalog powinien mieć określoną strukturę.',
+  'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
+    'ROMy gier retro powinny być zgrupowane w oddzielnych katalogach, a katalogi powinny mieć następujące nazwy:',
+  'There are no saved states for current game.': 'Brak zapisanych stanów dla bieżącej gry.',
+  'This is due to a limitation of the browser.': 'Wynika to z ograniczeń przeglądarki.',
+  'This is due to a restriction of the security policy of your browser.':
+    'Wynika to z ograniczenia polityki bezpieczeństwa Twojej przeglądarki.',
+  'to open/hide this menu.': 'aby otworzyć/ukryć to menu.',
+  'to rewind while playing.': 'do tyłu podczas odtwarzania.',
+  'To select a ROMs directory from your Dropbox, you need to sign in with Dropbox first.':
+    'Aby wybrać katalog ROM z Dropbox, musisz najpierw zalogować się w Dropbox.',
+  'To select a ROMs directory from your Google Drive, you need to sign in with Google first.':
+    'Aby wybrać katalog ROM z Dysku Google, musisz najpierw zalogować się w Google.',
+  'To select a ROMs directory from your OneDrive, you need to sign in with Microsoft first.':
+    'Aby wybrać katalog ROM z OneDrive, musisz najpierw zalogować się w Microsoft.',
+  'Try public library': 'Wypróbuj bibliotekę publiczną',
+  'UI controls': 'Elementy sterujące interfejsu użytkownika',
+  Version: 'Wersja',
+  'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
+    'Musimy poprosić Cię o ponowne zezwolenie na odczytanie Twoich ROM-ów, mimo że zrobiłeś to już ostatnim razem.',
+  'You are now authenticated with RetroAssembly.': 'Nastąpiło uwierzytelnienie w RetroAssembly.',
+  'You selected an invalid directory as your ROMs directory': 'Wybrałeś nieprawidłowy katalog jako katalog ROM',
+  'Your login status is expired. Please login again.': 'Twój {{ loginName }} status logowania wygasł. ',
+  'Your personal retro game collection cabinet': 'Twoja osobista szafka na kolekcję gier retro',
+  'Your should choose a directory containing at least one of the above sub directories.':
+    'Powinieneś wybrać katalog zawierający co najmniej jeden z powyższych podkatalogów.',
+}
+
+export const pl = { translation }

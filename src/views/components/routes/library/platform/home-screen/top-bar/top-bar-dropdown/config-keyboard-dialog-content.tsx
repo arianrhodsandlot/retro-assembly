@@ -1,8 +1,11 @@
 import { DialogClose } from '@radix-ui/react-dialog'
+import { useTranslation } from 'react-i18next'
 import { BaseButton } from '../../../../../../primitives/base-button'
 import { KeyboardMapping } from '../keyboard-mapping'
 
 export function ConfigKeyboardDialogContent() {
+  const { t } = useTranslation()
+
   return (
     <div>
       <KeyboardMapping />
@@ -11,7 +14,7 @@ export function ConfigKeyboardDialogContent() {
         <DialogClose asChild>
           <BaseButton className='autofocus' styleType='primary'>
             <span className='icon-[mdi--close] h-5 w-5' />
-            Close
+            {t('Close')}
           </BaseButton>
         </DialogClose>
       </div>

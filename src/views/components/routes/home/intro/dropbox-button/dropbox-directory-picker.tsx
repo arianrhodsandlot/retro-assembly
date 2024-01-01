@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAsyncRetry } from 'react-use'
 import { detectNeedsLogin } from '../../../../../../core'
 import { SpatialNavigation } from '../../../../../lib/spatial-navigation'
@@ -12,6 +13,7 @@ export function DropboxDirectoryPicker({
   isValidating: boolean
   onSelect: (path: string) => void
 }) {
+  const { t } = useTranslation()
   const state = useAsyncRetry(async () => await detectNeedsLogin('dropbox'))
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export function DropboxDirectoryPicker({
         <div className='text-rose-700'>
           <div className='flex items-center rounded border border-rose-700 bg-rose-100 px-4 py-2 text-sm'>
             <span className='icon-[mdi--bell] mr-2 h-4 w-4' />
-            Select a directory to initialize your game library.
+            {t('Select a directory to initialize your game library.')}
           </div>
         </div>
         <div className='flex-1 overflow-auto'>

@@ -1,0 +1,107 @@
+const translation = {
+  'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
+    'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.',
+  'A personal retro game collection cabinet in your browser':
+    'A personal retro game collection cabinet in your browser',
+  About: 'About',
+  'an empty directory': 'an empty directory',
+  'Are you sure to logout?': 'Are you sure to logout?',
+  'built with your own ROM files': 'built with your own ROM files',
+  Cancle: 'Cancle',
+  'Choose one like this!': 'Choose one like this!',
+  'Click here to launch the game': 'Click here to launch the game',
+  Close: 'Close',
+  'Configure gamepads': 'Configure gamepads',
+  'Configure Keyboards': 'Configure Keyboards',
+  Confirm: 'Confirm',
+  'Connect your controller and press any button to begin': 'Connect your controller and press any button to begin',
+  'Continue with your own library': 'Continue with your own library',
+  'Enjoy legal free games.': 'Enjoy legal free games.',
+  Exit: 'Exit',
+  'Failed to load games.': 'Failed to load games.',
+  'Failed to load state list': 'Failed to load state list',
+  'Fast forward': 'Fast forward',
+  'Gameplay controller-keyboard mappings': 'Gameplay controller-keyboard mappings',
+  'Games are loaded from': 'Games are loaded from',
+  'Grant permission': 'Grant permission',
+  'Here is an example:': 'Here is an example:',
+  'In game shortcuts': 'In game shortcuts',
+  'Input help': 'Input help',
+  Keyboard: 'Keyboard',
+  'Last Updated': 'Last Updated',
+  'Load state': 'Load state',
+  'Loading selected state': 'Loading selected state',
+  Loading: 'Loading',
+  'Local file permission is needed': 'Local file permission is needed',
+  'Login fail. Error:': 'Login fail. Error: {{ message }}',
+  Logout: 'Logout',
+  'May need to login again after 24h.': 'May need to login again after 24h.',
+  Move: 'Move',
+  'Next console': 'Next console',
+  'Not encouraged because it only provides limited usage(100 users) for unverified apps.':
+    'Not encouraged because it only provides limited usage(100 users) for unverified apps.',
+  'Notice:': 'Notice:',
+  OK: 'OK',
+  or: 'or',
+  'Please do not turn off your device!': 'Please do not turn off your device!',
+  'Press a button on your controller': 'Press a button on your controller',
+  Press: 'Press',
+  'Previous console': 'Previous console',
+  'Privacy Policy': 'Privacy Policy',
+  Proceed: 'Proceed',
+  'Reset to default': 'Reset to default',
+  Restart: 'Restart',
+  Resume: 'Resume',
+  Retry: 'Retry',
+  'Return home': 'Return home',
+  Rewind: 'Rewind',
+  'Save & exit': 'Save & exit',
+  'Save state': 'Save state',
+  'Saved at': 'Saved at',
+  Saving: 'Saving',
+  'Select a cloud directory': 'Select a cloud directory',
+  'Select a directory to initialize your game library.': 'Select a directory to initialize your game library.',
+  'select a directory': 'select a directory',
+  'Select a local directory': 'Select a local directory',
+  'Show/hide menu': 'Show/hide menu',
+  'Sign in with': 'Sign in with {{ service }}',
+  'Some actions are not available while playing the public library.':
+    'Some actions are not available while playing the public library.',
+  'Star me on GitHub': 'Star me on GitHub',
+  'Synchronize your games and saves across multiple devices.':
+    'Synchronize your games and saves across multiple devices.',
+  'Tap here to launch the game': 'Tap here to launch the game',
+  'The directory you choose should match a certain structure:':
+    'The directory you choose should match a certain structure:',
+  'The directory you choose should match a certain structure.':
+    'The directory you choose should match a certain structure.',
+  'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
+    'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:',
+  'There are no saved states for current game.': 'There are no saved states for current game.',
+  'This is due to a limitation of the browser.': 'This is due to a limitation of the browser.',
+  'This is due to a restriction of the security policy of your browser.':
+    'This is due to a restriction of the security policy of your browser.',
+  'to open/hide this menu.': 'to open/hide this menu.',
+  'to rewind while playing.': 'to rewind while playing.',
+  'To select a ROMs directory from your Dropbox, you need to sign in with Dropbox first.':
+    'To select a ROMs directory from your Dropbox, you need to sign in with Dropbox first.',
+  'To select a ROMs directory from your Google Drive, you need to sign in with Google first.':
+    'To select a ROMs directory from your Google Drive, you need to sign in with Google first.',
+  'To select a ROMs directory from your OneDrive, you need to sign in with Microsoft first.':
+    'To select a ROMs directory from your OneDrive, you need to sign in with Microsoft first.',
+  'Try public library': 'Try public library',
+  'UI controls': 'UI controls',
+  Version: 'Version',
+  'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
+    'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.',
+  'You are now authenticated with RetroAssembly.': 'You are now authenticated with RetroAssembly.',
+  'You selected an invalid directory as your ROMs directory':
+    'You selected an invalid directory as your ROMs directory',
+  'Your login status is expired. Please login again.':
+    'Your {{ loginName }} login status is expired. Please login again.',
+  'Your personal retro game collection cabinet': 'Your personal retro game collection cabinet',
+  'Your should choose a directory containing at least one of the above sub directories.':
+    'Your should choose a directory containing at least one of the above sub directories.',
+}
+
+export const en = { translation }

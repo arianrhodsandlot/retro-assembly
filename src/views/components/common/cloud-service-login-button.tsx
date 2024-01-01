@@ -3,6 +3,7 @@ import { clsx } from 'clsx'
 import mitt from 'mitt'
 import { type MouseEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { useAsyncExecute } from '../hooks/use-async-execute'
 import { BaseButton } from '../primitives/base-button'
@@ -35,6 +36,7 @@ export function CloudServiceLoginButton({
   showReturnHome = false,
   onLogin,
 }: CloudServiceLoginButtonProps) {
+  const { t } = useTranslation()
   const [authorizeUrlState] = useAsyncExecute(async () => await getAuthorizeUrl(cloudService))
   const authorizeWindow = useRef<Window | null>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
@@ -113,7 +115,7 @@ export function CloudServiceLoginButton({
             'icon-[logos--dropbox]': cloudService === 'dropbox',
           })}
         />
-        <span className='shrink-0'>Sign in with {cloudServiceMap[cloudService]}</span>
+        <span className='shrink-0'>{t('Sign in with', { service: cloudServiceMap[cloudService] })}</span>
         {showLoading ? <span className='icon-[line-md--loading-loop] h-5 w-5 shrink-0' /> : null}
       </BaseButton>
       {showReturnHome ? <ReturnToHomeButton /> : null}

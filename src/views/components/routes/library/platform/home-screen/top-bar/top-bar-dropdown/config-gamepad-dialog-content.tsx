@@ -1,8 +1,11 @@
 import { DialogClose } from '@radix-ui/react-dialog'
+import { useTranslation } from 'react-i18next'
 import { BaseButton } from '../../../../../../primitives/base-button'
 import { GamepadMapping } from '../gamepad-mapping'
 
 export function ConfigGamepadDialogContent() {
+  const { t } = useTranslation()
+
   return (
     <div>
       <GamepadMapping />
@@ -11,7 +14,7 @@ export function ConfigGamepadDialogContent() {
         <DialogClose asChild>
           <BaseButton styleType='primary'>
             <span className='icon-[mdi--close] h-5 w-5' />
-            Close
+            {t('Close')}
           </BaseButton>
         </DialogClose>
       </div>

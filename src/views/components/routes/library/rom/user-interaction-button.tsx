@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { BaseDialogContent } from '../../../primitives/base-dialog-content'
 import { isTouchDevice } from '../lib/utils'
 
@@ -6,6 +7,8 @@ interface UserInteractionButtonProps {
 }
 
 export function UserInteractionButton({ onUserInteract }: UserInteractionButtonProps) {
+  const { t } = useTranslation()
+
   return (
     <BaseDialogContent>
       <div className='flex-center flex-col'>
@@ -17,20 +20,21 @@ export function UserInteractionButton({ onUserInteract }: UserInteractionButtonP
           {isTouchDevice() ? (
             <>
               <span className='icon-[mdi--gesture-tap] mr-2 h-5 w-5 shrink-0' />
-              Tap here to launch the game
+              {t('Tap here to launch the game')}
             </>
           ) : (
             <>
               <span className='icon-[mdi--cursor-default-click] mr-2 h-5 w-5 shrink-0' />
-              Click here to launch the game
+              {t('Click here to launch the game')}
             </>
           )}
         </button>
         <div className='mt-2 flex max-w-xs text-xs text-rose-700'>
           <span className='icon-[mdi--lightbulb-on-outline] mr-2 h-4 w-4 shrink-0' />
           <div>
-            This is due to a limitation of the browser.
-            <br />A game can only run after the screen is tapped, rather than clicking a button on a gamepad.
+            {t('This is due to a limitation of the browser.')}
+            <br />
+            {t('A game can only run after the screen is tapped, rather than clicking a button on a gamepad.')}
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { AboutButton } from './about-button'
 import { ClearSiteDataButton } from './clear-site-data-button'
 import { ConfigGamepadButton } from './config-gamepad-button'
 import { ConfigKeyboardButton } from './config-keyboard-button'
+import { ConfigLanguageButton } from './config-language-button'
 import { InputHelpButton } from './input-help-button'
 
 export function TopBarDropdown() {
@@ -94,6 +95,7 @@ export function TopBarDropdown() {
         <InputHelpButton />
         <ConfigKeyboardButton />
         <ConfigGamepadButton />
+        <ConfigLanguageButton />
         <ClearSiteDataButton />
         <AboutButton />
       </div>

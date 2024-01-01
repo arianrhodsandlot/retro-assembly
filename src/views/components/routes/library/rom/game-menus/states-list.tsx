@@ -1,12 +1,14 @@
 import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAsync } from 'react-use'
 import { getStates } from '../../../../../../core'
 import { shouldFocusStatesListAtom } from './atoms'
 import { StateItem } from './state-item'
 
 export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }) {
+  const { t } = useTranslation()
   const [shouldFocusStatesList, setShouldFocusStatesList] = useAtom(shouldFocusStatesListAtom)
   const firstStateRef = useRef<HTMLButtonElement>(null)
   const state = useAsync(getStates)
@@ -32,7 +34,7 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
       ) : state.error ? (
         <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
           <span className='icon-[mdi--alert-circle-outline] mr-2 h-6 w-6' />
-          Failed to load state list
+          {t('Failed to load state list')}
         </div>
       ) : state?.value?.length ? (
         <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
@@ -44,7 +46,7 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
         <div className='flex h-full items-center pl-20 opacity-60'>
           <div className='flex items-center text-xl'>
             <span className='icon-[mdi--file-hidden] mr-2 h-6 w-6' />
-            There are no saved states for current game.
+            {t('There are no saved states for current game.')}
           </div>
         </div>
       )}

@@ -1,11 +1,13 @@
 import { useSetAtom } from 'jotai'
 import { type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { start, updatePreference, validateRomDirectory } from '../../../../../core'
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
 import { BaseButton } from '../../../primitives/base-button'
 import { isInvalidDialogOpenAtom } from './atoms'
 
 export function LocalButton({ children }: { children?: ReactNode } = {}) {
+  const { t } = useTranslation()
   const setIsInvalidDialogOpen = useSetAtom(isInvalidDialogOpenAtom)
   const { navigateToLibrary } = useRouterHelpers()
 
@@ -29,7 +31,7 @@ export function LocalButton({ children }: { children?: ReactNode } = {}) {
     return (
       <BaseButton className='w-60' onClick={selectLocalDirectory} styleType='primary'>
         <span className='icon-[flat-color-icons--opened-folder] h-5 w-5' />
-        select a directory
+        {t('select a directory')}
       </BaseButton>
     )
   }

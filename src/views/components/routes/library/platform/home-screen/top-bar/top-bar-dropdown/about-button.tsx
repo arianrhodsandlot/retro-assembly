@@ -1,10 +1,13 @@
 import { DialogClose } from '@radix-ui/react-dialog'
+import { useTranslation } from 'react-i18next'
 import logo from '../../../../../../../../assets/logo/logo-512x512.png'
 import { BaseButton } from '../../../../../../primitives/base-button'
 import { BaseDialogTrigger } from '../../../../../../primitives/base-dialog-trigger'
 import { TopBarButton } from '../top-bar-button'
 
 export function AboutButton() {
+  const { t } = useTranslation()
+
   return (
     <BaseDialogTrigger
       content={
@@ -13,10 +16,12 @@ export function AboutButton() {
             <img alt='RetroAssembly' className='h-12 w-12 rounded-full' src={logo} />
             <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider'>RetroAssemly</div>
           </div>
-          <div className='mt-4 text-center text-sm'>A personal retro game collection cabinet in your browser</div>
+          <div className='mt-4 text-center text-sm'>
+            {t('A personal retro game collection cabinet in your browser')}
+          </div>
           <div className='flex-center mt-6 flex-col gap-2 text-xs'>
             <div>
-              <span>Version</span>
+              <span>{t('Version')}</span>
               <a
                 className='ml-1 underline'
                 href={`https://github.com/arianrhodsandlot/retro-assembly/tree/${GIT_VERSION}`}
@@ -27,7 +32,7 @@ export function AboutButton() {
               </a>
             </div>
             <div>
-              <span>Last Updated</span>
+              <span>{t('Last Updated')}</span>
               <span className='ml-1'>{BUILD_TIME}</span>
             </div>
           </div>
@@ -40,7 +45,7 @@ export function AboutButton() {
           </div>
           <div className='flex-center mb-2 mt-1 gap-2 text-xs'>
             <a className='underline' href='/privacy-policy.html' target='_blank'>
-              Privacy Policy
+              {t('Privacy Policy')}
             </a>
           </div>
           <div className='flex-center mb-2 mt-1 gap-2 text-xs'>
@@ -82,7 +87,7 @@ export function AboutButton() {
             <DialogClose asChild>
               <BaseButton styleType='primary'>
                 <span className='icon-[mdi--hand-okay] h-5 w-5' />
-                Okay
+                {t('OK')}
               </BaseButton>
             </DialogClose>
           </div>
@@ -92,7 +97,7 @@ export function AboutButton() {
       <TopBarButton>
         <div className='flex items-center gap-2 px-4'>
           <span className='icon-[mdi--info] relative z-[1] h-8 w-8' />
-          About
+          {t('About')}
         </div>
       </TopBarButton>
     </BaseDialogTrigger>

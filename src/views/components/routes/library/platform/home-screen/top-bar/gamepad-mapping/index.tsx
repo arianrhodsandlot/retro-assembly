@@ -1,11 +1,13 @@
 import { clsx } from 'clsx'
 import { compact, find, reject, uniqBy } from 'lodash-es'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getGamepadMappings, updateGamepadMappings } from '../../../../../../../../core'
 import { BaseCallout } from '../../../../../../primitives/base-callout'
 import { GamepadMappingPanel } from './gamepad-mapping-panel'
 
 export function GamepadMapping() {
+  const { t } = useTranslation()
   const [gamepads, setGamepads] = useState<Gamepad[]>([])
   const [currentGamePadId, setCurrentGamePadId] = useState<string>()
   const [gamepadMappings, setGamepadMappings] = useState(getGamepadMappings())
@@ -88,7 +90,7 @@ export function GamepadMapping() {
           <div className='flex flex-col items-center justify-center'>
             <BaseCallout className='flex-center'>
               <span className='icon-[mdi--information-outline] mr-2 h-4 w-4' />
-              Connect your controller and press any button to begin!
+              {t('Connect your controller and press any button to begin')}
             </BaseCallout>
             <div className='py-4'>
               <span className='icon-[line-md--loading-loop] mt-4 h-10 w-10 text-rose-700' />

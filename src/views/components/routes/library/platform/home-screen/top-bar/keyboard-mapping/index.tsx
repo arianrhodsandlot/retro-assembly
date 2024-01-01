@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getDefaultKeyboardMappings, getKeyboardMappings, updateKeyboardMappings } from '../../../../../../../../core'
 import { KeyboardMappingPanel } from './keyboard-mapping-panel'
 
 const defaultKeyboardMapping = getDefaultKeyboardMappings()
 
 export function KeyboardMapping() {
+  const { t } = useTranslation()
   const [keyboardMappings, setKeyboardMappings] = useState(getKeyboardMappings())
 
   function updateKeyboardMapping(mapping) {
@@ -25,7 +27,7 @@ export function KeyboardMapping() {
         <div>
           <div className='flex w-full items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap rounded bg-rose-800 px-4 py-2 text-sm text-white'>
             <span className='icon-[mdi--keyboard] h-5 w-5' />
-            Keyboard
+            {t('Keyboard')}
           </div>
           <KeyboardMappingPanel
             mapping={keyboardMappings[0].mapping}

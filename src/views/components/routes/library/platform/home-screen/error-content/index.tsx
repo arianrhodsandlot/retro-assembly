@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { isUsingDropbox, isUsingGoogleDrive, isUsingOnedrive } from '../../../../../../../core'
 import { ReturnToHomeButton } from '../../../../../common/return-to-home-button'
 import { BaseButton } from '../../../../../primitives/base-button'
@@ -13,6 +14,8 @@ function isInvalidTokenError(error: any) {
 }
 
 export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => void }) {
+  const { t } = useTranslation()
+
   if (error instanceof DOMException && error.name === 'SecurityError') {
     return (
       <BaseDialogContent>
@@ -50,12 +53,12 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
             <div>
               <span className='icon-[mdi--bell] mr-2 mt-[2px] h-4 w-4 ' />
             </div>
-            <div>Failed to load games.</div>
+            <div>{t('Failed to load games.')}</div>
           </div>
         </BaseCallout>
         <BaseButton className='mt-2' onClick={onSolve} styleType='primary'>
           <span className='icon-[mdi--reload] h-6 w-6' />
-          Retry
+          {t('Retry')}
         </BaseButton>
         <ReturnToHomeButton />
       </div>

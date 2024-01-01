@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isCloudServiceEnabled, isLocalDirectorySelectorEnabled } from '../../../../../core'
 import { SpatialNavigation } from '../../../../lib/spatial-navigation'
 import { BaseButton } from '../../../primitives/base-button'
@@ -31,6 +32,7 @@ const directoryInstructionToolTip = (
 )
 
 export function ContinueModalContent() {
+  const { t } = useTranslation()
   const [isInvalidDialogOpen, setIsInvalidDialogOpenAtom] = useAtom(isInvalidDialogOpenAtom)
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export function ContinueModalContent() {
             <div>
               <div className='flex-center gap-2 text-center font-bold'>
                 <span className='icon-[mdi--cube-outline] h-6 w-6' />
-                Select a local directory
+                {t('Select a local directory')}
                 {directoryInstructionToolTip}
               </div>
               <div className='mt-4 flex justify-center'>
@@ -58,11 +60,11 @@ export function ContinueModalContent() {
             <div className='flex flex-col items-center'>
               <div className='flex-center gap-2 text-center font-bold'>
                 <span className='icon-[mdi--cube-outline] h-6 w-6' />
-                Select a cloud directory
+                {t('Select a cloud directory')}
                 {directoryInstructionToolTip}
               </div>
               <div className='mt-2 flex items-start justify-center text-xs'>
-                <div>Synchronize your games and saves across multiple devices.</div>
+                <div>{t('Synchronize your games and saves across multiple devices.')}</div>
               </div>
               <div className='mt-4 flex w-60 flex-col justify-between gap-y-3'>
                 {isOnedriveEnabled ? (
@@ -70,7 +72,7 @@ export function ContinueModalContent() {
                     <OnedriveButton />
                     <div className='-mt-2 flex items-start gap-2 text-xs'>
                       <span className='icon-[mdi--alert-box-outline] h-4 w-4 shrink-0' />
-                      May need to login again after 24h.
+                      {t('May need to login again after 24h.')}
                     </div>
                   </>
                 ) : null}
@@ -80,7 +82,7 @@ export function ContinueModalContent() {
                     <GoogleDriveButton />
                     <div className='-mt-2 flex items-start gap-2 text-xs'>
                       <span className='icon-[mdi--alert-decagram-outline] h-4 w-4 shrink-0' />
-                      Not encouraged because it only provides limited usage(100 users) for unverified apps.
+                      {t('Not encouraged because it only provides limited usage(100 users) for unverified apps.')}
                     </div>
                   </>
                 ) : null}
@@ -92,13 +94,14 @@ export function ContinueModalContent() {
         <div className='m-auto mt-10 px-12 text-rose-200' hidden>
           <div className='flex items-center font-bold'>
             <span className='icon-[mdi--bell] mr-2 h-4 w-4' />
-            Notice:
+            {t('Notice:')}
           </div>
           <div className='mt-2 pl-6'>
-            The directory you choose should match a certain structure:
+            {t('The directory you choose should match a certain structure:')}
             <br />
-            The ROMs of retro games should be grouped in seperate directories, and the directories should be named in
-            these conviention:
+            {t(
+              'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:',
+            )}
             <ul className='list-disc pl-4'>
               <li className='list-item'>NES/Famicom - nes</li>
               <li className='list-item'>SNES/Super Famicom - snes</li>
@@ -110,7 +113,7 @@ export function ContinueModalContent() {
         <div className='max-w-lg text-rose-700'>
           <div className='flex items-center font-bold'>
             <span className='icon-[mdi--alert] mr-2 h-5 w-5 shrink-0 text-yellow-400' />
-            <h4>You selected an invalid directory as your ROMs directory</h4>
+            <h4>{t('You selected an invalid directory as your ROMs directory')}</h4>
           </div>
 
           <div className='mt-4'>
@@ -120,7 +123,7 @@ export function ContinueModalContent() {
           <div className='mt-4 text-center'>
             <BaseButton className='m-auto' onClick={() => setIsInvalidDialogOpenAtom(false)} styleType='primary'>
               <span className='icon-[mdi--hand-okay] h-5 w-5' />
-              OK
+              {t('OK')}
             </BaseButton>
           </div>
         </div>

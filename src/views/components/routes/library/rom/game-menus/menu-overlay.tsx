@@ -1,6 +1,7 @@
 import { useAsync as useAsyncFn } from '@react-hookz/web'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { loadGameState, restartGame, resumeGame, saveGameState } from '../../../../../../core'
 import { SpatialNavigation } from '../../../../../lib/spatial-navigation'
 import { BouncingEllipsis } from '../../../../common/bouncing-ellipsis'
@@ -11,6 +12,7 @@ import { MenuItems } from './menu-items'
 import { MenuTips } from './menu-tips'
 
 export function MenuOverlay() {
+  const { t } = useTranslation()
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const { exit } = useExit()
 
@@ -61,11 +63,11 @@ export function MenuOverlay() {
     <div className='menu-overlay h-full w-full py-10' data-testid='menu-overlay'>
       {saveStateState.status === 'loading' ? (
         <LoadingScreen>
-          Saving <BouncingEllipsis /> Please do not turn off your device!
+          {t('Saving')} <BouncingEllipsis /> {t('Please do not turn off your device!')}
         </LoadingScreen>
       ) : loadStateState.status === 'loading' ? (
         <LoadingScreen>
-          Loading selected state
+          {t('Loading selected state')}
           <BouncingEllipsis />
         </LoadingScreen>
       ) : (

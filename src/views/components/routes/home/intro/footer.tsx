@@ -1,9 +1,13 @@
+import { useTranslation } from 'react-i18next'
+
 export function Footer() {
+  const { t } = useTranslation()
+
   return (
     <>
       <div className='flex-center gap-2 text-xs'>
         <div>
-          <span>Version</span>
+          <span>{t('Version')}</span>
           <a
             className='ml-1 underline'
             href={`https://github.com/arianrhodsandlot/retro-assembly/tree/${GIT_VERSION}`}
@@ -15,7 +19,7 @@ export function Footer() {
         </div>
         ·
         <div>
-          <span>Last Updated</span>
+          <span>{t('Last Updated')}</span>
           <span className='ml-1'>{BUILD_TIME}</span>
         </div>
       </div>
@@ -27,7 +31,7 @@ export function Footer() {
         </a>
         ·
         <a className='underline' href='/privacy-policy.html' target='_blank'>
-          Privacy Policy
+          {t('Privacy Policy')}
         </a>
         ·
         <a

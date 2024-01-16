@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash-es'
 import { useSyncExternalStore } from 'react'
 
 function subscribe(callback) {
@@ -9,13 +10,18 @@ function subscribe(callback) {
   }
 }
 
+let snapshot: (Gamepad | null)[]
 function getSnapshot() {
   const gamepads = navigator.getGamepads?.()
-  const gamepad = gamepads?.[0]
-  const connected = Boolean(gamepad)
-  return { gamepads, gamepad, connected }
+  if (!isEqual(gamepads, snapshot)) {
+    snapshot = gamepads
+  }
+  return snapshot
 }
 
 export function useGamepads() {
-  return useSyncExternalStore(subscribe, getSnapshot)
+  const gamepads = useSyncExternalStore(subscribe, getSnapshot)
+  const gamepad = gamepads?.[0]
+  const connected = Boolean(gamepad)
+  return { connected, gamepads, gamepad }
 }

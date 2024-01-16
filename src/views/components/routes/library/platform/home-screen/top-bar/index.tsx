@@ -4,7 +4,7 @@ import { platformsAtom } from '../atoms'
 import { Logo } from './logo'
 import { PlatformNavigation } from './platform-navigation'
 import { TopBarDropdown } from './top-bar-dropdown'
-import { TopbarLink } from './topbar-link'
+import { TopBarLink } from './top-bar-link'
 
 export function TopBar() {
   const platforms = useAtomValue(platformsAtom)
@@ -18,7 +18,7 @@ export function TopBar() {
       <Logo />
       {platforms?.length ? <PlatformNavigation /> : <div className='flex-1' />}
       <TopBarDropdown />
-      {params.library === 'public' ? <TopbarLink /> : null}
+      {params.library === 'public' ? <TopBarLink /> : null}
     </div>
   )
 }

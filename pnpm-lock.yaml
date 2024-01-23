@@ -62,6 +62,9 @@ dependencies:
   goodcodes-parser:
     specifier: 2.5.0
     version: 2.5.0
+  hono:
+    specifier: ^3.12.6
+    version: 3.12.6
   i18next:
     specifier: 23.7.13
     version: 23.7.13
@@ -1860,8 +1863,8 @@ packages:
       '@types/gapi.client.discovery-v1': 0.0.4
     dev: true
 
-  /@maxim_mazurok/gapi.client.drive-v3@0.0.20231217:
-    resolution: {integrity: sha512-1lkVnRLCMym0f3ZvJQJBSye9GiTDS6VFJMzEdu3KEQt4LLAN4H4gTtBww8x/ucajTfB0rJevFRKjO1MZHnkElQ==}
+  /@maxim_mazurok/gapi.client.drive-v3@0.0.20240118:
+    resolution: {integrity: sha512-hCBTOZ0Tf1iWEVB3i0iyp4WRt7oTQFB/NpNl/ApI6YIRlv0RiiaQrhU9GG3kbpkGciLaeIJsNVt9Po0+chAq/A==}
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
@@ -2739,7 +2742,7 @@ packages:
   /@types/gapi.client.drive-v3@0.0.4:
     resolution: {integrity: sha512-jE37dJ0EzAdY0aJPFOp20xmec/aO0P4HtUIA9k07RMPyedFDOcuMlSac1r0PklwQdgXF7BHaMoObNHNAnwSQUQ==}
     dependencies:
-      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20231217
+      '@maxim_mazurok/gapi.client.drive-v3': 0.0.20240118
     dev: true
 
   /@types/gapi.client@1.0.8:
@@ -4734,6 +4737,11 @@ packages:
     dependencies:
       function-bind: 1.1.2
     dev: true
+
+  /hono@3.12.6:
+    resolution: {integrity: sha512-nnLMJbBA8k+tW8XD1Xt0BfNmJswppYF2pSOVo5U3DdU72SPYUjFkPg7/Q9KfkNcsrXzxFdJQ00JYjPGancmOOA==}
+    engines: {node: '>=16.0.0'}
+    dev: false
 
   /hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}

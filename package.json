@@ -30,6 +30,7 @@
     "framer-motion": "10.16.16",
     "github-fork-ribbon-css": "0.2.3",
     "goodcodes-parser": "2.5.0",
+    "hono": "^3.12.6",
     "i18next": "23.7.13",
     "i18next-browser-languagedetector": "7.2.0",
     "idb": "8.0.0",

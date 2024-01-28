@@ -96,6 +96,8 @@ export class Emulator {
       style: this.style,
       element: this.canvas,
       core: this.core,
+      // experimental shader support
+      shader: localStorage._shader,
       rom,
       bios,
       retroarchConfig,

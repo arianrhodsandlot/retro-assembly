@@ -3,7 +3,7 @@ import logo from '../../../../../../../assets/logo/logo-192x192.png'
 
 export function Logo() {
   return (
-    <Link href='/' replace>
+    <Link asChild href='/' replace>
       <a
         className='flex items-center px-8 text-center font-["Fredoka_Variable",sans-serif] text-lg font-bold tracking-wider'
         href='/'

@@ -6,9 +6,11 @@ export async function getStates() {
   const { emulator, fileSystem } = globalContext
   if (!fileSystem) {
     throw new Error('fileSystem is not valid')
-  } else if (!emulator) {
+  }
+  if (!emulator) {
     throw new Error('emulator is not valid')
-  } else if (!emulator.rom?.fileAccessor.name) {
+  }
+  if (!emulator.rom?.fileAccessor.name) {
     throw new Error('emulator rom is not valid')
   }
 

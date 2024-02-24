@@ -55,11 +55,11 @@ export class PreferenceParser {
   }
 
   static onUpdated(callback: (params: { name: string; values: PreferenceValues }) => void) {
-    this.emitter.on('updated', callback)
+    PreferenceParser.emitter.on('updated', callback)
   }
 
   static offUpdated(callback: (params: { name: string; values: PreferenceValues }) => void) {
-    this.emitter.off('updated', callback)
+    PreferenceParser.emitter.off('updated', callback)
   }
 
   get(name: Exclude<PreferenceName, 'gamepadMappings' | 'keyboardMappings'>): string

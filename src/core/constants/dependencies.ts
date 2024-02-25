@@ -2,7 +2,7 @@ export const cdnHost = 'https://cdn.jsdelivr.net'
 
 export const vendorsInfo = {
   name: 'retro-assembly-vendors',
-  version: '1.16.0-20230923091356',
+  version: '1.17.0-20240225183742',
 }
 
 export const libretroDatabaseInfo = {

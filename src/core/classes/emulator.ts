@@ -92,7 +92,7 @@ export class Emulator {
     const bios = this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []
     const retroarchConfig = { ...getRetroarchConfig(), ...this.retroarchConfig }
     const retroarchCoreConfig = { ...defaultRetroarchCoresConfig[this.core], ...this.coreConfig?.[this.core] }
-    this.nostalgist = await Nostalgist.launch({
+    const launchOptions = {
       style: this.style,
       element: this.canvas,
       core: this.core,
@@ -103,22 +103,25 @@ export class Emulator {
       retroarchConfig,
       retroarchCoreConfig,
       respondToGlobalEvents: false,
-
       async waitForInteraction({ done }) {
         await waitForUserInteraction?.()
         done()
       },
-
-      resolveCoreJs(core) {
-        const corePath = `dist/cores/${core}_libretro.js`
-        return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
-      },
-
-      resolveCoreWasm(core) {
-        const corePath = `dist/cores/${core}_libretro.wasm`
-        return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
-      },
-    })
+    }
+    const vendorCores = ['a5200', 'fbneo', 'prosystem', 'stella2014']
+    if (vendorCores.includes(launchOptions.core)) {
+      Object.assign(launchOptions, {
+        resolveCoreJs(core: string) {
+          const corePath = `dist/cores/${core}_libretro.js`
+          return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
+        },
+        resolveCoreWasm(core: string) {
+          const corePath = `dist/cores/${core}_libretro.wasm`
+          return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
+        },
+      })
+    }
+    this.nostalgist = await Nostalgist.launch(launchOptions)
     this.setupDOM()
     this.processStatus = 'ready'
   }

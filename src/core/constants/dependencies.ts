@@ -7,10 +7,10 @@ export const vendorsInfo = {
 
 export const libretroDatabaseInfo = {
   name: 'libretro/libretro-database',
-  version: 'e3b5cb0',
+  version: '8bca7df',
 }
 
 export const fbneoInfo = {
   name: 'libretro/FBNeo',
-  version: '9726e61',
+  version: '4a555e0',
 }

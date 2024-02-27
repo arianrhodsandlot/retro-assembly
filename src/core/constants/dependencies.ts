@@ -18,8 +18,7 @@ const cdnHosts = [
   'https://gcore.jsdelivr.net',
   'https://fastly.jsdelivr.net',
   'https://testingcf.jsdelivr.net',
-  'https://jsd.cdn.zzko.cn',
-  'https://jsd.lihaoyu.cn',
+  'https://www.jsdelivr.ren',
 ]
 
 let [selectedCDNHost] = cdnHosts

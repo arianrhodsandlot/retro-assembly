@@ -36,9 +36,9 @@ export function PlatformNavigationItem({ platform, highlighted = false }: Platfo
 
   return (
     // @ts-expect-error Link can accept ref
-    <Link href={`${linkToPlatform(platform.name)}`} ref={buttonRef} replace>
+    <Link className='flex-shrink-0' href={`${linkToPlatform(platform.name)}`} ref={buttonRef} replace>
       <TopBarButton
-        className='flex-shrink-0 px-8'
+        className='px-8'
         highlighted={highlighted}
         key={platform.name}
         onFocus={onFocus}

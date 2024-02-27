@@ -1,6 +1,6 @@
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { parse } from 'path-browserify'
-import { cdnHost, fbneoInfo, libretroDatabaseInfo } from '../constants/dependencies'
+import { fbneoInfo, getCDNHost, libretroDatabaseInfo } from '../constants/dependencies'
 import { platformFullNameMap } from '../constants/platforms'
 import { blobToBuffer } from '../helpers/file'
 import { http } from '../helpers/http'
@@ -8,11 +8,11 @@ import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
 import { type Entry } from './libretrodb/types'
 
-const arcadeGameListUrl = `${cdnHost}/gh/${fbneoInfo.name}@${fbneoInfo.version}/gamelist.txt`
+const arcadeGameListUrl = `${getCDNHost()}/gh/${fbneoInfo.name}@${fbneoInfo.version}/gamelist.txt`
 
 function getDbUrl(platformFullName: string) {
   const dbPath = `rdb/${platformFullName}.rdb`
-  return `${cdnHost}/gh/${libretroDatabaseInfo.name}@${libretroDatabaseInfo.version}/${dbPath}`
+  return `${getCDNHost()}/gh/${libretroDatabaseInfo.name}@${libretroDatabaseInfo.version}/${dbPath}`
 }
 
 function normalizeGameName(originalName: string) {

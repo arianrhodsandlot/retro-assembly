@@ -1,11 +1,9 @@
 import { noop } from 'lodash-es'
-import { cdnHost } from '../../constants/dependencies'
+import { getCDNHost } from '../../constants/dependencies'
 import { retrobrewsGames } from '../../constants/retrobrews'
 import { http } from '../../helpers/http'
 import { FileAccessor } from './file-accessor'
 import { type FileSystemProvider } from './file-system-provider'
-
-const cdnBaseUrl = `${cdnHost}/gh`
 
 export class DemoProvider implements FileSystemProvider {
   static getSingleton() {
@@ -36,6 +34,7 @@ export class DemoProvider implements FileSystemProvider {
     }
 
     const encodedFile = encodeURIComponent(file)
+    const cdnBaseUrl = `${getCDNHost()}/gh`
     const url = `${cdnBaseUrl}/${romRepo}@master/${encodedFile}`
     return await http(url).blob()
   }

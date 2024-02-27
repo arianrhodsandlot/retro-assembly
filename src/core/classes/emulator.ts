@@ -1,6 +1,6 @@
 import delay from 'delay'
 import { Nostalgist } from 'nostalgist'
-import { cdnHost, vendorsInfo } from '../constants/dependencies'
+import { getCDNHost, vendorsInfo } from '../constants/dependencies'
 import { platformCoreMap } from '../constants/platforms'
 import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
 import { type Rom } from './rom'
@@ -113,11 +113,11 @@ export class Emulator {
       Object.assign(launchOptions, {
         resolveCoreJs(core: string) {
           const corePath = `dist/cores/${core}_libretro.js`
-          return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
+          return `${getCDNHost()}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
         },
         resolveCoreWasm(core: string) {
           const corePath = `dist/cores/${core}_libretro.wasm`
-          return `${cdnHost}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
+          return `${getCDNHost()}/npm/${vendorsInfo.name}@${vendorsInfo.version}/${corePath}`
         },
       })
     }

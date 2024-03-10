@@ -95,8 +95,8 @@ export function getRetroarchConfig() {
   const inputConfig = getEmptyInputConfig()
   if (compact(gamepads).length > 0) {
     for (const [index, gamepad] of gamepads.entries()) {
-      const mapping = gamepadMappingsMap.get(gamepad?.id ?? '')
-      if (mapping && gamepad) {
+      if (gamepad) {
+        const mapping = gamepadMappingsMap.get(gamepad.id) || gamepadMappingsMap.get('')
         for (const codeKey in mapping) {
           let buttonName = mapping[codeKey]
           // eslint-disable-next-line max-depth

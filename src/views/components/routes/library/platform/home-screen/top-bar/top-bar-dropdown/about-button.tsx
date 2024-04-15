@@ -14,7 +14,7 @@ export function AboutButton() {
         <div className='w-72 text-rose-700'>
           <div className='flex-center m-auto gap-4 font-bold'>
             <img alt='RetroAssembly' className='h-12 w-12 rounded-full' src={logo} />
-            <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider'>RetroAssemly</div>
+            <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider'>RetroAssembly</div>
           </div>
           <div className='mt-4 text-center text-sm'>
             {t('A personal retro game collection cabinet in your browser')}

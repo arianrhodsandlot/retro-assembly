@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export function BaseCallout({ className, children }: { className?: string; children: ReactNode }) {
   return (

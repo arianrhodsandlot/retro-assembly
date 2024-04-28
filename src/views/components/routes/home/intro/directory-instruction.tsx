@@ -14,18 +14,18 @@ export function DirectoryInstruction() {
       {t('Here is an example:')}
       <BaseCallout className='my-4'>
         <pre className='flex items-center rounded bg-rose-300 px-2 py-1 text-xs text-rose-100'>
-          <span className='icon-[mdi--hand-pointing-down] mr-1 h-4 w-4' />
+          <span className='icon-[mdi--hand-pointing-down] mr-1 size-4' />
           {t('Choose one like this!')}
         </pre>
         <div className='text-xs'>
           <div className='flex items-center'>
-            <span className='icon-[mdi--folder-open] mr-2 h-6 w-6 text-rose-500' />
+            <span className='icon-[mdi--folder-open] mr-2 size-6 text-rose-500' />
             roms
           </div>
           <div className='ml-2 flex flex-wrap gap-x-4'>
             {supportedSystemNames.map((name) => (
               <div className='flex items-center' key={name}>
-                <span className='icon-[mdi--folder] mr-1 h-6 w-6 text-rose-500' />
+                <span className='icon-[mdi--folder] mr-1 size-6 text-rose-500' />
                 {name}
               </div>
             ))}

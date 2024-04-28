@@ -25,8 +25,8 @@ export function KeyboardMapping() {
     <div>
       <div className='mt-4 flex flex-col gap-8'>
         <div>
-          <div className='flex w-full items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap rounded bg-rose-800 px-4 py-2 text-sm text-white'>
-            <span className='icon-[mdi--keyboard] h-5 w-5' />
+          <div className='flex w-full items-center gap-2 truncate rounded bg-rose-800 px-4 py-2 text-sm text-white'>
+            <span className='icon-[mdi--keyboard] size-5' />
             {t('Keyboard')}
           </div>
           <KeyboardMappingPanel

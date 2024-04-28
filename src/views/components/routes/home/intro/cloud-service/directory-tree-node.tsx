@@ -3,9 +3,9 @@ import { clsx } from 'clsx'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type CloudService } from '../../../../../../core'
+import type { CloudService } from '../../../../../../core'
 import { directoyTreeAtom } from './atoms'
-import { type TreeNode } from './types'
+import type { TreeNode } from './types'
 import { toggleNodeExpanded } from './utils'
 
 interface DirectoryTreeNodeParams {
@@ -47,14 +47,14 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
       >
         {node.isDirectory ? (
           node.expanded ? (
-            <span className='icon-[mdi--folder-open] mr-2 h-6 w-6 text-rose-500' />
+            <span className='icon-[mdi--folder-open] mr-2 size-6 text-rose-500' />
           ) : node.hasChildren ? (
-            <span className='icon-[mdi--folder] mr-2 h-6 w-6 text-rose-500' />
+            <span className='icon-[mdi--folder] mr-2 size-6 text-rose-500' />
           ) : (
-            <span className='icon-[mdi--folder-alert] mr-2 h-6 w-6 text-rose-500' />
+            <span className='icon-[mdi--folder-alert] mr-2 size-6 text-rose-500' />
           )
         ) : (
-          <span className='icon-[mdi--file] mr-2 h-6 w-6 text-rose-500' />
+          <span className='icon-[mdi--file] mr-2 size-6 text-rose-500' />
         )}
 
         <div className='group flex min-w-0 flex-1'>
@@ -64,7 +64,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
             onClick={onClickDirectoryName}
             title={node.name}
           >
-            <div className='overflow-hidden text-ellipsis whitespace-nowrap'>{node.name}</div>
+            <div className='truncate'>{node.name}</div>
             {!node.hasChildren && node.isDirectory ? (
               <div className='ml-2  text-xs text-gray-300 opacity-0 group-hover:opacity-100'>
                 {t('an empty directory')}
@@ -79,7 +79,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
               )}
               onClick={() => onSelect(node.path)}
             >
-              <span className='icon-[mdi--check] mr-1 h-4 w-4' />
+              <span className='icon-[mdi--check] mr-1 size-4' />
               {t('Proceed')}
             </button>
           ) : null}
@@ -87,7 +87,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
       </div>
 
       {state.status === 'loading' ? (
-        <span className='icon-[line-md--loading-loop] my-2 ml-10 h-6 w-6 text-rose-700' />
+        <span className='icon-[line-md--loading-loop] my-2 ml-10 size-6 text-rose-700' />
       ) : null}
 
       {node.expanded ? (

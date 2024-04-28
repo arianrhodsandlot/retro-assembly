@@ -1,4 +1,4 @@
-import { type Resource } from 'i18next'
+import type { Resource } from 'i18next'
 import { ar } from './ar'
 import { de } from './de'
 import { en } from './en'

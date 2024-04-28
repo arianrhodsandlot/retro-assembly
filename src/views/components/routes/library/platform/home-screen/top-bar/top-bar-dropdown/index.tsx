@@ -82,12 +82,12 @@ export function TopBarDropdown() {
   return (
     <div onBlurCapture={onBlurCapture} onFocusCapture={onFocusCapture} ref={elementRef}>
       <TopBarButton className='flex aspect-square items-center justify-center' onClick={toggleDropdown}>
-        <span className='icon-[mdi--menu] relative z-[1] h-8 w-8' />
+        <span className='icon-[mdi--menu] relative z-[1] size-8' />
       </TopBarButton>
 
       <div
         className={clsx(
-          'absolute right-0 top-16 -mt-[1px] flex origin-top transform-gpu flex-col justify-stretch border border-r-0 border-t-0 border-b-black border-l-black bg-rose-700 transition-transform',
+          'absolute right-0 top-16 -mt-px flex origin-top transform-gpu flex-col justify-stretch border border-r-0 border-t-0 border-b-black border-l-black bg-rose-700 transition-transform',
           { 'scale-y-0': !isDropdownOpen },
         )}
         ref={dropdownItemsContainerRef}

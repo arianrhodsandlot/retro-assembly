@@ -15,28 +15,28 @@ export function IconShortcutButtons() {
       {isLocalDirectorySelectorEnabled() ? (
         <LocalButton>
           <IconShortcutButton type='local'>
-            <span className='icon-[flat-color-icons--opened-folder] h-4 w-4' />
+            <span className='icon-[flat-color-icons--opened-folder] size-4' />
           </IconShortcutButton>
         </LocalButton>
       ) : null}
       {isOnedriveEnabled ? (
         <OnedriveButton>
           <IconShortcutButton type='onedrive'>
-            <span className='icon-[logos--microsoft-onedrive] h-4 w-4' />
+            <span className='icon-[logos--microsoft-onedrive] size-4' />
           </IconShortcutButton>
         </OnedriveButton>
       ) : null}
       {isDropboxEnabled ? (
         <DropboxButton>
           <IconShortcutButton type='dropbox'>
-            <span className='icon-[logos--dropbox] h-4 w-4' />
+            <span className='icon-[logos--dropbox] size-4' />
           </IconShortcutButton>
         </DropboxButton>
       ) : null}
       {isGoogleDriveEnabled ? (
         <GoogleDriveButton>
           <IconShortcutButton type='google-drive'>
-            <span className='icon-[logos--google-drive] h-4 w-4' />
+            <span className='icon-[logos--google-drive] size-4' />
           </IconShortcutButton>
         </GoogleDriveButton>
       ) : null}

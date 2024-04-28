@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { TopBar } from './top-bar'
 
 const backgroundImage =

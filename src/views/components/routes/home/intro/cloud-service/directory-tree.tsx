@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { type CloudService } from '../../../../../../core'
+import type { CloudService } from '../../../../../../core'
 import { directoyTreeAtom } from './atoms'
 import { DirectoryTreeNode } from './directory-tree-node'
 

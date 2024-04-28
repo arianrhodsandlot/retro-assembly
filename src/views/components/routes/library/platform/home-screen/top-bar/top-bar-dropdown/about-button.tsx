@@ -13,7 +13,7 @@ export function AboutButton() {
       content={
         <div className='w-72 text-rose-700'>
           <div className='flex-center m-auto gap-4 font-bold'>
-            <img alt='RetroAssembly' className='h-12 w-12 rounded-full' src={logo} />
+            <img alt='RetroAssembly' className='size-12 rounded-full' src={logo} />
             <div className='font-["Fredoka_Variable",sans-serif] text-2xl tracking-wider'>RetroAssembly</div>
           </div>
           <div className='mt-4 text-center text-sm'>
@@ -55,7 +55,7 @@ export function AboutButton() {
               rel='noreferrer'
               target='_blank'
             >
-              <span className='icon-[simple-icons--gmail] mr-1 h-4 w-4' />
+              <span className='icon-[simple-icons--gmail] mr-1 size-4' />
             </a>
             <a
               className='flex-center gap-1'
@@ -63,7 +63,7 @@ export function AboutButton() {
               rel='noreferrer'
               target='_blank'
             >
-              <span className='icon-[simple-icons--github] mr-1 h-4 w-4' />
+              <span className='icon-[simple-icons--github] mr-1 size-4' />
             </a>
             <a
               className='hidden items-center justify-center gap-1'
@@ -71,7 +71,7 @@ export function AboutButton() {
               rel='noreferrer'
               target='_blank'
             >
-              <span className='icon-[simple-icons--discord] mr-1 h-4 w-4' />
+              <span className='icon-[simple-icons--discord] mr-1 size-4' />
             </a>
             <a
               className='hidden items-center justify-center gap-1'
@@ -79,14 +79,14 @@ export function AboutButton() {
               rel='noreferrer'
               target='_blank'
             >
-              <span className='icon-[simple-icons--x] mr-1 h-4 w-4' />
+              <span className='icon-[simple-icons--x] mr-1 size-4' />
             </a>
           </div>
 
           <div className='flex-center mt-8 gap-5'>
             <DialogClose asChild>
               <BaseButton styleType='primary'>
-                <span className='icon-[mdi--hand-okay] h-5 w-5' />
+                <span className='icon-[mdi--hand-okay] size-5' />
                 {t('OK')}
               </BaseButton>
             </DialogClose>
@@ -96,7 +96,7 @@ export function AboutButton() {
     >
       <TopBarButton>
         <div className='flex items-center gap-2 px-4'>
-          <span className='icon-[mdi--info] relative z-[1] h-8 w-8' />
+          <span className='icon-[mdi--info] relative z-[1] size-8' />
           {t('About')}
         </div>
       </TopBarButton>

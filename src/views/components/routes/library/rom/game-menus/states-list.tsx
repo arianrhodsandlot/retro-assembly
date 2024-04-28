@@ -28,16 +28,16 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
   return (
     <div className={clsx('relative h-full py-20')}>
       {state.loading ? (
-        <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
-          <span className='icon-[line-md--loading-loop] h-12 w-12 text-white' />
+        <div className='flex h-full max-w-2xl items-center justify-center overflow-auto px-20'>
+          <span className='icon-[line-md--loading-loop] size-12 text-white' />
         </div>
       ) : state.error ? (
-        <div className='flex h-full max-w-2xl items-center justify-center overflow-auto pl-20 pr-20'>
-          <span className='icon-[mdi--alert-circle-outline] mr-2 h-6 w-6' />
+        <div className='flex h-full max-w-2xl items-center justify-center overflow-auto px-20'>
+          <span className='icon-[mdi--alert-circle-outline] mr-2 size-6' />
           {t('Failed to load state list')}
         </div>
       ) : state?.value?.length ? (
-        <div className='flex max-h-full flex-col overflow-auto pl-20 pr-20'>
+        <div className='flex max-h-full flex-col overflow-auto px-20'>
           {state?.value?.map((s, index) => (
             <StateItem key={s.id} onSelect={onSelect} ref={index === 0 ? firstStateRef : undefined} state={s} />
           ))}
@@ -45,7 +45,7 @@ export function StatesList({ onSelect }: { onSelect: (stateId: string) => void }
       ) : (
         <div className='flex h-full items-center pl-20 opacity-60'>
           <div className='flex items-center text-xl'>
-            <span className='icon-[mdi--file-hidden] mr-2 h-6 w-6' />
+            <span className='icon-[mdi--file-hidden] mr-2 size-6' />
             {t('There are no saved states for current game.')}
           </div>
         </div>

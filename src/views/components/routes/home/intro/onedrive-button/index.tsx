@@ -1,6 +1,6 @@
 import { useAsync } from '@react-hookz/web'
 import { useSetAtom } from 'jotai'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { start, updatePreference, validateRomDirectory } from '../../../../../../core'
 import { useRouterHelpers } from '../../../../hooks/use-router-helpers'
 import { BaseButton } from '../../../../primitives/base-button'
@@ -34,7 +34,7 @@ export function OnedriveButton({ children }: { children?: ReactNode } = {}) {
     >
       {children || (
         <BaseButton data-testid='select-onedrive-directory' styleType='primary'>
-          <span className='icon-[logos--microsoft-onedrive] h-5 w-5' />
+          <span className='icon-[logos--microsoft-onedrive] size-5' />
           OneDrive
         </BaseButton>
       )}

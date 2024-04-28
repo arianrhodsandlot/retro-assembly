@@ -1,7 +1,7 @@
 import { map, range, sample } from 'lodash-es'
 
 /** Generate a PKCE challenge verifier
- * @param length Length of the verifier
+ * @param length - Length of the verifier
  * @returns A random verifier `length` characters long
  */
 function generateVerifier(length: number): string {
@@ -10,7 +10,7 @@ function generateVerifier(length: number): string {
 }
 
 /** Generate a PKCE code challenge from a code verifier
- * @param codeVerifier
+ * @param codeVerifier - The code verifier string
  * @returns The base64 url encoded code challenge
  */
 async function generateChallenge(codeVerifier: string) {
@@ -29,7 +29,7 @@ async function generateChallenge(codeVerifier: string) {
 }
 
 /** Generate a PKCE challenge pair
- * @param length Length of the verifer (between 43-128). Defaults to 43.
+ * @param length - Length of the verifer (between 43-128). Defaults to 43.
  * @returns PKCE challenge pair
  */
 export async function generatePKCEChallenge(length?: number) {

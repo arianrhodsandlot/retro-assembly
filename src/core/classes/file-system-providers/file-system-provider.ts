@@ -1,4 +1,4 @@
-import { type FileAccessor } from './file-accessor'
+import type { FileAccessor } from './file-accessor'
 
 export interface FileSystemProvider {
   getContent: (path: string) => Promise<Blob>

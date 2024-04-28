@@ -1,6 +1,6 @@
-import { type Dropbox, type files } from 'dropbox'
+import type { Dropbox, files } from 'dropbox'
 import { Auth } from './auth'
-import { type CloudServiceClient } from './cloud-service-client'
+import type { CloudServiceClient } from './cloud-service-client'
 
 const hostUrl = `${location.protocol}//${location.host}`
 export class DropboxClient extends Auth implements CloudServiceClient {

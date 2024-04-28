@@ -6,7 +6,7 @@ import { blobToBuffer } from '../helpers/file'
 import { http } from '../helpers/http'
 import { parseGoodCode } from '../helpers/misc'
 import { Libretrodb } from './libretrodb/libretrodb'
-import { type Entry } from './libretrodb/types'
+import type { Entry } from './libretrodb/types'
 
 const arcadeGameListUrl = `${getCDNHost()}/gh/${fbneoInfo.name}@${fbneoInfo.version}/gamelist.txt`
 
@@ -112,7 +112,7 @@ export class GamesDatabase {
     }
 
     const gamelistText = await http(arcadeGameListUrl).text()
-    const disabledRomPrefix = /^(nes|md|msx|spec|gg|sms|fds|pce|cv)_/
+    const disabledRomPrefix = /^(?:nes|md|msx|spec|gg|sms|fds|pce|cv)_/
     const gamelist = gamelistText
       .split('\n')
       .slice(7)

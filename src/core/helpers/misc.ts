@@ -20,7 +20,7 @@ export function getCover({ platform, name, type = 'boxart' }) {
   const typeUrlPart = `Named_${capitalize(type)}s`
   const normalizedPlatformFullName = platformFullName.replaceAll(' ', '_')
   const pathPrefix = `gh/libretro-thumbnails/${normalizedPlatformFullName}@master`
-  const normalizedFileName = name.replaceAll(/&|\*|\/|:|`|<|>|\?|\\|\|"/g, '_')
+  const normalizedFileName = name.replaceAll(/[&*/:`<>?\\]|\|"/g, '_')
   const encode = encodeRFC3986URIComponent
   return `${getCDNHost()}/${pathPrefix}/${encode(typeUrlPart)}/${encode(normalizedFileName)}.png`
 }

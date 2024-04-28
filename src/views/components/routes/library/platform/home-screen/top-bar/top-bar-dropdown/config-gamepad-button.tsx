@@ -21,7 +21,7 @@ export function ConfigGamepadButton() {
     >
       <TopBarButton>
         <div className='flex items-center gap-2 px-4'>
-          <span className='icon-[mdi--controller] relative z-[1] h-8 w-8' />
+          <span className='icon-[mdi--controller] relative z-[1] size-8' />
           {t('Configure gamepads')}
         </div>
       </TopBarButton>

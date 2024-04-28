@@ -1,12 +1,11 @@
-import { type GoodCodeResult } from 'goodcodes-parser'
+import type { GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
 import { isAbsolute, parse, relative } from 'path-browserify'
 import { extPlatformMap, platformNamesSorted } from '../constants/platforms'
 import { getCover, parseGoodCode } from '../helpers/misc'
-import { type FileAccessor } from './file-system-providers/file-accessor'
-import { type ArcadeGameInfo } from './games-database'
-import { GamesDatabase } from './games-database'
-import { type Entry } from './libretrodb/types'
+import type { FileAccessor } from './file-system-providers/file-accessor'
+import { type ArcadeGameInfo , GamesDatabase } from './games-database'
+import type { Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 
 const allowedExtensions = new Set(['zip', 'bin', ...Object.keys(extPlatformMap)])

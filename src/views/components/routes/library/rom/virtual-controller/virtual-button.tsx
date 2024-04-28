@@ -55,7 +55,7 @@ export function VirtualButton({ name, onTap, children }: VirtualButtonProps) {
     <div
       aria-hidden
       className={clsx(
-        'flex h-full w-full touch-none select-none items-center justify-center text-sm font-extrabold uppercase',
+        'flex size-full touch-none select-none items-center justify-center text-sm font-extrabold uppercase',
         canPress && pressing ? 'bg-white text-black' : 'bg-transparent text-white/40',
       )}
       onContextMenu={onContextMenu}

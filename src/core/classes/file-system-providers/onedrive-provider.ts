@@ -3,7 +3,7 @@ import { http } from '../../helpers/http'
 import { OnedriveClient } from '../cloude-service/onedrive-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
-import { type FileSystemProvider } from './file-system-provider'
+import type { FileSystemProvider } from './file-system-provider'
 
 interface ListOptions {
   pageSize?: number

@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
-import { type MouseEvent } from 'react'
-import { type Rom } from '../../../../core'
+import type { MouseEvent } from 'react'
+import type { Rom } from '../../../../core'
 
 interface MaskAtomValue {
   event?: MouseEvent<HTMLButtonElement>

@@ -53,7 +53,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
   }, [setShowMenuOverlay])
 
   return (
-    <div className='flex h-full w-full flex-1 items-stretch justify-center py-10'>
+    <div className='flex size-full flex-1 items-stretch justify-center py-10'>
       <div
         className={clsx(
           'menu-overlay-buttons flex items-center border-r-4 transition-[width]',
@@ -69,7 +69,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             onFocus={() => setShowStateList(false)}
             ref={firstButtonRef}
           >
-            <span className='icon-[material-symbols--resume] mr-2 h-6 w-6 shrink-0' />
+            <span className='icon-[material-symbols--resume] mr-2 size-6 shrink-0' />
             {t('Resume')}
           </button>
 
@@ -79,7 +79,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             onClick={onRestart}
             onFocus={() => setShowStateList(false)}
           >
-            <span className='icon-[mdi--restart] mr-2 h-6 w-6 shrink-0' />
+            <span className='icon-[mdi--restart] mr-2 size-6 shrink-0' />
             {t('Restart')}
           </button>
 
@@ -90,7 +90,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             onClick={onSaveState}
             onFocus={() => setShowStateList(false)}
           >
-            <span className='icon-[mdi--content-save] mr-2 h-6 w-6 shrink-0' />
+            <span className='icon-[mdi--content-save] mr-2 size-6 shrink-0' />
             {t('Save state')}
           </button>
 
@@ -103,7 +103,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             onClick={() => setShouldFocusStatesList(true)}
             onFocus={onLoadStateButtonFocus}
           >
-            <span className='icon-[mdi--tray-arrow-down] mr-2 h-6 w-6 shrink-0' />
+            <span className='icon-[mdi--tray-arrow-down] mr-2 size-6 shrink-0' />
             {t('Load state')}
           </button>
 
@@ -114,12 +114,12 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             onClick={onSaveAndExit}
             onFocus={() => setShowStateList(false)}
           >
-            <span className='icon-[mdi--location-exit] mr-2 h-6 w-6 shrink-0' />
+            <span className='icon-[mdi--location-exit] mr-2 size-6 shrink-0' />
             {t('Save & exit')}
           </button>
 
           <button className={menuButtonClassNames} onClick={onExit} onFocus={() => setShowStateList(false)}>
-            <span className='icon-[mdi--exit-to-app] mr-2 h-6 w-6 shrink-0' />
+            <span className='icon-[mdi--exit-to-app] mr-2 size-6 shrink-0' />
             {t('Exit')}
           </button>
         </div>

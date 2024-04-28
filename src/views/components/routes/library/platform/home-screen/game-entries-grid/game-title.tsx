@@ -1,6 +1,6 @@
 import { uniq } from 'lodash-es'
 import { useAsync } from 'react-use'
-import { type Rom } from '../../../../../../../core'
+import type { Rom } from '../../../../../../../core'
 import { DistrictIcon } from './district-icon'
 
 export function GameTitle({ rom }: { rom: Rom }) {
@@ -17,7 +17,7 @@ export function GameTitle({ rom }: { rom: Rom }) {
 
   return (
     <div
-      className='relative w-full overflow-hidden bg-slate-200 px-1 py-1 text-center text-xs text-slate-400'
+      className='relative w-full overflow-hidden bg-slate-200 p-1 text-center text-xs text-slate-400'
       data-display-name={gameNameState.value ?? rom.displayName}
       title={title}
     >
@@ -27,7 +27,7 @@ export function GameTitle({ rom }: { rom: Rom }) {
 
       {revision !== undefined && (
         <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-          <span className='icon-[octicon--versions-16] h-4 w-4 align-middle' />
+          <span className='icon-[octicon--versions-16] size-4 align-middle' />
           {revision > 1 && (
             <span className='ml-2 h-4 align-middle font-["Noto_Mono",ui-monospace,monospace]'>{revision}</span>
           )}
@@ -36,15 +36,15 @@ export function GameTitle({ rom }: { rom: Rom }) {
 
       {version.alpha ? (
         <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-          <span className='icon-[mdi--alpha] h-4 w-4 align-middle' />
+          <span className='icon-[mdi--alpha] size-4 align-middle' />
         </span>
       ) : version.beta ? (
         <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-          <span className='icon-[mdi--beta] h-4 w-4 align-middle' />
+          <span className='icon-[mdi--beta] size-4 align-middle' />
         </span>
       ) : version.prototype ? (
         <span className='ml-2 inline-block rounded bg-gray-300 px-1'>
-          <span className='icon-[mdi--flask] h-4 w-4 align-middle' />
+          <span className='icon-[mdi--flask] size-4 align-middle' />
         </span>
       ) : null}
     </div>

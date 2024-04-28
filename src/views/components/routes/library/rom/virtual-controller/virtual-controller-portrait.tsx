@@ -11,8 +11,8 @@ export function VirtualControllerPortrait() {
 
   if (hideButtons) {
     return (
-      <div className='flex h-full w-full justify-end px-10 py-10 portrait:flex landscape:hidden'>
-        <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
+      <div className='flex size-full justify-end p-10 portrait:flex landscape:hidden'>
+        <div className='size-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
           <VirtualControllerToggleButton />
         </div>
       </div>
@@ -20,22 +20,22 @@ export function VirtualControllerPortrait() {
   }
 
   return (
-    <div className='flex h-full w-full flex-col px-2 py-10 portrait:flex landscape:hidden'>
+    <div className='flex size-full flex-col px-2 py-10 portrait:flex landscape:hidden'>
       <div className='flex items-end justify-between gap-10'>
         <div className='h-8 w-20 overflow-hidden rounded-md border-4 border-dashed border-white/50'>
           <VirtualButton name='select'>
-            <span className='icon-[mdi--minus-thick] h-6 w-6' />
+            <span className='icon-[mdi--minus-thick] size-6' />
           </VirtualButton>
         </div>
-        <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
+        <div className='size-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
           <VirtualControllerMenuButton />
         </div>
-        <div className='h-12 w-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
+        <div className='size-12 overflow-hidden rounded-full border-4 border-dashed border-white/50'>
           <VirtualControllerToggleButton />
         </div>
         <div className='h-8 w-20 overflow-hidden rounded-md border-4 border-dashed border-white/50'>
           <VirtualButton name='start'>
-            <span className='icon-[mdi--play] h-6 w-6' />
+            <span className='icon-[mdi--play] size-6' />
           </VirtualButton>
         </div>
       </div>

@@ -25,7 +25,7 @@ export function MainButtons() {
           )}
           onClick={onClickTryPublicLibrary}
         >
-          <span className='icon-[mdi--play] h-6 w-6' />
+          <span className='icon-[mdi--play] size-6' />
           <div className='ml-2'>{t('Try public library')}</div>
         </button>
         <div className='mt-2 text-xs text-white/60'>
@@ -48,7 +48,7 @@ export function MainButtons() {
               'hover:scale-105 hover:animate-[pulse-rose-border_1.5s_ease-in-out_infinite]',
             )}
           >
-            <span className='icon-[mdi--login] h-6 w-6' />
+            <span className='icon-[mdi--login] size-6' />
             <div className='ml-2'>{t('Continue with your own library')}</div>
           </button>
         </BaseDialogTrigger>

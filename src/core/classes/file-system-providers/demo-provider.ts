@@ -3,7 +3,7 @@ import { getCDNHost } from '../../constants/dependencies'
 import { retrobrewsGames } from '../../constants/retrobrews'
 import { http } from '../../helpers/http'
 import { FileAccessor } from './file-accessor'
-import { type FileSystemProvider } from './file-system-provider'
+import type { FileSystemProvider } from './file-system-provider'
 
 export class DemoProvider implements FileSystemProvider {
   static getSingleton() {

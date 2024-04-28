@@ -69,11 +69,11 @@ export function GamepadMapping() {
             <div key={gamepad.id}>
               <button
                 className={clsx(
-                  'flex w-full items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap rounded bg-rose-800 px-4 py-2 text-sm text-white',
+                  'flex w-full items-center gap-2 truncate rounded bg-rose-800 px-4 py-2 text-sm text-white',
                 )}
                 onClick={() => setCurrentGamePadId(gamepad.id)}
               >
-                <span className='icon-[mdi--controller] h-5 w-5' />
+                <span className='icon-[mdi--controller] size-5' />
                 {gamepad.id}
               </button>
               {currentGamePadId === gamepad.id ? (
@@ -89,11 +89,11 @@ export function GamepadMapping() {
         ) : (
           <div className='flex flex-col items-center justify-center'>
             <BaseCallout className='flex-center'>
-              <span className='icon-[mdi--information-outline] mr-2 h-4 w-4' />
+              <span className='icon-[mdi--information-outline] mr-2 size-4' />
               {t('Connect your controller and press any button to begin')}
             </BaseCallout>
             <div className='py-4'>
-              <span className='icon-[line-md--loading-loop] mt-4 h-10 w-10 text-rose-700' />
+              <span className='icon-[line-md--loading-loop] mt-4 size-10 text-rose-700' />
             </div>
           </div>
         )}

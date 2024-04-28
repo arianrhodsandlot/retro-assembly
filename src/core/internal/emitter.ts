@@ -1,5 +1,5 @@
 import mitt from 'mitt'
-import { type Rom } from '..'
+import type { Rom } from '..'
 import { PreferenceParser } from '../classes/preference-parser'
 import { addHistoryItem } from '../helpers/history'
 

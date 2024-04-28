@@ -175,7 +175,7 @@ export function HomeScreen() {
   if (showLoading) {
     return (
       <HomeScreenLayout>
-        <span className='icon-[line-md--loading-loop] h-16 w-16 text-rose-700' />
+        <span className='icon-[line-md--loading-loop] size-16 text-rose-700' />
       </HomeScreenLayout>
     )
   }
@@ -185,7 +185,7 @@ export function HomeScreen() {
   return (
     <HomeScreenLayout>
       {isRomsEmpty || (
-        <div className='h-full w-full' ref={gridContainerRef}>
+        <div className='size-full' ref={gridContainerRef}>
           <GameEntryGrid
             className='game-entry-grid absolute bottom-0 flex-1 !overflow-x-hidden'
             columnCount={columnCount}

@@ -1,7 +1,6 @@
 import { Dialog, DialogContent, DialogOverlay, DialogPortal, type DialogProps } from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
-import { type ReactNode } from 'react'
+import { type ReactNode , useEffect } from 'react'
 import { onCancel } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 

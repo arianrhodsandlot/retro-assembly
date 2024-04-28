@@ -1,6 +1,6 @@
 import { join } from 'path-browserify'
 import { type CloudService, listDirectory } from '../../../../../../core'
-import { type TreeNode } from './types'
+import type { TreeNode } from './types'
 
 interface ToggleNodeExpandedParams {
   node: TreeNode

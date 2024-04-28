@@ -32,10 +32,10 @@ export function MenuEntryButton({ onClick }: { onClick: () => void }) {
         >
           <div
             aria-hidden
-            className='mb-8 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white text-rose-700 shadow-xl'
+            className='mb-8 flex size-12 cursor-pointer items-center justify-center rounded-full bg-white text-rose-700 shadow-xl'
             onClick={onClick}
           >
-            <span className='icon-[mdi--cog-pause-outline] h-6 w-6' />
+            <span className='icon-[mdi--cog-pause-outline] size-6' />
           </div>
         </motion.div>
       ) : null}

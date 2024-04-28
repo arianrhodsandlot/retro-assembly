@@ -40,7 +40,7 @@ export function Footer() {
           rel='noreferrer'
           target='_blank'
         >
-          <span className='icon-[simple-icons--gmail] mr-1 h-4 w-4' />
+          <span className='icon-[simple-icons--gmail] mr-1 size-4' />
         </a>
         <a
           className='flex-center gap-1'
@@ -48,7 +48,7 @@ export function Footer() {
           rel='noreferrer'
           target='_blank'
         >
-          <span className='icon-[simple-icons--github] mr-1 h-4 w-4' />
+          <span className='icon-[simple-icons--github] mr-1 size-4' />
         </a>
         <a
           className='hidden items-center justify-center gap-1'
@@ -56,7 +56,7 @@ export function Footer() {
           rel='noreferrer'
           target='_blank'
         >
-          <span className='icon-[simple-icons--discord] mr-1 h-4 w-4' />
+          <span className='icon-[simple-icons--discord] mr-1 size-4' />
         </a>
         <a
           className='hidden items-center justify-center gap-1'
@@ -64,7 +64,7 @@ export function Footer() {
           rel='noreferrer'
           target='_blank'
         >
-          <span className='icon-[simple-icons--x] mr-1 h-4 w-4' />
+          <span className='icon-[simple-icons--x] mr-1 size-4' />
         </a>
       </div>
     </>

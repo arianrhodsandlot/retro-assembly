@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { type FileSystemProvider } from './file-system-provider'
+import type { FileSystemProvider } from './file-system-provider'
 
 export class DummyProvider implements FileSystemProvider {
   private file: File

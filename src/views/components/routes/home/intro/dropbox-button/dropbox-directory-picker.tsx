@@ -25,7 +25,7 @@ export function DropboxDirectoryPicker({
   if (isValidating || state.loading) {
     return (
       <div className='flex-center py-6'>
-        <span className='icon-[line-md--loading-loop] h-12 w-12 text-rose-700' />
+        <span className='icon-[line-md--loading-loop] size-12 text-rose-700' />
       </div>
     )
   }
@@ -39,7 +39,7 @@ export function DropboxDirectoryPicker({
       <div className='flex h-full flex-col'>
         <div className='text-rose-700'>
           <div className='flex items-center rounded border border-rose-700 bg-rose-100 px-4 py-2 text-sm'>
-            <span className='icon-[mdi--bell] mr-2 h-4 w-4' />
+            <span className='icon-[mdi--bell] mr-2 size-4' />
             {t('Select a directory to initialize your game library.')}
           </div>
         </div>

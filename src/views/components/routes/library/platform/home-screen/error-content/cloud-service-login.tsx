@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { type CloudService } from '../../../../../../../core'
+import type { CloudService } from '../../../../../../../core'
 import { CloudServiceLoginButton } from '../../../../../common/cloud-service-login-button'
 import { BaseCallout } from '../../../../../primitives/base-callout'
 
@@ -20,7 +20,7 @@ export function CloudServiceLogin({ cloudService, onSolve }: CloudServiceLoginPr
       <BaseCallout>
         <div className='flex items-start'>
           <div>
-            <span className='icon-[mdi--bell] mr-2 mt-[2px] h-4 w-4' />
+            <span className='icon-[mdi--bell] mr-2 mt-[2px] size-4' />
           </div>
           <div>{t('Your login status is expired. Please login again.', { loginName: loginNameMap[cloudService] })}</div>
         </div>

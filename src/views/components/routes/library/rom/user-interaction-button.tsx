@@ -19,18 +19,18 @@ export function UserInteractionButton({ onUserInteract }: UserInteractionButtonP
         >
           {isTouchDevice() ? (
             <>
-              <span className='icon-[mdi--gesture-tap] mr-2 h-5 w-5 shrink-0' />
+              <span className='icon-[mdi--gesture-tap] mr-2 size-5 shrink-0' />
               {t('Tap here to launch the game')}
             </>
           ) : (
             <>
-              <span className='icon-[mdi--cursor-default-click] mr-2 h-5 w-5 shrink-0' />
+              <span className='icon-[mdi--cursor-default-click] mr-2 size-5 shrink-0' />
               {t('Click here to launch the game')}
             </>
           )}
         </button>
         <div className='mt-2 flex max-w-xs text-xs text-rose-700'>
-          <span className='icon-[mdi--lightbulb-on-outline] mr-2 h-4 w-4 shrink-0' />
+          <span className='icon-[mdi--lightbulb-on-outline] mr-2 size-4 shrink-0' />
           <div>
             {t('This is due to a limitation of the browser.')}
             <br />

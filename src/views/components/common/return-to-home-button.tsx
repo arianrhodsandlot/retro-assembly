@@ -8,7 +8,7 @@ export function ReturnToHomeButton() {
 
   return (
     <BaseButton onClick={teardown}>
-      <span className='icon-[mdi--home] h-6 w-6 text-rose-700' />
+      <span className='icon-[mdi--home] size-6 text-rose-700' />
       {t('Return home')}
     </BaseButton>
   )

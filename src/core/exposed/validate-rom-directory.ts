@@ -1,11 +1,11 @@
 import { filter } from 'lodash-es'
 import { DropboxProvider } from '../classes/file-system-providers/dropbox-provider'
-import { type FileAccessor } from '../classes/file-system-providers/file-accessor'
+import type { FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { GoogleDriveProvider } from '../classes/file-system-providers/google-drive-provider'
 import { LocalProvider } from '../classes/file-system-providers/local-provider'
 import { OnedriveProvider } from '../classes/file-system-providers/onedrive-provider'
 import { platformNamesSorted } from '../constants/platforms'
-import { type CloudService } from '.'
+import type { CloudService } from '.'
 
 interface ValidateRomDirectoryParamsForLocalType {
   type: 'local'

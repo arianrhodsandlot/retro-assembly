@@ -1,7 +1,7 @@
 import { DropboxClient } from '../cloude-service/dropbox-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
-import { type FileSystemProvider } from './file-system-provider'
+import type { FileSystemProvider } from './file-system-provider'
 
 interface ListOptions {
   pageSize?: number

@@ -1,8 +1,7 @@
 import { useAsync as useAsyncFn, useIntervalEffect } from '@react-hookz/web'
 import { clsx } from 'clsx'
 import mitt from 'mitt'
-import { type MouseEvent } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { type MouseEvent , useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { useAsyncExecute } from '../hooks/use-async-execute'
@@ -109,14 +108,14 @@ export function CloudServiceLoginButton({
         target='_blank'
       >
         <span
-          className={clsx('mr-2 inline-block h-5 w-5 shrink-0', {
+          className={clsx('mr-2 inline-block size-5 shrink-0', {
             'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
             'icon-[logos--google-icon]': cloudService === 'google-drive',
             'icon-[logos--dropbox]': cloudService === 'dropbox',
           })}
         />
         <span className='shrink-0'>{t('Sign in with', { service: cloudServiceMap[cloudService] })}</span>
-        {showLoading ? <span className='icon-[line-md--loading-loop] h-5 w-5 shrink-0' /> : null}
+        {showLoading ? <span className='icon-[line-md--loading-loop] size-5 shrink-0' /> : null}
       </BaseButton>
       {showReturnHome ? <ReturnToHomeButton /> : null}
     </div>

@@ -1,6 +1,6 @@
 import { useAsync } from '@react-hookz/web'
 import { useSetAtom } from 'jotai'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { start, updatePreference, validateRomDirectory } from '../../../../../../core'
 import { useRouterHelpers } from '../../../../hooks/use-router-helpers'
 import { BaseButton } from '../../../../primitives/base-button'
@@ -35,7 +35,7 @@ export function DropboxButton({ children }: { children?: ReactNode } = {}) {
     >
       {children || (
         <BaseButton styleType='primary'>
-          <span className='icon-[logos--dropbox] h-5 w-5' />
+          <span className='icon-[logos--dropbox] size-5' />
           Dropbox
         </BaseButton>
       )}

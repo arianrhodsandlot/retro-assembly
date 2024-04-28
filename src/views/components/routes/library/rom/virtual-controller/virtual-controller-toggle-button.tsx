@@ -7,7 +7,7 @@ export function VirtualControllerToggleButton() {
 
   return (
     <VirtualButton onTap={() => setHideButtonsAtom(!hideButtons)}>
-      <span className='icon-[mdi--controller] h-6 w-6' />
+      <span className='icon-[mdi--controller] size-6' />
     </VirtualButton>
   )
 }

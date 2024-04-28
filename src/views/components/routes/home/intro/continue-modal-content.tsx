@@ -27,7 +27,7 @@ const directoryInstructionToolTip = (
       </div>
     }
   >
-    <span className='icon-[mdi--help-circle-outline] relative -top-1 h-4 w-4' />
+    <span className='icon-[mdi--help-circle-outline] relative -top-1 size-4' />
   </BasePopover>
 )
 
@@ -46,7 +46,7 @@ export function ContinueModalContent() {
           {isLocalDirectorySelectorEnabled() ? (
             <div>
               <div className='flex-center gap-2 text-center font-bold'>
-                <span className='icon-[mdi--cube-outline] h-6 w-6' />
+                <span className='icon-[mdi--cube-outline] size-6' />
                 {t('Select a local directory')}
                 {directoryInstructionToolTip}
               </div>
@@ -59,7 +59,7 @@ export function ContinueModalContent() {
           {isAnyCloudServiceEnabled ? (
             <div className='flex flex-col items-center'>
               <div className='flex-center gap-2 text-center font-bold'>
-                <span className='icon-[mdi--cube-outline] h-6 w-6' />
+                <span className='icon-[mdi--cube-outline] size-6' />
                 {t('Select a cloud directory')}
                 {directoryInstructionToolTip}
               </div>
@@ -71,7 +71,7 @@ export function ContinueModalContent() {
                   <>
                     <OnedriveButton />
                     <div className='-mt-2 flex items-start gap-2 text-xs'>
-                      <span className='icon-[mdi--alert-box-outline] h-4 w-4 shrink-0' />
+                      <span className='icon-[mdi--alert-box-outline] size-4 shrink-0' />
                       {t('May need to login again after 24h.')}
                     </div>
                   </>
@@ -81,7 +81,7 @@ export function ContinueModalContent() {
                   <>
                     <GoogleDriveButton />
                     <div className='-mt-2 flex items-start gap-2 text-xs'>
-                      <span className='icon-[mdi--alert-decagram-outline] h-4 w-4 shrink-0' />
+                      <span className='icon-[mdi--alert-decagram-outline] size-4 shrink-0' />
                       {t('Not encouraged because it only provides limited usage(100 users) for unverified apps.')}
                     </div>
                   </>
@@ -93,7 +93,7 @@ export function ContinueModalContent() {
 
         <div className='m-auto mt-10 px-12 text-rose-200' hidden>
           <div className='flex items-center font-bold'>
-            <span className='icon-[mdi--bell] mr-2 h-4 w-4' />
+            <span className='icon-[mdi--bell] mr-2 size-4' />
             {t('Notice:')}
           </div>
           <div className='mt-2 pl-6'>
@@ -112,7 +112,7 @@ export function ContinueModalContent() {
       <BaseDialogContent closable onOpenChange={setIsInvalidDialogOpenAtom} open={isInvalidDialogOpen}>
         <div className='max-w-lg text-rose-700'>
           <div className='flex items-center font-bold'>
-            <span className='icon-[mdi--alert] mr-2 h-5 w-5 shrink-0 text-yellow-400' />
+            <span className='icon-[mdi--alert] mr-2 size-5 shrink-0 text-yellow-400' />
             <h4>{t('You selected an invalid directory as your ROMs directory')}</h4>
           </div>
 
@@ -122,7 +122,7 @@ export function ContinueModalContent() {
 
           <div className='mt-4 text-center'>
             <BaseButton className='m-auto' onClick={() => setIsInvalidDialogOpenAtom(false)} styleType='primary'>
-              <span className='icon-[mdi--hand-okay] h-5 w-5' />
+              <span className='icon-[mdi--hand-okay] size-5' />
               {t('OK')}
             </BaseButton>
           </div>

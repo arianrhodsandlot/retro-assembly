@@ -8,7 +8,7 @@ import { loadImageWithLimit } from './utils'
 
 function pseudoRandomDeg(seed: string) {
   let code = 0
-  for (let i = 0; i < seed.length; i++) {
+  for (let i = 0; i < seed.length; i += 1) {
     code += seed.codePointAt(i) ?? 0
   }
   return code % 180
@@ -55,7 +55,7 @@ export function GameEntryContent({ rom }: { rom: Rom }) {
     return (
       <div className='m-auto flex h-full items-center justify-center bg-zinc-300 text-center font-bold'>
         <span
-          className='icon-[line-md--loading-loop] h-8 w-8 text-slate-400'
+          className='icon-[line-md--loading-loop] size-8 text-slate-400'
           style={{ transform: `rotate(${rotate}deg)` }}
         />
       </div>

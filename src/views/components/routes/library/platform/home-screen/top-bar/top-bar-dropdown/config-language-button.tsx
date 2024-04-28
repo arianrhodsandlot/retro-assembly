@@ -16,7 +16,7 @@ export function ConfigLanguageButton() {
     <BaseDialogTrigger content={<ConfigLanguageDialogContent />} onOpenChange={onOpenChange} open={open}>
       <TopBarButton>
         <div className='flex items-center gap-2 px-4'>
-          <span className='icon-[mdi--translate-variant] relative z-[1] h-8 w-8' />
+          <span className='icon-[mdi--translate-variant] relative z-[1] size-8' />
           {t('Language')}
         </div>
       </TopBarButton>

@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
-import { type CSSProperties, type FocusEvent, type MouseEvent } from 'react'
-import { type Rom } from '../../../../../../../core'
+import type { CSSProperties, FocusEvent, MouseEvent } from 'react'
+import type { Rom } from '../../../../../../../core'
 import { launchingMaskAtom } from '../../../atoms'
 import { GameEntryButton } from './game-entry-button'
 import { GameEntryContent } from './game-entry-content'

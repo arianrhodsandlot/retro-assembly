@@ -3,7 +3,7 @@ import { http } from '../../helpers/http'
 import { GoogleDriveClient } from '../cloude-service/google-drive-client'
 import { RequestCache } from '../request-cache'
 import { FileAccessor } from './file-accessor'
-import { type FileSystemProvider } from './file-system-provider'
+import type { FileSystemProvider } from './file-system-provider'
 
 interface ListOptions {
   pageSize?: number

@@ -1,7 +1,7 @@
 import { join } from 'path-browserify'
 import { Emulator } from '../classes/emulator'
 import { PreferenceParser } from '../classes/preference-parser'
-import { type Rom } from '../classes/rom'
+import type { Rom } from '../classes/rom'
 import { getAdditionalFiles } from '../helpers/arcade'
 import { getBiosFiles } from '../helpers/bios'
 import { emitter } from '../internal/emitter'

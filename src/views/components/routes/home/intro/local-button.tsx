@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { start, updatePreference, validateRomDirectory } from '../../../../../core'
 import { useRouterHelpers } from '../../../hooks/use-router-helpers'
@@ -30,7 +30,7 @@ export function LocalButton({ children }: { children?: ReactNode } = {}) {
   if (!children) {
     return (
       <BaseButton className='w-60' onClick={selectLocalDirectory} styleType='primary'>
-        <span className='icon-[flat-color-icons--opened-folder] h-5 w-5' />
+        <span className='icon-[flat-color-icons--opened-folder] size-5' />
         {t('select a directory')}
       </BaseButton>
     )

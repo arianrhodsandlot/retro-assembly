@@ -1,4 +1,4 @@
-import { type CloudService } from '.'
+import type { CloudService } from '.'
 
 function isOnedriveEnabled() {
   return Boolean(import.meta.env.VITE_ONEDRIVE_CLIENT_ID)

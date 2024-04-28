@@ -2,8 +2,8 @@ import { lightFormat, parse, toDate } from 'date-fns'
 import { orderBy } from 'lodash-es'
 import { join } from 'path-browserify'
 import { humanizeDate } from '../helpers/misc'
-import { type FileAccessor } from './file-system-providers/file-accessor'
-import { type FileSystemProvider } from './file-system-providers/file-system-provider'
+import type { FileAccessor } from './file-system-providers/file-accessor'
+import type { FileSystemProvider } from './file-system-providers/file-system-provider'
 
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
 
@@ -68,7 +68,7 @@ export class CoreStateManager {
     try {
       fileAccessors = await fileSystemProvider.list(stateDirPath)
     } catch (error) {
-      if (this.isInvalidDirectoryError(error)) {
+      if (isInvalidDirectoryError(error)) {
         return []
       }
       throw error
@@ -120,17 +120,17 @@ export class CoreStateManager {
     const statePath = join(stateDirPath, `${stateId}.state`)
     return await fileSystemProvider.getContent(statePath)
   }
+}
 
-  private isInvalidDirectoryError(error: any) {
-    // local file system
-    if (error?.name === 'NotFoundError') {
-      return true
-    }
-    // onedrive
-    if (error?.code === 'itemNotFound') {
-      return true
-    }
-    // google drive
-    return error?.message?.startsWith?.('directory not found')
+function isInvalidDirectoryError(error: any) {
+  // local file system
+  if (error?.name === 'NotFoundError') {
+    return true
   }
+  // onedrive
+  if (error?.code === 'itemNotFound') {
+    return true
+  }
+  // google drive
+  return error?.message?.startsWith?.('directory not found')
 }

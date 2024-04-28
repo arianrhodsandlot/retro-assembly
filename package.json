@@ -52,7 +52,7 @@
     "wouter": "3.1.0"
   },
   "devDependencies": {
-    "@arianrhodsandlot/eslint-config": "0.8.5",
+    "@arianrhodsandlot/eslint-config": "0.12.2",
     "@iconify/json": "2.2.195",
     "@iconify/tailwind": "0.1.4",
     "@playwright/test": "1.42.1",
@@ -81,5 +81,9 @@
     "vite": "5.2.4",
     "vite-plugin-pwa": "0.19.7",
     "zx": "7.2.3"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not op_mini all"
+  ]
 }

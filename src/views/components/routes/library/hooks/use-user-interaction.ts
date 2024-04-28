@@ -23,7 +23,7 @@ export function useUserInteraction() {
     SpatialNavigation.focus('canvas')
   }
 
-  async function launchGame_(rom: Rom | undefined) {
+  async function launchGameLocal(rom: Rom | undefined) {
     if (!rom) {
       return
     }
@@ -36,6 +36,6 @@ export function useUserInteraction() {
     onUserInteract,
     waitForUserInteraction,
     setNeedsUserInteraction,
-    launchGame: launchGame_,
+    launchGame: launchGameLocal,
   }
 }

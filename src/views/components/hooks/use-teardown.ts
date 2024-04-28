@@ -4,10 +4,10 @@ import { useRouterHelpers } from './use-router-helpers'
 export function useTeardown() {
   const { navigateToHome } = useRouterHelpers()
 
-  async function teardown_() {
+  async function teardownLocal() {
     await teardown()
     navigateToHome()
   }
 
-  return { teardown: teardown_ }
+  return { teardown: teardownLocal }
 }

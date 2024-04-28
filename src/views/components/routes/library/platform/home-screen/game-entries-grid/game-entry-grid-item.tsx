@@ -1,5 +1,5 @@
-import { type CSSProperties } from 'react'
-import { type Rom } from '../../../../../../../core'
+import type { CSSProperties } from 'react'
+import type { Rom } from '../../../../../../../core'
 import { GameEntry } from './game-entry'
 
 interface GameEntryGridItemProps {

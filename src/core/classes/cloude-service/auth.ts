@@ -13,6 +13,7 @@ export interface AuthConfig {
   redirectUri: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class Auth {
   protected static tokenStorageKey: string
   protected static config: AuthConfig
@@ -76,7 +77,7 @@ export abstract class Auth {
     if (error?.statusCode === 404 || error?.status === 409) {
       return false
     }
-    return !!error
+    return Boolean(error)
   }
 
   protected static async requestWithRefreshTokenOnError(request: () => Promise<any>): ReturnType<typeof request> {

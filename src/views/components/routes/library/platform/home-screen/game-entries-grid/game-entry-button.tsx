@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { type JSX } from 'react'
+import type { JSX } from 'react'
 import { isTouchDevice } from '../../../lib/utils'
 import { useGamepads } from '../input-tips/hooks/use-gamepads'
 
@@ -27,7 +27,7 @@ export function GameEntryButton({
     <button className='group relative' {...props} data-testid='game-entry-button'>
       <div
         className={clsx(
-          'opacity-1 block h-full w-full bg-gray-100 text-left transition-transform group-focus:transform-gpu',
+          'opacity-1 block size-full bg-gray-100 text-left transition-transform group-focus:transform-gpu',
           'after:pointer-events-none after:absolute after:inset-0 after:border-b after:border-black',
           { 'after:border-r': !isLastColumn },
           { 'relative group-focus:z-10 group-focus:shadow-2xl group-focus:shadow-black': shouldScaleWhenFocus },

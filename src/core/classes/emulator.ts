@@ -3,7 +3,7 @@ import { Nostalgist } from 'nostalgist'
 import { getCDNHost, vendorsInfo } from '../constants/dependencies'
 import { platformCoreMap } from '../constants/platforms'
 import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retroarch'
-import { type Rom } from './rom'
+import type { Rom } from './rom'
 
 interface EmulatorConstructorOptions {
   core?: string
@@ -194,6 +194,7 @@ export class Emulator {
     document.body.addEventListener('mousemove', this.showCanvasCusor, false)
     window.addEventListener('resize', this.resizeCanvas, false)
     document.body.style.setProperty('overflow', 'hidden')
+
     screen.orientation.addEventListener('change', this.resizeCanvas, false)
 
     // tell retroarch that controllers are connected

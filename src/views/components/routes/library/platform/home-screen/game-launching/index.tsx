@@ -1,4 +1,4 @@
-import { type AnimationDefinition } from 'framer-motion'
+import type { AnimationDefinition } from 'framer-motion'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { isEqual } from 'lodash-es'
 import { useRouterHelpers } from '../../../../../hooks/use-router-helpers'

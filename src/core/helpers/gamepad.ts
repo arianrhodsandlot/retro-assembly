@@ -92,7 +92,7 @@ interface PressButtonListener {
   listener: PressButtonListenerFunction
 }
 const pressButtonListeners: PressButtonListener[] = []
-interface pressButtonsCallbackParams {
+interface PressButtonsCallbackParams {
   gamepad: Gamepad
   pressedForTimesButtonIndicies: number[]
   pressedButtonIndicies: number[]
@@ -101,7 +101,7 @@ function pressButtonsCallback({
   gamepad,
   pressedButtonIndicies,
   pressedForTimesButtonIndicies,
-}: pressButtonsCallbackParams) {
+}: PressButtonsCallbackParams) {
   const buttonsMap = buttonsMaps.get(gamepad.id) ?? buttonsMaps.get('')
   if (!buttonsMap) {
     return

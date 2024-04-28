@@ -2,7 +2,7 @@ import { get, set } from 'idb-keyval'
 import { isNil } from 'lodash-es'
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
-import { type FileSystemName } from '.'
+import type { FileSystemName } from '.'
 
 function setFileSystemProviderType(type: FileSystemName) {
   PreferenceParser.set({ name: 'configProviderType', value: type })

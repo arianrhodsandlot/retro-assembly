@@ -19,7 +19,7 @@ export function VirtualControllerMenuButton() {
 
   return (
     <VirtualButton onTap={toggleMenu}>
-      <span className='icon-[mdi--menu] h-6 w-6' />
+      <span className='icon-[mdi--menu] size-6' />
     </VirtualButton>
   )
 }

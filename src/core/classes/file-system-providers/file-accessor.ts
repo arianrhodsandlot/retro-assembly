@@ -1,5 +1,5 @@
 import { join, parse } from 'path-browserify'
-import { type FileSystemProvider } from './file-system-provider'
+import type { FileSystemProvider } from './file-system-provider'
 
 export interface FileAccessorOptions {
   name: string

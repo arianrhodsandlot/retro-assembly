@@ -24,7 +24,7 @@ export function AuthMain({ cloudService }: AuthMainProps) {
     return (
       <AuthLayout>
         <div className='flex flex-col text-rose-700'>
-          <span className='icon-[line-md--loading-loop] h-16 w-16' />
+          <span className='icon-[line-md--loading-loop] size-16' />
           <div className='mt-10 flex'>
             {t('Loading')} <BouncingEllipsis />
           </div>
@@ -36,7 +36,7 @@ export function AuthMain({ cloudService }: AuthMainProps) {
   if (state.error) {
     return (
       <AuthLayout>
-        <span className='icon-[mdi--account-alert] h-6 w-6' />
+        <span className='icon-[mdi--account-alert] size-6' />
         {t('Login fail. Error:', { message: state.error.message })}
       </AuthLayout>
     )
@@ -44,7 +44,7 @@ export function AuthMain({ cloudService }: AuthMainProps) {
 
   return (
     <AuthLayout>
-      <span className='icon-[mdi--account-check] h-6 w-6' />
+      <span className='icon-[mdi--account-check] size-6' />
       {t('You are now authenticated with RetroAssembly.')}
     </AuthLayout>
   )

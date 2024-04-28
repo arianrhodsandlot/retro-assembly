@@ -1,6 +1,6 @@
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
-import { type Rom } from '../classes/rom'
+import type { Rom } from '../classes/rom'
 import { arcadeHardwareBiosMap } from '../constants/platforms'
 import { globalContext } from '../internal/global-context'
 

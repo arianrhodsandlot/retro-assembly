@@ -4,7 +4,7 @@ export function TopBarLink() {
   return (
     <a href='https://github.com/arianrhodsandlot/retro-assembly' rel='noreferrer' target='_blank'>
       <TopBarButton className='flex-center aspect-square'>
-        <span className='icon-[simple-icons--github] relative z-[1] h-8 w-8' />
+        <span className='icon-[simple-icons--github] relative z-[1] size-8' />
       </TopBarButton>
     </a>
   )

@@ -85,7 +85,7 @@ export function InputMappingPanel({
         <div className='mt-4 flex items-center justify-between gap-2'>
           <div className='flex flex-col items-center'>
             <button
-              className={clsx('flex h-8 w-8 items-center justify-center rounded-t-sm bg-rose-800 text-white', {
+              className={clsx('flex size-8 items-center justify-center rounded-t-sm bg-rose-800 text-white', {
                 'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'up',
               })}
               onClick={() => waitForButtonPressed('up')}
@@ -95,7 +95,7 @@ export function InputMappingPanel({
             </button>
             <div className='flex gap-8'>
               <button
-                className={clsx('flex h-8 w-8 items-center justify-center rounded-l-sm bg-rose-800 text-white', {
+                className={clsx('flex size-8 items-center justify-center rounded-l-sm bg-rose-800 text-white', {
                   'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'left',
                 })}
                 onClick={() => waitForButtonPressed('left')}
@@ -104,7 +104,7 @@ export function InputMappingPanel({
                 <div className='font-mono text-xs text-white/60'>{getCode('left')}</div>
               </button>
               <button
-                className={clsx('flex h-8 w-8 items-center justify-center rounded-r-sm bg-rose-800 text-white', {
+                className={clsx('flex size-8 items-center justify-center rounded-r-sm bg-rose-800 text-white', {
                   'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'right',
                 })}
                 onClick={() => waitForButtonPressed('right')}
@@ -114,7 +114,7 @@ export function InputMappingPanel({
               </button>
             </div>
             <button
-              className={clsx('flex h-8 w-8 items-center justify-center rounded-b-sm bg-rose-800 text-white', {
+              className={clsx('flex size-8 items-center justify-center rounded-b-sm bg-rose-800 text-white', {
                 'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'down',
               })}
               onClick={() => waitForButtonPressed('down')}
@@ -147,7 +147,7 @@ export function InputMappingPanel({
 
           <div className='flex flex-col items-center'>
             <button
-              className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
+              className={clsx('flex size-8 items-center justify-center rounded-full bg-rose-800 text-white', {
                 'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'x',
               })}
               onClick={() => waitForButtonPressed('x')}
@@ -157,7 +157,7 @@ export function InputMappingPanel({
             </button>
             <div className='flex gap-8'>
               <button
-                className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
+                className={clsx('flex size-8 items-center justify-center rounded-full bg-rose-800 text-white', {
                   'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'y',
                 })}
                 onClick={() => waitForButtonPressed('y')}
@@ -166,7 +166,7 @@ export function InputMappingPanel({
                 <div className='font-mono text-xs text-white/60'>{getCode('y')}</div>
               </button>
               <button
-                className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
+                className={clsx('flex size-8 items-center justify-center rounded-full bg-rose-800 text-white', {
                   'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'a',
                 })}
                 onClick={() => waitForButtonPressed('a')}
@@ -176,7 +176,7 @@ export function InputMappingPanel({
               </button>
             </div>
             <button
-              className={clsx('flex h-8 w-8 items-center justify-center rounded-full bg-rose-800 text-white', {
+              className={clsx('flex size-8 items-center justify-center rounded-full bg-rose-800 text-white', {
                 'transform-gpu animate-[bounce-scale_1s_linear_infinite]': waitingButton === 'b',
               })}
               onClick={() => waitForButtonPressed('b')}
@@ -194,7 +194,7 @@ export function InputMappingPanel({
           onClick={onResetMapping}
           tabIndex={-1}
         >
-          <span className='icon-[mdi--reload-alert] h-4 w-4' />
+          <span className='icon-[mdi--reload-alert] size-4' />
           {t('Reset to default')}
         </button>
       </div>

@@ -13,7 +13,7 @@ export function ConfigKeyboardDialogContent() {
       <div className='flex-center mt-8 gap-5'>
         <DialogClose asChild>
           <BaseButton className='autofocus' styleType='primary'>
-            <span className='icon-[mdi--close] h-5 w-5' />
+            <span className='icon-[mdi--close] size-5' />
             {t('Close')}
           </BaseButton>
         </DialogClose>

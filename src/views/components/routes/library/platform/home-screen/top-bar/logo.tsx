@@ -8,7 +8,7 @@ export function Logo() {
         className='flex items-center px-8 text-center font-["Fredoka_Variable",sans-serif] text-lg font-bold tracking-wider'
         href='/'
       >
-        <img alt='RetroAssembly' className='h-10 w-10 rounded-full' src={logo} />
+        <img alt='RetroAssembly' className='size-10 rounded-full' src={logo} />
         <div className='ml-4 hidden lg:block'>RetroAssembly</div>
       </a>
     </Link>

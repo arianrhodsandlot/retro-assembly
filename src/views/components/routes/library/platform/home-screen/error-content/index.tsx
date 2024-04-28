@@ -51,13 +51,13 @@ export function ErrorContent({ error, onSolve }: { error: any; onSolve: () => vo
         <BaseCallout>
           <div className='flex items-start'>
             <div>
-              <span className='icon-[mdi--bell] mr-2 mt-[2px] h-4 w-4 ' />
+              <span className='icon-[mdi--bell] mr-2 mt-[2px] size-4 ' />
             </div>
             <div>{t('Failed to load games.')}</div>
           </div>
         </BaseCallout>
         <BaseButton className='mt-2' onClick={onSolve} styleType='primary'>
-          <span className='icon-[mdi--reload] h-6 w-6' />
+          <span className='icon-[mdi--reload] size-6' />
           {t('Retry')}
         </BaseButton>
         <ReturnToHomeButton />

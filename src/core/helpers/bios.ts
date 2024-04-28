@@ -1,7 +1,7 @@
 import { compact } from 'lodash-es'
 import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
-import { type Rom } from '../classes/rom'
+import type { Rom } from '../classes/rom'
 import { coreBiosMap, platformCoreMap, platformNeedsBios } from '../constants/platforms'
 import { globalContext } from '../internal/global-context'
 import { getArcadeBiosNames } from './arcade'

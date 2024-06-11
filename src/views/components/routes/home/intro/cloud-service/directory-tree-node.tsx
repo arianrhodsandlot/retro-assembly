@@ -48,10 +48,13 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
         {node.isDirectory ? (
           node.expanded ? (
             <span className='icon-[mdi--folder-open] mr-2 size-6 text-rose-500' />
-          ) : node.hasChildren ? (
-            <span className='icon-[mdi--folder] mr-2 size-6 text-rose-500' />
           ) : (
-            <span className='icon-[mdi--folder-alert] mr-2 size-6 text-rose-500' />
+            <span
+              className={clsx(
+                node.hasChildren ? 'icon-[mdi--folder]' : 'icon-[mdi--folder-alert]',
+                'mr-2 size-6 text-rose-500',
+              )}
+            />
           )
         ) : (
           <span className='icon-[mdi--file] mr-2 size-6 text-rose-500' />

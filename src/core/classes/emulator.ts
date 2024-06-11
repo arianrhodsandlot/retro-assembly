@@ -195,7 +195,9 @@ export class Emulator {
     window.addEventListener('resize', this.resizeCanvas, false)
     document.body.style.setProperty('overflow', 'hidden')
 
-    screen.orientation.addEventListener('change', this.resizeCanvas, false)
+    if (screen.orientation) {
+      screen.orientation.addEventListener('change', this.resizeCanvas, false)
+    }
 
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
@@ -210,6 +212,8 @@ export class Emulator {
     window.removeEventListener('resize', this.resizeCanvas, false)
     this.canvas.remove()
     document.body.style.removeProperty('overflow')
-    screen.orientation.removeEventListener('change', this.resizeCanvas, false)
+    if (screen.orientation) {
+      screen.orientation.removeEventListener('change', this.resizeCanvas, false)
+    }
   }
 }

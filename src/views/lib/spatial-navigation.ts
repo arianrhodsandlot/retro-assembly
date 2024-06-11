@@ -1,5 +1,5 @@
-import { onConfirm, onPress } from '../../../core'
-import { SpatialNavigation } from './js-spatial-navigation'
+import { onConfirm, onPress } from '../../core'
+import { SpatialNavigation } from '../../vendors/js-spatial-navigation'
 
 SpatialNavigation.init()
 

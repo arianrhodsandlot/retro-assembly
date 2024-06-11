@@ -51,7 +51,9 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
       await getScript('https://apis.google.com/js/api.js')
     }
     if (!gapi.client) {
-      await new Promise((resolve) => {  gapi.load('client', resolve)})
+      await new Promise((resolve) => {
+        gapi.load('client', resolve)
+      })
     }
     if (!gapi.client.getToken()) {
       gapi.client.setToken({ access_token: GoogleDriveClient.getAccessToken() })

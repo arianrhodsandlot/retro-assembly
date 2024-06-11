@@ -33,12 +33,12 @@ export function MenuTips() {
               {t('to rewind while playing.')}
             </div>
           </>
-        ) : (isTouchDevice() ? null : (
+        ) : isTouchDevice() ? null : (
           <div className='flex items-center gap-2'>
             {t('Press')} <LightInputButton>ESC</LightInputButton>
             {t('to open/hide this menu.')}
           </div>
-        ))}
+        )}
       </div>
     </div>
   )

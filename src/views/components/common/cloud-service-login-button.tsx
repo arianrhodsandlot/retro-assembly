@@ -1,7 +1,7 @@
 import { useAsync as useAsyncFn, useIntervalEffect } from '@react-hookz/web'
 import { clsx } from 'clsx'
 import mitt from 'mitt'
-import { type MouseEvent , useEffect, useRef, useState } from 'react'
+import { type MouseEvent, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type CloudService, detectNeedsLogin, getAuthorizeUrl, getTokenStorageKey } from '../../../core'
 import { useAsyncExecute } from '../hooks/use-async-execute'

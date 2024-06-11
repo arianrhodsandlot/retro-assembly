@@ -65,7 +65,7 @@ export function MenuOverlay() {
         <LoadingScreen>
           {t('Saving')} <BouncingEllipsis /> {t('Please do not turn off your device!')}
         </LoadingScreen>
-      ) : (loadStateState.status === 'loading' ? (
+      ) : loadStateState.status === 'loading' ? (
         <LoadingScreen>
           {t('Loading selected state')}
           <BouncingEllipsis />
@@ -82,7 +82,7 @@ export function MenuOverlay() {
           />
           <MenuTips />
         </div>
-      ))}
+      )}
     </div>
   )
 }

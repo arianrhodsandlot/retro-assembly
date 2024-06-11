@@ -1,4 +1,4 @@
-import { Arrow , Content, type PopoverTriggerProps, Portal, Root, Trigger } from '@radix-ui/react-popover'
+import { Arrow, Content, type PopoverTriggerProps, Portal, Root, Trigger } from '@radix-ui/react-popover'
 import type { ReactNode } from 'react'
 
 interface BaseTooltipProps extends PopoverTriggerProps {

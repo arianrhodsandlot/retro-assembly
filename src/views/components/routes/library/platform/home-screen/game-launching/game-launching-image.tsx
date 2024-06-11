@@ -1,4 +1,4 @@
-import { AnimatePresence, type AnimationLifecycles , type AnimationProps, motion } from 'framer-motion'
+import { AnimatePresence, type AnimationLifecycles, type AnimationProps, motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 interface GameLaunchingImageProps {

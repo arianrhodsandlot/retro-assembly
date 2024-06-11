@@ -74,7 +74,7 @@ function getEmptyInputConfig() {
   ]
   const inputConfig = {}
   for (const gamepadButtonName of gamepadButtonNames) {
-    for (let i = 0; i < 4; i  += 1) {
+    for (let i = 0; i < 4; i += 1) {
       inputConfig[`input_player${i + 1}_${gamepadButtonName}`] = ''
       inputConfig[`input_player${i + 1}_${gamepadButtonName}_btn`] = ''
     }

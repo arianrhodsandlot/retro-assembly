@@ -4,7 +4,7 @@ import { isAbsolute, parse, relative } from 'path-browserify'
 import { extPlatformMap, platformNamesSorted } from '../constants/platforms'
 import { getCover, parseGoodCode } from '../helpers/misc'
 import type { FileAccessor } from './file-system-providers/file-accessor'
-import { type ArcadeGameInfo , GamesDatabase } from './games-database'
+import { type ArcadeGameInfo, GamesDatabase } from './games-database'
 import type { Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 

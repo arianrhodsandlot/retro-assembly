@@ -3,4 +3,4 @@ dist
 node_modules
 test-results
 tests/fixtures/roms
-vendors
+

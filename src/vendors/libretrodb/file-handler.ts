@@ -13,7 +13,7 @@ export enum SEEK_MODE {
 
 function validateNumber(value, name) {
   if (typeof value !== 'number') {
-    throw new Error('ERR_INVALID_ARG_TYPE: ' + name)
+    throw new TypeError(`ERR_INVALID_ARG_TYPE: ${name}`)
   }
 }
 
@@ -31,7 +31,7 @@ function boundsError(value, length, type) {
 }
 
 function readBigUInt64BE(buffer, offset) {
-  offset = offset >>> 0
+  offset >>>= 0
   validateNumber(offset, 'offset')
   const first = buffer[offset]
   const last = buffer[offset + 7]

@@ -28,9 +28,7 @@ export function PlatformNavigationMobile({ platforms, current }: PlatformNavigat
           src={platformImageMap[current.name]}
           width={28}
         />
-        <div className='ml-2 truncate'>
-          {current ? getPlatformDisplayName(current.fullName) : ''}
-        </div>
+        <div className='ml-2 truncate'>{current ? getPlatformDisplayName(current.fullName) : ''}</div>
         {dropdownEnabled ? <span className='icon-[mdi--menu-down] size-8 shrink-0' /> : null}
       </button>
 

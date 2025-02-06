@@ -10,46 +10,9 @@ const indexkeyPath = 'identifier'
 const databaseNotInitializedError = new Error('database is not initialized')
 
 export class RequestCache {
-  static initialization: Promise<RequestCache>
+  static readonly initialization: Promise<RequestCache>
 
   private database: IDBPDatabase<unknown> | undefined
-
-  static async getSingleton() {
-    RequestCache.initialization ??= new RequestCache().initialize()
-    return await RequestCache.initialization
-  }
-
-  static async makeCacheable({
-    func,
-    identifier,
-    prediction,
-    maxAge,
-    cacheOnly,
-  }: {
-    func: (...params: any[]) => Promise<any>
-    identifier?: string | any | ((...params: any) => string)
-    prediction?: any
-    maxAge?: number
-    cacheOnly?: boolean
-  }) {
-    const requestCache = await RequestCache.getSingleton()
-    return requestCache.makeCacheable({ func, identifier, prediction, maxAge, cacheOnly })
-  }
-
-  static async set(key: unknown, value: any) {
-    const requestCache = await RequestCache.getSingleton()
-    return requestCache.set(key, value)
-  }
-
-  static async get(key: unknown) {
-    const requestCache = await RequestCache.getSingleton()
-    return requestCache.get(key)
-  }
-
-  static async remove(key: unknown) {
-    const requestCache = await RequestCache.getSingleton()
-    return requestCache.remove(key)
-  }
 
   static async destory() {
     const { database } = await RequestCache.getSingleton()
@@ -58,31 +21,41 @@ export class RequestCache {
     }
   }
 
-  async initialize() {
-    this.database = await openDB(databaseName, databaseVersion, {
-      upgrade(database) {
-        database
-          .createObjectStore(tableName, { keyPath: 'id', autoIncrement: true })
-          .createIndex(indexName, indexkeyPath)
-      },
-    })
-    return this
+  static async get(key: unknown) {
+    const requestCache = await RequestCache.getSingleton()
+    return requestCache.get(key)
   }
 
-  async set(key: unknown, value: any) {
-    const { database } = this
-    if (!database) {
-      throw databaseNotInitializedError
-    }
+  static async getSingleton() {
+    RequestCache.initialization ??= new RequestCache().initialize()
+    return await RequestCache.initialization
+  }
 
-    const indexkey = typeof key === 'string' ? key : JSON.stringify(key)
-    const [row] = await database.getAllFromIndex(tableName, indexName, indexkey)
+  static async makeCacheable({
+    cacheOnly,
+    func,
+    identifier,
+    maxAge,
+    prediction,
+  }: {
+    cacheOnly?: boolean
+    func: (...params: any[]) => Promise<any>
+    identifier?: ((...params: any) => string) | any | string
+    maxAge?: number
+    prediction?: any
+  }) {
+    const requestCache = await RequestCache.getSingleton()
+    return requestCache.makeCacheable({ cacheOnly, func, identifier, maxAge, prediction })
+  }
 
-    const newRow = { [indexkeyPath]: indexkey, value, createTime: Date.now() }
-    if (row?.id) {
-      Object.assign(newRow, { id: row.id })
-    }
-    await database.put(tableName, newRow)
+  static async remove(key: unknown) {
+    const requestCache = await RequestCache.getSingleton()
+    return requestCache.remove(key)
+  }
+
+  static async set(key: unknown, value: any) {
+    const requestCache = await RequestCache.getSingleton()
+    return requestCache.set(key, value)
   }
 
   async get(key: unknown) {
@@ -96,32 +69,29 @@ export class RequestCache {
     return row
   }
 
-  async remove(key: unknown) {
-    const { database } = this
-    if (!database) {
-      throw databaseNotInitializedError
-    }
-    const indexkey = typeof key === 'string' ? key : JSON.stringify(key)
-    const rows = await database.getAllFromIndex(tableName, indexName, indexkey)
-    for (const row of rows) {
-      if (row?.id) {
-        await database.delete(tableName, row.id)
-      }
-    }
+  async initialize() {
+    this.database = await openDB(databaseName, databaseVersion, {
+      upgrade(database) {
+        database
+          .createObjectStore(tableName, { autoIncrement: true, keyPath: 'id' })
+          .createIndex(indexName, indexkeyPath)
+      },
+    })
+    return this
   }
 
   makeCacheable({
+    cacheOnly,
     func,
-    identifier = (...args) => JSON.stringify({ functionName: func.name, args }),
+    identifier = (...args) => JSON.stringify({ args, functionName: func.name }),
     maxAge,
     prediction,
-    cacheOnly,
   }: {
+    cacheOnly?: boolean
     func: (...args: any[]) => Promise<any>
-    identifier?: string | any | ((...args: any) => string)
+    identifier?: ((...args: any) => string) | any | string
     maxAge?: number
     prediction?: any
-    cacheOnly?: boolean
   }) {
     const cacheKeys = new Set<string>()
     const clearCache = () => {
@@ -130,7 +100,7 @@ export class RequestCache {
       }
     }
     const cacheable = async (...args) => {
-      const cacheKey = getCacheKey({ identifier, args })
+      const cacheKey = getCacheKey({ args, identifier })
       const cache = await this.get(cacheKey)
 
       let isCacheValid = Boolean(cache)
@@ -163,11 +133,41 @@ export class RequestCache {
 
     return { cacheable, clearCache }
   }
+
+  async remove(key: unknown) {
+    const { database } = this
+    if (!database) {
+      throw databaseNotInitializedError
+    }
+    const indexkey = typeof key === 'string' ? key : JSON.stringify(key)
+    const rows = await database.getAllFromIndex(tableName, indexName, indexkey)
+    for (const row of rows) {
+      if (row?.id) {
+        await database.delete(tableName, row.id)
+      }
+    }
+  }
+
+  async set(key: unknown, value: any) {
+    const { database } = this
+    if (!database) {
+      throw databaseNotInitializedError
+    }
+
+    const indexkey = typeof key === 'string' ? key : JSON.stringify(key)
+    const [row] = await database.getAllFromIndex(tableName, indexName, indexkey)
+
+    const newRow = { createTime: Date.now(), [indexkeyPath]: indexkey, value }
+    if (row?.id) {
+      Object.assign(newRow, { id: row.id })
+    }
+    await database.put(tableName, newRow)
+  }
 }
 
-function getCacheKey({ identifier, args }) {
+function getCacheKey({ args, identifier }) {
   if (typeof identifier === 'function') {
-    return getCacheKey({ identifier: identifier(...args), args })
+    return getCacheKey({ args, identifier: identifier(...args) })
   }
-  return JSON.stringify({ identifier, args })
+  return JSON.stringify({ args, identifier })
 }

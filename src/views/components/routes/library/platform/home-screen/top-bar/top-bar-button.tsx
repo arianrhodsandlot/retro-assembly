@@ -1,14 +1,17 @@
 import { clsx } from 'clsx'
-import { type ButtonHTMLAttributes, forwardRef } from 'react'
+import type { ButtonHTMLAttributes } from 'react'
 
 interface TopBarButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   highlighted?: boolean
 }
 
-export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(function TopBarButton(
-  { children, highlighted = false, className, ...props },
+export function TopBarButton({
+  children,
+  className,
+  highlighted = false,
   ref,
-) {
+  ...props
+}: { ref?: React.RefObject<HTMLButtonElement | null> } & TopBarButtonProps) {
   return (
     <button
       ref={ref}
@@ -28,4 +31,4 @@ export const TopBarButton = forwardRef<HTMLButtonElement, TopBarButtonProps>(fun
       <div className='relative z-[1] flex items-center'>{children}</div>
     </button>
   )
-})
+}

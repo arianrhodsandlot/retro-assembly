@@ -1,4 +1,4 @@
-import { AnimatePresence, type TargetAndTransition, motion } from 'framer-motion'
+import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { SpatialNavigation } from '../../../../lib/spatial-navigation'

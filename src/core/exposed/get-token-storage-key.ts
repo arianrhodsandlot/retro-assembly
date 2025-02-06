@@ -5,12 +5,12 @@ import type { CloudService } from '.'
 
 export function getTokenStorageKey(type: CloudService) {
   switch (type) {
-    case 'onedrive':
-      return OnedriveClient.tokenStorageKey
-    case 'google-drive':
-      return GoogleDriveClient.tokenStorageKey
     case 'dropbox':
       return DropboxClient.tokenStorageKey
+    case 'google-drive':
+      return GoogleDriveClient.tokenStorageKey
+    case 'onedrive':
+      return OnedriveClient.tokenStorageKey
     default:
       throw new Error('invalid token type')
   }

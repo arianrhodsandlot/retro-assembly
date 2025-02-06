@@ -14,7 +14,7 @@ function generateVerifier(length: number): string {
  * @returns The base64 url encoded code challenge
  */
 async function generateChallenge(codeVerifier: string) {
-  if (!window.crypto?.subtle?.digest) {
+  if (!globalThis.crypto?.subtle?.digest) {
     return codeVerifier
   }
 
@@ -45,8 +45,8 @@ export async function generatePKCEChallenge(length?: number) {
   const challenge = await generateChallenge(verifier)
 
   return {
-    codeVerifier: verifier,
     codeChallenge: challenge,
+    codeVerifier: verifier,
     method: verifier === challenge ? 'plain' : 'S256',
   }
 }

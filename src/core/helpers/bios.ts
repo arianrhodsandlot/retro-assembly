@@ -36,5 +36,5 @@ export async function getArcadeBiosFile(biosName: string) {
   } catch (error) {
     console.warn(error)
   }
-  return blob ? { name: biosName, blob } : undefined
+  return blob ? { blob, name: biosName } : undefined
 }

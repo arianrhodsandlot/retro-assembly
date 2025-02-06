@@ -1,12 +1,12 @@
 import type { Translation } from './types'
 
 const translation: Translation = {
+  About: 'О',
   'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
     'Игра может запускаться только после касания экрана, а не нажатия кнопки на геймпаде.',
+  'an empty directory': 'пустой каталог',
   'A personal retro game collection cabinet in your browser':
     'Персональный кабинет с коллекцией ретро-игр в вашем браузере',
-  About: 'О',
-  'an empty directory': 'пустой каталог',
   'Are you sure to logout?': 'Вы уверены, что выйдете из системы?',
   'Auto detect': 'Автоматически определять',
   'built with your own ROM files': 'построен с вашими собственными файлами ROM',
@@ -34,9 +34,9 @@ const translation: Translation = {
   Keyboard: 'Клавиатура',
   Language: 'Язык',
   'Last Updated': 'Последнее обновление',
-  'Load state': 'Состояние загрузки',
-  'Loading selected state': 'Загрузка выбранного состояния',
   Loading: 'Загрузка',
+  'Loading selected state': 'Загрузка выбранного состояния',
+  'Load state': 'Состояние загрузки',
   'Local file permission is needed': 'Требуется разрешение на локальный файл',
   'Login fail. Error:': 'Неверный логин.  {{ message }}',
   Logout: 'Выйти',
@@ -49,8 +49,8 @@ const translation: Translation = {
   OK: 'ХОРОШО',
   or: 'или',
   'Please do not turn off your device!': 'Пожалуйста, не выключайте свое устройство!',
-  'Press a button on your controller': 'Нажмите кнопку на вашем контроллере',
   Press: 'Нажимать',
+  'Press a button on your controller': 'Нажмите кнопку на вашем контроллере',
   'Previous console': 'Предыдущая консоль',
   'Privacy Policy': 'политика конфиденциальности',
   Proceed: 'Продолжить',
@@ -61,12 +61,12 @@ const translation: Translation = {
   'Return home': 'Вернуться домой',
   Rewind: 'Перемотка назад',
   'Save & exit': 'Сохранять',
-  'Save state': 'Сохранить состояние',
   'Saved at': 'Сохранено в',
+  'Save state': 'Сохранить состояние',
   Saving: 'Сохранение',
   'Select a cloud directory': 'Выберите облачный каталог',
-  'Select a directory to initialize your game library.': 'Выберите каталог для инициализации вашей игровой библиотеки.',
   'select a directory': 'выберите каталог',
+  'Select a directory to initialize your game library.': 'Выберите каталог для инициализации вашей игровой библиотеки.',
   'Select a local directory': 'Выберите локальный каталог',
   'Show/hide menu': 'Показать/скрыть меню',
   'Sign in with': 'Войти в систему с {{ service }}',
@@ -80,9 +80,9 @@ const translation: Translation = {
     'Выбранный вами каталог должен соответствовать определенной структуре:',
   'The directory you choose should match a certain structure.':
     'Выбранный вами каталог должен соответствовать определенной структуре.',
+  'There are no saved states for current game.': 'Для текущей игры нет сохраненных состояний.',
   'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
     'ПЗУ ретро-игр должны быть сгруппированы в отдельные каталоги, а названия каталогов должны быть следующими:',
-  'There are no saved states for current game.': 'Для текущей игры нет сохраненных состояний.',
   'This is due to a limitation of the browser.': 'Это связано с ограничениями браузера.',
   'This is due to a restriction of the security policy of your browser.':
     'Это связано с ограничением политики безопасности вашего браузера.',
@@ -100,12 +100,12 @@ const translation: Translation = {
   'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
     'Мы должны снова попросить вас дать разрешение на чтение ваших ПЗУ, даже если вы уже сделали это в прошлый раз.',
   'You are now authenticated with RetroAssembly.': 'Теперь вы прошли аутентификацию с помощью RetroAssembly.',
-  'You selected an invalid directory as your ROMs directory':
-    'Вы выбрали неверный каталог в качестве каталога ваших ПЗУ.',
   'Your login status is expired. Please login again.': 'Твой {{ loginName }} Статус входа истек. ',
   'Your personal retro game collection cabinet': 'Ваш личный шкаф с коллекцией ретро-игр',
   'Your should choose a directory containing at least one of the above sub directories.':
     'Вам следует выбрать каталог, содержащий хотя бы один из вышеперечисленных подкаталогов.',
+  'You selected an invalid directory as your ROMs directory':
+    'Вы выбрали неверный каталог в качестве каталога ваших ПЗУ.',
 }
 
 export const ru = { translation }

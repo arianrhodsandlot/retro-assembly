@@ -6,18 +6,20 @@ export async function loadGameState(stateId: string) {
   const { emulator, fileSystem } = globalContext
   if (!fileSystem) {
     throw new Error('fileSystem is not valid')
-  } else if (!emulator) {
+  }
+  if (!emulator) {
     throw new Error('emulator is not valid')
-  } else if (!emulator.rom?.fileAccessor.name) {
+  }
+  if (!emulator.rom?.fileAccessor.name) {
     throw new Error('emulator rom is not valid')
   }
 
   const stateDirectory = PreferenceParser.get('stateDirectory')
   const coreStateManager = new CoreStateManager({
     core: emulator.core,
-    name: emulator.rom?.fileAccessor?.name,
     directory: stateDirectory,
     fileSystemProvider: fileSystem,
+    name: emulator.rom?.fileAccessor?.name,
   })
   const state = await coreStateManager.getStateContent(stateId)
   emulator.loadState(state)

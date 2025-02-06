@@ -17,26 +17,10 @@ export class LocalProvider implements FileSystemProvider {
     return new LocalProvider({ handle })
   }
 
-  async getContent(path: string) {
-    const handle = await this.getHandleByPath({ path })
-    if (handle instanceof FileSystemDirectoryHandle) {
-      throw new TypeError(`path "${path}" is not a file but a directory (maybe)`)
-    }
-    return await handle.getFile()
-  }
-
-  async peekContent(path: string) {
-    return await this.getContent(path)
-  }
-
-  async getContentAndCache(path: string) {
-    return await this.getContent(path)
-  }
-
   // path should not start with a slash
   // todo: maybe needs to make it be the same as the onedrive provider
   async create({ file, path }: { file: Blob; path: string }) {
-    const handle = await this.getHandleByPath({ path, create: true })
+    const handle = await this.getHandleByPath({ create: true, path })
     if (handle instanceof FileSystemDirectoryHandle) {
       throw new TypeError(`path "${path}" is not a file but a directory (maybe)`)
     }
@@ -52,9 +36,21 @@ export class LocalProvider implements FileSystemProvider {
   }
 
   async delete(path: string) {
-    const fileHandle = await this.getHandleByPath({ path, create: true })
+    const fileHandle = await this.getHandleByPath({ create: true, path })
     // @ts-expect-error "remove" is not listed in typescript's declaration files
     await fileHandle?.remove()
+  }
+
+  async getContent(path: string) {
+    const handle = await this.getHandleByPath({ path })
+    if (handle instanceof FileSystemDirectoryHandle) {
+      throw new TypeError(`path "${path}" is not a file but a directory (maybe)`)
+    }
+    return await handle.getFile()
+  }
+
+  async getContentAndCache(path: string) {
+    return await this.getContent(path)
   }
 
   async list(path = '') {
@@ -64,7 +60,7 @@ export class LocalProvider implements FileSystemProvider {
     }
     const childrenHandles = await listDirectoryByHandle({ handle })
     const fileAccessors = childrenHandles.map(
-      ({ name, kind }) => new FileAccessor({ name, directory: path, type: kind, fileSystemProvider: this }),
+      ({ kind, name }) => new FileAccessor({ directory: path, fileSystemProvider: this, name, type: kind }),
     )
     return orderBy(fileAccessors, ['name'], ['asc'])
   }
@@ -74,11 +70,11 @@ export class LocalProvider implements FileSystemProvider {
     return await Promise.resolve(undefined)
   }
 
-  private async load() {
-    this.handle ??= await requestLocalHandle({ name: 'rom', mode: 'readwrite' })
+  async peekContent(path: string) {
+    return await this.getContent(path)
   }
 
-  private async getHandleByPath({ path, create = false }: { path: string; create?: boolean }) {
+  private async getHandleByPath({ create = false, path }: { create?: boolean; path: string }) {
     if (!this.handle) {
       await this.load()
       if (!this.handle) {
@@ -100,5 +96,9 @@ export class LocalProvider implements FileSystemProvider {
       }
     }
     return directoryHandle
+  }
+
+  private async load() {
+    this.handle ??= await requestLocalHandle({ mode: 'readwrite', name: 'rom' })
   }
 }

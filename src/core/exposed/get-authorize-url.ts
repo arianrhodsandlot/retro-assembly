@@ -5,12 +5,12 @@ import type { CloudService } from '.'
 
 export async function getAuthorizeUrl(type: CloudService) {
   switch (type) {
-    case 'onedrive':
-      return await OnedriveClient.getAuthorizeUrl()
-    case 'google-drive':
-      return await GoogleDriveClient.getAuthorizeUrl()
     case 'dropbox':
       return await DropboxClient.getAuthorizeUrl()
+    case 'google-drive':
+      return await GoogleDriveClient.getAuthorizeUrl()
+    case 'onedrive':
+      return await OnedriveClient.getAuthorizeUrl()
     default:
       throw new Error('invalid token type')
   }

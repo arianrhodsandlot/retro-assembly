@@ -16,7 +16,7 @@ export function OnedriveButton({ children }: { children?: ReactNode } = {}) {
     const isValid = await validateRomDirectory({ directory: romDirectory, type: 'onedrive' })
 
     if (isValid) {
-      await updatePreference({ fileSystem: 'onedrive', directory: romDirectory })
+      await updatePreference({ directory: romDirectory, fileSystem: 'onedrive' })
       await start()
       navigateToLibrary('onedrive')
     } else {

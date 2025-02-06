@@ -16,6 +16,7 @@ export function UserInteractionButton({ onUserInteract }: UserInteractionButtonP
           aria-hidden
           className='flex-center relative w-72 cursor-pointer rounded border-2 border-rose-700 bg-rose-700 px-4 py-2 text-sm text-white'
           onClick={onUserInteract}
+          type='button'
         >
           {isTouchDevice() ? (
             <>

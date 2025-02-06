@@ -1,14 +1,17 @@
 import { clsx } from 'clsx'
-import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsync } from 'react-use'
 
 interface StateItemProps {
-  state: any
   onSelect: (stateId: string) => void
+  state: any
 }
 
-export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function StateItem({ state, onSelect }, ref) {
+export function StateItem({
+  onSelect,
+  ref,
+  state,
+}: { ref?: React.RefObject<HTMLButtonElement | null> } & StateItemProps) {
   const { t } = useTranslation()
   const thumbnailUrlState = useAsync(async () => await state.thumbnail?.getUrl())
 
@@ -21,6 +24,7 @@ export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function 
       data-testid='state-item'
       onClick={() => onSelect(state.id)}
       ref={ref}
+      type='button'
     >
       <div className='size-36 overflow-hidden'>
         {state.thumbnail ? (
@@ -44,4 +48,4 @@ export const StateItem = forwardRef<HTMLButtonElement, StateItemProps>(function 
       </div>
     </button>
   )
-})
+}

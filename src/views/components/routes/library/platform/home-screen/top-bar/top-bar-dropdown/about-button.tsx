@@ -44,7 +44,7 @@ export function AboutButton() {
             </a>
           </div>
           <div className='flex-center mb-2 mt-1 gap-2 text-xs'>
-            <a className='underline' href='/privacy-policy.html' target='_blank'>
+            <a className='underline' href='/privacy-policy.html' rel='noreferrer' target='_blank'>
               {t('Privacy Policy')}
             </a>
           </div>

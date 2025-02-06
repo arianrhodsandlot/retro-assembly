@@ -34,7 +34,7 @@ export async function getAdditionalFiles(rom: Rom) {
     const parentFilePath = join(romDirectory, platform, parentFileName)
     try {
       const blob = await globalContext.fileSystem.getContent(parentFilePath)
-      return [{ name: parentFileName, blob }]
+      return [{ blob, name: parentFileName }]
     } catch {
       return []
     }

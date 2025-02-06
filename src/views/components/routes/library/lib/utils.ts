@@ -1,3 +1,3 @@
 export function isTouchDevice() {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  return 'ontouchstart' in globalThis || navigator.maxTouchPoints > 0
 }

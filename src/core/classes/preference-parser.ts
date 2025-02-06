@@ -5,35 +5,35 @@ import { getStorageByKey, setStorageByKey } from '../helpers/storage'
 type InputMapping = Record<string, string>
 
 interface PreferenceValues {
-  configProviderType: string
-  stateProviderType: string
-  romProviderType: string
   configDirectory: string
-  stateDirectory: string
-  romDirectory: string
-  gamepadMappings: { name: string; mapping: InputMapping }[]
+  configProviderType: string
+  gamepadMappings: { mapping: InputMapping; name: string }[]
   keyboardMappings: { mapping: InputMapping }[]
+  romDirectory: string
+  romProviderType: string
+  stateDirectory: string
+  stateProviderType: string
 }
 
 const defaultPreferences: PreferenceValues = {
-  configProviderType: 'public',
-  stateProviderType: 'public',
-  romProviderType: 'public',
   configDirectory: '',
-  stateDirectory: '',
-  romDirectory: '',
-  gamepadMappings: [{ name: '', mapping: defaultGamepadMapping }],
+  configProviderType: 'public',
+  gamepadMappings: [{ mapping: defaultGamepadMapping, name: '' }],
   keyboardMappings: [{ mapping: defaultKeyboardMapping }],
+  romDirectory: '',
+  romProviderType: 'public',
+  stateDirectory: '',
+  stateProviderType: 'public',
 }
 
 type PreferenceName = keyof typeof defaultPreferences
 type PreferenceValue = PreferenceValues[PreferenceName]
 
 export class PreferenceParser {
-  static storageKey = 'preference'
-  static emitter = mitt<{
+  static readonly emitter = mitt<{
     updated: { name: string; values: PreferenceValues }
   }>()
+  static readonly storageKey = 'preference'
 
   private preferenceValues: PreferenceValues | undefined
 
@@ -49,17 +49,17 @@ export class PreferenceParser {
     return preferenceParser.get(name)
   }
 
-  static set({ name, value }: { name: PreferenceName; value: any }) {
-    const preferenceParser = new PreferenceParser()
-    return preferenceParser.set({ name, value })
+  static offUpdated(callback: (params: { name: string; values: PreferenceValues }) => void) {
+    PreferenceParser.emitter.off('updated', callback)
   }
 
   static onUpdated(callback: (params: { name: string; values: PreferenceValues }) => void) {
     PreferenceParser.emitter.on('updated', callback)
   }
 
-  static offUpdated(callback: (params: { name: string; values: PreferenceValues }) => void) {
-    PreferenceParser.emitter.off('updated', callback)
+  static set({ name, value }: { name: PreferenceName; value: any }) {
+    const preferenceParser = new PreferenceParser()
+    return preferenceParser.set({ name, value })
   }
 
   get(name: Exclude<PreferenceName, 'gamepadMappings' | 'keyboardMappings'>): string

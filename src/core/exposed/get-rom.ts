@@ -14,10 +14,10 @@ export function getRom({ platform, rom }) {
   const directory = join(romDirectory, platform)
 
   const fileAccessor = new FileAccessor({
-    name: rom,
     directory,
-    type: 'file',
     fileSystemProvider: fileSystem,
+    name: rom,
+    type: 'file',
   })
   return Rom.fromFileAccessor(fileAccessor)
 }

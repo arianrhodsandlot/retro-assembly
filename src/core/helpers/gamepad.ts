@@ -47,7 +47,7 @@ function updateGamepadStatus({ gamepad, gamepadStatus }) {
     }
   }
   if (pressedForTimesButtonIndicies.length > 0) {
-    pressButtonsCallback({ gamepad, pressedForTimesButtonIndicies, pressedButtonIndicies })
+    pressButtonsCallback({ gamepad, pressedButtonIndicies, pressedForTimesButtonIndicies })
   }
 
   // update button status record for using in next loop
@@ -60,7 +60,7 @@ function updateGamepadStatus({ gamepad, gamepadStatus }) {
   }
 }
 
-function updateGamepadsStatus({ index, gamepad }) {
+function updateGamepadsStatus({ gamepad, index }) {
   const gamepadStatus = gamepadsStatus[index] ?? []
   updateGamepadStatus({ gamepad, gamepadStatus })
   gamepadsStatus[index] = gamepadStatus
@@ -71,7 +71,7 @@ export function gamepadPollLoop() {
     const gamepads = navigator.getGamepads()
     for (const [index, gamepad] of gamepads.entries()) {
       if (gamepad) {
-        updateGamepadsStatus({ index, gamepad })
+        updateGamepadsStatus({ gamepad, index })
       }
     }
   }
@@ -80,22 +80,22 @@ export function gamepadPollLoop() {
 
 interface PressButtonListenerFunctionParam {
   gamepad?: Gamepad
-  pressedForTimesButtonNames?: string[]
+  pressedButtonIndicies?: number[]
   pressedButtonNames?: string[]
   pressedForTimesButtonIndicies?: number[]
-  pressedButtonIndicies?: number[]
+  pressedForTimesButtonNames?: string[]
 }
 export type PressButtonListenerFunction = (param: PressButtonListenerFunctionParam) => void
 interface PressButtonListener {
   buttonNames: string[]
-  originalCallback: any
   listener: PressButtonListenerFunction
+  originalCallback: any
 }
 const pressButtonListeners: PressButtonListener[] = []
 interface PressButtonsCallbackParams {
   gamepad: Gamepad
-  pressedForTimesButtonIndicies: number[]
   pressedButtonIndicies: number[]
+  pressedForTimesButtonIndicies: number[]
 }
 function pressButtonsCallback({
   gamepad,
@@ -113,10 +113,10 @@ function pressButtonsCallback({
     for (const { listener } of pressButtonListeners) {
       listener({
         gamepad,
-        pressedForTimesButtonNames,
+        pressedButtonIndicies,
         pressedButtonNames,
         pressedForTimesButtonIndicies,
-        pressedButtonIndicies,
+        pressedForTimesButtonNames,
       })
     }
   }
@@ -126,13 +126,13 @@ export function onPressAnyButton(callback: PressButtonListenerFunction) {
   if (typeof callback === 'function') {
     pressButtonListeners.push({
       buttonNames: [],
-      originalCallback: callback,
       listener(params) {
-        const { pressedForTimesButtonIndicies, pressedButtonIndicies } = params
+        const { pressedButtonIndicies, pressedForTimesButtonIndicies } = params
         if (pressedForTimesButtonIndicies && pressedButtonIndicies) {
           callback(params)
         }
       },
+      originalCallback: callback,
     })
   }
 }
@@ -149,8 +149,7 @@ export function onPressButtons(buttonNames: string[], callback) {
   if (typeof callback === 'function') {
     pressButtonListeners.push({
       buttonNames,
-      originalCallback: callback,
-      listener({ pressedForTimesButtonNames, pressedButtonNames }) {
+      listener({ pressedButtonNames, pressedForTimesButtonNames }) {
         if (
           buttonNames.every((buttonName) => pressedForTimesButtonNames?.includes(buttonName)) &&
           buttonNames.some((buttonName) => pressedButtonNames?.includes(buttonName))
@@ -158,6 +157,7 @@ export function onPressButtons(buttonNames: string[], callback) {
           callback()
         }
       },
+      originalCallback: callback,
     })
   }
 }
@@ -185,7 +185,7 @@ function startGamepadPollLoop() {
   }
 }
 
-window.addEventListener('gamepadconnected', () => {
+globalThis.addEventListener('gamepadconnected', () => {
   startGamepadPollLoop()
 })
 

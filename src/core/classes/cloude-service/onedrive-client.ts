@@ -5,13 +5,13 @@ import type { CloudServiceClient } from './cloud-service-client'
 
 const hostUrl = `${location.protocol}//${location.host}`
 export class OnedriveClient extends Auth implements CloudServiceClient {
-  static tokenStorageKey = 'onedrive-token'
+  static readonly tokenStorageKey = 'onedrive-token'
   protected static config = {
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-    tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     clientId: import.meta.env.VITE_ONEDRIVE_CLIENT_ID,
-    scope: ['offline_access', 'Files.ReadWrite.All'],
     redirectUri: `${hostUrl}/auth/onedrive`,
+    scope: ['offline_access', 'Files.ReadWrite.All'],
+    tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
   }
 
   private client: Client | Promise<Client>
@@ -26,13 +26,13 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
 
     const query = {
       client_id: this.config.clientId,
-      scope: this.config.scope.join(' '),
-      response_type: 'code',
-      redirect_uri: this.config.redirectUri,
       code_challenge: codeChallenge,
       code_challenge_method: method,
+      redirect_uri: this.config.redirectUri,
+      response_type: 'code',
+      scope: this.config.scope.join(' '),
     }
-    return queryString.stringifyUrl({ url: this.config.authorizeUrl, query })
+    return queryString.stringifyUrl({ query, url: this.config.authorizeUrl })
   }
 
   static async validateAccessToken() {
@@ -70,18 +70,18 @@ export class OnedriveClient extends Auth implements CloudServiceClient {
 
   async request({
     api,
-    method = 'get',
-    top,
-    skipToken,
-    orderby,
     content,
+    method = 'get',
+    orderby,
+    skipToken,
+    top,
   }: {
     api: Parameters<Client['api']>[0]
-    method?: string
-    top?: Parameters<GraphRequest['top']>[0]
-    skipToken?: Parameters<GraphRequest['skipToken']>[0]
-    orderby?: Parameters<GraphRequest['orderby']>[0]
     content?: unknown
+    method?: string
+    orderby?: Parameters<GraphRequest['orderby']>[0]
+    skipToken?: Parameters<GraphRequest['skipToken']>[0]
+    top?: Parameters<GraphRequest['top']>[0]
   }) {
     const client = await this.client
     let request = client.api(api)

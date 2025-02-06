@@ -9,18 +9,18 @@ import type { TreeNode } from './types'
 import { toggleNodeExpanded } from './utils'
 
 interface DirectoryTreeNodeParams {
-  node: TreeNode
   cloudService: CloudService
+  node: TreeNode
   onSelect: (path: string) => void
 }
 
-export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTreeNodeParams) {
+export function DirectoryTreeNode({ cloudService, node, onSelect }: DirectoryTreeNodeParams) {
   const { t } = useTranslation()
   const [tree, setTree] = useAtom(directoyTreeAtom)
 
   const [state, { execute: updateTree }] = useAsync(async () => {
     if (tree) {
-      await toggleNodeExpanded({ node, cloudService })
+      await toggleNodeExpanded({ cloudService, node })
       setTree({ ...tree })
     }
   })
@@ -81,6 +81,7 @@ export function DirectoryTreeNode({ node, cloudService, onSelect }: DirectoryTre
                 'group-hover:scale-100 group-hover:opacity-100',
               )}
               onClick={() => onSelect(node.path)}
+              type='button'
             >
               <span className='icon-[mdi--check] mr-1 size-4' />
               {t('Proceed')}

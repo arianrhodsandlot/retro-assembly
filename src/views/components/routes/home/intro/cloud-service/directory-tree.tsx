@@ -5,9 +5,9 @@ import { directoyTreeAtom } from './atoms'
 import { DirectoryTreeNode } from './directory-tree-node'
 
 const cloudServiceNameMap = {
-  onedrive: 'OneDrive',
-  'google-drive': 'Google Drive',
   dropbox: 'Dropbox',
+  'google-drive': 'Google Drive',
+  onedrive: 'OneDrive',
 }
 
 interface DirectoryTreeParams {
@@ -28,12 +28,12 @@ export function DirectoryTree({ cloudService, onSelect }: DirectoryTreeParams) {
   useEffect(() => {
     if (!tree) {
       const initialTree = {
-        path: '/',
-        name,
-        expanded: false,
-        isDirectory: true,
-        hasChildren: true,
         children: undefined,
+        expanded: false,
+        hasChildren: true,
+        isDirectory: true,
+        name,
+        path: '/',
       }
       setTree(initialTree)
     }

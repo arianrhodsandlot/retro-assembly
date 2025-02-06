@@ -1,4 +1,4 @@
-import { AnimatePresence, type TargetAndTransition, motion } from 'framer-motion'
+import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion'
 import { useRef } from 'react'
 import { Link } from 'wouter'
 import { platformImageMap } from '../../../../../../../lib/constants'
@@ -7,14 +7,14 @@ import { TopBarButton } from '../top-bar-button'
 import { getPlatformDisplayName } from './utils'
 
 interface PlatformNavigationItemProps {
-  platform: {
-    name: string
-    fullName: string
-  }
   highlighted?: boolean
+  platform: {
+    fullName: string
+    name: string
+  }
 }
 
-export function PlatformNavigationItem({ platform, highlighted = false }: PlatformNavigationItemProps) {
+export function PlatformNavigationItem({ highlighted = false, platform }: PlatformNavigationItemProps) {
   const { linkToPlatform } = useRouterHelpers()
   const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -25,7 +25,7 @@ export function PlatformNavigationItem({ platform, highlighted = false }: Platfo
       return
     }
     const left = target.offsetLeft - container.offsetLeft - target.clientWidth
-    container.scroll({ left: left >= 0 ? left : 0, behavior: 'smooth' })
+    container.scroll({ behavior: 'smooth', left: Math.max(left, 0) })
   }
 
   function onAnimationComplete(definition: TargetAndTransition) {

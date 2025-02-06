@@ -17,14 +17,14 @@ const districtsIconMap = {
   K: <span className='icon-[twemoji--flag-south-korea] mr-2 size-4 align-middle' />,
   Nl: <span className='icon-[twemoji--flag-netherlands] mr-2 size-4 align-middle' />,
   No: <span className='icon-[twemoji--flag-norway] mr-2 size-4 align-middle' />,
+  PD: <span className='icon-[twemoji--free-button] mr-2 size-4 align-middle' />,
   R: <span className='icon-[twemoji--flag-russia] mr-2 size-4 align-middle' />,
   S: <span className='icon-[twemoji--flag-spain] mr-2 size-4 align-middle' />,
   Sw: <span className='icon-[twemoji--flag-sweden] mr-2 size-4 align-middle' />,
   U: <span className='icon-[twemoji--flag-united-states] mr-2 size-4 align-middle' />,
   UK: <span className='icon-[twemoji--flag-united-kingdom] mr-2 size-4 align-middle' />,
-  W: <span className='icon-[twemoji--flag-united-nations] mr-2 size-4 align-middle' />,
-  PD: <span className='icon-[twemoji--free-button] mr-2 size-4 align-middle' />,
   Unk: <span className='icon-[twemoji--red-question-mark] mr-2 size-4 align-middle' />,
+  W: <span className='icon-[twemoji--flag-united-nations] mr-2 size-4 align-middle' />,
 }
 
 export function DistrictIcon({ district }: { district: string }) {

@@ -9,9 +9,9 @@ import { BaseButton } from '../primitives/base-button'
 import { ReturnToHomeButton } from './return-to-home-button'
 
 const cloudServiceMap = {
-  onedrive: 'Microsoft',
-  'google-drive': 'Google',
   dropbox: 'Dropbox',
+  'google-drive': 'Google',
+  onedrive: 'Microsoft',
 }
 
 function openAuthWindow(url) {
@@ -25,19 +25,19 @@ function openAuthWindow(url) {
 
 interface CloudServiceLoginButtonProps {
   cloudService: CloudService
-  showReturnHome?: boolean
   onLogin: () => void
+  showReturnHome?: boolean
 }
 
 const emitter = mitt()
 export function CloudServiceLoginButton({
   cloudService,
-  showReturnHome = false,
   onLogin,
+  showReturnHome = false,
 }: CloudServiceLoginButtonProps) {
   const { t } = useTranslation()
   const [authorizeUrlState] = useAsyncExecute(async () => await getAuthorizeUrl(cloudService))
-  const authorizeWindow = useRef<Window | null>(null)
+  const authorizeWindow = useRef<null | Window>(null)
   const [isAuthWindowOpening, setIsAuthWindowOpening] = useState(false)
 
   useIntervalEffect(() => {
@@ -109,9 +109,9 @@ export function CloudServiceLoginButton({
       >
         <span
           className={clsx('mr-2 inline-block size-5 shrink-0', {
-            'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
-            'icon-[logos--google-icon]': cloudService === 'google-drive',
             'icon-[logos--dropbox]': cloudService === 'dropbox',
+            'icon-[logos--google-icon]': cloudService === 'google-drive',
+            'icon-[logos--microsoft-icon]': cloudService === 'onedrive',
           })}
         />
         <span className='shrink-0'>{t('Sign in with', { service: cloudServiceMap[cloudService] })}</span>

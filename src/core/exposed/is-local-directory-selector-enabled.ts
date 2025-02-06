@@ -1,3 +1,3 @@
 export function isLocalDirectorySelectorEnabled() {
-  return typeof window.showDirectoryPicker === 'function'
+  return typeof globalThis.showDirectoryPicker === 'function'
 }

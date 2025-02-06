@@ -29,11 +29,11 @@ export async function launchGame(
     getEmulatorConfig(),
   ])
   const emulator = new Emulator({
-    rom,
-    biosFiles,
     additionalFiles,
-    retroarchConfig: emulatorConfig.retroarch,
+    biosFiles,
     coreConfig: emulatorConfig.retroarchCore,
+    retroarchConfig: emulatorConfig.retroarch,
+    rom,
   })
   globalContext.emulator = emulator
   await emulator.launch(waitForUserInteraction)

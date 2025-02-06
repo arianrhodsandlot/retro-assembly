@@ -6,9 +6,9 @@ import { FileAccessor } from './file-accessor'
 import type { FileSystemProvider } from './file-system-provider'
 
 interface ListOptions {
-  pageSize?: number
-  pageCursor?: string
   orderBy?: string
+  pageCursor?: string
+  pageSize?: number
 }
 
 let onedriveCloudProvider: OnedriveProvider
@@ -29,6 +29,25 @@ export class OnedriveProvider implements FileSystemProvider {
     return onedriveCloudProvider
   }
 
+  // path should start with a slash
+  async create({ file, path }) {
+    return await this.client.request({
+      api: `/me/drive/root:${path}:/content`,
+      content: file,
+      method: 'put',
+    })
+  }
+
+  async delete(path: string) {
+    if (!path) {
+      return
+    }
+    return await this.client.request({
+      api: `/me/drive/root:${path}`,
+      method: 'delete',
+    })
+  }
+
   async getContent(path: string) {
     const { '@microsoft.graph.downloadUrl': downloadUrl } = await this.client.request({ api: `/me/drive/root:${path}` })
     return await http(downloadUrl).blob()
@@ -45,33 +64,8 @@ export class OnedriveProvider implements FileSystemProvider {
     return blob
   }
 
-  async peekContent(path: string) {
-    const cacheKey = { name: 'OnedriveProvider.peekContent', path }
-    const rawCache = await RequestCache.get(cacheKey)
-    return rawCache?.value
-  }
-
-  // path should start with a slash
-  async create({ file, path }) {
-    return await this.client.request({
-      api: `/me/drive/root:${path}:/content`,
-      method: 'put',
-      content: file,
-    })
-  }
-
-  async delete(path: string) {
-    if (!path) {
-      return
-    }
-    return await this.client.request({
-      api: `/me/drive/root:${path}`,
-      method: 'delete',
-    })
-  }
-
   async list(path: string) {
-    const children: { name: string; folder?: unknown }[] = []
+    const children: { folder?: unknown; name: string }[] = []
     let listNextPage = async () => await this.listChildrenByPages(path, {})
     do {
       const result = await listNextPage()
@@ -86,10 +80,10 @@ export class OnedriveProvider implements FileSystemProvider {
     return children.map(
       (item) =>
         new FileAccessor({
-          name: item.name,
           directory: path,
-          type: 'folder' in item ? 'directory' : 'file',
           fileSystemProvider: this,
+          name: item.name,
+          type: 'folder' in item ? 'directory' : 'file',
         }),
     )
   }
@@ -100,23 +94,29 @@ export class OnedriveProvider implements FileSystemProvider {
     const fileAccessors: FileAccessor[] | undefined = children?.map(
       (item) =>
         new FileAccessor({
-          name: item.name,
           directory: path,
-          type: 'folder' in item ? 'directory' : 'file',
           fileSystemProvider: this,
+          name: item.name,
+          type: 'folder' in item ? 'directory' : 'file',
         }),
     )
     return fileAccessors
   }
 
+  async peekContent(path: string) {
+    const cacheKey = { name: 'OnedriveProvider.peekContent', path }
+    const rawCache = await RequestCache.get(cacheKey)
+    return rawCache?.value
+  }
+
   private async listChildrenByPages(
     path: string,
-    { pageSize = 200, pageCursor = '', orderBy = 'name' }: ListOptions = {},
+    { orderBy = 'name', pageCursor = '', pageSize = 200 }: ListOptions = {},
   ) {
     const apiPath = !path || path === '/' ? '/me/drive/root/children' : `/me/drive/root:${path}:/children`
-    const result = await this.client.request({ api: apiPath, top: pageSize, skipToken: pageCursor, orderby: orderBy })
-    const items: { name: string; folder?: unknown }[] = result.value
-    const pager = { size: pageSize, cursor: '' }
+    const result = await this.client.request({ api: apiPath, orderby: orderBy, skipToken: pageCursor, top: pageSize })
+    const items: { folder?: unknown; name: string }[] = result.value
+    const pager = { cursor: '', size: pageSize }
     const nextLink = result['@odata.nextLink']
     let listNextPage
     if (nextLink) {
@@ -126,14 +126,14 @@ export class OnedriveProvider implements FileSystemProvider {
       if (skipToken) {
         pager.cursor = skipToken.toString()
         listNextPage = async () =>
-          await this.listChildrenByPages(path, { pageSize: pager.size, pageCursor: pager.cursor, orderBy })
+          await this.listChildrenByPages(path, { orderBy, pageCursor: pager.cursor, pageSize: pager.size })
       }
     }
 
     return {
       items,
-      pager,
       listNextPage,
+      pager,
     }
   }
 }

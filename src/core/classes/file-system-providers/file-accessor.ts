@@ -2,31 +2,43 @@ import { join, parse } from 'path-browserify'
 import type { FileSystemProvider } from './file-system-provider'
 
 export interface FileAccessorOptions {
-  name: string
   directory: string
-  type: string
-  temporaryUrl?: string
-  meta?: any
   fileSystemProvider: FileSystemProvider
+  meta?: any
+  name: string
+  temporaryUrl?: string
+  type: string
 }
 
 export class FileAccessor {
-  readonly name: string
-  readonly directory: string
-  readonly path: string
-
   readonly basename: string
+  readonly directory: string
   readonly extname: string
 
   public readonly meta: any
+  readonly name: string
 
-  private type: string
-  private temporaryUrl: string
-  private blobUrl: string | undefined
+  readonly path: string
+
+  get isDirectory() {
+    return this.type === 'directory'
+  }
+  get isFile() {
+    return this.type === 'file'
+  }
+  get isLoaded() {
+    return Boolean(this.blob)
+  }
   private blob: Blob | undefined
+  private blobUrl: string | undefined
+
   private fileSystemProvider: FileSystemProvider
 
-  constructor({ name, directory, type, temporaryUrl = '', meta, fileSystemProvider }: FileAccessorOptions) {
+  private temporaryUrl: string
+
+  private type: string
+
+  constructor({ directory, fileSystemProvider, meta, name, temporaryUrl = '', type }: FileAccessorOptions) {
     this.name = name
     this.directory = directory
     this.type = type
@@ -34,21 +46,9 @@ export class FileAccessor {
     this.fileSystemProvider = fileSystemProvider
     this.path = join(directory, name)
     this.meta = meta
-    const { name: base, ext } = parse(name)
+    const { ext, name: base } = parse(name)
     this.basename = base
     this.extname = ext.slice(1)
-  }
-
-  get isDirectory() {
-    return this.type === 'directory'
-  }
-
-  get isFile() {
-    return this.type === 'file'
-  }
-
-  get isLoaded() {
-    return Boolean(this.blob)
   }
 
   async getBlob() {

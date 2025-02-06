@@ -7,15 +7,15 @@ const discoveryDocs = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/re
 const hostUrl = `${location.protocol}//${location.host}`
 
 export class GoogleDriveClient extends Auth implements CloudServiceClient {
-  static tokenStorageKey = 'google-drive-token'
+  static readonly tokenStorageKey = 'google-drive-token'
 
   protected static config = {
     authorizeUrl: 'https://accounts.google.com/o/oauth2/auth',
-    tokenUrl: 'https://oauth2.googleapis.com/token',
     clientId: import.meta.env.VITE_GOOGLE_DRIVE_CLIENT_ID,
     clientSecret: import.meta.env.VITE_GOOGLE_DRIVE_CLIENT_SECRET,
-    scope: ['https://www.googleapis.com/auth/drive'],
     redirectUri: `${hostUrl}/auth/google-drive`,
+    scope: ['https://www.googleapis.com/auth/drive'],
+    tokenUrl: 'https://oauth2.googleapis.com/token',
   }
 
   private static apiKey = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY
@@ -24,7 +24,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
 
   constructor() {
     super()
-    if (!('gapi' in window)) {
+    if (!('gapi' in globalThis)) {
       throw new Error('gapi is not available')
     }
     this.client = gapi
@@ -34,20 +34,20 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
     const { codeChallenge, method } = await this.getPkceChanllenge()
 
     const query = {
+      access_type: 'offline',
       client_id: this.config.clientId,
-      scope: this.config.scope.join(' '),
-      response_type: 'code',
-      redirect_uri: this.config.redirectUri,
       code_challenge: codeChallenge,
       code_challenge_method: method,
       prompt: 'consent',
-      access_type: 'offline',
+      redirect_uri: this.config.redirectUri,
+      response_type: 'code',
+      scope: this.config.scope.join(' '),
     }
-    return queryString.stringifyUrl({ url: this.config.authorizeUrl, query })
+    return queryString.stringifyUrl({ query, url: this.config.authorizeUrl })
   }
 
   static async loadGapi() {
-    if (!('gapi' in window)) {
+    if (!('gapi' in globalThis)) {
       await getScript('https://apis.google.com/js/api.js')
     }
     if (!gapi.client) {
@@ -70,7 +70,7 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
 
     await GoogleDriveClient.loadGapi()
     try {
-      await gapi.client.drive.files.list({ pageSize: 1, fields: 'files(id)' })
+      await gapi.client.drive.files.list({ fields: 'files(id)', pageSize: 1 })
     } catch (error) {
       console.warn(error)
       return false
@@ -78,24 +78,24 @@ export class GoogleDriveClient extends Auth implements CloudServiceClient {
     return true
   }
 
-  protected static shouldRefreshToken(error: unknown) {
-    return (error as any)?.result?.error?.status === 'UNAUTHENTICATED'
-  }
-
   protected static async refreshToken() {
     await super.refreshToken()
     gapi.client.setToken({ access_token: GoogleDriveClient.getAccessToken() })
   }
 
-  async list(...args: Parameters<typeof gapi.client.drive.files.list>) {
-    return await GoogleDriveClient.requestWithRefreshTokenOnError(
-      async () => await this.client.client.drive.files.list(...args),
-    )
+  protected static shouldRefreshToken(error: unknown) {
+    return (error as any)?.result?.error?.status === 'UNAUTHENTICATED'
   }
 
   async create(...args: Parameters<typeof gapi.client.drive.files.create>) {
     return await GoogleDriveClient.requestWithRefreshTokenOnError(
       async () => await this.client.client.drive.files.create(...args),
+    )
+  }
+
+  async list(...args: Parameters<typeof gapi.client.drive.files.list>) {
+    return await GoogleDriveClient.requestWithRefreshTokenOnError(
+      async () => await this.client.client.drive.files.list(...args),
     )
   }
 }

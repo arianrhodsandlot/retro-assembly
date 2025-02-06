@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
-import { type Rom, isUsingDemo } from '../../../../../../../core'
+import { isUsingDemo, type Rom } from '../../../../../../../core'
 import { getCDNHost } from '../../../../../../../core/constants/dependencies'
 import { platformContentImageMap } from '../../../../../../lib/constants'
 import { GameEntryImage } from './game-entry-image'
@@ -22,7 +22,7 @@ export function GameEntryContent({ rom }: { rom: Rom }) {
     const abortController = new AbortController()
     abortControllerRef.current = abortController
     if (usingDemo) {
-      let { platform, fileAccessor } = rom
+      let { fileAccessor, platform } = rom
       if (platform === 'megadrive') {
         platform = 'md'
       }

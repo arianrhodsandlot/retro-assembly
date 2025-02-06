@@ -8,40 +8,40 @@ import type { FileSystemProvider } from './file-system-providers/file-system-pro
 const stateCreateTimeFormat = 'yyyyMMddHHmmssSSS'
 
 interface CoreStateParams {
-  core: string
-  name: string
-  createTime: number
   blob: Blob
+  core: string
+  createTime: number
+  name: string
   thumbnailBlob?: Blob
 }
 
 interface CoreState {
-  id: string
-  name: string
   createTime: {
     date: Date
     humanized: string
   }
+  id: string
+  name: string
   path: string
   thumbnail: FileAccessor | undefined
 }
 
 export class CoreStateManager {
   core: string
-  name: string
   directory: string
   fileSystemProvider: FileSystemProvider
+  name: string
 
   constructor({
     core,
-    name,
     directory,
     fileSystemProvider,
+    name,
   }: {
     core: string
-    name: string
     directory: string
     fileSystemProvider: FileSystemProvider
+    name: string
   }) {
     this.core = core
     this.name = name
@@ -50,8 +50,8 @@ export class CoreStateManager {
   }
 
   async createState(state: CoreStateParams) {
-    const { fileSystemProvider, directory } = this
-    const { core, name, createTime, blob, thumbnailBlob } = state
+    const { directory, fileSystemProvider } = this
+    const { blob, core, createTime, name, thumbnailBlob } = state
     const stateBaseFileName = lightFormat(toDate(createTime), stateCreateTimeFormat)
     const stateDirPath = join(directory, core, name)
     await fileSystemProvider.create({ file: blob, path: join(stateDirPath, `${stateBaseFileName}.state`) })
@@ -60,8 +60,24 @@ export class CoreStateManager {
     }
   }
 
+  async deleteState(stateId: string) {
+    const { core, directory, fileSystemProvider, name } = this
+    const stateDirPath = join(directory, core, name)
+    await Promise.allSettled([
+      fileSystemProvider.delete(join(stateDirPath, `${stateId}.state`)),
+      fileSystemProvider.delete(join(stateDirPath, `${stateId}.png`)),
+    ])
+  }
+
+  async getStateContent(stateId: string) {
+    const { core, directory, fileSystemProvider, name } = this
+    const stateDirPath = join(directory, core, name)
+    const statePath = join(stateDirPath, `${stateId}.state`)
+    return await fileSystemProvider.getContent(statePath)
+  }
+
   async getStates() {
-    const { fileSystemProvider, core, directory, name } = this
+    const { core, directory, fileSystemProvider, name } = this
     const stateDirPath = join(directory, core, name)
 
     let fileAccessors: FileAccessor[] = []
@@ -84,9 +100,9 @@ export class CoreStateManager {
       if (createTime) {
         if (extname === 'state') {
           const state = {
+            createTime: { date: createTime, humanized: humanizeDate(createTime) },
             id: basename,
             name,
-            createTime: { humanized: humanizeDate(createTime), date: createTime },
             path,
             thumbnail: undefined,
           }
@@ -103,22 +119,6 @@ export class CoreStateManager {
     }
 
     return orderBy(states, ['createTime.date'], ['desc'])
-  }
-
-  async deleteState(stateId: string) {
-    const { fileSystemProvider, directory, core, name } = this
-    const stateDirPath = join(directory, core, name)
-    await Promise.allSettled([
-      fileSystemProvider.delete(join(stateDirPath, `${stateId}.state`)),
-      fileSystemProvider.delete(join(stateDirPath, `${stateId}.png`)),
-    ])
-  }
-
-  async getStateContent(stateId: string) {
-    const { fileSystemProvider, directory, core, name } = this
-    const stateDirPath = join(directory, core, name)
-    const statePath = join(stateDirPath, `${stateId}.state`)
-    return await fileSystemProvider.getContent(statePath)
   }
 }
 

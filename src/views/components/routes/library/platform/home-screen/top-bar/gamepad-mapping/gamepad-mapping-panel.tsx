@@ -3,16 +3,16 @@ import { useEffect, useRef, useState } from 'react'
 import { onPressAny } from '../../../../../../../../core'
 import { InputMappingPanel } from '../../../../../../common/input-mapping-panel'
 
-type GamepadMapping = Record<string | number, string>
+type GamepadMapping = Record<number | string, string>
 
 interface GamepadMappingPanelProps {
   gamepad: Gamepad
   mapping: GamepadMapping | undefined
-  onUpdateMapping: (mapping: GamepadMapping) => void
   onResetMapping: () => void
+  onUpdateMapping: (mapping: GamepadMapping) => void
 }
 
-export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onResetMapping }: GamepadMappingPanelProps) {
+export function GamepadMappingPanel({ gamepad, mapping, onResetMapping, onUpdateMapping }: GamepadMappingPanelProps) {
   const [waitingButton, setWaitingButton] = useState('')
   const inputTimerRef = useRef(0)
   const offPressAnyRef = useRef<() => void>()
@@ -59,7 +59,7 @@ export function GamepadMappingPanel({ gamepad, mapping, onUpdateMapping, onReset
       offPressAnyRef.current?.()
     }
 
-    inputTimerRef.current = window.setTimeout(() => {
+    inputTimerRef.current = globalThis.setTimeout(() => {
       finishWaitForButtonPressed()
     }, 5000)
   }

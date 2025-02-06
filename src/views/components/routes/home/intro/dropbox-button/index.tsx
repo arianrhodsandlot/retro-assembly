@@ -16,7 +16,7 @@ export function DropboxButton({ children }: { children?: ReactNode } = {}) {
     const isValid = await validateRomDirectory({ directory: romDirectory, type: 'dropbox' })
 
     if (isValid) {
-      await updatePreference({ fileSystem: 'dropbox', directory: romDirectory })
+      await updatePreference({ directory: romDirectory, fileSystem: 'dropbox' })
       setIsInvalidDialogOpen(false)
       await start()
       navigateToLibrary('dropbox')

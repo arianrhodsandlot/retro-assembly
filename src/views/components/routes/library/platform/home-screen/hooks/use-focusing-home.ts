@@ -15,7 +15,7 @@ export function isFocusingHome() {
   return gameEntryGrid.contains(document.activeElement) || platformNavigation.contains(document.activeElement)
 }
 export function useFocusingHome() {
-  const [focusingHome, setFocusingHome] = useState(isFocusingHome())
+  const [focusingHome, setFocusingHome] = useState(isFocusingHome)
 
   useEffect(() => {
     function onFocus() {

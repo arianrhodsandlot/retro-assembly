@@ -5,14 +5,14 @@ import type { CloudService } from '.'
 
 export async function retrieveToken(type: CloudService) {
   switch (type) {
-    case 'onedrive':
-      await OnedriveClient.retrieveToken()
+    case 'dropbox':
+      await DropboxClient.retrieveToken()
       break
     case 'google-drive':
       await GoogleDriveClient.retrieveToken()
       break
-    case 'dropbox':
-      await DropboxClient.retrieveToken()
+    case 'onedrive':
+      await OnedriveClient.retrieveToken()
       break
     default:
       throw new Error('invalid token type')

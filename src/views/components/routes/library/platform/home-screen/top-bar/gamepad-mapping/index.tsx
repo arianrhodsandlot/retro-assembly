@@ -21,9 +21,9 @@ export function GamepadMapping() {
     const newMappings = [...gamepadMappings]
 
     if (index > -1) {
-      newMappings[index] = { name: currentGamePadId, mapping }
+      newMappings[index] = { mapping, name: currentGamePadId }
     } else {
-      newMappings.push({ name: currentGamePadId, mapping })
+      newMappings.push({ mapping, name: currentGamePadId })
     }
 
     updateGamepadMappings(newMappings)
@@ -52,12 +52,12 @@ export function GamepadMapping() {
 
     updateGamepads()
 
-    window.addEventListener('gamepadconnected', updateGamepads)
-    window.addEventListener('gamepaddisconnected', updateGamepads)
+    globalThis.addEventListener('gamepadconnected', updateGamepads)
+    globalThis.addEventListener('gamepaddisconnected', updateGamepads)
 
     return () => {
-      window.removeEventListener('gamepadconnected', updateGamepads)
-      window.removeEventListener('gamepaddisconnected', updateGamepads)
+      globalThis.removeEventListener('gamepadconnected', updateGamepads)
+      globalThis.removeEventListener('gamepaddisconnected', updateGamepads)
     }
   }, [setGamepads, setCurrentGamePadId])
 
@@ -72,6 +72,7 @@ export function GamepadMapping() {
                   'flex w-full items-center gap-2 truncate rounded bg-rose-800 px-4 py-2 text-sm text-white',
                 )}
                 onClick={() => setCurrentGamePadId(gamepad.id)}
+                type='button'
               >
                 <span className='icon-[mdi--controller] size-5' />
                 {gamepad.id}

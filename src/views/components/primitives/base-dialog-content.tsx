@@ -12,9 +12,10 @@ interface BaseDialogProps extends DialogProps {
 
 export function BaseDialogContent({
   children,
-  open = true,
   closable = false,
   closableByGamepadCancel = true,
+  onOpenChange,
+  open = true,
   ...props
 }: BaseDialogProps) {
   useEffect(() => {
@@ -29,14 +30,14 @@ export function BaseDialogContent({
     if (open && closableByGamepadCancel) {
       const offCancel = onCancel(() => {
         offCancel()
-        props.onOpenChange?.(false)
+        onOpenChange?.(false)
       })
 
       return () => {
         offCancel()
       }
     }
-  }, [props, closable, open, closableByGamepadCancel])
+  }, [onOpenChange, closable, open, closableByGamepadCancel])
 
   return (
     <Dialog open={open} {...props}>

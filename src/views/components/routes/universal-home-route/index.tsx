@@ -8,7 +8,7 @@ import { HomeScreen } from '../library/platform/home-screen'
 import { GameAddons } from '../library/rom/game-addons'
 
 export function UniversalHomeRoute() {
-  const { params, isHomeRoute, isPlatformRoute, isRomRoute, navigateToLibrary, navigateToPlatform, redirectToHome } =
+  const { isHomeRoute, isPlatformRoute, isRomRoute, navigateToLibrary, navigateToPlatform, params, redirectToHome } =
     useRouterHelpers()
   const [started, setStarted] = useState(false)
 

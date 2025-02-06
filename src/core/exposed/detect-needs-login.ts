@@ -5,12 +5,12 @@ import type { CloudService } from '.'
 
 export async function detectNeedsLogin(type: CloudService) {
   switch (type) {
-    case 'onedrive':
-      return !(await OnedriveClient.validateAccessToken())
-    case 'google-drive':
-      return !(await GoogleDriveClient.validateAccessToken())
     case 'dropbox':
       return !(await DropboxClient.validateAccessToken())
+    case 'google-drive':
+      return !(await GoogleDriveClient.validateAccessToken())
+    case 'onedrive':
+      return !(await OnedriveClient.validateAccessToken())
     default:
       throw new Error('invalid token type')
   }

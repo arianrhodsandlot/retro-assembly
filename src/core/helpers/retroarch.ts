@@ -3,22 +3,22 @@ import { PreferenceParser } from '../classes/preference-parser'
 
 const defaultRetroarchConfig = {
   menu_driver: 'rgui',
-  rewind_enable: true,
   notification_show_when_menu_is_alive: true,
-  stdin_cmd_enable: true,
   quit_press_twice: false,
+  rewind_enable: true,
+  stdin_cmd_enable: true,
   video_vsync: true,
 
   rgui_menu_color_theme: 4,
   rgui_show_start_screen: false,
+  save_file_compression: true,
   savestate_file_compression: true,
   savestate_thumbnail_enable: true,
-  save_file_compression: true,
 
-  input_rewind_btn: 6, // L2
-  input_hold_fast_forward_btn: 7, // R2
   // input_menu_toggle_gamepad_combo: 6, // L1+R1
   input_enable_hotkey_btn: 8, // select
+  input_hold_fast_forward_btn: 7, // R2
+  input_rewind_btn: 6, // L2
   rewind_granularity: 4,
 
   input_exit_emulator: 'nul',
@@ -88,7 +88,7 @@ export function getRetroarchConfig() {
   const gamepads = navigator.getGamepads()
 
   const gamepadMappingsMap = new Map<string, Record<string, string>>()
-  for (const { name, mapping } of gamepadMappings) {
+  for (const { mapping, name } of gamepadMappings) {
     gamepadMappingsMap.set(name, mapping)
   }
 

@@ -13,7 +13,7 @@ export function useRouterHelpers() {
   const [isPlatformRoute] = useRoute(routes.platform)
   const [isRomRoute] = useRoute(routes.rom)
 
-  const wouter = { location, setLocation, router, params, useRoute }
+  const wouter = { location, params, router, setLocation, useRoute }
 
   let { library = 'public', platform = '', rom } = params
   if (isHomeRoute && isUsingDemo()) {
@@ -82,21 +82,21 @@ export function useRouterHelpers() {
   }
 
   return {
-    params: normalizedParams,
     isHomeRoute,
     isPlatformRoute,
     isRomRoute,
     linkToLibrary,
     linkToPlatform,
     linkToRom,
+    navigateToHome,
     navigateToLibrary,
     navigateToPlatform,
     navigateToRom,
-    navigateToHome,
+    params: normalizedParams,
+    redirectToHome,
     redirectToLibrary,
     redirectToPlatform,
     redirectToRom,
-    redirectToHome,
     wouter,
   }
 }

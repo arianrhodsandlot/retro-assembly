@@ -8,25 +8,30 @@ import { type ArcadeGameInfo, GamesDatabase } from './games-database'
 import type { Entry } from './libretrodb/types'
 import { PreferenceParser } from './preference-parser'
 
-const allowedExtensions = new Set(['zip', 'bin', ...Object.keys(extPlatformMap)])
+const allowedExtensions = new Set(['bin', 'zip', ...Object.keys(extPlatformMap)])
 
 export class Rom {
-  id = ''
+  arcadeGameInfo: ArcadeGameInfo | undefined
   fileAccessor: FileAccessor
 
-  platform = ''
   gameInfo: Entry<string> | undefined
-  arcadeGameInfo: ArcadeGameInfo | undefined
+  id = ''
+  platform = ''
 
   readyPromise: Promise<void>
 
-  private originalGoodCode: GoodCodeResult
-  private gameInfoGoodCode: GoodCodeResult | undefined
-
-  private constructor(romFileAccessor: FileAccessor) {
-    this.fileAccessor = romFileAccessor
-    this.originalGoodCode = parseGoodCode(romFileAccessor.name)
-    this.readyPromise = this.load()
+  get covers() {
+    if (this.standardizedName) {
+      return [
+        getCover({ name: this.standardizedName, platform: this.platform, type: 'boxart' }),
+        getCover({ name: this.standardizedName, platform: this.platform, type: 'title' }),
+        getCover({ name: this.standardizedName, platform: this.platform, type: 'snap' }),
+      ]
+    }
+    return ''
+  }
+  get displayName() {
+    return this.goodCode.rom
   }
 
   get goodCode() {
@@ -37,19 +42,22 @@ export class Rom {
     return this.arcadeGameInfo?.fullName || this.gameInfo?.name || this.goodCode.rom
   }
 
-  get displayName() {
-    return this.goodCode.rom
+  private gameInfoGoodCode: GoodCodeResult | undefined
+
+  private originalGoodCode: GoodCodeResult
+
+  private constructor(romFileAccessor: FileAccessor) {
+    this.fileAccessor = romFileAccessor
+    this.originalGoodCode = parseGoodCode(romFileAccessor.name)
+    this.readyPromise = this.load()
   }
 
-  get covers() {
-    if (this.standardizedName) {
-      return [
-        getCover({ platform: this.platform, name: this.standardizedName, type: 'boxart' }),
-        getCover({ platform: this.platform, name: this.standardizedName, type: 'title' }),
-        getCover({ platform: this.platform, name: this.standardizedName, type: 'snap' }),
-      ]
+  static fromFileAccessor(romFileAccessor: FileAccessor) {
+    if (Rom.isValidFileName(romFileAccessor.name)) {
+      const rom = new Rom(romFileAccessor)
+      rom.id = rom.fileAccessor.path || rom.fileAccessor.name
+      return rom
     }
-    return ''
   }
 
   static fromFileAccessors(files: FileAccessor[]) {
@@ -63,14 +71,6 @@ export class Rom {
     return roms
   }
 
-  static fromFileAccessor(romFileAccessor: FileAccessor) {
-    if (Rom.isValidFileName(romFileAccessor.name)) {
-      const rom = new Rom(romFileAccessor)
-      rom.id = rom.fileAccessor.path || rom.fileAccessor.name
-      return rom
-    }
-  }
-
   static groupByPlatform(roms: Rom[]) {
     return groupBy(roms, 'platform')
   }
@@ -80,8 +80,8 @@ export class Rom {
     return ext && allowedExtensions.has(ext)
   }
 
-  ready() {
-    return this.readyPromise
+  async getBlob() {
+    return await this.fileAccessor.getBlob()
   }
 
   async load() {
@@ -95,12 +95,24 @@ export class Rom {
     this.gameInfoGoodCode = parseGoodCode(goodCodeName)
   }
 
-  async getBlob() {
-    return await this.fileAccessor.getBlob()
+  ready() {
+    return this.readyPromise
+  }
+
+  async updateArcadeGameInfo() {
+    if (this.platform === 'arcade') {
+      if (this.arcadeGameInfo) {
+        return this.arcadeGameInfo
+      }
+
+      const arcadeGameInfo = await GamesDatabase.queryArcadeGameInfo(this.fileAccessor.name)
+      this.arcadeGameInfo = arcadeGameInfo
+      return arcadeGameInfo
+    }
   }
 
   async updateGameInfo() {
-    const { platform, fileAccessor } = this
+    const { fileAccessor, platform } = this
     if (!platform) {
       await this.updatePlatform()
     }
@@ -131,26 +143,6 @@ export class Rom {
     this.platform = platform
   }
 
-  async updateArcadeGameInfo() {
-    if (this.platform === 'arcade') {
-      if (this.arcadeGameInfo) {
-        return this.arcadeGameInfo
-      }
-
-      const arcadeGameInfo = await GamesDatabase.queryArcadeGameInfo(this.fileAccessor.name)
-      this.arcadeGameInfo = arcadeGameInfo
-      return arcadeGameInfo
-    }
-  }
-
-  private guessPlatformByFileName(name: string = this.fileAccessor.name) {
-    const extname = name.split('.').pop()
-    if (!extname) {
-      return ''
-    }
-    return extPlatformMap[extname] ?? ''
-  }
-
   private async guessPlatformByExtractedContent() {
     const { BlobReader, ZipReader } = await import('@zip.js/zip.js')
     if (!this.fileAccessor.isLoaded) {
@@ -171,6 +163,14 @@ export class Rom {
       console.warn(error)
     }
     return ''
+  }
+
+  private guessPlatformByFileName(name: string = this.fileAccessor.name) {
+    const extname = name.split('.').pop()
+    if (!extname) {
+      return ''
+    }
+    return extPlatformMap[extname] ?? ''
   }
 
   private guessPlatformByPath() {

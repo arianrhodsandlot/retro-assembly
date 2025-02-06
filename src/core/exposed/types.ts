@@ -1,4 +1,4 @@
-export { type PlatformName } from '../constants/platforms'
-export { type Rom } from '../classes/rom'
-export type CloudService = 'onedrive' | 'google-drive' | 'dropbox'
-export type FileSystemName = CloudService | 'local' | 'public'
+export type { Rom } from '../classes/rom'
+export type { PlatformName } from '../constants/platforms'
+export type CloudService = 'dropbox' | 'google-drive' | 'onedrive'
+export type FileSystemName = 'local' | 'public' | CloudService

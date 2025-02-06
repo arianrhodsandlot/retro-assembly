@@ -3,7 +3,7 @@ import { clsx } from 'clsx'
 import delay from 'delay'
 import { useState } from 'react'
 
-export function AnimatedIcons({ wait = 0, children }: { wait?: number; children: any }) {
+export function AnimatedIcons({ children, wait = 0 }: { children: any; wait?: number }) {
   const [frames, setFrames] = useState(0)
   const [enableAnimation, setEnableAnimation] = useState(true)
 

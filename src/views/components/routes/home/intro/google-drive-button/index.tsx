@@ -16,7 +16,7 @@ export function GoogleDriveButton({ children }: { children?: ReactNode } = {}) {
     const isValid = await validateRomDirectory({ directory: romDirectory, type: 'google-drive' })
 
     if (isValid) {
-      await updatePreference({ fileSystem: 'google-drive', directory: romDirectory })
+      await updatePreference({ directory: romDirectory, fileSystem: 'google-drive' })
       setIsInvalidDialogOpen(false)
       await start()
       navigateToLibrary('google-drive')

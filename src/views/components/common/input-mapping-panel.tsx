@@ -7,16 +7,16 @@ type InputMapping = Record<string, string>
 
 interface InputMappingPanelProps {
   mapping?: InputMapping
-  waitingButton: string
-  waitForButtonPressed: (name: string) => void
   onResetMapping: () => void
+  waitForButtonPressed: (name: string) => void
+  waitingButton: string
 }
 
 export function InputMappingPanel({
   mapping,
-  waitingButton,
-  waitForButtonPressed,
   onResetMapping,
+  waitForButtonPressed,
+  waitingButton,
 }: InputMappingPanelProps) {
   const { t } = useTranslation()
 
@@ -48,6 +48,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('l1')}
               tabIndex={-1}
+              type='button'
             >
               L1<div className='ml-2 font-mono text-xs text-white/60'>{getCode('l1')}</div>
             </button>
@@ -57,6 +58,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('l2')}
               tabIndex={-1}
+              type='button'
             >
               L2<div className='ml-2 font-mono text-xs text-white/60'>{getCode('l2')}</div>
             </button>
@@ -68,6 +70,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('r2')}
               tabIndex={-1}
+              type='button'
             >
               R2<div className='ml-2 font-mono text-xs text-white/60'>{getCode('r2')}</div>
             </button>
@@ -77,6 +80,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('r1')}
               tabIndex={-1}
+              type='button'
             >
               R1<div className='ml-2 font-mono text-xs text-white/60'>{getCode('r1')}</div>
             </button>
@@ -90,6 +94,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('up')}
               tabIndex={-1}
+              type='button'
             >
               <div className='font-mono text-xs text-white/60'>{getCode('up')}</div>
             </button>
@@ -100,6 +105,7 @@ export function InputMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('left')}
                 tabIndex={-1}
+                type='button'
               >
                 <div className='font-mono text-xs text-white/60'>{getCode('left')}</div>
               </button>
@@ -109,6 +115,7 @@ export function InputMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('right')}
                 tabIndex={-1}
+                type='button'
               >
                 <div className='font-mono text-xs text-white/60'>{getCode('right')}</div>
               </button>
@@ -119,6 +126,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('down')}
               tabIndex={-1}
+              type='button'
             >
               <div className='font-mono text-xs text-white/60'>{getCode('down')}</div>
             </button>
@@ -131,6 +139,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('select')}
               tabIndex={-1}
+              type='button'
             >
               select<div className='ml-2 font-mono text-xs text-white/60'>{getCode('select')}</div>
             </button>
@@ -140,6 +149,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('start')}
               tabIndex={-1}
+              type='button'
             >
               start<div className='ml-2 font-mono text-xs text-white/60'>{getCode('start')}</div>
             </button>
@@ -152,6 +162,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('x')}
               tabIndex={-1}
+              type='button'
             >
               <div className='font-mono text-xs text-white/60'>{getCode('x')}</div>
             </button>
@@ -162,6 +173,7 @@ export function InputMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('y')}
                 tabIndex={-1}
+                type='button'
               >
                 <div className='font-mono text-xs text-white/60'>{getCode('y')}</div>
               </button>
@@ -171,6 +183,7 @@ export function InputMappingPanel({
                 })}
                 onClick={() => waitForButtonPressed('a')}
                 tabIndex={-1}
+                type='button'
               >
                 <div className='font-mono text-xs text-white/60'>{getCode('a')}</div>
               </button>
@@ -181,6 +194,7 @@ export function InputMappingPanel({
               })}
               onClick={() => waitForButtonPressed('b')}
               tabIndex={-1}
+              type='button'
             >
               <div className='font-mono text-xs text-white/60'>{getCode('b')}</div>
             </button>
@@ -193,6 +207,7 @@ export function InputMappingPanel({
           className='flex-center gap-1 rounded border border-rose-800 bg-white px-2 py-1 text-rose-700'
           onClick={onResetMapping}
           tabIndex={-1}
+          type='button'
         >
           <span className='icon-[mdi--reload-alert] size-4' />
           {t('Reset to default')}

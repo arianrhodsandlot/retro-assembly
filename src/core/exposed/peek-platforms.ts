@@ -14,7 +14,7 @@ export async function peekPlatforms() {
   const directoryNames = directories?.map(({ name }) => name)
   const platformNames = intersection(platformNamesSorted, directoryNames)
   return (platformNames as typeof platformNamesSorted).map((platformName) => ({
-    name: platformName,
     fullName: platformFullNameMap[platformName],
+    name: platformName,
   }))
 }

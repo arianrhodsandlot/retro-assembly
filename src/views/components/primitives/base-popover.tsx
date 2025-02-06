@@ -5,7 +5,7 @@ interface BaseTooltipProps extends PopoverTriggerProps {
   tooltipContent: ReactNode
 }
 
-export function BasePopover({ tooltipContent, children, ...props }: BaseTooltipProps) {
+export function BasePopover({ children, tooltipContent, ...props }: BaseTooltipProps) {
   return (
     <Root>
       <Trigger {...props}>{children}</Trigger>

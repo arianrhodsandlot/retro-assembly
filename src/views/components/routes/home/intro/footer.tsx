@@ -30,7 +30,7 @@ export function Footer() {
           arianrhodsandlot
         </a>
         ·
-        <a className='underline' href='/privacy-policy.html' target='_blank'>
+        <a className='underline' href='/privacy-policy.html' rel='noreferrer' target='_blank'>
           {t('Privacy Policy')}
         </a>
         ·

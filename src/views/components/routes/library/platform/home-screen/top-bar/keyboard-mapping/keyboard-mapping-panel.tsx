@@ -2,12 +2,12 @@ import { isNil } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { InputMappingPanel } from '../../../../../../common/input-mapping-panel'
 
-type InputMapping = Record<string | number, string>
+type InputMapping = Record<number | string, string>
 
 interface KeyboardMappingPanelProps {
   mapping: InputMapping | undefined
-  onUpdateMapping: (mapping: InputMapping) => void
   onResetMapping: () => void
+  onUpdateMapping: (mapping: InputMapping) => void
 }
 
 /*
@@ -21,42 +21,42 @@ tilde, backquote, pause, quote, comma, minus, slash, semicolon, equals, leftbrac
 backslash, rightbracket, kp_period, kp_equals, rctrl, ralt
 */
 const knownKeyMap = {
-  Minus: 'minus',
-  Equal: 'equals',
-  BracketLeft: 'leftbracket',
-  BracketRight: 'rightbracket',
-  Backslash: 'backslash',
-  Semicolon: 'semicolon',
-  Quote: 'quote',
-  Comma: 'comma',
-  Period: 'period',
-  Slash: 'slash',
-  Enter: 'enter',
-  ShiftLeft: 'shift',
-  ControlLeft: 'ctrl',
   AltLeft: 'alt',
-  ShiftRight: 'rshift',
-  ControlRight: 'rctrl',
   AltRight: 'ralt',
-  Space: 'space',
-  Insert: 'insert',
-  Home: 'home',
-  PageUp: 'pageup',
-  Delete: 'del',
-  End: 'end',
-  PageDown: 'pagedown',
-  ArrowUp: 'up',
   ArrowDown: 'down',
   ArrowLeft: 'left',
   ArrowRight: 'right',
+  ArrowUp: 'up',
+  Backslash: 'backslash',
+  Backspace: 'backspace',
+  BracketLeft: 'leftbracket',
+  BracketRight: 'rightbracket',
+  CapsLock: 'capslock',
+  Comma: 'comma',
+  ControlLeft: 'ctrl',
+  ControlRight: 'rctrl',
+  Delete: 'del',
+  End: 'end',
+  Enter: 'enter',
+  Equal: 'equals',
+  Home: 'home',
+  Insert: 'insert',
+  Minus: 'minus',
+  NumpadAdd: 'add',
   NumpadDivide: 'divide',
+  NumpadEnter: 'kp_enter',
   NumpadMultiply: 'multiply',
   NumpadSubtract: 'subtract',
-  NumpadAdd: 'add',
-  NumpadEnter: 'kp_enter',
-  CapsLock: 'capslock',
+  PageDown: 'pagedown',
+  PageUp: 'pageup',
+  Period: 'period',
+  Quote: 'quote',
+  Semicolon: 'semicolon',
+  ShiftLeft: 'shift',
+  ShiftRight: 'rshift',
+  Slash: 'slash',
+  Space: 'space',
   Tab: 'tab',
-  Backspace: 'backspace',
 }
 function getKeyNameFromEvent(event: KeyboardEvent) {
   const { code } = event
@@ -80,7 +80,7 @@ function getKeyNameFromEvent(event: KeyboardEvent) {
   }
 }
 
-export function KeyboardMappingPanel({ mapping, onUpdateMapping, onResetMapping }: KeyboardMappingPanelProps) {
+export function KeyboardMappingPanel({ mapping, onResetMapping, onUpdateMapping }: KeyboardMappingPanelProps) {
   const [waitingButton, setWaitingButton] = useState('')
   const inputTimerRef = useRef(0)
   const offPressAnyRef = useRef<() => void>()
@@ -123,7 +123,7 @@ export function KeyboardMappingPanel({ mapping, onUpdateMapping, onResetMapping 
 
     document.addEventListener('keydown', onKeyPress)
 
-    offPressAnyRef.current = function () {
+    offPressAnyRef.current = () => {
       document.removeEventListener('keydown', onKeyPress)
     }
 
@@ -132,7 +132,7 @@ export function KeyboardMappingPanel({ mapping, onUpdateMapping, onResetMapping 
       offPressAnyRef.current?.()
     }
 
-    inputTimerRef.current = window.setTimeout(() => {
+    inputTimerRef.current = globalThis.setTimeout(() => {
       finishWaitForButtonPressed()
     }, 5000)
   }

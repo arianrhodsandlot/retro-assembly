@@ -15,10 +15,10 @@ export async function previewGame(
   } catch {}
 
   const fileAccessor = new FileAccessor({
-    name: file.name,
     directory: '',
-    type: 'file',
     fileSystemProvider: globalContext.fileSystem,
+    name: file.name,
+    type: 'file',
   })
   await fileAccessor.getBlob()
   const rom = Rom.fromFileAccessor(fileAccessor)

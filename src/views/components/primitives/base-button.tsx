@@ -1,18 +1,22 @@
 import { clsx } from 'clsx'
-import { type JSX, createElement, forwardRef } from 'react'
+import { createElement, type JSX } from 'react'
 
 type ButtonProps = JSX.IntrinsicElements['button']
 interface BaseButtonProps extends ButtonProps {
-  tag?: 'button' | 'a'
-  styleType?: 'primary' | 'normal'
   href?: string
+  styleType?: 'normal' | 'primary'
+  tag?: 'a' | 'button'
   target?: string
 }
 
-export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(function BaseButton(
-  { styleType = 'normal', children, className, tag = 'button', ...props },
+export function BaseButton({
+  children,
+  className,
   ref,
-) {
+  styleType = 'normal',
+  tag = 'button',
+  ...props
+}: { ref?: React.RefObject<HTMLButtonElement | null> } & BaseButtonProps) {
   return createElement(
     tag,
     {
@@ -29,4 +33,4 @@ export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(functio
     },
     <div className='flex-center relative gap-2'>{children}</div>,
   )
-})
+}

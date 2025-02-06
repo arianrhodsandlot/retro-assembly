@@ -1,7 +1,7 @@
 type IntrinsicImgProps = Partial<JSX.IntrinsicElements['img']>
-type GameEntryImageProps = Pick<IntrinsicImgProps, 'src' | 'alt'>
+type GameEntryImageProps = Pick<IntrinsicImgProps, 'alt' | 'src'>
 
-export function GameEntryImage({ src, alt }: GameEntryImageProps) {
+export function GameEntryImage({ alt, src }: GameEntryImageProps) {
   return (
     <div className='absolute inset-0 overflow-hidden bg-zinc-300'>
       <img

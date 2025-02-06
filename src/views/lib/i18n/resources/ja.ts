@@ -1,12 +1,12 @@
 import type { Translation } from './types'
 
 const translation: Translation = {
+  About: 'について',
   'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
     'ゲームは、ゲームパッドのボタンをクリックするのではなく、画面がタップされた後にのみ実行できます。',
+  'an empty directory': '空のディレクトリ',
   'A personal retro game collection cabinet in your browser':
     'ブラウザ内の個人的なレトロ ゲーム コレクション キャビネット',
-  About: 'について',
-  'an empty directory': '空のディレクトリ',
   'Are you sure to logout?': 'ログアウトしてもよろしいですか?',
   'Auto detect': '自動検出',
   'built with your own ROM files': '独自の ROM ファイルでビルド',
@@ -34,9 +34,9 @@ const translation: Translation = {
   Keyboard: 'キーボード',
   Language: '言語',
   'Last Updated': '最終更新',
-  'Load state': '負荷状態',
-  'Loading selected state': '選択した状態をロードしています',
   Loading: '読み込み中',
+  'Loading selected state': '選択した状態をロードしています',
+  'Load state': '負荷状態',
   'Local file permission is needed': 'ローカルファイル権限が必要です',
   'Login fail. Error:': 'ログイン失敗。 {{ message }}',
   Logout: 'ログアウト',
@@ -49,8 +49,8 @@ const translation: Translation = {
   OK: 'わかりました',
   or: 'または',
   'Please do not turn off your device!': 'デバイスの電源を切らないでください。',
-  'Press a button on your controller': 'コントローラーのボタンを押します',
   Press: 'プレス',
+  'Press a button on your controller': 'コントローラーのボタンを押します',
   'Previous console': '以前のコンソール',
   'Privacy Policy': 'プライバシーポリシー',
   Proceed: '進む',
@@ -61,12 +61,12 @@ const translation: Translation = {
   'Return home': '帰宅',
   Rewind: '巻き戻し',
   'Save & exit': '保存',
-  'Save state': '状態を保存する',
   'Saved at': '保存場所',
+  'Save state': '状態を保存する',
   Saving: '保存',
   'Select a cloud directory': 'クラウドディレクトリを選択してください',
-  'Select a directory to initialize your game library.': 'ゲーム ライブラリを初期化するディレクトリを選択します。',
   'select a directory': 'ディレクトリを選択してください',
+  'Select a directory to initialize your game library.': 'ゲーム ライブラリを初期化するディレクトリを選択します。',
   'Select a local directory': 'ローカルディレクトリを選択してください',
   'Show/hide menu': 'メニューの表示/非表示',
   'Sign in with': 'サインインするには {{ service }}',
@@ -79,9 +79,9 @@ const translation: Translation = {
     '選択したディレクトリは、特定の構造と一致する必要があります。',
   'The directory you choose should match a certain structure.':
     '選択したディレクトリは特定の構造と一致する必要があります。',
+  'There are no saved states for current game.': '現在のゲームには保存された状態はありません。',
   'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
     'レトロ ゲームの ROM は別のディレクトリにグループ化する必要があり、ディレクトリには次のような便宜上名前を付ける必要があります。',
-  'There are no saved states for current game.': '現在のゲームには保存された状態はありません。',
   'This is due to a limitation of the browser.': 'これはブラウザの制限によるものです。',
   'This is due to a restriction of the security policy of your browser.':
     'これは、ブラウザのセキュリティ ポリシーの制限によるものです。',
@@ -99,12 +99,12 @@ const translation: Translation = {
   'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
     '前回すでにこれを実行している場合でも、ROM を読み取る許可を再度与えるように要求する必要があります。',
   'You are now authenticated with RetroAssembly.': 'これで、RetroAssembly で認証されました。',
-  'You selected an invalid directory as your ROMs directory': '無効なディレクトリを ROM ディレクトリとして選択しました',
   'Your login status is expired. Please login again.':
     'あなたの {{ loginName }} ログインステータスの有効期限が切れています。',
   'Your personal retro game collection cabinet': 'あなただけのレトロゲームコレクションキャビネット',
   'Your should choose a directory containing at least one of the above sub directories.':
     '上記のサブディレクトリの少なくとも 1 つを含むディレクトリを選択する必要があります。',
+  'You selected an invalid directory as your ROMs directory': '無効なディレクトリを ROM ディレクトリとして選択しました',
 }
 
 export const ja = { translation }

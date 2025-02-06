@@ -12,16 +12,16 @@ import { onCancel } from '../../../core'
 import { SpatialNavigation } from '../../lib/spatial-navigation'
 
 interface BaseDialogProps extends DialogProps {
-  content: ReactNode
   closableByGamepadCancel?: boolean
+  content: ReactNode
 }
 
 export function BaseDialogTrigger({
   children,
-  content,
   closableByGamepadCancel = true,
-  open,
+  content,
   onOpenChange,
+  open,
   ...props
 }: BaseDialogProps) {
   useEffect(() => {

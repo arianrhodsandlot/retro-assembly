@@ -1,6 +1,5 @@
-export type * from './types'
-
 export { detectHasRunningGame } from './detect-has-running-game'
+
 export { detectNeedsLogin } from './detect-needs-login'
 export { detectNeedsSetup } from './detect-needs-setup'
 export { exitGame } from './exit-game'
@@ -46,6 +45,7 @@ export { retrieveToken } from './retrieve-token'
 export { saveGameState } from './save-game-state'
 export { start } from './start'
 export { teardown } from './teardown'
+export type * from './types'
 export { updateGamepadMappings } from './update-gamepad-mappings'
 export { updateKeyboardMappings } from './update-keyboard-mappings'
 export { updatePreference } from './update-preference'

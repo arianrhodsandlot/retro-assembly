@@ -3,7 +3,6 @@ import { useAtom, useSetAtom } from 'jotai'
 import { some } from 'lodash-es'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
-  type PlatformName,
   getHistoryRoms,
   getPlatformRoms,
   getPlatforms,
@@ -11,6 +10,7 @@ import {
   peekHistoryRoms,
   peekPlatformRoms,
   peekPlatforms,
+  type PlatformName,
 } from '../../../../../../core'
 import { useRouterHelpers } from '../../../../hooks/use-router-helpers'
 import { platformsAtom, romsAtom } from './atoms'
@@ -52,18 +52,18 @@ async function getRoms(platform: string) {
 export function HomeScreen() {
   const [roms, setRoms] = useAtom(romsAtom)
   const setPlatforms = useSetAtom(platformsAtom)
-  const { params, isPlatformRoute, isRomRoute, redirectToPlatform } = useRouterHelpers()
-  const [measurements = { width: 0, height: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
+  const { isPlatformRoute, isRomRoute, params, redirectToPlatform } = useRouterHelpers()
+  const [measurements = { height: 0, width: 0 }, gridContainerRef] = useMeasure<HTMLDivElement>()
   const [isRetrying, setIsRetrying] = useState(false)
   const currentPlatformName = useCurrentPlatformName()
 
   const currentPlatformRef = useRef(currentPlatformName)
 
-  const { width: gridWidth, height: gridHeight } = measurements
+  const { height: gridHeight, width: gridWidth } = measurements
 
   const columnCount = getColumnCount(gridWidth)
 
-  function getNewCurrentPlatformName(platforms: { name: PlatformName; fullName: string }[]) {
+  function getNewCurrentPlatformName(platforms: { fullName: string; name: PlatformName }[]) {
     if (!platforms?.length) {
       return ''
     }
@@ -142,27 +142,20 @@ export function HomeScreen() {
     }
   }
 
-  const loadPlatformsAndRomsFromCache = useCallback(
-    async function () {
-      await loadPlatformsFromCache()
-      await loadRomsFromCache()
-    },
-    [loadPlatformsFromCache, loadRomsFromCache],
-  )
+  const loadPlatformsAndRomsFromCache = useCallback(async () => {
+    await loadPlatformsFromCache()
+    await loadRomsFromCache()
+  }, [loadPlatformsFromCache, loadRomsFromCache])
 
-  const loadPlatformsAndRomsFromRemote = useCallback(
-    async function () {
-      await loadPlatformsFromRemote()
-      await loadRomsFromRemote()
-    },
-    [loadPlatformsFromRemote, loadRomsFromRemote],
-  )
+  const loadPlatformsAndRomsFromRemote = useCallback(async () => {
+    await loadPlatformsFromRemote()
+    await loadRomsFromRemote()
+  }, [loadPlatformsFromRemote, loadRomsFromRemote])
 
   useEffect(() => {
     if (isRomRoute) {
       return
     }
-
     ;(async () => {
       await loadPlatformsAndRomsFromCache()
       await loadPlatformsAndRomsFromRemote()

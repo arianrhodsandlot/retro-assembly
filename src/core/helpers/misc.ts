@@ -8,7 +8,7 @@ function encodeRFC3986URIComponent(str) {
   return encodeURIComponent(str).replaceAll(/[!'()*]/g, (c) => `%${c.codePointAt(0)?.toString(16).toUpperCase()}`)
 }
 
-export function getCover({ platform, name, type = 'boxart' }) {
+export function getCover({ name, platform, type = 'boxart' }) {
   if (!name || !platform) {
     return ''
   }
@@ -46,10 +46,10 @@ export async function getScript(url: string) {
   script.src = url
   document.body.append(script)
   await new Promise<void>((resolve, reject) => {
-    script.addEventListener('load', function () {
+    script.addEventListener('load', () => {
       resolve()
     })
-    script.addEventListener('error', function (error) {
+    script.addEventListener('error', (error) => {
       reject(error)
     })
   })

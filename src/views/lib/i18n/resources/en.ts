@@ -1,10 +1,10 @@
 const translation = {
+  About: 'About',
   'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
     'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.',
+  'an empty directory': 'an empty directory',
   'A personal retro game collection cabinet in your browser':
     'A personal retro game collection cabinet in your browser',
-  About: 'About',
-  'an empty directory': 'an empty directory',
   'Are you sure to logout?': 'Are you sure to logout?',
   'Auto detect': 'Auto detect',
   'built with your own ROM files': 'built with your own ROM files',
@@ -31,9 +31,9 @@ const translation = {
   Keyboard: 'Keyboard',
   Language: 'Language',
   'Last Updated': 'Last Updated',
-  'Load state': 'Load state',
-  'Loading selected state': 'Loading selected state',
   Loading: 'Loading',
+  'Loading selected state': 'Loading selected state',
+  'Load state': 'Load state',
   'Local file permission is needed': 'Local file permission is needed',
   'Login fail. Error:': 'Login fail. Error: {{ message }}',
   Logout: 'Logout',
@@ -46,8 +46,8 @@ const translation = {
   OK: 'OK',
   or: 'or',
   'Please do not turn off your device!': 'Please do not turn off your device!',
-  'Press a button on your controller': 'Press a button on your controller',
   Press: 'Press',
+  'Press a button on your controller': 'Press a button on your controller',
   'Previous console': 'Previous console',
   'Privacy Policy': 'Privacy Policy',
   Proceed: 'Proceed',
@@ -58,12 +58,12 @@ const translation = {
   'Return home': 'Return home',
   Rewind: 'Rewind',
   'Save & exit': 'Save & exit',
-  'Save state': 'Save state',
   'Saved at': 'Saved at',
+  'Save state': 'Save state',
   Saving: 'Saving',
   'Select a cloud directory': 'Select a cloud directory',
-  'Select a directory to initialize your game library.': 'Select a directory to initialize your game library.',
   'select a directory': 'select a directory',
+  'Select a directory to initialize your game library.': 'Select a directory to initialize your game library.',
   'Select a local directory': 'Select a local directory',
   'Show/hide menu': 'Show/hide menu',
   'Sign in with': 'Sign in with {{ service }}',
@@ -77,9 +77,9 @@ const translation = {
     'The directory you choose should match a certain structure:',
   'The directory you choose should match a certain structure.':
     'The directory you choose should match a certain structure.',
+  'There are no saved states for current game.': 'There are no saved states for current game.',
   'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
     'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:',
-  'There are no saved states for current game.': 'There are no saved states for current game.',
   'This is due to a limitation of the browser.': 'This is due to a limitation of the browser.',
   'This is due to a restriction of the security policy of your browser.':
     'This is due to a restriction of the security policy of your browser.',
@@ -97,13 +97,13 @@ const translation = {
   'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
     'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.',
   'You are now authenticated with RetroAssembly.': 'You are now authenticated with RetroAssembly.',
-  'You selected an invalid directory as your ROMs directory':
-    'You selected an invalid directory as your ROMs directory',
   'Your login status is expired. Please login again.':
     'Your {{ loginName }} login status is expired. Please login again.',
   'Your personal retro game collection cabinet': 'Your personal retro game collection cabinet',
   'Your should choose a directory containing at least one of the above sub directories.':
     'Your should choose a directory containing at least one of the above sub directories.',
+  'You selected an invalid directory as your ROMs directory':
+    'You selected an invalid directory as your ROMs directory',
 }
 
 export const en = { translation }

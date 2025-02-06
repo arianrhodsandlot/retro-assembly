@@ -14,30 +14,30 @@ function scrollAsNeeded(e: FocusEvent<HTMLButtonElement, Element>) {
   }
   const top = target.offsetTop - target.clientHeight
   if (top >= 0) {
-    container.scrollTo({ top, behavior: 'smooth' })
+    container.scrollTo({ behavior: 'smooth', top })
   }
 }
 
 export function GameEntry({
-  rom,
-  columnIndex,
-  rowIndex,
-  rowCount,
   columnCount,
+  columnIndex,
+  rom,
+  rowCount,
+  rowIndex,
   style,
 }: {
-  rom: Rom
-  columnIndex: number
-  rowIndex: number
-  rowCount: number
   columnCount: number
+  columnIndex: number
+  rom: Rom
+  rowCount: number
+  rowIndex: number
   style: CSSProperties
 }) {
   const setMask = useSetAtom(launchingMaskAtom)
 
   function onClickGameEntryButton(event: MouseEvent<HTMLButtonElement>) {
     event.currentTarget.focus()
-    setMask({ event, target: event.currentTarget, rom })
+    setMask({ event, rom, target: event.currentTarget })
   }
 
   const isFirstRow = rowIndex === 0

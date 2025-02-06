@@ -11,11 +11,11 @@ function hasGamepads() {
 
 let defaultShow = !hasGamepads()
 
-window.addEventListener('gamepadconnected', () => {
+globalThis.addEventListener('gamepadconnected', () => {
   defaultShow = !hasGamepads()
 })
 
-window.addEventListener('gamepaddisconnected', () => {
+globalThis.addEventListener('gamepaddisconnected', () => {
   defaultShow = !hasGamepads()
 })
 
@@ -51,11 +51,11 @@ export function VirtualControllerButtons() {
     function onGamepadChange() {
       setShow(!hasGamepads())
     }
-    window.addEventListener('gamepadconnected', onGamepadChange)
-    window.addEventListener('gamepaddisconnected', onGamepadChange)
+    globalThis.addEventListener('gamepadconnected', onGamepadChange)
+    globalThis.addEventListener('gamepaddisconnected', onGamepadChange)
     return () => {
-      window.removeEventListener('gamepadconnected', onGamepadChange)
-      window.removeEventListener('gamepaddisconnected', onGamepadChange)
+      globalThis.removeEventListener('gamepadconnected', onGamepadChange)
+      globalThis.removeEventListener('gamepaddisconnected', onGamepadChange)
     }
   }, [])
 

@@ -6,17 +6,17 @@ import { getStorageByKey, setStorageByKey } from '../../helpers/storage'
 
 export interface AuthConfig {
   authorizeUrl?: string
-  tokenUrl: string
   clientId: string
   clientSecret?: string
-  scope: string[]
   redirectUri: string
+  scope: string[]
+  tokenUrl: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class Auth {
-  protected static tokenStorageKey: string
   protected static config: AuthConfig
+  protected static tokenStorageKey: string
 
   static async retrieveToken() {
     const isRetrievingToken = this.isRetrievingToken()
@@ -27,15 +27,16 @@ export abstract class Auth {
     const { code, error, error_description: errorDescription } = queryString.parse(location.search)
     if (error) {
       throw new Error(`error: ${error}, error description: ${errorDescription}`)
-    } else if (typeof code === 'string') {
+    }
+    if (typeof code === 'string') {
       const { codeVerifier } = getStorageByKey('pkce-chanllenge') ?? ''
       const grantType = 'authorization_code'
       const params = {
         client_id: this.config.clientId,
-        redirect_uri: this.config.redirectUri,
         code,
-        grant_type: grantType,
         code_verifier: codeVerifier,
+        grant_type: grantType,
+        redirect_uri: this.config.redirectUri,
       }
 
       // Since Google does not support PKCE authorization yet, though we don't want to expose our client secret, we have to.
@@ -80,6 +81,33 @@ export abstract class Auth {
     return Boolean(error)
   }
 
+  protected static async refreshToken() {
+    const tokenStorage = getStorageByKey(this.tokenStorageKey) ?? {}
+    const refreshToken = tokenStorage.refresh_token
+    if (!refreshToken) {
+      return
+    }
+
+    const params = {
+      client_id: this.config.clientId,
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    }
+
+    // Since Google does not support PKCE authorization yet, though we don't want to expose our client secret, we have to.
+    // see https://stackoverflow.com/q/76528208 https://stackoverflow.com/q/60724690 https://stackoverflow.com/q/19615372
+    if (this.config.clientSecret) {
+      Object.assign(params, { client_secret: this.config.clientSecret })
+    }
+
+    const body = new URLSearchParams(params)
+    const result = await ky.post(this.config.tokenUrl, { body }).json<any>()
+    setStorageByKey({
+      key: this.tokenStorageKey,
+      value: { ...tokenStorage, ...result, createTime: Date.now() },
+    })
+  }
+
   protected static async requestWithRefreshTokenOnError(request: () => Promise<any>): ReturnType<typeof request> {
     const tokenStorage = getStorageByKey(this.tokenStorageKey) ?? {}
     const { createTime, expires_in: expiresIn, refresh_token: refreshToken } = tokenStorage
@@ -103,33 +131,6 @@ export abstract class Auth {
       }
       throw error
     }
-  }
-
-  protected static async refreshToken() {
-    const tokenStorage = getStorageByKey(this.tokenStorageKey) ?? {}
-    const refreshToken = tokenStorage.refresh_token
-    if (!refreshToken) {
-      return
-    }
-
-    const params = {
-      client_id: this.config.clientId,
-      refresh_token: refreshToken,
-      grant_type: 'refresh_token',
-    }
-
-    // Since Google does not support PKCE authorization yet, though we don't want to expose our client secret, we have to.
-    // see https://stackoverflow.com/q/76528208 https://stackoverflow.com/q/60724690 https://stackoverflow.com/q/19615372
-    if (this.config.clientSecret) {
-      Object.assign(params, { client_secret: this.config.clientSecret })
-    }
-
-    const body = new URLSearchParams(params)
-    const result = await ky.post(this.config.tokenUrl, { body }).json<any>()
-    setStorageByKey({
-      key: this.tokenStorageKey,
-      value: { ...tokenStorage, ...result, createTime: Date.now() },
-    })
   }
 
   private static isRetrievingToken() {

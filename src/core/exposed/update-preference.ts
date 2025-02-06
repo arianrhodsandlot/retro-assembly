@@ -27,12 +27,12 @@ async function setLocalFileSystemHandle(handle) {
 }
 
 export async function updatePreference({
-  fileSystem,
   directory,
+  fileSystem,
   handle,
 }: {
-  fileSystem?: FileSystemName
   directory?: string
+  fileSystem?: FileSystemName
   handle?: FileSystemHandle
 }) {
   if (!isNil(fileSystem)) {

@@ -6,13 +6,13 @@ import { defaultRetroarchCoresConfig, getRetroarchConfig } from '../helpers/retr
 import type { Rom } from './rom'
 
 interface EmulatorConstructorOptions {
+  additionalFiles?: { blob: Blob; name: string }[]
+  biosFiles?: { blob: Blob; name: string }[]
   core?: string
-  rom?: Rom
-  style?: Partial<CSSStyleDeclaration>
-  biosFiles?: { name: string; blob: Blob }[]
-  additionalFiles?: { name: string; blob: Blob }[]
   coreConfig?: Record<string, Record<string, string>>
   retroarchConfig?: Record<string, string>
+  rom?: Rom
+  style?: Partial<CSSStyleDeclaration>
 }
 
 const defaultStyle: Partial<CSSStyleDeclaration> = {
@@ -21,39 +21,39 @@ const defaultStyle: Partial<CSSStyleDeclaration> = {
   backgroundPosition: '0 0,15px 15px',
   backgroundSize: '30px 30px',
   cursor: 'default',
-  position: 'fixed',
-  inset: '0',
   height: '100%',
-  width: '100%',
-  touchAction: 'none',
-  zIndex: '10',
+  inset: '0',
   opacity: '1',
+  position: 'fixed',
+  touchAction: 'none',
+  width: '100%',
+  zIndex: '10',
 }
 
 export class Emulator {
-  core = ''
-  rom?: Rom
-  biosFiles?: { name: string; blob: Blob }[]
-  additionalFiles?: { name: string; blob: Blob }[]
-  processStatus: 'initial' | 'ready' | 'terminated' = 'initial'
-  gameStatus: 'paused' | 'running' = 'running'
+  additionalFiles?: { blob: Blob; name: string }[]
+  biosFiles?: { blob: Blob; name: string }[]
   canvas: HTMLCanvasElement
-  style: Partial<CSSStyleDeclaration>
-  nostalgist: Nostalgist | undefined
+  core = ''
   coreConfig: Record<string, Record<string, string>> | undefined
+  gameStatus: 'paused' | 'running' = 'running'
+  nostalgist: Nostalgist | undefined
+  processStatus: 'initial' | 'ready' | 'terminated' = 'initial'
   retroarchConfig: Record<string, string> | undefined
-  private previousActiveElement: Element | null
-
+  rom?: Rom
+  style: Partial<CSSStyleDeclaration>
   private hideCursorAbortController: AbortController | undefined
 
+  private previousActiveElement: Element | null
+
   constructor({
-    core,
-    rom,
-    style,
-    biosFiles,
     additionalFiles,
+    biosFiles,
+    core,
     coreConfig,
     retroarchConfig,
+    rom,
+    style,
   }: EmulatorConstructorOptions) {
     this.rom = rom ?? undefined
     this.biosFiles = biosFiles
@@ -67,6 +67,16 @@ export class Emulator {
 
     this.resizeCanvas = this.resizeCanvas.bind(this)
     this.showCanvasCusor = this.showCanvasCusor.bind(this)
+  }
+
+  exit() {
+    this.processStatus = 'terminated'
+
+    this.nostalgist?.exit()
+
+    this.cleanupDOM()
+    // @ts-expect-error try to focus on previous active element
+    this.previousActiveElement?.focus?.()
   }
 
   async launch(waitForUserInteraction?: () => Promise<void>) {
@@ -86,23 +96,23 @@ export class Emulator {
     const fileContent = await this.rom.getBlob()
 
     const rom = [
-      { fileName, fileContent },
-      ...(this.additionalFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []),
+      { fileContent, fileName },
+      ...(this.additionalFiles?.map(({ blob, name }) => ({ fileContent: blob, fileName: name })) || []),
     ]
-    const bios = this.biosFiles?.map(({ name, blob }) => ({ fileName: name, fileContent: blob })) || []
+    const bios = this.biosFiles?.map(({ blob, name }) => ({ fileContent: blob, fileName: name })) || []
     const retroarchConfig = { ...getRetroarchConfig(), ...this.retroarchConfig }
     const retroarchCoreConfig = { ...defaultRetroarchCoresConfig[this.core], ...this.coreConfig?.[this.core] }
     const launchOptions = {
-      style: this.style,
-      element: this.canvas,
-      core: this.core,
-      // experimental shader support
-      shader: localStorage._shader,
-      rom,
       bios,
+      core: this.core,
+      element: this.canvas,
+      respondToGlobalEvents: false,
       retroarchConfig,
       retroarchCoreConfig,
-      respondToGlobalEvents: false,
+      rom,
+      // experimental shader support
+      shader: localStorage._shader,
+      style: this.style,
       async waitForInteraction({ done }) {
         await waitForUserInteraction?.()
         done()
@@ -126,16 +136,20 @@ export class Emulator {
     this.processStatus = 'ready'
   }
 
-  resume() {
-    this.nostalgist?.resume()
+  loadState(blob: Blob) {
+    this.nostalgist?.loadState(blob)
+  }
+
+  pause() {
+    this.nostalgist?.pause()
   }
 
   restart() {
     this.nostalgist?.restart()
   }
 
-  pause() {
-    this.nostalgist?.pause()
+  resume() {
+    this.nostalgist?.resume()
   }
 
   async saveState() {
@@ -145,46 +159,29 @@ export class Emulator {
 
     const { state, thumbnail } = await this.nostalgist.saveState()
     return {
-      name: this.rom?.fileAccessor.name,
+      blob: state,
       core: this.core,
       createTime: Date.now(),
-      blob: state,
+      name: this.rom?.fileAccessor.name,
       thumbnailBlob: thumbnail,
     }
   }
 
-  loadState(blob: Blob) {
-    this.nostalgist?.loadState(blob)
-  }
-
-  exit() {
-    this.processStatus = 'terminated'
-
-    this.nostalgist?.exit()
-
-    this.cleanupDOM()
-    // @ts-expect-error try to focus on previous active element
-    this.previousActiveElement?.focus?.()
-  }
-
-  private async showCanvasCusor() {
-    this.canvas.style.cursor = 'default'
-
-    if (this.hideCursorAbortController) {
-      this.hideCursorAbortController.abort()
+  private cleanupDOM() {
+    document.body.removeEventListener('mousemove', this.showCanvasCusor, false)
+    window.removeEventListener('resize', this.resizeCanvas, false)
+    this.canvas.remove()
+    document.body.style.removeProperty('overflow')
+    if (screen.orientation) {
+      screen.orientation.removeEventListener('change', this.resizeCanvas, false)
     }
-    this.hideCursorAbortController = new AbortController()
-    try {
-      await delay(3000, { signal: this.hideCursorAbortController.signal })
-      this.canvas.style.cursor = 'none'
-    } catch {}
   }
 
   private async resizeCanvas() {
     await delay(100)
     this.nostalgist?.resize({
-      width: innerWidth,
       height: innerHeight,
+      width: innerWidth,
     })
   }
 
@@ -202,18 +199,21 @@ export class Emulator {
     // tell retroarch that controllers are connected
     for (const gamepad of navigator.getGamepads?.() ?? []) {
       if (gamepad) {
-        window.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
+        globalThis.dispatchEvent(new GamepadEvent('gamepadconnected', { gamepad }))
       }
     }
   }
 
-  private cleanupDOM() {
-    document.body.removeEventListener('mousemove', this.showCanvasCusor, false)
-    window.removeEventListener('resize', this.resizeCanvas, false)
-    this.canvas.remove()
-    document.body.style.removeProperty('overflow')
-    if (screen.orientation) {
-      screen.orientation.removeEventListener('change', this.resizeCanvas, false)
+  private async showCanvasCusor() {
+    this.canvas.style.cursor = 'default'
+
+    if (this.hideCursorAbortController) {
+      this.hideCursorAbortController.abort()
     }
+    this.hideCursorAbortController = new AbortController()
+    try {
+      await delay(3000, { signal: this.hideCursorAbortController.signal })
+      this.canvas.style.cursor = 'none'
+    } catch {}
   }
 }

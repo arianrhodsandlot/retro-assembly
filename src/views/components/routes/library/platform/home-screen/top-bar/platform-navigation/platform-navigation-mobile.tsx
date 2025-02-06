@@ -4,11 +4,11 @@ import { useRouterHelpers } from '../../../../../../hooks/use-router-helpers'
 import { getPlatformDisplayName } from './utils'
 
 interface PlatformNavigationMobileProps {
-  platforms: { name: string; fullName: string }[]
-  current?: { name: string; fullName: string }
+  current?: { fullName: string; name: string }
+  platforms: { fullName: string; name: string }[]
 }
 
-export function PlatformNavigationMobile({ platforms, current }: PlatformNavigationMobileProps) {
+export function PlatformNavigationMobile({ current, platforms }: PlatformNavigationMobileProps) {
   const selectRef = useRef<HTMLSelectElement>(null)
   const { navigateToPlatform } = useRouterHelpers()
 
@@ -20,7 +20,7 @@ export function PlatformNavigationMobile({ platforms, current }: PlatformNavigat
 
   return (
     <div className='platform-navigation-mobile flex-center relative flex-1 overflow-hidden sm:hidden'>
-      <button className='flex-center w-full'>
+      <button className='flex-center w-full' type='button'>
         <img
           alt={current.fullName}
           className='shrink-0 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)]'

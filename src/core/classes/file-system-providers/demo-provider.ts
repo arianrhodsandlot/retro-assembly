@@ -10,6 +10,15 @@ export class DemoProvider implements FileSystemProvider {
     return new DemoProvider()
   }
 
+  async create({ file, path }: { file: Blob; path: string }) {
+    noop(file, path)
+    return await Promise.resolve(undefined)
+  }
+
+  async delete(path: string) {
+    return await noop(path)
+  }
+
   async getContent(path: string) {
     const file = path.split('/').at(-1)
     if (!file) {
@@ -39,26 +48,13 @@ export class DemoProvider implements FileSystemProvider {
     return await http(url).blob()
   }
 
-  async peekContent(path: string) {
-    return await this.getContent(path)
-  }
-
   async getContentAndCache(path: string) {
     return await this.getContent(path)
   }
 
-  async create({ file, path }: { file: Blob; path: string }) {
-    noop(file, path)
-    return await Promise.resolve(undefined)
-  }
-
-  async delete(path: string) {
-    return await noop(path)
-  }
-
   async list(path = '') {
     const createFileAccessor = ({ fileName, name }) =>
-      new FileAccessor({ name: fileName, directory: path, type: 'file', fileSystemProvider: this, meta: { name } })
+      new FileAccessor({ directory: path, fileSystemProvider: this, meta: { name }, name: fileName, type: 'file' })
 
     await Promise.resolve()
     if (path in retrobrewsGames) {
@@ -69,12 +65,16 @@ export class DemoProvider implements FileSystemProvider {
     const directories = ['atari2600', 'gba', 'gbc', 'megadrive', 'nes', 'snes']
     return directories.map(
       (directory: string) =>
-        new FileAccessor({ name: directory, directory: '', type: 'directory', fileSystemProvider: this }),
+        new FileAccessor({ directory: '', fileSystemProvider: this, name: directory, type: 'directory' }),
     )
   }
 
   async peek(path: string) {
     noop(path)
     return await Promise.resolve(undefined)
+  }
+
+  async peekContent(path: string) {
+    return await this.getContent(path)
   }
 }

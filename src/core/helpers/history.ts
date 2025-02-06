@@ -73,7 +73,7 @@ export async function addHistoryItem(rom: Rom) {
 
   const historyPath = getHistoryPath()
   const history = await getHistory()
-  const historyItem = { name: rom.fileAccessor.name, relativePath, lastPlayedDate: Date.now(), playedTimes: 1 }
+  const historyItem = { lastPlayedDate: Date.now(), name: rom.fileAccessor.name, playedTimes: 1, relativePath }
 
   const playedItem = find(history.items, { relativePath })
   if (playedItem) {
@@ -85,7 +85,7 @@ export async function addHistoryItem(rom: Rom) {
   const historyContent = JSON.stringify(history, null, 2)
 
   const file = new Blob([historyContent], { type: 'application/json' })
-  globalContext.fileSystem?.create({ path: historyPath, file })
+  globalContext.fileSystem?.create({ file, path: historyPath })
 }
 
 export function historyToRom(history) {
@@ -100,11 +100,11 @@ export function historyToRom(history) {
   }
   const romDirectory = PreferenceParser.get('romDirectory')
   const historyFileAccessors: FileAccessor[] = []
-  for (const { relativePath, name } of historyItems) {
+  for (const { name, relativePath } of historyItems) {
     if (relativePath) {
       const path = join(romDirectory, relativePath)
       const directory = dirname(path)
-      const fileAccessor = new FileAccessor({ name, directory, type: 'file', fileSystemProvider })
+      const fileAccessor = new FileAccessor({ directory, fileSystemProvider, name, type: 'file' })
       historyFileAccessors.push(fileAccessor)
     }
   }

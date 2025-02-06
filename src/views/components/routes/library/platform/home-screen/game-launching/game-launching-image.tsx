@@ -2,23 +2,23 @@ import { AnimatePresence, type AnimationLifecycles, type AnimationProps, motion 
 import type { ReactNode } from 'react'
 
 interface GameLaunchingImageProps {
-  show: boolean
-  styles: {
-    initial: AnimationProps['initial']
-    animate: AnimationProps['animate']
-    exit: AnimationProps['exit']
-  }
+  children: ReactNode
   onAnimationComplete: AnimationLifecycles['onAnimationComplete']
   onAnimationStart: AnimationLifecycles['onAnimationStart']
-  children: ReactNode
+  show: boolean
+  styles: {
+    animate: AnimationProps['animate']
+    exit: AnimationProps['exit']
+    initial: AnimationProps['initial']
+  }
 }
 
 export function GameLaunchingImage({
-  show,
-  styles,
+  children,
   onAnimationComplete,
   onAnimationStart,
-  children,
+  show,
+  styles,
 }: GameLaunchingImageProps) {
   return (
     <AnimatePresence>

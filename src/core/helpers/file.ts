@@ -9,13 +9,13 @@ export async function detectLocalHandleExistence(name: string) {
   return Boolean(handle)
 }
 
-export async function detectLocalHandlePermission({ name, mode }: { name: string; mode: 'read' | 'readwrite' }) {
+export async function detectLocalHandlePermission({ mode, name }: { mode: 'read' | 'readwrite'; name: string }) {
   const handles = await get('local-file-system-handles')
   const permission = await handles?.[name]?.queryPermission({ mode })
   return permission === 'granted'
 }
 
-export async function requestLocalHandle({ name, mode }: { name: string; mode: 'read' | 'readwrite' }) {
+export async function requestLocalHandle({ mode, name }: { mode: 'read' | 'readwrite'; name: string }) {
   const handles = (await get('local-file-system-handles')) ?? {}
 
   const handle = handles[name]
@@ -25,13 +25,12 @@ export async function requestLocalHandle({ name, mode }: { name: string; mode: '
       return handle
     }
     throw new Error('The user abort a request.')
-  } else {
-    return await requestFreshLocalHandle({ name, mode })
   }
+  return await requestFreshLocalHandle({ mode, name })
 }
 
-export async function requestFreshLocalHandle({ name, mode }: { name: string; mode: 'read' | 'readwrite' }) {
-  const handle = await window.showDirectoryPicker({ mode })
+export async function requestFreshLocalHandle({ mode, name }: { mode: 'read' | 'readwrite'; name: string }) {
+  const handle = await globalThis.showDirectoryPicker({ mode })
   const handles = (await get('local-file-system-handles')) ?? {}
   handles[name] = handle
   await set('local-file-system-handles', handles)

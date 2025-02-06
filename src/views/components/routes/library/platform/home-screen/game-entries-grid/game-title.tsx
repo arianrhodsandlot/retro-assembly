@@ -5,7 +5,7 @@ import { DistrictIcon } from './district-icon'
 
 export function GameTitle({ rom }: { rom: Rom }) {
   const { codes } = rom.goodCode
-  const { revision, countries, version = {} } = codes
+  const { countries, revision, version = {} } = codes
   const districts = uniq(countries?.map(({ code }) => code))
 
   const gameNameState = useAsync(async () => {
@@ -21,7 +21,9 @@ export function GameTitle({ rom }: { rom: Rom }) {
       data-display-name={gameNameState.value ?? rom.displayName}
       title={title}
     >
-      {districts?.map((district) => <DistrictIcon district={district} key={district} />)}
+      {districts?.map((district) => (
+        <DistrictIcon district={district} key={district} />
+      ))}
 
       <span className='align-middle'>{gameNameState.value ?? rom.displayName}</span>
 

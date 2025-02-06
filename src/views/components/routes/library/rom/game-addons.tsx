@@ -10,7 +10,7 @@ import { UserInteractionButton } from './user-interaction-button'
 import { VirtualController } from './virtual-controller'
 
 export function GameAddons() {
-  const { showInteractionButton, onUserInteract, launchGame } = useUserInteraction()
+  const { launchGame, onUserInteract, showInteractionButton } = useUserInteraction()
   const { params } = useRouterHelpers()
   const { exit } = useExit()
 

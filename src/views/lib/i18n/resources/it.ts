@@ -1,12 +1,12 @@
 import type { Translation } from './types'
 
 const translation: Translation = {
+  About: 'Di',
   'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
     'Un gioco può essere eseguito solo dopo aver toccato lo schermo, anziché facendo clic su un pulsante sul gamepad.',
+  'an empty directory': 'una directory vuota',
   'A personal retro game collection cabinet in your browser':
     'Un armadietto personale per la raccolta di giochi retrò nel tuo browser',
-  About: 'Di',
-  'an empty directory': 'una directory vuota',
   'Are you sure to logout?': 'Sei sicuro di uscire?',
   'Auto detect': 'Trovato automaticamente',
   'built with your own ROM files': 'costruito con i tuoi file ROM',
@@ -34,9 +34,9 @@ const translation: Translation = {
   Keyboard: 'Tastiera',
   Language: 'Lingua',
   'Last Updated': 'Ultimo aggiornamento',
-  'Load state': 'Stato di caricamento',
-  'Loading selected state': 'Caricamento dello stato selezionato',
   Loading: 'Caricamento',
+  'Loading selected state': 'Caricamento dello stato selezionato',
+  'Load state': 'Stato di caricamento',
   'Local file permission is needed': "È necessaria l'autorizzazione per il file locale",
   'Login fail. Error:': 'Login fallito.  {{ message }}',
   Logout: 'Disconnettersi',
@@ -49,8 +49,8 @@ const translation: Translation = {
   OK: 'OK',
   or: 'O',
   'Please do not turn off your device!': 'Per favore non spegnere il dispositivo!',
-  'Press a button on your controller': 'Premi un pulsante sul controller',
   Press: 'Premere',
+  'Press a button on your controller': 'Premi un pulsante sul controller',
   'Previous console': 'Consolle precedente',
   'Privacy Policy': 'politica sulla riservatezza',
   Proceed: 'Procedere',
@@ -61,13 +61,13 @@ const translation: Translation = {
   'Return home': 'Torna a casa',
   Rewind: 'Riavvolgi',
   'Save & exit': 'Salva',
-  'Save state': 'Salva stato',
   'Saved at': 'Salvato a',
+  'Save state': 'Salva stato',
   Saving: 'Salvataggio',
   'Select a cloud directory': 'Seleziona una directory cloud',
+  'select a directory': 'selezionare una directory',
   'Select a directory to initialize your game library.':
     'Seleziona una directory per inizializzare la tua libreria di giochi.',
-  'select a directory': 'selezionare una directory',
   'Select a local directory': 'Seleziona una directory locale',
   'Show/hide menu': 'Mostra/nascondi il menu',
   'Sign in with': 'Accedi con {{ service }}',
@@ -81,9 +81,9 @@ const translation: Translation = {
     'La directory scelta dovrebbe corrispondere a una determinata struttura:',
   'The directory you choose should match a certain structure.':
     'La directory scelta dovrebbe corrispondere a una determinata struttura.',
+  'There are no saved states for current game.': 'Non ci sono stati salvati per il gioco corrente.',
   'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
     'Le ROM dei giochi retrò dovrebbero essere raggruppate in directory separate e le directory dovrebbero essere denominate in queste condizioni:',
-  'There are no saved states for current game.': 'Non ci sono stati salvati per il gioco corrente.',
   'This is due to a limitation of the browser.': 'Ciò è dovuto a una limitazione del browser.',
   'This is due to a restriction of the security policy of your browser.':
     'Ciò è dovuto a una limitazione della politica di sicurezza del tuo browser.',
@@ -101,12 +101,12 @@ const translation: Translation = {
   'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
     "Dobbiamo chiederti di concederci il permesso di leggere nuovamente le tue ROM, anche se l'hai già fatto l'ultima volta.",
   'You are now authenticated with RetroAssembly.': 'Ora sei autenticato con RetroAssembly.',
-  'You selected an invalid directory as your ROMs directory':
-    'Hai selezionato una directory non valida come directory delle ROM',
   'Your login status is expired. Please login again.': 'Tuo {{ loginName }} lo stato di accesso è scaduto. ',
   'Your personal retro game collection cabinet': 'Il tuo armadietto personale per la raccolta di giochi retrò',
   'Your should choose a directory containing at least one of the above sub directories.':
     'Dovresti scegliere una directory che contenga almeno una delle sottodirectory sopra indicate.',
+  'You selected an invalid directory as your ROMs directory':
+    'Hai selezionato una directory non valida come directory delle ROM',
 }
 
 export const it = { translation }

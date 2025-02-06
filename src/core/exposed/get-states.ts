@@ -18,9 +18,9 @@ export async function getStates() {
 
   const coreStateManager = new CoreStateManager({
     core: emulator.core,
-    name: emulator.rom.fileAccessor.name,
     directory: stateDirectory,
     fileSystemProvider: fileSystem,
+    name: emulator.rom.fileAccessor.name,
   })
 
   return await coreStateManager.getStates()

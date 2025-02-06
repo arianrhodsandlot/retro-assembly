@@ -8,9 +8,13 @@ import { globalContext } from '../internal/global-context'
 
 export async function start(type = PreferenceParser.get('romProviderType')) {
   switch (type) {
-    case 'public':
-      globalContext.fileSystem = DemoProvider.getSingleton()
-      globalContext.isDemoRunning = true
+    case 'dropbox':
+      globalContext.fileSystem = DropboxProvider.getSingleton()
+      globalContext.isDemoRunning = false
+      break
+    case 'google-drive':
+      globalContext.fileSystem = await GoogleDriveProvider.getSingleton()
+      globalContext.isDemoRunning = false
       break
     case 'local':
       globalContext.fileSystem = LocalProvider.getSingleton()
@@ -20,13 +24,9 @@ export async function start(type = PreferenceParser.get('romProviderType')) {
       globalContext.fileSystem = OnedriveProvider.getSingleton()
       globalContext.isDemoRunning = false
       break
-    case 'google-drive':
-      globalContext.fileSystem = await GoogleDriveProvider.getSingleton()
-      globalContext.isDemoRunning = false
-      break
-    case 'dropbox':
-      globalContext.fileSystem = DropboxProvider.getSingleton()
-      globalContext.isDemoRunning = false
+    case 'public':
+      globalContext.fileSystem = DemoProvider.getSingleton()
+      globalContext.isDemoRunning = true
       break
     default:
       throw new Error('unknown rom provider type')

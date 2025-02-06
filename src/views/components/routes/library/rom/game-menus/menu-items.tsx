@@ -12,15 +12,15 @@ const menuButtonClassNames =
   'flex items-center justify-end py-4 pr-20 text-right transition-[color,background-color] focus:animate-[pulse-white-bg_1.5s_ease-in-out_infinite] focus:bg-white focus:text-rose-700 disabled:text-white/20'
 
 interface MenuItemsProps {
-  onResume: () => void
-  onRestart: () => void
-  onSaveState: () => void
-  onSaveAndExit: () => void
   onExit: () => void
   onLoadState: (stateId: string) => void
+  onRestart: () => void
+  onResume: () => void
+  onSaveAndExit: () => void
+  onSaveState: () => void
 }
 
-export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onExit, onLoadState }: MenuItemsProps) {
+export function MenuItems({ onExit, onLoadState, onRestart, onResume, onSaveAndExit, onSaveState }: MenuItemsProps) {
   const { t } = useTranslation()
   const setShowMenuOverlay = useSetAtom(showMenuOverlayAtom)
   const setShouldFocusStatesList = useSetAtom(shouldFocusStatesListAtom)
@@ -68,6 +68,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             onClick={onResume}
             onFocus={() => setShowStateList(false)}
             ref={firstButtonRef}
+            type='button'
           >
             <span className='icon-[material-symbols--resume] mr-2 size-6 shrink-0' />
             {t('Resume')}
@@ -78,6 +79,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             data-testid='menu-item-restart'
             onClick={onRestart}
             onFocus={() => setShowStateList(false)}
+            type='button'
           >
             <span className='icon-[mdi--restart] mr-2 size-6 shrink-0' />
             {t('Restart')}
@@ -89,6 +91,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             disabled={usingDemo}
             onClick={onSaveState}
             onFocus={() => setShowStateList(false)}
+            type='button'
           >
             <span className='icon-[mdi--content-save] mr-2 size-6 shrink-0' />
             {t('Save state')}
@@ -102,6 +105,7 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             disabled={usingDemo}
             onClick={() => setShouldFocusStatesList(true)}
             onFocus={onLoadStateButtonFocus}
+            type='button'
           >
             <span className='icon-[mdi--tray-arrow-down] mr-2 size-6 shrink-0' />
             {t('Load state')}
@@ -113,12 +117,18 @@ export function MenuItems({ onResume, onRestart, onSaveState, onSaveAndExit, onE
             disabled={usingDemo}
             onClick={onSaveAndExit}
             onFocus={() => setShowStateList(false)}
+            type='button'
           >
             <span className='icon-[mdi--location-exit] mr-2 size-6 shrink-0' />
             {t('Save & exit')}
           </button>
 
-          <button className={menuButtonClassNames} onClick={onExit} onFocus={() => setShowStateList(false)}>
+          <button
+            className={menuButtonClassNames}
+            onClick={onExit}
+            onFocus={() => setShowStateList(false)}
+            type='button'
+          >
             <span className='icon-[mdi--exit-to-app] mr-2 size-6 shrink-0' />
             {t('Exit')}
           </button>

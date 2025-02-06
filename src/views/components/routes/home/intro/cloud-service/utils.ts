@@ -3,11 +3,11 @@ import { type CloudService, listDirectory } from '../../../../../../core'
 import type { TreeNode } from './types'
 
 interface ToggleNodeExpandedParams {
-  node: TreeNode
   cloudService: CloudService
+  node: TreeNode
 }
 
-export async function toggleNodeExpanded({ node, cloudService }: ToggleNodeExpandedParams) {
+export async function toggleNodeExpanded({ cloudService, node }: ToggleNodeExpandedParams) {
   if (!node?.hasChildren) {
     return
   }
@@ -20,10 +20,10 @@ export async function toggleNodeExpanded({ node, cloudService }: ToggleNodeExpan
   if (!node.children) {
     const children = await listDirectory({ path: node.path, type: cloudService })
     node.children = children.map((child) => {
-      const { name, isDirectory } = child
+      const { isDirectory, name } = child
       const hasChildren = isDirectory
       const path = join(node.path, name)
-      return { path, name, expanded: false, isDirectory, hasChildren, children: undefined }
+      return { children: undefined, expanded: false, hasChildren, isDirectory, name, path }
     })
   }
 

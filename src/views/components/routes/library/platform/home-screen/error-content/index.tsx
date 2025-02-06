@@ -9,7 +9,7 @@ import { LocalFilePermision } from './local-file-permision'
 
 function isInvalidTokenError(error: any) {
   error ??= {}
-  const { message, status, statusCode, response } = error
+  const { message, response, status, statusCode } = error
   return message === 'invalid token' || statusCode === 401 || status === 401 || response?.status === 400
 }
 

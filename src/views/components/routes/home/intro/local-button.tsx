@@ -13,11 +13,11 @@ export function LocalButton({ children }: { children?: ReactNode } = {}) {
 
   async function selectLocalDirectory() {
     try {
-      const handle = await window.showDirectoryPicker({ mode: 'readwrite' })
+      const handle = await globalThis.showDirectoryPicker({ mode: 'readwrite' })
 
-      const isValid = await validateRomDirectory({ type: 'local', handle })
+      const isValid = await validateRomDirectory({ handle, type: 'local' })
       if (isValid) {
-        await updatePreference({ fileSystem: 'local', directory: '', handle })
+        await updatePreference({ directory: '', fileSystem: 'local', handle })
         setIsInvalidDialogOpen(false)
         await start()
         navigateToLibrary('local')

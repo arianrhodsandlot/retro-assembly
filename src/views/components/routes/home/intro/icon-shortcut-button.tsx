@@ -1,16 +1,18 @@
 import { clsx } from 'clsx'
-import { type ReactNode, forwardRef } from 'react'
+import type { ReactNode } from 'react'
 
 interface IconShortcutButtonProps {
-  type: string
   children: ReactNode
   onClick?: () => void
+  type: string
 }
 
-export const IconShortcutButton = forwardRef<HTMLButtonElement, IconShortcutButtonProps>(function IconShortcutButton(
-  { type, onClick, children },
+export function IconShortcutButton({
+  children,
+  onClick,
   ref,
-) {
+  type,
+}: { ref?: React.RefObject<HTMLButtonElement | null> } & IconShortcutButtonProps) {
   return (
     <button
       className={clsx(
@@ -21,8 +23,9 @@ export const IconShortcutButton = forwardRef<HTMLButtonElement, IconShortcutButt
       data-testid={`select-${type}-directory`}
       onClick={onClick}
       ref={ref}
+      type='button'
     >
       {children}
     </button>
   )
-})
+}

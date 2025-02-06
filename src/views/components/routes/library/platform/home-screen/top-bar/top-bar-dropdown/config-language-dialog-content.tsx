@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { BaseButton } from '../../../../../../primitives/base-button'
 
 export function ConfigLanguageDialogContent() {
-  const { t, i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
-  const { value, set, remove } = useLocalStorageValue<string>('i18nextLng', {
+  const { remove, set, value } = useLocalStorageValue<string>('i18nextLng', {
     parse(str) {
       return str
     },

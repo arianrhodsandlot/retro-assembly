@@ -1,11 +1,11 @@
 import type { Translation } from './types'
 
 const translation: Translation = {
+  About: 'عن',
   'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
     'لا يمكن تشغيل اللعبة إلا بعد النقر على الشاشة، بدلاً من النقر فوق زر على لوحة الألعاب.',
-  'A personal retro game collection cabinet in your browser': 'خزانة مجموعة ألعاب شخصية قديمة في متصفحك',
-  About: 'عن',
   'an empty directory': 'دليل فارغ',
+  'A personal retro game collection cabinet in your browser': 'خزانة مجموعة ألعاب شخصية قديمة في متصفحك',
   'Are you sure to logout?': 'هل أنت متأكد من تسجيل الخروج؟',
   'Auto detect': 'اكتشاف تلقائي',
   'built with your own ROM files': 'بنيت مع ملفات ROM الخاصة بك',
@@ -32,9 +32,9 @@ const translation: Translation = {
   Keyboard: 'لوحة المفاتيح',
   Language: 'لغة',
   'Last Updated': 'آخر تحديث',
-  'Load state': 'الدولة الحمل',
-  'Loading selected state': 'جارٍ تحميل الحالة المحددة',
   Loading: 'تحميل',
+  'Loading selected state': 'جارٍ تحميل الحالة المحددة',
+  'Load state': 'الدولة الحمل',
   'Local file permission is needed': 'هناك حاجة إلى إذن الملف المحلي',
   'Login fail. Error:': 'فشل تسجيل الدخول.  {{ message }}',
   Logout: 'تسجيل خروج',
@@ -47,8 +47,8 @@ const translation: Translation = {
   OK: 'نعم',
   or: 'أو',
   'Please do not turn off your device!': 'من فضلك لا تطفئ جهازك!',
-  'Press a button on your controller': 'اضغط على زر على وحدة التحكم الخاصة بك',
   Press: 'يضعط',
+  'Press a button on your controller': 'اضغط على زر على وحدة التحكم الخاصة بك',
   'Previous console': 'وحدة التحكم السابقة',
   'Privacy Policy': 'سياسة الخصوصية',
   Proceed: 'يتابع',
@@ -59,12 +59,12 @@ const translation: Translation = {
   'Return home': 'العودة إلى المنزل',
   Rewind: 'الترجيع',
   'Save & exit': 'يحفظ',
-  'Save state': 'حالة الحفظ',
   'Saved at': 'تم الحفظ في',
+  'Save state': 'حالة الحفظ',
   Saving: 'إنقاذ',
   'Select a cloud directory': 'حدد دليل السحابة',
-  'Select a directory to initialize your game library.': 'حدد دليلاً لتهيئة مكتبة الألعاب الخاصة بك.',
   'select a directory': 'حدد الدليل',
+  'Select a directory to initialize your game library.': 'حدد دليلاً لتهيئة مكتبة الألعاب الخاصة بك.',
   'Select a local directory': 'حدد الدليل المحلي',
   'Show/hide menu': 'إظهار/إخفاء القائمة',
   'Sign in with': 'تسجيل الدخول ب {{ service }}',
@@ -75,9 +75,9 @@ const translation: Translation = {
   'Tap here to launch the game': 'اضغط هنا لبدء اللعبة',
   'The directory you choose should match a certain structure:': 'يجب أن يتطابق الدليل الذي تختاره مع بنية معينة:',
   'The directory you choose should match a certain structure.': 'يجب أن يتطابق الدليل الذي تختاره مع بنية معينة.',
+  'There are no saved states for current game.': 'لا توجد حالات محفوظة للعبة الحالية.',
   'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
     'يجب تجميع ROMs الخاصة بالألعاب القديمة في أدلة منفصلة، ​​ويجب تسمية الدلائل في هذه الاتفاقية:',
-  'There are no saved states for current game.': 'لا توجد حالات محفوظة للعبة الحالية.',
   'This is due to a limitation of the browser.': 'هذا بسبب القيود المفروضة على المتصفح.',
   'This is due to a restriction of the security policy of your browser.':
     'ويرجع ذلك إلى تقييد السياسة الأمنية لمتصفحك.',
@@ -95,11 +95,11 @@ const translation: Translation = {
   'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
     'علينا أن نطلب منك منح الإذن لقراءة ROM الخاصة بك مرة أخرى، على الرغم من أنك قمت بذلك بالفعل في المرة الأخيرة.',
   'You are now authenticated with RetroAssembly.': 'لقد تمت مصادقتك الآن باستخدام RetroAssembly.',
-  'You selected an invalid directory as your ROMs directory': 'لقد قمت بتحديد دليل غير صالح كدليل ROM الخاص بك',
   'Your login status is expired. Please login again.': 'لك {{ loginName }} حالة تسجيل الدخول منتهية الصلاحية. ',
   'Your personal retro game collection cabinet': 'خزانة مجموعة الألعاب الرجعية الشخصية الخاصة بك',
   'Your should choose a directory containing at least one of the above sub directories.':
     'يجب عليك اختيار دليل يحتوي على واحد على الأقل من الأدلة الفرعية المذكورة أعلاه.',
+  'You selected an invalid directory as your ROMs directory': 'لقد قمت بتحديد دليل غير صالح كدليل ROM الخاص بك',
 }
 
 export const ar = { translation }

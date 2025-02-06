@@ -220,7 +220,7 @@ function prioritize(priorities) {
 
   const destDistance = destPriority.distance
 
-  destPriority.group.sort(function (a, b) {
+  destPriority.group.sort((a, b) => {
     for (const distance of destDistance) {
       const delta = distance(a) - distance(b)
       if (delta) {
@@ -495,15 +495,11 @@ function getSectionId(elem) {
 }
 
 function getSectionNavigableElements(sectionId) {
-  return parseSelector(_sections[sectionId].selector).filter(function (elem) {
-    return isNavigable(elem, sectionId)
-  })
+  return parseSelector(_sections[sectionId].selector).filter((elem) => isNavigable(elem, sectionId))
 }
 
 function getSectionDefaultElement(sectionId) {
-  const defaultElement = parseSelector(_sections[sectionId].defaultElement).find(function (elem) {
-    return isNavigable(elem, sectionId, true)
-  })
+  const defaultElement = parseSelector(_sections[sectionId].defaultElement).find((elem) => isNavigable(elem, sectionId, true))
   if (!defaultElement) {
     return null
   }
@@ -880,7 +876,7 @@ function onBlur(evt) {
       fireEvent(target, 'unfocused', unfocusProperties, false)
     } else {
       _duringFocusChange = true
-      setTimeout(function () {
+      setTimeout(() => {
         target.focus()
         _duringFocusChange = false
       })

@@ -25,9 +25,9 @@ type CoreName =
   | 'gearboy'
   | 'genesis_plus_gx'
   | 'mednafen_lynx'
+  | 'mednafen_ngp'
   | 'mednafen_vb'
   | 'mednafen_wswan'
-  | 'mednafen_ngp'
   | 'mgba'
   | 'mupen64plus_next'
   | 'nestopia'
@@ -132,18 +132,18 @@ export const coreBiosMap: Record<string, string[]> = {
 }
 
 export const arcadeHardwareBiosMap: Record<string, string[]> = {
-  'Super Kaneko Nova System': ['skns.zip'],
-  'Neo Geo MVS': ['neogeo.zip'],
-  'Neo Geo CDZ': ['neocdz.zip'],
-  PolyGameMaster: ['pgm.zip'],
+  'C-Chip Internal ROM': ['cchip.zip'],
   'Cassette System': ['decocass.zip'],
   'ISG Selection Master Type 2006': ['isgsm.zip'],
-  SSIO: ['midssio.zip'],
-  NMK16: ['nmk004.zip'],
-  'YM2608 Internal ROM': ['ym2608.zip'],
-  'C-Chip Internal ROM': ['cchip.zip'],
   'NA-1 / NA-2': ['namcoc69.zip', 'namcoc70.zip'],
   'NB-1 / NB-2': ['namcoc75.zip'],
+  'Neo Geo CDZ': ['neocdz.zip'],
+  'Neo Geo MVS': ['neogeo.zip'],
+  NMK16: ['nmk004.zip'],
+  PolyGameMaster: ['pgm.zip'],
+  SSIO: ['midssio.zip'],
+  'Super Kaneko Nova System': ['skns.zip'],
+  'YM2608 Internal ROM': ['ym2608.zip'],
 }
 
 export const extPlatformMap: Record<string, PlatformName> = {

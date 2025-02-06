@@ -1,7 +1,5 @@
 import { Nostalgist } from 'nostalgist'
 
-const { browserfs } = Nostalgist.vendors
-const { BFSRequire } = browserfs
+export const { path } = Nostalgist.vendors
 
-export const { Buffer } = BFSRequire('buffer')
-export const path = BFSRequire('path')
+export { Buffer } from 'node:buffer'

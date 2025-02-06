@@ -12,28 +12,28 @@ import { GameLaunchingImage } from './game-launching-image'
 
 function getMaskStyle(target: HTMLButtonElement | undefined) {
   const boundingClientRect = target?.getBoundingClientRect()
-  const { y, x, width, height } = boundingClientRect || {}
+  const { height, width, x, y } = boundingClientRect || {}
   const isValidBounding =
     typeof y === 'number' && typeof x === 'number' && typeof width === 'number' && typeof height === 'number'
   let maskPosition = {}
   if (isValidBounding) {
     maskPosition =
-      width && height ? { top: y, left: x, width, height } : { top: '50%', left: '50%', width: '0', height: '0' }
+      width && height ? { height, left: x, top: y, width } : { height: '0', left: '50%', top: '50%', width: '0' }
   }
   const initial = { ...maskPosition, filter: 'brightness(1)' }
-  const expanded = { ...maskPosition, top: 0, left: 0, width: '100%', height: '100%', filter: 'brightness(0)' }
-  const exit = isValidBounding ? { width: 0, height: 0, left: x + width / 2, top: y + height / 2, opacity: 0 } : initial
-  return { valid: isValidBounding, initial, exit, expanded }
+  const expanded = { ...maskPosition, filter: 'brightness(0)', height: '100%', left: 0, top: 0, width: '100%' }
+  const exit = isValidBounding ? { height: 0, left: x + width / 2, opacity: 0, top: y + height / 2, width: 0 } : initial
+  return { exit, expanded, initial, valid: isValidBounding }
 }
 
 export function GameLaunching() {
   const { setNeedsUserInteraction } = useUserInteraction()
-  const { navigateToRom, isPlatformRoute, params } = useRouterHelpers()
+  const { isPlatformRoute, navigateToRom, params } = useRouterHelpers()
   const launchingMask = useAtomValue(launchingMaskAtom)
   const setLaunchingFromHistory = useSetAtom(launchingFromHistoryAtom)
   const { connected } = useGamepads()
 
-  const { rom, target, event } = launchingMask || {}
+  const { event, rom, target } = launchingMask || {}
 
   const maskStyle = getMaskStyle(target)
 
@@ -73,9 +73,9 @@ export function GameLaunching() {
   }
 
   const styles = {
-    initial: maskStyle.initial,
-    exit: maskStyle.exit,
     animate: maskStyle.expanded,
+    exit: maskStyle.exit,
+    initial: maskStyle.initial,
   }
 
   return (

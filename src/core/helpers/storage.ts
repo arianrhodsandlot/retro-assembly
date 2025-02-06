@@ -3,7 +3,7 @@ import store2 from 'store2'
 
 const store = store2.local
 
-export function setStorageByKey({ key, value, expireAt }: { key: string; value: unknown; expireAt?: Date }) {
+export function setStorageByKey({ expireAt, key, value }: { expireAt?: Date; key: string; value: unknown }) {
   store.set(key, {
     meta: {
       expireAt: expireAt?.getTime(),

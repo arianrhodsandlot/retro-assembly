@@ -3,9 +3,9 @@ import { type ReactNode, type UIEvent, useState } from 'react'
 import { pressController } from '../../../../../../core'
 
 interface VirtualButtonProps {
+  children?: ReactNode
   name?: string
   onTap?: () => void
-  children?: ReactNode
 }
 
 function onContextMenu(event: UIEvent<HTMLDivElement>) {
@@ -13,7 +13,7 @@ function onContextMenu(event: UIEvent<HTMLDivElement>) {
   event.stopPropagation()
 }
 
-export function VirtualButton({ name, onTap, children }: VirtualButtonProps) {
+export function VirtualButton({ children, name, onTap }: VirtualButtonProps) {
   const [pressing, setPressing] = useState(false)
   const canPress = Boolean(name || onTap)
 

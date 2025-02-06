@@ -12,8 +12,8 @@ export function CloudServiceLogin({ cloudService, onSolve }: CloudServiceLoginPr
   const { t } = useTranslation()
 
   const loginNameMap = {
-    onedrive: 'OneDrive',
     'google-drive': 'Google Drive',
+    onedrive: 'OneDrive',
   }
   return (
     <div>

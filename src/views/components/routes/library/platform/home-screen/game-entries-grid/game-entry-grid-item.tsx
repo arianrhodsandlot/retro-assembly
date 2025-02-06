@@ -4,17 +4,17 @@ import { GameEntry } from './game-entry'
 
 interface GameEntryGridItemProps {
   columnIndex: number
-  rowIndex: number
-  style: CSSProperties
   data: {
-    rowCount: number
     columnCount: number
     roms: Rom[]
+    rowCount: number
   }
+  rowIndex: number
+  style: CSSProperties
 }
 
-export function GameEntryGridItem({ columnIndex, rowIndex, style, data }: GameEntryGridItemProps) {
-  const { rowCount, columnCount, roms } = data
+export function GameEntryGridItem({ columnIndex, data, rowIndex, style }: GameEntryGridItemProps) {
+  const { columnCount, roms, rowCount } = data
   const index = rowIndex * columnCount + columnIndex
   const rom = roms[index]
 

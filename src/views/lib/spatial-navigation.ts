@@ -4,68 +4,68 @@ import { SpatialNavigation } from '../../vendors/js-spatial-navigation'
 SpatialNavigation.init()
 
 SpatialNavigation.add({
-  id: 'get-started',
-  selector: '.get-started button',
-  enterTo: 'default-element',
   defaultElement: '.get-started button',
-  leaveFor: { up: '', down: '', left: '', right: '' },
+  enterTo: 'default-element',
+  id: 'get-started',
+  leaveFor: { down: '', left: '', right: '', up: '' },
+  selector: '.get-started button',
 })
 
 SpatialNavigation.add({
-  id: 'platform-navigation',
-  selector: '.platform-navigation button',
   enterTo: 'last-focused',
+  id: 'platform-navigation',
   navigableFilter(element: HTMLElement) {
     const boundingClientRect = element.getBoundingClientRect()
     return boundingClientRect.width > 0 && boundingClientRect.height > 0
   },
+  selector: '.platform-navigation button',
 })
 
 SpatialNavigation.add({
+  enterTo: 'last-focused',
   id: 'game-entry-grid',
   selector: '.game-entry-grid button',
-  enterTo: 'last-focused',
 })
 
 SpatialNavigation.add({
   id: 'menu-overlay-buttons',
-  selector: '.menu-overlay-buttons button',
-  restrict: 'self-only',
   leaveFor: {
-    up: '.menu-overlay-buttons button:last-child',
     down: '.menu-overlay-buttons button:first-child',
     left: '',
     right: '@menu-overlay-button-details',
+    up: '.menu-overlay-buttons button:last-child',
   },
+  restrict: 'self-only',
+  selector: '.menu-overlay-buttons button',
 })
 
 SpatialNavigation.add({
-  id: 'menu-overlay-button-details',
-  selector: '.menu-overlay-button-details button',
-  enterTo: 'default-element',
   defaultElement: '.menu-overlay-button-details button:first-child',
-  leaveFor: { up: '', down: '', left: '@menu-overlay-buttons', right: '' },
+  enterTo: 'default-element',
+  id: 'menu-overlay-button-details',
+  leaveFor: { down: '', left: '@menu-overlay-buttons', right: '', up: '' },
+  selector: '.menu-overlay-button-details button',
 })
 
 SpatialNavigation.add({
+  enterTo: 'default-element',
   id: 'modal',
+  leaveFor: { down: '', left: '', right: '', up: '' },
   selector: '.modal button, .modal a',
-  enterTo: 'default-element',
-  leaveFor: { up: '', down: '', left: '', right: '' },
 })
 
 SpatialNavigation.add({
+  enterTo: 'default-element',
   id: 'canvas',
+  leaveFor: { down: '', left: '', right: '', up: '' },
   selector: '#canvas',
-  enterTo: 'default-element',
-  leaveFor: { up: '', down: '', left: '', right: '' },
 })
 
 SpatialNavigation.add({
-  id: 'intro',
-  selector: '.intro button',
   enterTo: 'default-element',
-  leaveFor: { up: '', down: '', left: '', right: '' },
+  id: 'intro',
+  leaveFor: { down: '', left: '', right: '', up: '' },
+  selector: '.intro button',
 })
 
 function getCurrentFocusedElement() {

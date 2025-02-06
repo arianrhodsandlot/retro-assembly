@@ -4,12 +4,12 @@ import type { CloudServiceClient } from './cloud-service-client'
 
 const hostUrl = `${location.protocol}//${location.host}`
 export class DropboxClient extends Auth implements CloudServiceClient {
-  static tokenStorageKey = 'dropbox-token'
+  static readonly tokenStorageKey = 'dropbox-token'
   protected static config = {
     clientId: import.meta.env.VITE_DROPBOX_CLIENT_ID,
+    redirectUri: `${hostUrl}/auth/dropbox`,
     scope: ['files.content.read', 'files.content.write', 'files.metadata.read'],
     tokenUrl: 'https://api.dropboxapi.com/oauth2/token',
-    redirectUri: `${hostUrl}/auth/dropbox`,
   }
 
   static async getAuthorizeUrl(): Promise<string> {
@@ -34,7 +34,7 @@ export class DropboxClient extends Auth implements CloudServiceClient {
     try {
       await DropboxClient.requestWithRefreshTokenOnError(async () => {
         const client = await DropboxClient.getClient()
-        return await client.filesListFolder({ path: '', limit: 1 })
+        return await client.filesListFolder({ limit: 1, path: '' })
       })
     } catch (error) {
       console.warn(error)
@@ -53,23 +53,11 @@ export class DropboxClient extends Auth implements CloudServiceClient {
     const accessToken = DropboxClient.getAccessToken()
 
     if (accessToken) {
-      const auth = new DropboxAuth({ clientId: DropboxClient.config.clientId, accessToken })
-      return new Dropbox({ clientId: DropboxClient.config.clientId, auth })
+      const auth = new DropboxAuth({ accessToken, clientId: DropboxClient.config.clientId })
+      return new Dropbox({ auth, clientId: DropboxClient.config.clientId })
     }
 
     return new Dropbox({ clientId: DropboxClient.config.clientId })
-  }
-
-  async list(
-    params: files.ListFolderArg | files.ListFolderContinueArg,
-  ): ReturnType<Dropbox['filesListFolder']> | ReturnType<Dropbox['filesListFolderContinue']> {
-    return await DropboxClient.requestWithRefreshTokenOnError(async () => {
-      const client = await DropboxClient.getClient()
-      if ('cursor' in params) {
-        return await client.filesListFolderContinue(params)
-      }
-      return await client.filesListFolder(params)
-    })
   }
 
   async create(params: files.UploadArg) {
@@ -88,6 +76,18 @@ export class DropboxClient extends Auth implements CloudServiceClient {
       const client = await DropboxClient.getClient()
 
       return await client.filesDownload(params)
+    })
+  }
+
+  async list(
+    params: files.ListFolderArg | files.ListFolderContinueArg,
+  ): ReturnType<Dropbox['filesListFolder']> | ReturnType<Dropbox['filesListFolderContinue']> {
+    return await DropboxClient.requestWithRefreshTokenOnError(async () => {
+      const client = await DropboxClient.getClient()
+      if ('cursor' in params) {
+        return await client.filesListFolderContinue(params)
+      }
+      return await client.filesListFolder(params)
     })
   }
 }

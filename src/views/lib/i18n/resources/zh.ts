@@ -1,11 +1,11 @@
 import type { Translation } from './types'
 
 const translation: Translation = {
+  About: '关于',
   'A game can only run after the screen is tapped, rather than clicking a button on a gamepad.':
     '游戏只能在点击屏幕后运行，仅点击游戏手柄上的按钮是无法运行的。',
-  'A personal retro game collection cabinet in your browser': '浏览器中的个人复古游戏收藏柜',
-  About: '关于',
   'an empty directory': '一个空目录',
+  'A personal retro game collection cabinet in your browser': '浏览器中的个人复古游戏收藏柜',
   'Are you sure to logout?': '你确定要退出吗？',
   'Auto detect': '自动检测',
   'built with your own ROM files': '由你自己的 ROM 文件构建',
@@ -32,9 +32,9 @@ const translation: Translation = {
   Keyboard: '键盘',
   Language: '语言',
   'Last Updated': '最近更新时间',
-  'Load state': '读档',
-  'Loading selected state': '正在加载选择的存档',
   Loading: '加载中',
+  'Loading selected state': '正在加载选择的存档',
+  'Load state': '读档',
   'Local file permission is needed': '需要本地文件权限',
   'Login fail. Error:': '登录失败。 {{ message }}',
   Logout: '退出',
@@ -47,8 +47,8 @@ const translation: Translation = {
   OK: '好',
   or: '或者',
   'Please do not turn off your device!': '请不要关闭你的设备！',
-  'Press a button on your controller': '按手柄上的按钮',
   Press: '按',
+  'Press a button on your controller': '按手柄上的按钮',
   'Previous console': '上一个主机',
   'Privacy Policy': '隐私政策',
   Proceed: '继续',
@@ -59,12 +59,12 @@ const translation: Translation = {
   'Return home': '回家',
   Rewind: '倒带',
   'Save & exit': '存档并退出',
-  'Save state': '存档',
   'Saved at': '保存于',
+  'Save state': '存档',
   Saving: '正在保存',
   'Select a cloud directory': '选择来自云服务的目录',
-  'Select a directory to initialize your game library.': '选择一个目录来初始化你的游戏库。',
   'select a directory': '选择目录',
+  'Select a directory to initialize your game library.': '选择一个目录来初始化你的游戏库。',
   'Select a local directory': '选择本地目录',
   'Show/hide menu': '显示/隐藏菜单',
   'Sign in with': '登陆使用 {{ service }}',
@@ -74,9 +74,9 @@ const translation: Translation = {
   'Tap here to launch the game': '点击此处启动游戏',
   'The directory you choose should match a certain structure:': '你选择的目录应符合特定的结构：',
   'The directory you choose should match a certain structure.': '你选择的目录应该符合一定的结构。',
+  'There are no saved states for current game.': '当前游戏没有保存状态。',
   'The ROMs of retro games should be grouped in seperate directories, and the directories should be named in these conviention:':
     '复古游戏的 ROM 应分组在单独的目录中，并且目录应按以下约定命名：',
-  'There are no saved states for current game.': '当前游戏没有保存状态。',
   'This is due to a limitation of the browser.': '这是由于浏览器的限制。',
   'This is due to a restriction of the security policy of your browser.': '这是由于你的浏览器的安全策略的限制。',
   'to open/hide this menu.': '打开/隐藏此菜单。',
@@ -93,11 +93,11 @@ const translation: Translation = {
   'We have to ask you to grant permission to read your ROMs again, even though you have already done this last time.':
     '我们必须请求你授予再次读取 ROM 的权限，即使你上次已经这样做了。',
   'You are now authenticated with RetroAssembly.': '你现在已通过 RetroAssembly 进行身份验证。',
-  'You selected an invalid directory as your ROMs directory': '你选择了无效的目录作为 ROM 目录',
   'Your login status is expired. Please login again.': '你的 {{ loginName }} 登录状态已过期。',
   'Your personal retro game collection cabinet': '你的个人复古游戏收藏柜',
   'Your should choose a directory containing at least one of the above sub directories.':
     '你应该选择至少包含上述子目录之一的目录。',
+  'You selected an invalid directory as your ROMs directory': '你选择了无效的目录作为 ROM 目录',
 }
 
 export const zh = { translation }

@@ -8,26 +8,26 @@ import { platformNamesSorted } from '../constants/platforms'
 import type { CloudService } from '.'
 
 interface ValidateRomDirectoryParamsForLocalType {
-  type: 'local'
   handle: FileSystemDirectoryHandle
+  type: 'local'
 }
 
 interface ValidateRomDirectoryParamsForCloudServiceType {
-  type: CloudService
   directory: string
+  type: CloudService
 }
 
-type ValidateRomDirectoryParams = ValidateRomDirectoryParamsForLocalType | ValidateRomDirectoryParamsForCloudServiceType
+type ValidateRomDirectoryParams = ValidateRomDirectoryParamsForCloudServiceType | ValidateRomDirectoryParamsForLocalType
 
 export async function validateRomDirectory(params: ValidateRomDirectoryParams) {
   const { type } = params
   let directories: FileAccessor[]
 
   switch (type) {
-    case 'onedrive': {
+    case 'dropbox': {
       const { directory } = params
-      const onedrive = OnedriveProvider.getSingleton()
-      const children = await onedrive.list(directory)
+      const dropboxProvider = DropboxProvider.getSingleton()
+      const children = await dropboxProvider.list(directory)
       directories = filter(children, 'isDirectory')
       break
     }
@@ -38,17 +38,17 @@ export async function validateRomDirectory(params: ValidateRomDirectoryParams) {
       directories = filter(children, 'isDirectory')
       break
     }
-    case 'dropbox': {
-      const { directory } = params
-      const dropboxProvider = DropboxProvider.getSingleton()
-      const children = await dropboxProvider.list(directory)
-      directories = filter(children, 'isDirectory')
-      break
-    }
     case 'local': {
       const { handle } = params
       const local = LocalProvider.getSingleton({ handle })
       const children = await local.list()
+      directories = filter(children, 'isDirectory')
+      break
+    }
+    case 'onedrive': {
+      const { directory } = params
+      const onedrive = OnedriveProvider.getSingleton()
+      const children = await onedrive.list(directory)
       directories = filter(children, 'isDirectory')
       break
     }

@@ -24,6 +24,7 @@ export function MainButtons() {
             'hover:scale-105 hover:animate-[pulse-rose-border_1.5s_ease-in-out_infinite]',
           )}
           onClick={onClickTryPublicLibrary}
+          type='button'
         >
           <span className='icon-[mdi--play] size-6' />
           <div className='ml-2'>{t('Try public library')}</div>
@@ -47,6 +48,7 @@ export function MainButtons() {
               'focus:scale-105 focus:animate-[pulse-rose-border_1.5s_ease-in-out_infinite]',
               'hover:scale-105 hover:animate-[pulse-rose-border_1.5s_ease-in-out_infinite]',
             )}
+            type='button'
           >
             <span className='icon-[mdi--login] size-6' />
             <div className='ml-2'>{t('Continue with your own library')}</div>

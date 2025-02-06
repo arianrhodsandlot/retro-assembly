@@ -38,19 +38,19 @@ function requestWithoutDuplicates(url) {
 }
 
 export interface ArcadeGameInfo {
+  company: string
   fileName: string
   fullName: string
+  hardware: string
   parent: string
   year: string
-  company: string
-  hardware: string
 }
 
 export class GamesDatabase {
   private static gamesDatabaseMap = new Map<string, GamesDatabase>()
 
-  private index = new Map<string, Entry<string>[]>()
   private arcadeFileNameMap: Record<string, ArcadeGameInfo> = {}
+  private index = new Map<string, Entry<string>[]>()
   private platform: string
   private readyPromise: Promise<void>
 
@@ -68,12 +68,6 @@ export class GamesDatabase {
     return gamesDatabase
   }
 
-  static async queryByFileNameFromPlatform({ fileName, platform }: { fileName: string; platform: string }) {
-    const db = GamesDatabase.getInstance(platform)
-    await db.ready()
-    return db.queryByFileName(fileName)
-  }
-
   static async queryArcadeGameInfo(fileName: string) {
     const platform = 'arcade'
     const db = GamesDatabase.getInstance(platform)
@@ -81,8 +75,36 @@ export class GamesDatabase {
     return db.queryArcadeGameInfo(fileName)
   }
 
+  static async queryByFileNameFromPlatform({ fileName, platform }: { fileName: string; platform: string }) {
+    const db = GamesDatabase.getInstance(platform)
+    await db.ready()
+    return db.queryByFileName(fileName)
+  }
+
   async load() {
     await Promise.all([this.loadRdb(), this.loadArcadeGameList()])
+  }
+
+  async loadArcadeGameList() {
+    if (this.platform !== 'arcade') {
+      return
+    }
+
+    const gamelistText = await http(arcadeGameListUrl).text()
+    const disabledRomPrefix = /^(?:nes|md|msx|spec|gg|sms|fds|pce|cv)_/
+    const gamelist = gamelistText
+      .split('\n')
+      .slice(7)
+      .map((row) => row.split('|').map((segment) => segment.trim()))
+    const arcadeFileNameMap = {}
+    for (const row of gamelist) {
+      const [, fileName, , fullName, parent, year, company, hardware] = row
+      if (disabledRomPrefix.test(fileName)) {
+        continue
+      }
+      arcadeFileNameMap[fileName] = { company, fileName, fullName, hardware, parent, year }
+    }
+    this.arcadeFileNameMap = arcadeFileNameMap
   }
 
   async loadRdb() {
@@ -106,35 +128,11 @@ export class GamesDatabase {
     }
   }
 
-  async loadArcadeGameList() {
-    if (this.platform !== 'arcade') {
-      return
+  queryArcadeGameInfo(fileName: string) {
+    if (this.platform === 'arcade') {
+      const [baseFileName] = fileName.split('.')
+      return this.arcadeFileNameMap[baseFileName]
     }
-
-    const gamelistText = await http(arcadeGameListUrl).text()
-    const disabledRomPrefix = /^(?:nes|md|msx|spec|gg|sms|fds|pce|cv)_/
-    const gamelist = gamelistText
-      .split('\n')
-      .slice(7)
-      .map((row) => row.split('|').map((segment) => segment.trim()))
-    const arcadeFileNameMap = {}
-    for (const row of gamelist) {
-      const [, fileName, , fullName, parent, year, company, hardware] = row
-      if (disabledRomPrefix.test(fileName)) {
-        continue
-      }
-      arcadeFileNameMap[fileName] = { fileName, fullName, parent, year, company, hardware }
-    }
-    this.arcadeFileNameMap = arcadeFileNameMap
-  }
-
-  async ready() {
-    try {
-      await this.readyPromise
-    } catch (error) {
-      console.warn(error)
-    }
-    return this
   }
 
   queryByFileName(fileName: string) {
@@ -166,10 +164,12 @@ export class GamesDatabase {
     return candidates[0]
   }
 
-  queryArcadeGameInfo(fileName: string) {
-    if (this.platform === 'arcade') {
-      const [baseFileName] = fileName.split('.')
-      return this.arcadeFileNameMap[baseFileName]
+  async ready() {
+    try {
+      await this.readyPromise
+    } catch (error) {
+      console.warn(error)
     }
+    return this
   }
 }

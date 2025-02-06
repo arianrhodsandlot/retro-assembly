@@ -4,9 +4,9 @@ import { FileAccessor } from './file-accessor'
 import type { FileSystemProvider } from './file-system-provider'
 
 interface ListOptions {
-  pageSize?: number
-  pageCursor?: string
   orderBy?: string
+  pageCursor?: string
+  pageSize?: number
 }
 
 let dropboxCloudProvider: DropboxProvider
@@ -27,6 +27,24 @@ export class DropboxProvider implements FileSystemProvider {
     return dropboxCloudProvider
   }
 
+  // path should start with a slash
+  async create({ file, path }) {
+    if (!file || !path) {
+      return
+    }
+    return await this.client.create({
+      contents: file,
+      path,
+    })
+  }
+
+  // todo: not implemented yet
+  async delete(path) {
+    console.info(path)
+    await this
+    throw new Error('not implemented')
+  }
+
   async getContent(path: string) {
     const result = await this.client.download({ path })
     // @ts-expect-error fileBlob is not declared in dropbox sdk's types
@@ -42,30 +60,6 @@ export class DropboxProvider implements FileSystemProvider {
       RequestCache.set(cacheKey, blob)
     }
     return blob
-  }
-
-  async peekContent(path: string) {
-    const cacheKey = { name: 'DropboxProvider.peekContent', path }
-    const rawCache = await RequestCache.get(cacheKey)
-    return rawCache?.value
-  }
-
-  // path should start with a slash
-  async create({ file, path }) {
-    if (!file || !path) {
-      return
-    }
-    return await this.client.create({
-      path,
-      contents: file,
-    })
-  }
-
-  // todo: not implemented yet
-  async delete(path) {
-    console.info(path)
-    await this
-    throw new Error('not implemented')
   }
 
   async list(path: string) {
@@ -84,10 +78,10 @@ export class DropboxProvider implements FileSystemProvider {
     return children.map(
       (item) =>
         new FileAccessor({
-          name: item.name,
           directory: path,
-          type: item['.tag'] === 'folder' ? 'directory' : 'file',
           fileSystemProvider: this,
+          name: item.name,
+          type: item['.tag'] === 'folder' ? 'directory' : 'file',
         }),
     )
   }
@@ -98,30 +92,36 @@ export class DropboxProvider implements FileSystemProvider {
     const fileAccessors: FileAccessor[] | undefined = children?.map(
       (item) =>
         new FileAccessor({
-          name: item.name,
           directory: path,
-          type: item['.tag'] === 'folder' ? 'directory' : 'file',
           fileSystemProvider: this,
+          name: item.name,
+          type: item['.tag'] === 'folder' ? 'directory' : 'file',
         }),
     )
     return fileAccessors
   }
 
-  private async listChildrenByPages(path: string, { pageSize = 200, pageCursor = '' }: ListOptions = {}) {
-    const pager = { size: pageSize, cursor: '' }
+  async peekContent(path: string) {
+    const cacheKey = { name: 'DropboxProvider.peekContent', path }
+    const rawCache = await RequestCache.get(cacheKey)
+    return rawCache?.value
+  }
+
+  private async listChildrenByPages(path: string, { pageCursor = '', pageSize = 200 }: ListOptions = {}) {
+    const pager = { cursor: '', size: pageSize }
     const params = pageCursor
       ? { cursor: pageCursor }
-      : { path: path === '/' ? '' : path, include_media_info: true, limit: pageSize }
+      : { include_media_info: true, limit: pageSize, path: path === '/' ? '' : path }
 
     const result = await this.client.list(params)
 
-    const { entries: items, has_more: hasMore, cursor } = result.result
+    const { cursor, entries: items, has_more: hasMore } = result.result
     let listNextPage
     if (hasMore && cursor) {
       pager.cursor = cursor
       listNextPage = async () => await this.listChildrenByPages(path, { pageCursor: pager.cursor })
     }
 
-    return { items, pager, listNextPage }
+    return { items, listNextPage, pager }
   }
 }

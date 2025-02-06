@@ -1,9 +1,7 @@
 import { clsx } from 'clsx'
+import type { JSX } from 'react'
 
-type DivProps = JSX.IntrinsicElements['div']
-type BouncingEllipsisProps = DivProps
-
-export function BouncingEllipsis({ className, ...props }: BouncingEllipsisProps) {
+export function BouncingEllipsis({ className, ...props }: JSX.IntrinsicElements['div']) {
   const text = '...'
 
   return (

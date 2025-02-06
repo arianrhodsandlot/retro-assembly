@@ -4,8 +4,8 @@ import { defaultGamepadMapping } from '../constants/input'
 
 export function updateGamepadMappings(
   mappings: {
+    mapping: Record<number | string, string>
     name: string
-    mapping: Record<string | number, string>
   }[],
 ) {
   const [firstMapping] = mappings
@@ -13,7 +13,7 @@ export function updateGamepadMappings(
     if (firstMapping?.name === '') {
       firstMapping.mapping = defaultGamepadMapping
     } else {
-      mappings.unshift({ name: '', mapping: defaultGamepadMapping })
+      mappings.unshift({ mapping: defaultGamepadMapping, name: '' })
     }
   }
 

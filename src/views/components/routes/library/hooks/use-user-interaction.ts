@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { type Rom, launchGame } from '../../../../../core'
+import { launchGame, type Rom } from '../../../../../core'
 import { SpatialNavigation } from '../../../../lib/spatial-navigation'
 import { needsUserInteractionAtom } from '../atoms'
 
@@ -31,11 +31,11 @@ export function useUserInteraction() {
   }
 
   return {
-    needsUserInteraction,
-    showInteractionButton,
-    onUserInteract,
-    waitForUserInteraction,
-    setNeedsUserInteraction,
     launchGame: launchGameLocal,
+    needsUserInteraction,
+    onUserInteract,
+    setNeedsUserInteraction,
+    showInteractionButton,
+    waitForUserInteraction,
   }
 }

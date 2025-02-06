@@ -1,8 +1,10 @@
 import { compact, noop, orderBy } from 'lodash-es'
-import { parse, sep } from 'path-browserify'
 import { listDirectoryByHandle, requestLocalHandle } from '../../helpers/file'
+import { path } from '../../helpers/vendors'
 import { FileAccessor } from './file-accessor'
 import type { FileSystemProvider } from './file-system-provider'
+
+const { parse, sep } = path
 
 export class LocalProvider implements FileSystemProvider {
   private handle: FileSystemDirectoryHandle | undefined

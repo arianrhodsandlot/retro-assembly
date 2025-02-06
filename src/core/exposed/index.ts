@@ -1,5 +1,5 @@
+export * from '../helpers/vendors'
 export { detectHasRunningGame } from './detect-has-running-game'
-
 export { detectNeedsLogin } from './detect-needs-login'
 export { detectNeedsSetup } from './detect-needs-setup'
 export { exitGame } from './exit-game'

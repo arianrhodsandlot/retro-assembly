@@ -1,9 +1,11 @@
 import { find, remove } from 'lodash-es'
-import { dirname, isAbsolute, join, relative } from 'path-browserify'
 import { FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { PreferenceParser } from '../classes/preference-parser'
 import { Rom } from '../classes/rom'
+import { path } from '../helpers/vendors'
 import { globalContext } from '../internal/global-context'
+
+const { dirname, isAbsolute, join, relative } = path
 
 function getHistoryPath() {
   const configDirectory = PreferenceParser.get('configDirectory')

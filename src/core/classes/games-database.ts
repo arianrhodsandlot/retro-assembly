@@ -1,10 +1,10 @@
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
-import { parse } from 'path-browserify'
 import { fbneoInfo, getCDNHost, libretroDatabaseInfo } from '../constants/dependencies'
 import { platformFullNameMap } from '../constants/platforms'
 import { blobToBuffer } from '../helpers/file'
 import { http } from '../helpers/http'
 import { parseGoodCode } from '../helpers/misc'
+import { path } from '../helpers/vendors'
 import { Libretrodb } from './libretrodb/libretrodb'
 import type { Entry } from './libretrodb/types'
 
@@ -137,11 +137,7 @@ export class GamesDatabase {
 
   queryByFileName(fileName: string) {
     const arcadeGameInfo = this.queryArcadeGameInfo(fileName)
-    if (arcadeGameInfo) {
-      fileName = arcadeGameInfo.fileName
-    }
-
-    const key = normalizeGameName(fileName)
+    const key = normalizeGameName(arcadeGameInfo ? arcadeGameInfo.fileName : fileName)
     const indexed = this.index.get(key)
     if (!indexed) {
       return
@@ -151,7 +147,7 @@ export class GamesDatabase {
 
     if (candidates?.length > 1) {
       for (const candidate of candidates) {
-        if (candidate.name === parse(fileName).name) {
+        if (candidate.name === path.parse(fileName).name) {
           return candidate
         }
       }

@@ -1,5 +1,4 @@
-import { join } from 'path-browserify'
-import { type CloudService, listDirectory } from '../../../../../../core'
+import { type CloudService, listDirectory, path } from '../../../../../../core'
 import type { TreeNode } from './types'
 
 interface ToggleNodeExpandedParams {
@@ -22,8 +21,7 @@ export async function toggleNodeExpanded({ cloudService, node }: ToggleNodeExpan
     node.children = children.map((child) => {
       const { isDirectory, name } = child
       const hasChildren = isDirectory
-      const path = join(node.path, name)
-      return { children: undefined, expanded: false, hasChildren, isDirectory, name, path }
+      return { children: undefined, expanded: false, hasChildren, isDirectory, name, path: path.join(node.path, name) }
     })
   }
 

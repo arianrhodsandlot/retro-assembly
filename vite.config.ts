@@ -10,30 +10,30 @@ export default defineConfig(async () => {
   const shortVersion = revision.trim().slice(0, 7)
 
   return {
-    server: { host: true },
-    define: {
-      GIT_VERSION: JSON.stringify(shortVersion),
-      BUILD_TIME: JSON.stringify(formatISO(new Date())),
-    },
     build: { rollupOptions: { input: ['index.html', 'privacy-policy.html'] } },
+    define: {
+      BUILD_TIME: JSON.stringify(formatISO(new Date())),
+      GIT_VERSION: JSON.stringify(shortVersion),
+    },
     plugins: [
       react(),
       splitVendorChunkPlugin(),
       VitePWA({
-        registerType: 'autoUpdate',
         devOptions: { enabled: false },
         manifest: {
+          description: 'A personal retro game collection cabinet in your browser',
+          icons: [
+            { sizes: '192x192', src: '/assets/logo/logo-192x192.png', type: 'image/png' },
+            { purpose: 'any', sizes: '512x512', src: '/assets/logo/logo-512x512.png', type: 'image/png' },
+            { purpose: 'maskable', sizes: '512x512', src: '/assets/logo/maskable-512x512.png', type: 'image/png' },
+          ],
           name: 'RetroAssembly',
           short_name: 'RetroAssembly',
-          description: 'A personal retro game collection cabinet in your browser',
           theme_color: '#be123c',
-          icons: [
-            { src: '/assets/logo/logo-192x192.png', sizes: '192x192', type: 'image/png' },
-            { src: '/assets/logo/logo-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-            { src: '/assets/logo/maskable-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-          ],
         },
+        registerType: 'autoUpdate',
       }),
     ],
+    server: { host: true },
   }
 })

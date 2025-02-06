@@ -1,9 +1,9 @@
-import { join } from 'path-browserify'
 import { Emulator } from '../classes/emulator'
 import { PreferenceParser } from '../classes/preference-parser'
 import type { Rom } from '../classes/rom'
 import { getAdditionalFiles } from '../helpers/arcade'
 import { getBiosFiles } from '../helpers/bios'
+import { path } from '../helpers/vendors'
 import { emitter } from '../internal/emitter'
 import { globalContext } from '../internal/global-context'
 import { exitGame } from './exit-game'
@@ -43,7 +43,7 @@ export async function launchGame(
 
 function getConfigPath() {
   const configDirectory = PreferenceParser.get('configDirectory')
-  return join(configDirectory, 'config.json')
+  return path.join(configDirectory, 'config.json')
 }
 
 async function getEmulatorConfig() {

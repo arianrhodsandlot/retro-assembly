@@ -1,6 +1,6 @@
-import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
 import { Rom } from '../classes/rom'
+import { path } from '../helpers/vendors'
 import { globalContext } from '../internal/global-context'
 
 export async function getPlatformRoms(platform: string) {
@@ -10,7 +10,7 @@ export async function getPlatformRoms(platform: string) {
   }
 
   const romDirectory = isDemoRunning ? '' : PreferenceParser.get('romDirectory')
-  const platformRomsDirectory = join(romDirectory, platform)
+  const platformRomsDirectory = path.join(romDirectory, platform)
   const files = await fileSystem.list(platformRomsDirectory)
   return Rom.fromFileAccessors(files)
 }

@@ -1,4 +1,4 @@
-import { join, parse } from 'path-browserify'
+import { path } from '../../helpers/vendors'
 import type { FileSystemProvider } from './file-system-provider'
 
 export interface FileAccessorOptions {
@@ -44,9 +44,9 @@ export class FileAccessor {
     this.type = type
     this.temporaryUrl = temporaryUrl
     this.fileSystemProvider = fileSystemProvider
-    this.path = join(directory, name)
+    this.path = path.join(directory, name)
     this.meta = meta
-    const { ext, name: base } = parse(name)
+    const { ext, name: base } = path.parse(name)
     this.basename = base
     this.extname = ext.slice(1)
   }

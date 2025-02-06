@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
 
   const button = page.getByTestId('select-onedrive-directory')
   if (isUpdatingHar) {
-    await page.routeFromHAR(harPath, { url: harUrlPattern, update: true, updateMode: 'minimal' })
+    await page.routeFromHAR(harPath, { update: true, updateMode: 'minimal', url: harUrlPattern })
     await button.click()
     await dialog.getByRole('link').click()
   } else {

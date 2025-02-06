@@ -1,8 +1,8 @@
 import type { GoodCodeResult } from 'goodcodes-parser'
 import { groupBy } from 'lodash-es'
-import { isAbsolute, parse, relative } from 'path-browserify'
 import { extPlatformMap, platformNamesSorted } from '../constants/platforms'
 import { getCover, parseGoodCode } from '../helpers/misc'
+import { path } from '../helpers/vendors'
 import type { FileAccessor } from './file-system-providers/file-accessor'
 import { type ArcadeGameInfo, GamesDatabase } from './games-database'
 import type { Entry } from './libretrodb/types'
@@ -176,10 +176,10 @@ export class Rom {
   private guessPlatformByPath() {
     const romDirectory = PreferenceParser.get('romDirectory')
     if (this.fileAccessor.path?.startsWith(romDirectory)) {
-      const relativePath = isAbsolute(this.fileAccessor.path)
-        ? relative(romDirectory, this.fileAccessor.path)
+      const relativePath = path.isAbsolute(this.fileAccessor.path)
+        ? path.relative(romDirectory, this.fileAccessor.path)
         : this.fileAccessor.path
-      const { dir } = parse(relativePath)
+      const { dir } = path.parse(relativePath)
       if ((platformNamesSorted as string[]).includes(dir)) {
         return dir
       }

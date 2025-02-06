@@ -1,4 +1,3 @@
-import { useAsync } from '@react-hookz/web'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { getProvider, isUsingDemo, start } from '../../../../core'
@@ -12,28 +11,26 @@ export function UniversalHomeRoute() {
     useRouterHelpers()
   const [started, setStarted] = useState(false)
 
-  const [, { execute }] = useAsync(async () => {
-    const provider = getProvider()
-    if (isHomeRoute) {
-      if (provider === 'public') {
-        await start('public')
-        setStarted(true)
-      } else {
-        navigateToLibrary(provider)
-      }
-    } else if (provider === params.library) {
-      await start()
-      setStarted(true)
-    } else if (isUsingDemo()) {
-      redirectToHome()
-    } else {
-      navigateToPlatform(undefined, provider)
-    }
-  })
-
   useEffect(() => {
-    execute()
-  }, [execute, isHomeRoute, params.library])
+    ;(async () => {
+      const provider = getProvider()
+      if (isHomeRoute) {
+        if (provider === 'public') {
+          await start('public')
+          setStarted(true)
+        } else {
+          navigateToLibrary(provider)
+        }
+      } else if (provider === params.library) {
+        await start()
+        setStarted(true)
+      } else if (isUsingDemo()) {
+        redirectToHome()
+      } else {
+        navigateToPlatform(undefined, provider)
+      }
+    })()
+  }, [isHomeRoute, params.library, navigateToLibrary, redirectToHome, navigateToPlatform])
 
   if (started === false) {
     return

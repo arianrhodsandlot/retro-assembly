@@ -1,8 +1,8 @@
 import { compact } from 'lodash-es'
-import { join } from 'path-browserify'
 import { PreferenceParser } from '../classes/preference-parser'
 import type { Rom } from '../classes/rom'
 import { coreBiosMap, platformCoreMap, platformNeedsBios } from '../constants/platforms'
+import { path } from '../helpers/vendors'
 import { globalContext } from '../internal/global-context'
 import { getArcadeBiosNames } from './arcade'
 
@@ -29,10 +29,10 @@ export async function getArcadeBiosFile(biosName: string) {
     throw new Error('fileSystem is not available')
   }
   const romDirectory = PreferenceParser.get('romDirectory')
-  const biosDirectory = join(romDirectory, 'system')
+  const biosDirectory = path.join(romDirectory, 'system')
   let blob: Blob | undefined
   try {
-    blob = await globalContext.fileSystem?.getContent(join(biosDirectory, biosName))
+    blob = await globalContext.fileSystem?.getContent(path.join(biosDirectory, biosName))
   } catch (error) {
     console.warn(error)
   }

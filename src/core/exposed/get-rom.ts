@@ -1,7 +1,7 @@
-import { join } from 'path-browserify'
 import { FileAccessor } from '../classes/file-system-providers/file-accessor'
 import { PreferenceParser } from '../classes/preference-parser'
 import { Rom } from '../classes/rom'
+import { path } from '../helpers/vendors'
 import { globalContext } from '../internal/global-context'
 
 export function getRom({ platform, rom }) {
@@ -11,7 +11,7 @@ export function getRom({ platform, rom }) {
   }
 
   const romDirectory = PreferenceParser.get('romDirectory')
-  const directory = join(romDirectory, platform)
+  const directory = path.join(romDirectory, platform)
 
   const fileAccessor = new FileAccessor({
     directory,

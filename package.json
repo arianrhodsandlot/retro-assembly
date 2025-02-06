@@ -1,7 +1,6 @@
 {
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.2.0",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
@@ -83,7 +82,6 @@
     "@types/wicg-file-system-access": "2023.10.5",
     "@vitejs/plugin-react-swc": "3.7.2",
     "autoprefixer": "10.4.20",
-    "browserfs": "1.4.3",
     "eslint": "9.19.0",
     "is-ci": "4.1.0",
     "lint-staged": "15.4.3",
@@ -95,5 +93,6 @@
     "vite": "6.1.0",
     "vite-plugin-pwa": "0.21.1",
     "zx": "8.3.2"
-  }
+  },
+  "packageManager": "pnpm@10.2.0"
 }

@@ -10,22 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v4
         with:
-          version: 8
           run_install: true
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: tests/fixtures/roms
           key: tests/fixtures/roms
 
-      - run: pnpm lint
       - run: pnpm playwright install chromium
-      - run: pnpm prepare-test
-      - run: pnpm t
+      - run: node --run=prepare-test
+      - run: node --run=test

@@ -26,6 +26,7 @@ app.get('/auth/login', async (c) => {
     options: {
       queryParams: {},
       redirectTo: new URL('/auth/callback', c.req.url).href,
+      scopes: 'https://www.googleapis.com/auth/drive.appdata',
     },
     provider: 'google',
   })

@@ -1,30 +1,16 @@
-import type { Context } from 'hono'
-import type { ContentfulStatusCode } from 'hono/utils/http-status'
-
-function makeJSONResponse(
-  c: Context,
-  { code = 0, data = null, message = 'ok' }: { code?: number; data?: unknown; message?: string } = {},
-  status: ContentfulStatusCode = 200,
-) {
-  return c.json(
-    {
-      code,
-      data,
-      message,
-      requestId: c.get('requestId'),
-    },
-    status,
-  )
+function formatValue(value: boolean | number | string) {
+  return typeof value === 'string' ? `'${value}'` : `${value}`
 }
 
-export function ok(c: Context, data: unknown = null) {
-  return makeJSONResponse(c, { data })
-}
-
-export function raise(
-  c: Context,
-  { code = 1, data, message = 'error' }: { code?: number; data?: unknown; message?: string } = {},
-  status: ContentfulStatusCode = 400,
+export function buildGoogleDriveConditions(
+  conditions: Record<string, { operator: string; value: boolean | number | string } | boolean | number | string>,
 ) {
-  return makeJSONResponse(c, { code, data, message }, status)
+  const mergedConditions: typeof conditions = { trashed: false, ...conditions }
+  return Object.entries(mergedConditions)
+    .map(([key, value]) =>
+      typeof value === 'object'
+        ? `${key} ${value.operator} ${formatValue(value.value)}`
+        : `${key} = ${formatValue(value)}`,
+    )
+    .join(' and ')
 }

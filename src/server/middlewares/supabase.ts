@@ -10,24 +10,15 @@ declare module 'hono' {
   }
 }
 
-export function supabaseMiddleware() {
+export function supabase() {
   return async (c: Context, next: Next) => {
-    const supabaseEnv = env<{
-      SUPABASE_ANON_KEY: string
-      SUPABASE_URL: string
-    }>(c)
-    const supabaseUrl = supabaseEnv.SUPABASE_URL
-    const supabaseAnonKey = supabaseEnv.SUPABASE_ANON_KEY
+    const supabaseEnv = env(c)
 
-    if (!supabaseUrl) {
-      throw new Error('SUPABASE_URL missing!')
+    if (!supabaseEnv.SUPABASE_URL || !supabaseEnv.SUPABASE_ANON_KEY) {
+      throw new Error('SUPABASE_URL or SUPABASE_ANON_KEY missing!')
     }
 
-    if (!supabaseAnonKey) {
-      throw new Error('SUPABASE_ANON_KEY missing!')
-    }
-
-    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    const supabase = createServerClient(supabaseEnv.SUPABASE_URL, supabaseEnv.SUPABASE_ANON_KEY, {
       cookies: {
         getAll() {
           return parseCookieHeader(c.req.header('Cookie') ?? '')
@@ -35,6 +26,7 @@ export function supabaseMiddleware() {
         setAll(cookiesToSet) {
           console.info('cookiesToSet', cookiesToSet)
           for (const { name, options, value } of cookiesToSet) {
+            // @ts-expect-error types from hono seems to be not aligned
             setCookie(c, name, value, options)
           }
         },

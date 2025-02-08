@@ -1,5 +1,4 @@
 import type { Context } from 'hono'
-import { ok } from '../utils.ts'
 
 export function scan(c: Context) {
   // retroassembly_rom
@@ -7,5 +6,5 @@ export function scan(c: Context) {
   // fs.traverse(process.env.romDir, (file) => {
   //   a
   // })
-  return ok(c)
+  return c.var.ok({})
 }

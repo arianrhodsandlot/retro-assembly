@@ -1,10 +1,10 @@
 import type { Context } from 'hono'
-import { ok } from '../utils.ts'
 
-export function platforms(c: Context) {
-  // const platformIds = Rom.distinct('platform_id')
-  // const platform = platformIds.map((platformId) => map[platformId])
-  return ok(c, {
-    platforms: [],
-  })
+export async function platforms(c: Context) {
+  try {
+    const files = await c.var.fs.list('/retroassembly')
+    return c.var.ok(files)
+  } catch {
+    return c.var.ok([])
+  }
 }

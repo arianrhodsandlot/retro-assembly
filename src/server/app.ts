@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { Hono } from 'hono'
 import { compress } from 'hono/compress'
 import { cors } from 'hono/cors'
@@ -33,7 +34,18 @@ app.use(
 
 app.get('/api/profile', profile)
 app.get('/api/platforms', platforms)
-app.get('/api/roms', roms)
+app.get('/api/platform/:platform/roms', roms)
+app.get('/api/platform/:platform/rom/:rom', async (c) => {
+  const platform = c.req.param('platform')
+  const rom = c.req.param('rom')
+
+  const romPath = path.join('/retroassembly', platform, rom)
+
+  const romContent = await c.var.op.read(romPath)
+  return c.var.ok({
+    romContent: romContent.toString(),
+  })
+})
 app.get('/api/states', states)
 app.get('/api/scan', scan)
 app.get('/auth/login', authLogin)

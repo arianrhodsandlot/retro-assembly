@@ -24,7 +24,7 @@ interface PlatformDetail {
   id: PlatformName
 }
 
-export const platforms: Record<PlatformName, PlatformDetail> = {
+export const platformsMap: Record<PlatformName, PlatformDetail> = {
   arcade: { fullName: '', id: 'arcade' },
   atari2600: { fullName: '', id: 'atari2600' },
   atari5200: { fullName: '', id: 'atari5200' },

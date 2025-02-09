@@ -1,13 +1,11 @@
 import type { Context } from 'hono'
+import { platformsMap } from '../constants.ts'
 
-export async function platforms(c: Context) {
+export function platforms(c: Context) {
   try {
-    // await c.var.op.createDir('/retroassembly/nes/')
-    // await c.var.op.createDir('/retroassembly/snes/')
-    // await c.var.op.createDir('/retroassembly/megadrive/')
-    const entries = await c.var.op.list('/retroassembly/')
-    const platforms = entries.map((entry) => entry.path())
-    return c.var.ok({ platforms })
+    const defaultPlatforms = Object.entries(platformsMap).map(([name, platformDetail]) => platformDetail)
+    const userPlatforms = c.var.user.user_metadata.platforms || defaultPlatforms
+    return c.var.ok({ platforms: userPlatforms || defaultPlatforms })
   } catch (error) {
     console.error(error)
     return c.var.error(error)

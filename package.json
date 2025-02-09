@@ -44,11 +44,11 @@
     "delay": "6.0.0",
     "dropbox": "10.34.0",
     "file-select": "1.0.2",
-    "framer-motion": "12.3.1",
+    "framer-motion": "12.4.1",
     "github-fork-ribbon-css": "0.2.3",
     "goodcodes-parser": "2.5.0",
     "googleapis": "144.0.0",
-    "hono": "4.6.20",
+    "hono": "4.7.0",
     "i18next": "24.2.2",
     "i18next-browser-languagedetector": "8.0.2",
     "idb": "8.0.2",
@@ -58,6 +58,7 @@
     "lodash-es": "4.17.21",
     "mitt": "3.0.1",
     "nostalgist": "0.12.1",
+    "opendal": "0.47.8",
     "p-queue": "8.1.0",
     "query-string": "9.1.1",
     "react": "19.0.0",
@@ -71,7 +72,7 @@
   },
   "devDependencies": {
     "@arianrhodsandlot/eslint-config": "0.17.1",
-    "@iconify/json": "2.2.303",
+    "@iconify/json": "2.2.304",
     "@iconify/tailwind": "1.2.0",
     "@playwright/test": "1.50.1",
     "@tailwindcss/typography": "0.5.16",
@@ -86,9 +87,9 @@
     "@types/react-helmet": "6.1.11",
     "@types/react-window": "1.8.8",
     "@types/wicg-file-system-access": "2023.10.5",
-    "@vitejs/plugin-react-swc": "3.7.2",
+    "@vitejs/plugin-react-swc": "3.8.0",
     "autoprefixer": "10.4.20",
-    "eslint": "9.19.0",
+    "eslint": "9.20.0",
     "is-ci": "4.1.0",
     "lint-staged": "15.4.3",
     "mkdirp": "3.0.1",
@@ -100,5 +101,14 @@
     "vite-plugin-pwa": "0.21.1",
     "zx": "8.3.2"
   },
-  "packageManager": "pnpm@10.2.0"
+  "optionalDependencies": {
+    "@opendal/lib-darwin-arm64": "0.47.7",
+    "@opendal/lib-darwin-x64": "0.47.7",
+    "@opendal/lib-linux-arm64-gnu": "0.47.8",
+    "@opendal/lib-linux-arm64-musl": "0.47.8",
+    "@opendal/lib-linux-x64-gnu": "0.47.8",
+    "@opendal/lib-win32-arm64-msvc": "0.47.8",
+    "@opendal/lib-win32-x64-msvc": "0.47.8"
+  },
+  "packageManager": "pnpm@10.2.1"
 }

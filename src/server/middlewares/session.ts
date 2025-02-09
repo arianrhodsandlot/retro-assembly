@@ -1,3 +1,4 @@
+import type { User } from '@supabase/supabase-js'
 import { google } from 'googleapis'
 import type { Context, Next } from 'hono'
 
@@ -7,18 +8,19 @@ declare module 'hono' {
       access_token: string
       refresh_token: string
     }
+    user: User
   }
 }
 
 export function session() {
   return async (c: Context, next: Next) => {
-    if (c.req.routePath.startsWith('/auth/')) {
+    if (c.req.path.startsWith('/auth/')) {
       await next()
       return
     }
 
     const { data } = await c.var.supabase.auth.getUser()
-    const providerCredentials = data.user?.user_metadata.provider_credentials
+    let providerCredentials = data.user?.user_metadata.provider_credentials
 
     if (!providerCredentials) {
       return c.redirect('/auth/login')
@@ -37,18 +39,20 @@ export function session() {
         oauth2.credentials = providerCredentials
         try {
           const response = await oauth2.refreshAccessToken()
-          const credentials = {
+          providerCredentials = {
             access_token: response.credentials.access_token,
             refresh_token: response.credentials.refresh_token,
           }
-          await c.var.supabase.auth.updateUser({ data: { provider_credentials: credentials } })
+          await c.var.supabase.auth.updateUser({ data: { provider_credentials: providerCredentials } })
         } catch {
           return c.redirect('/auth/login')
         }
       }
     }
 
-    c.set('providerCredentials', data.user.user_metadata.provider_credentials)
+    data.user.user_metadata.provider_credentials = undefined
+    c.set('user', data.user)
+    c.set('providerCredentials', providerCredentials)
 
     await next()
   }

@@ -12,12 +12,24 @@ import { scan } from './handlers/scan.ts'
 import { states } from './handlers/states.ts'
 import { fs } from './middlewares/fs.ts'
 import { okError } from './middlewares/ok-error.ts'
+import { opendal } from './middlewares/opendal.ts'
 import { session } from './middlewares/session.ts'
 import { supabase } from './middlewares/supabase.ts'
 
 const app = new Hono()
 
-app.use(logger(), requestId(), cors(), compress(), prettyJSON({ query: '' }), okError(), supabase(), session(), fs())
+app.use(
+  logger(),
+  requestId(),
+  cors(),
+  compress(),
+  prettyJSON({ query: '' }),
+  okError(),
+  supabase(),
+  session(),
+  fs(),
+  opendal(),
+)
 
 app.get('/api/profile', profile)
 app.get('/api/platforms', platforms)

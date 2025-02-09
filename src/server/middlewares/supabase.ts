@@ -24,7 +24,6 @@ export function supabase() {
           return parseCookieHeader(c.req.header('Cookie') ?? '')
         },
         setAll(cookiesToSet) {
-          console.info('cookiesToSet', cookiesToSet)
           for (const { name, options, value } of cookiesToSet) {
             // @ts-expect-error types from hono seems to be not aligned
             setCookie(c, name, value, options)

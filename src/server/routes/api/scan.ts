@@ -15,9 +15,9 @@ api.get('/scan', async (c) => {
     .map((entry) => {
       const filePath = entry.path()
       const relativePath = path.relative(rootDirectory, path.join('/', filePath))
-      const { dir, name } = path.parse(relativePath)
+      const { base, dir } = path.parse(relativePath)
 
-      return { fileName: name, filePath, platform: dir }
+      return { fileName: base, filePath, platform: dir }
     })
 
   const rows = await Promise.all(

@@ -64,15 +64,45 @@ api.post('/platform/:platform/rom/upload', async (c) => {
 })
 
 api.get('/platform/:platform/rom/:rom', async (c) => {
-  const op = c.get('op')
-  const { rootDirectory } = c.get('preference')
+  const user = c.get('user')
+  const supabase = c.get('supabase')
   const platform = c.req.param('platform')
   const rom = c.req.param('rom')
 
-  const romPath = path.join(rootDirectory, platform, rom)
+  const entry = await supabase
+    .from('retroassembly_rom')
+    .select()
+    .eq('user_id', user.id)
+    .eq('platform', platform)
+    .eq('file_name', rom)
+    .maybeSingle()
 
-  const romContent = await op.read(romPath)
-  return c.var.ok({
-    romContent: romContent.toString(),
-  })
+  return c.json(entry)
+})
+
+api.get('/platform/:platform/rom/:rom/content', async (c) => {
+  const user = c.get('user')
+  const supabase = c.get('supabase')
+  const op = c.get('op')
+  const { rootDirectory } = c.get('preference')
+
+  const platform = c.req.param('platform')
+  const rom = c.req.param('rom')
+
+  const entry = await supabase
+    .from('retroassembly_rom')
+    .select()
+    .eq('user_id', user.id)
+    .eq('platform', platform)
+    .eq('file_name', rom)
+    .maybeSingle()
+
+  const romPath = path.join(rootDirectory, platform, entry.data.file_name)
+
+  const buffer = await op.read(romPath)
+  c.header('content-type', 'application/octet-stream')
+  c.header('content-length', buffer.length.toString())
+  c.header('content-disposition', `attachment; filename="${encodeURIComponent(entry.data.file_name)}"`)
+
+  return c.body(buffer)
 })

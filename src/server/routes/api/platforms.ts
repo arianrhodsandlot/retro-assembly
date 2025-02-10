@@ -15,20 +15,13 @@ api.get('/platforms', (c) => {
 })
 
 api.get('/platform/:platform/roms', async (c) => {
-  const op = c.get('op')
-  const { rootDirectory } = c.get('preference')
+  const user = c.get('user')
+  const supabase = c.get('supabase')
   const platform = c.req.param('platform')
 
-  const romsPath = path.join(rootDirectory, platform, '/')
+  const entries = await supabase.from('retroassembly_rom').select().eq('user_id', user.id).eq('platform', platform)
 
-  const entries = await op.list(romsPath)
-  const roms = entries.slice(1).map((entry) => entry.path())
-
-  return c.var.ok({
-    platform: { id: platform },
-    roms,
-    romsPath,
-  })
+  return c.json(entries)
 })
 
 api.get('/platform/:platform/rom/upload/test', (c) => {

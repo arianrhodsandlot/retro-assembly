@@ -4,7 +4,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "dev:server": " node --env-file=.env --watch src/server/node-server.ts",
+    "dev:server": " node --disable-warning=ExperimentalWarning --env-file=.env --watch src/server/servers/node.ts",
     "dev:test": "playwright test -c tests/e2e --headed --ui",
     "lint": "eslint src",
     "prepare": "simple-git-hooks",

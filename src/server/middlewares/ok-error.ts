@@ -28,7 +28,7 @@ function makeJSONResponse(
 }
 
 function ok(c: Context) {
-  return (data: { code?: number; data: unknown; message?: string } | object) => makeJSONResponse(c, { data })
+  return (data: { code?: number; data: unknown; message?: string } | object = {}) => makeJSONResponse(c, { data })
 }
 
 function error(c: Context) {

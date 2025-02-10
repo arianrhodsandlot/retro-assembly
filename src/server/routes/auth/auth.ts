@@ -1,6 +1,6 @@
-import type { Context } from 'hono'
+import { auth } from './app.ts'
 
-export async function authLogin(c: Context) {
+auth.get('/login', async (c) => {
   const supabase = c.get('supabase')
 
   const scopes = ['https://www.googleapis.com/auth/drive.appfolder', 'https://www.googleapis.com/auth/drive.file']
@@ -16,12 +16,13 @@ export async function authLogin(c: Context) {
     provider: 'google',
   })
   return c.redirect(data.url)
-}
+})
 
-export async function authCallback(c: Context) {
+auth.get('/callback', async (c) => {
   const supabase = c.get('supabase')
   const code = c.req.query('code')
   const redirect = c.req.query('redirect') || '/api/profile'
+
   if (code) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     if (error) {
@@ -37,4 +38,4 @@ export async function authCallback(c: Context) {
     return c.redirect(redirect)
   }
   c.redirect('/auth/login')
-}
+})

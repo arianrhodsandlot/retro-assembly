@@ -2,6 +2,15 @@ import type { User } from '@supabase/supabase-js'
 import { google } from 'googleapis'
 import type { Context, Next } from 'hono'
 
+declare module '@supabase/supabase-js' {
+  interface UserMetadata {
+    provider_credentials: {
+      access_token: string
+      refresh_token: string
+    }
+  }
+}
+
 declare module 'hono' {
   interface ContextVariableMap {
     providerCredentials: {
@@ -50,7 +59,6 @@ export function session() {
       }
     }
 
-    data.user.user_metadata.provider_credentials = undefined
     c.set('user', data.user)
     c.set('providerCredentials', providerCredentials)
 

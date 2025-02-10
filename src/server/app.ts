@@ -16,17 +16,4 @@ app.use(logger(), requestId(), cors(), compress(), prettyJSON({ query: '' }))
 app.route('/api', api)
 app.route('/auth', auth)
 
-app.get('/test', (c) => {
-  return c.html(`
-    <html>
-    <body>
-      <form method="post" action="/api/platform/nes/rom/upload" enctype="multipart/form-data">
-        <input name="file" type="file" multiple />
-        <button type="submit">Upload ROM</button>
-      </form>
-      </body>
-    </html>
-  `)
-})
-
 export { app }

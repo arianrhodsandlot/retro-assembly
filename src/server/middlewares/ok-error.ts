@@ -18,7 +18,7 @@ function makeJSONResponse(
       {
         code: data.code || 0,
         data: data.data ?? null,
-        message: '',
+        message: data.message ?? '',
         requestId: c.get('requestId'),
       },
       status,
@@ -37,9 +37,9 @@ function error(c: Context) {
     status: ContentfulStatusCode = 400,
   ) => {
     if (data instanceof Error) {
-      return makeJSONResponse(c, { code: 1, data: null, message: data.message || '' }, status)
+      return makeJSONResponse(c, { code: 1, data: null, message: data.message }, status)
     }
-    return makeJSONResponse(c, { code: data.code || 1, data: data.data ?? null, message: data.message || '' }, status)
+    return makeJSONResponse(c, { code: data.code || 1, data: data.data ?? null, message: data.message }, status)
   }
 }
 

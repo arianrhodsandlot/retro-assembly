@@ -55,6 +55,8 @@
     "idb-keyval": "6.2.1",
     "jotai": "2.11.3",
     "ky": "1.7.4",
+    "libretro-dats": "github:RobLoach/libretro-dats",
+    "libretrodb": "1.0.0",
     "lodash-es": "4.17.21",
     "mitt": "3.0.1",
     "nostalgist": "0.12.1",

@@ -12,13 +12,13 @@ declare module 'hono' {
 
 export function supabase() {
   return async (c: Context, next: Next) => {
-    const supabaseEnv = env(c)
+    const { SUPABASE_ANON_KEY, SUPABASE_URL } = env(c)
 
-    if (!supabaseEnv.SUPABASE_URL || !supabaseEnv.SUPABASE_ANON_KEY) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
       throw new Error('SUPABASE_URL or SUPABASE_ANON_KEY missing!')
     }
 
-    const supabase = createServerClient(supabaseEnv.SUPABASE_URL, supabaseEnv.SUPABASE_ANON_KEY, {
+    const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       cookies: {
         getAll() {
           return parseCookieHeader(c.req.header('Cookie') ?? '')

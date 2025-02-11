@@ -33,11 +33,14 @@ function ok(c: Context) {
 
 function error(c: Context) {
   return (
-    data: { code?: number; data?: unknown; message?: string } | Error = {},
+    data: { code?: number; data?: unknown; message?: string } | Error | string = {},
     status: ContentfulStatusCode = 400,
   ) => {
     if (data instanceof Error) {
       return makeJSONResponse(c, { code: 1, data: null, message: data.message }, status)
+    }
+    if (typeof data === 'string') {
+      return makeJSONResponse(c, { code: 1, data: null, message: data }, status)
     }
     return makeJSONResponse(c, { code: data.code || 1, data: data.data ?? null, message: data.message }, status)
   }

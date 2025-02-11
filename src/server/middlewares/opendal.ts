@@ -1,6 +1,15 @@
-import { google } from 'googleapis'
 import type { Context, Next } from 'hono'
 import { Operator } from 'opendal'
+import { validateProviderToken } from '../utils/provider-token.ts'
+
+declare module '@supabase/supabase-js' {
+  interface UserMetadata {
+    provider_credentials: {
+      access_token: string
+      refresh_token: string
+    }
+  }
+}
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -10,38 +19,31 @@ declare module 'hono' {
 
 export function opendal() {
   return async (c: Context, next: Next) => {
-    const user = c.get('user')
-    let providerCredentials = user.user_metadata.provider_credentials
+    let user = c.get('user')
+    const supabase = c.get('supabase')
 
-    if (!providerCredentials) {
+    if (!user.user_metadata.provider_credentials) {
       return c.redirect('/auth/login')
     }
 
-    try {
-      const oauth2 = new google.auth.OAuth2()
-      oauth2.credentials = providerCredentials
-      await oauth2.getTokenInfo(providerCredentials.access_token)
-    } catch (error) {
-      if (error?.message === 'invalid_token') {
-        const oauth2 = new google.auth.OAuth2({
-          clientId: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        })
-        oauth2.credentials = providerCredentials
-        try {
-          const response = await oauth2.refreshAccessToken()
-          providerCredentials = {
-            access_token: response.credentials.access_token,
-            refresh_token: response.credentials.refresh_token,
-          }
-          await c.var.supabase.auth.updateUser({ data: { provider_credentials: providerCredentials } })
-        } catch {
-          return c.redirect('/auth/login')
+    const { credentials, valid } = await validateProviderToken(
+      user.app_metadata.provider,
+      user.user_metadata.provider_credentials,
+    )
+    if (valid) {
+      if (credentials) {
+        const { data } = await supabase.auth.updateUser({ data: { provider_credentials: credentials } })
+        if (data.user) {
+          user = data.user
+          c.set('user', user)
         }
       }
+    } else {
+      return c.redirect('/auth/login')
     }
 
-    const op = new Operator('gdrive', { access_token: providerCredentials.access_token })
+    const accessToken = user.user_metadata.provider_credentials.access_token
+    const op = new Operator('gdrive', { access_token: accessToken })
 
     c.set('op', op)
 

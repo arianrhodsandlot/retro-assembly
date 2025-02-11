@@ -1,15 +1,6 @@
 import type { User } from '@supabase/supabase-js'
 import type { Context, Next } from 'hono'
 
-declare module '@supabase/supabase-js' {
-  interface UserMetadata {
-    provider_credentials: {
-      access_token: string
-      refresh_token: string
-    }
-  }
-}
-
 declare module 'hono' {
   interface ContextVariableMap {
     providerCredentials: {

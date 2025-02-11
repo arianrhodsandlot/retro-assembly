@@ -1,9 +1,9 @@
 {
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "waku dev",
     "build": "waku build",
+    "dev": "waku dev -p 3001",
     "start": "waku start"
   },
   "dependencies": {

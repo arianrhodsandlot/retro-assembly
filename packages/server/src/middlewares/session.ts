@@ -1,15 +1,4 @@
-import type { User } from '@supabase/supabase-js'
 import type { Context, Next } from 'hono'
-
-declare module 'hono' {
-  interface ContextVariableMap {
-    providerCredentials: {
-      access_token: string
-      refresh_token: string
-    }
-    user: User
-  }
-}
 
 export function session() {
   return async (c: Context, next: Next) => {
@@ -20,7 +9,7 @@ export function session() {
 
     const { data } = await c.var.supabase.auth.getUser()
     if (!data?.user) {
-      return c.redirect('/auth/login')
+      return c.var.error('no login')
     }
     c.set('user', data.user)
 

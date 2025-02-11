@@ -1,6 +1,6 @@
 import type { UserMetadata } from '@supabase/supabase-js'
+import { merge } from 'es-toolkit'
 import type { Context, Next } from 'hono'
-import { defaultsDeep } from 'lodash-es'
 
 const defaultInputMap = {}
 
@@ -22,7 +22,7 @@ declare module '@supabase/supabase-js' {
 
 declare module 'hono' {
   interface ContextVariableMap {
-    preference: UserMetadata['preference']
+    preference: typeof defaultPreference
     userMetadata: UserMetadata
   }
 }
@@ -30,7 +30,7 @@ declare module 'hono' {
 export function userMetadata() {
   return async (c: Context, next: Next) => {
     const user = c.get('user')
-    const preference = defaultsDeep({}, user.user_metadata.preference, defaultPreference)
+    const preference = merge(structuredClone(user.user_metadata.preference || {}), defaultPreference)
 
     c.set('userMetadata', user.user_metadata)
     c.set('preference', preference)

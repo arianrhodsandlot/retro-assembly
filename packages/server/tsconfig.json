@@ -1,0 +1,7 @@
+{
+  "extends": "@tsconfig/node-lts",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  }
+}

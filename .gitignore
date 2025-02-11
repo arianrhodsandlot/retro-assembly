@@ -1,6 +1,7 @@
 dev-dist
 dist
 node_modules
-test-results
-tests/fixtures/roms
-src/server/assets
+packages/client/src/pages.gen.ts
+packages/legacy/test-results
+packages/legacy/tests/fixtures/roms
+packages/server/src/assets

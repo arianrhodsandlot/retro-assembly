@@ -14,15 +14,15 @@ async function queryRomInfo({ fileName, platform }: { fileName: string; platform
   return {
     fbneo_game_info: fbneoGameInfo,
     file_name: fileName,
-    good_code: parse(rdbRomInfo.rom_name || fileName),
+    good_code: parse(rdbRomInfo?.rom_name || fileName),
     libretro_rdb: rdbRomInfo,
     platform,
   }
 }
 
 api.get('/library/query', async (c) => {
-  const platform = c.req.query('platform')
-  const rom = c.req.query('rom')
+  const platform = c.req.query('platform') || ''
+  const rom = c.req.query('rom') || ''
 
   const info = await queryRomInfo({ fileName: rom, platform })
   return c.var.ok(info)

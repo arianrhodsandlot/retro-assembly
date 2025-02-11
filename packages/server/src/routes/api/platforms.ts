@@ -1,5 +1,4 @@
 import path from 'node:path'
-import { castArray } from 'lodash-es'
 import { platformFullNameMap } from '../../constants/platform.ts'
 import { opendal } from '../../middlewares/opendal.ts'
 import { api } from './app.ts'
@@ -58,7 +57,7 @@ api.post('/platform/:platform/rom/upload', opendal(), async (c) => {
   const romDirectory = path.join(rootDirectory, platform)
 
   const body = await c.req.parseBody<{ file: File }>({ all: true })
-  const files = castArray(body.file)
+  const files = Array.isArray(body.file) ? body.file : [body.file]
   await Promise.all(
     files.map(async (file) => {
       const buffer = Buffer.from(await file.arrayBuffer())

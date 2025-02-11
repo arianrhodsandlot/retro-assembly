@@ -1,7 +1,7 @@
 import path from 'node:path'
+import { camelCase, isEqual, pick, sortBy } from 'es-toolkit'
 import { parse } from 'goodcodes-parser'
 import { Libretrodb } from 'libretrodb'
-import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { platformFullNameMap } from '../constants/platform.ts'
 
 /**
@@ -44,7 +44,7 @@ function normalizeGameName(originalName: string) {
 }
 
 function isSimilarName(name1: string, name2: string) {
-  const comparePropNames = ['contries', 'languages', 'revision', 'versions']
+  const comparePropNames = ['countries', 'languages', 'revision', 'version'] as const
   const { codes: codes1 } = parseGoodCode(name1)
   const { codes: codes2 } = parseGoodCode(name2)
   const props1 = pick(codes1, comparePropNames)
@@ -91,7 +91,7 @@ export async function searchRdbRomInfo({ fileName, platform }) {
   if (!candidates) {
     return
   }
-  candidates = sortBy(candidates, (item) => Object.keys(item).length)
+  candidates = sortBy(candidates, [(item) => Object.keys(item).length])
 
   if (candidates.length > 1) {
     for (const candidate of candidates) {

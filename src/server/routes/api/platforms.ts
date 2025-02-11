@@ -1,6 +1,7 @@
 import path from 'node:path'
 import { castArray } from 'lodash-es'
 import { platformFullNameMap } from '../../constants/platform.ts'
+import { opendal } from '../../middlewares/opendal.ts'
 import { api } from './app.ts'
 
 api.use('/platform/:platform/*', async (c, next) => {
@@ -45,7 +46,7 @@ api.get('/platform/:platform/rom/upload/test', (c) => {
   `)
 })
 
-api.post('/platform/:platform/rom/upload', async (c) => {
+api.post('/platform/:platform/rom/upload', opendal(), async (c) => {
   const op = c.get('op')
   const { rootDirectory } = c.get('preference')
   const platform = c.req.param('platform')
@@ -81,7 +82,7 @@ api.get('/platform/:platform/rom/:rom', async (c) => {
   return c.json(entry)
 })
 
-api.get('/platform/:platform/rom/:rom/content', async (c) => {
+api.get('/platform/:platform/rom/:rom/content', opendal(), async (c) => {
   const user = c.get('user')
   const supabase = c.get('supabase')
   const op = c.get('op')

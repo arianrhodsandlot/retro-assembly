@@ -1,10 +1,11 @@
 import path from 'node:path'
 import { parse } from 'goodcodes-parser'
+import { opendal } from '../../middlewares/opendal.ts'
 import { getFBNeoGameInfo } from '../../utils/fbneo-game-info.ts'
 import { searchRdbRomInfo } from '../../utils/libretrodb.ts'
 import { api } from './app.ts'
 
-api.get('/scan', async (c) => {
+api.get('/scan', opendal(), async (c) => {
   const op = c.get('op')
   const user = c.get('user')
   const supabase = c.get('supabase')
@@ -14,11 +15,11 @@ api.get('/scan', async (c) => {
   const rawRomInfoList = entries
     .filter((entry) => !entry.path().endsWith('/'))
     .map((entry) => {
-      const filePath = entry.path()
-      const relativePath = path.relative(rootDirectory, path.join('/', filePath))
+      const absolutePath = path.join('/', entry.path())
+      const relativePath = path.relative(rootDirectory, absolutePath)
       const { base, dir } = path.parse(relativePath)
 
-      return { fileName: base, filePath, platform: dir }
+      return { fileName: base, filePath: relativePath, platform: dir }
     })
 
   const rows = await Promise.all(

@@ -3,6 +3,14 @@ import { castArray } from 'lodash-es'
 import { platformFullNameMap } from '../../constants/platform.ts'
 import { api } from './app.ts'
 
+api.use('/platform/:platform/*', async (c, next) => {
+  const platform = c.req.param('platform')
+  if (!(platform in platformFullNameMap)) {
+    return c.var.error({ message: 'Invalid platform' })
+  }
+  await next()
+})
+
 api.get('/platforms', (c) => {
   try {
     const defaultPlatforms = Object.entries(platformFullNameMap).map(([name, platformDetail]) => platformDetail)

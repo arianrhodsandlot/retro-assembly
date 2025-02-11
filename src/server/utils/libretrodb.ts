@@ -4,6 +4,31 @@ import { Libretrodb } from 'libretrodb'
 import { camelCase, isEqual, pick, sortBy } from 'lodash-es'
 import { platformFullNameMap } from '../constants/platform.ts'
 
+/**
+ * @example
+ * ```
+ * // an NES game record
+ * {
+ *   name: 'Yongzhe Dou Elong IV (Dragon Quest IV) (China) (Pirate) (Alt)',
+ *   description: 'Yongzhe Dou Elong IV (Dragon Quest IV) (China) (Pirate) (Alt)',
+ *   rom_name: 'Yongzhe Dou Elong IV (Dragon Quest IV) (China) (Pirate) (Alt).nes',
+ *   size: 262160,
+ *   crc: '497de6d9',
+ *   md5: 'd7416940c69b90025a307a6e48c1d601',
+ *   sha1: '1e2aa6d2e3e9d54641f8ded8f40fc75b38bd048a'
+ * }
+ * // an arcade game record
+ * {
+ *   name: 'X-Men vs Street Fighter (961004 USA)',
+ *   rom_name: 'xmvsfur1.zip',
+ *   size: 624109,
+ *   publisher: 'Capcom',
+ *   crc: 'e6c1c82d',
+ *   md5: 'ad5ecb98cb02b18fc1b1929638211e3f',
+ *   sha1: '47e93c46482eaa46762a695881dae2dc8f9e041c'
+ * }
+ * ```
+ */
 type Entry = NonNullable<ReturnType<Libretrodb<string>['searchHash']>>
 
 function parseGoodCode(fileName: string) {
@@ -41,11 +66,16 @@ async function getDatabase(platform: string) {
   const index = new Map<string, Entry[]>()
   for (const entry of database.getEntries()) {
     if (entry.name) {
-      const key = normalizeGameName(entry.name)
-      if (key) {
-        const candidates = index.get(key) ?? []
-        candidates.push(entry)
-        index.set(key, candidates)
+      const keys = [normalizeGameName(entry.name)]
+      if (platform === 'arcade') {
+        keys.push(normalizeGameName(entry.rom_name))
+      }
+      for (const key of keys) {
+        if (key) {
+          const candidates = index.get(key) ?? []
+          candidates.push(entry)
+          index.set(key, candidates)
+        }
       }
     }
   }
@@ -57,13 +87,13 @@ async function getDatabase(platform: string) {
 export async function searchRdbRomInfo({ fileName, platform }) {
   const { index } = await getDatabase(platform)
   const key = normalizeGameName(fileName)
-  const indexed = index.get(key)
-  if (!indexed) {
+  let candidates = index.get(key)
+  if (!candidates) {
     return
   }
-  const candidates = sortBy(indexed, (item) => Object.keys(item).length)
+  candidates = sortBy(candidates, (item) => Object.keys(item).length)
 
-  if (candidates?.length > 1) {
+  if (candidates.length > 1) {
     for (const candidate of candidates) {
       if (candidate.name === path.parse(fileName).name) {
         return candidate

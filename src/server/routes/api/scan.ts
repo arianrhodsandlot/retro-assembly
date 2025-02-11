@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { parse } from 'goodcodes-parser'
+import { getFBNeoGameInfo } from '../../utils/fbneo-game-info.ts'
 import { searchRdbRomInfo } from '../../utils/libretrodb.ts'
 import { api } from './app.ts'
 
@@ -22,8 +23,12 @@ api.get('/scan', async (c) => {
 
   const rows = await Promise.all(
     rawRomInfoList.map(async (rawRomInfo) => {
-      const rdbRomInfo = await searchRdbRomInfo(rawRomInfo)
+      const [rdbRomInfo, fbneoGameInfo] = await Promise.all([
+        searchRdbRomInfo(rawRomInfo),
+        getFBNeoGameInfo(rawRomInfo),
+      ])
       return {
+        fbneo_game_info: fbneoGameInfo,
         file_id: [user.id, rawRomInfo.filePath].join('#'),
         file_name: rawRomInfo.fileName,
         file_path: rawRomInfo.filePath,

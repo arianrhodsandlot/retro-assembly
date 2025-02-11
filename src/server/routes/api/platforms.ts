@@ -13,10 +13,14 @@ api.use('/platform/:platform/*', async (c, next) => {
 })
 
 api.get('/platforms', (c) => {
+  const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
   try {
-    const defaultPlatforms = Object.entries(platformFullNameMap).map(([name, platformDetail]) => platformDetail)
-    const userPlatforms = c.var.user.user_metadata.platforms || defaultPlatforms
-    return c.var.ok({ platforms: userPlatforms || defaultPlatforms })
+    const platformNames = c.var.user.user_metadata.platforms || defaultPlatformNames
+    const platforms = platformNames.map((platform) => ({
+      fullName: platformFullNameMap[platform],
+      name: platform,
+    }))
+    return c.var.ok({ platforms })
   } catch (error) {
     console.error(error)
     return c.var.error(error)

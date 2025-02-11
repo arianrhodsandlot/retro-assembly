@@ -1,5 +1,5 @@
 import './platforms.ts'
 import './profile.ts'
-import './scan.ts'
+import './library.ts'
 
 export { api } from './app.ts'

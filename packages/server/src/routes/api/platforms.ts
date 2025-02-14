@@ -3,7 +3,7 @@ import { platformFullNameMap } from '../../constants/platform.ts'
 import { opendal } from '../../middlewares/opendal.ts'
 import { api } from './app.ts'
 
-api.use('/platform/:platform/*', async (c, next) => {
+api.use('platform/:platform/*', async (c, next) => {
   const platform = c.req.param('platform')
   if (!(platform in platformFullNameMap)) {
     return c.var.error({ message: 'Invalid platform' })
@@ -11,7 +11,7 @@ api.use('/platform/:platform/*', async (c, next) => {
   await next()
 })
 
-api.get('/platforms', (c) => {
+api.get('platforms', (c) => {
   const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
   try {
     const platformNames = c.var.user.user_metadata.platforms || defaultPlatformNames
@@ -26,7 +26,7 @@ api.get('/platforms', (c) => {
   }
 })
 
-api.get('/platform/:platform/roms', async (c) => {
+api.get('platform/:platform/roms', async (c) => {
   const user = c.get('user')
   const supabase = c.get('supabase')
   const platform = c.req.param('platform')
@@ -36,7 +36,7 @@ api.get('/platform/:platform/roms', async (c) => {
   return c.json(entries)
 })
 
-api.get('/platform/:platform/rom/upload/test', (c) => {
+api.get('platform/:platform/rom/upload/test', (c) => {
   return c.html(`
     <html>
     <body>
@@ -49,7 +49,7 @@ api.get('/platform/:platform/rom/upload/test', (c) => {
   `)
 })
 
-api.post('/platform/:platform/rom/upload', opendal(), async (c) => {
+api.post('platform/:platform/rom/upload', opendal(), async (c) => {
   const op = c.get('op')
   const { rootDirectory } = c.get('preference')
   const platform = c.req.param('platform')
@@ -68,7 +68,7 @@ api.post('/platform/:platform/rom/upload', opendal(), async (c) => {
   return c.var.ok()
 })
 
-api.get('/platform/:platform/rom/:rom', async (c) => {
+api.get('platform/:platform/rom/:rom', async (c) => {
   const user = c.get('user')
   const supabase = c.get('supabase')
   const platform = c.req.param('platform')
@@ -85,24 +85,17 @@ api.get('/platform/:platform/rom/:rom', async (c) => {
   return c.json(entry)
 })
 
-api.get('/platform/:platform/rom/:rom/content', opendal(), async (c) => {
+api.get('rom/:id/content', opendal(), async (c) => {
   const user = c.get('user')
   const supabase = c.get('supabase')
   const op = c.get('op')
   const { rootDirectory } = c.get('preference')
 
-  const platform = c.req.param('platform')
-  const rom = c.req.param('rom')
+  const id = c.req.param('id')
 
-  const entry = await supabase
-    .from('retroassembly_rom')
-    .select()
-    .eq('user_id', user.id)
-    .eq('platform', platform)
-    .eq('file_name', rom)
-    .maybeSingle()
+  const entry = await supabase.from('retroassembly_rom').select().eq('user_id', user.id).eq('id', id).maybeSingle()
 
-  const romPath = path.join(rootDirectory, platform, entry.data.file_name)
+  const romPath = path.join(rootDirectory, entry.data.file_path)
 
   const buffer = await op.read(romPath)
   c.header('content-type', 'application/octet-stream')

@@ -20,7 +20,7 @@ async function queryRomInfo({ fileName, platform }: { fileName: string; platform
   }
 }
 
-api.get('/library/query', async (c) => {
+api.get('library/query', async (c) => {
   const platform = c.req.query('platform') || ''
   const rom = c.req.query('rom') || ''
 
@@ -28,7 +28,7 @@ api.get('/library/query', async (c) => {
   return c.var.ok(info)
 })
 
-api.get('/library/scan', opendal(), async (c) => {
+api.get('library/scan', opendal(), async (c) => {
   const op = c.get('op')
   const user = c.get('user')
   const supabase = c.get('supabase')

@@ -1,10 +1,14 @@
 import type { Provider } from '@supabase/supabase-js'
 import { auth } from './app.ts'
 
-auth.get('/auth', async (c) => {
+auth.get('login', async (c) => {
   const supabase = c.get('supabase')
   const redirectTo = c.req.query('redirect_to')
   const provider = c.req.query('provider') as Provider
+
+  if (!provider) {
+    return c.var.error('invalid provider')
+  }
 
   const scopes = {
     google: ['https://www.googleapis.com/auth/drive.appfolder', 'https://www.googleapis.com/auth/drive.file'].join(' '),
@@ -18,27 +22,28 @@ auth.get('/auth', async (c) => {
     options: { queryParams, redirectTo, scopes },
     provider,
   })
-  return c.var.ok(data)
+
+  return c.json(data)
 })
 
-auth.get('/callback', async (c) => {
+auth.get('callback', async (c) => {
   const supabase = c.get('supabase')
   const code = c.req.query('code')
-  const redirect = c.req.query('redirect') || '/api/profile'
 
-  if (code) {
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-    if (error) {
-      c.redirect('/auth/login')
-    }
-
-    const credentials = {
-      access_token: data.session.provider_token,
-      refresh_token: data.session.provider_refresh_token,
-    }
-    await supabase.auth.updateUser({ data: { provider_credentials: credentials } })
-
-    return c.redirect(redirect)
+  if (!code) {
+    return c.var.error('invalid code')
   }
-  c.redirect('/auth/login')
+
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+  if (error) {
+    return c.var.error(error)
+  }
+
+  const credentials = {
+    access_token: data.session.provider_token,
+    refresh_token: data.session.provider_refresh_token,
+  }
+  await supabase.auth.updateUser({ data: { provider_credentials: credentials } })
+
+  return c.json(credentials)
 })

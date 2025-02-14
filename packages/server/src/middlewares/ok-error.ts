@@ -4,7 +4,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 declare module 'hono' {
   interface ContextVariableMap {
     error: ReturnType<typeof error>
-    ok: ReturnType<typeof ok>
+    ok: Context['json']
   }
 }
 
@@ -27,10 +27,6 @@ function makeJSONResponse(
   return makeJSONResponse(c, { data }, status)
 }
 
-function ok(c: Context) {
-  return (data: { code?: number; data: unknown; message?: string } | object = {}) => makeJSONResponse(c, { data })
-}
-
 function error(c: Context) {
   return (
     data: { code?: number; data?: unknown; message?: string } | Error | string = {},
@@ -48,7 +44,7 @@ function error(c: Context) {
 
 export function okError() {
   return async (c: Context, next: Next) => {
-    c.set('ok', ok(c))
+    c.set('ok', c.json)
     c.set('error', error(c))
     await next()
   }

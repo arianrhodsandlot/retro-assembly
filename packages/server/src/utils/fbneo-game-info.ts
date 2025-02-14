@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 interface GameInfo {
   company: string
@@ -17,11 +18,9 @@ async function loadGameList() {
   if (gameInfoMap) {
     return
   }
-
-  const gameListContent = await fs.readFile(
-    path.resolve(import.meta.filename, '../../assets/fbneo/gamelist.txt'),
-    'utf8',
-  )
+  const dirname = import.meta.dirname || path.parse(fileURLToPath(import.meta.url.replace('client/packages/', ''))).dir
+  const gameListPath = path.resolve(dirname, '../assets/fbneo/gamelist.txt')
+  const gameListContent = await fs.readFile(gameListPath, 'utf8')
   const rows = gameListContent.split('\n')
   gameInfoMap = new Map()
   for (const row of rows) {

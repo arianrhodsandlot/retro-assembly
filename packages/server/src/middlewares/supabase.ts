@@ -21,10 +21,11 @@ export function supabase() {
     const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       cookies: {
         getAll() {
-          return parseCookieHeader(c.req.header('Cookie') ?? '')
+          const cookieHeader = c.req.header('Cookie') ?? ''
+          return parseCookieHeader(cookieHeader)
         },
-        setAll(cookiesToSet) {
-          for (const { name, options, value } of cookiesToSet) {
+        setAll(cookies) {
+          for (const { name, options, value } of cookies) {
             // @ts-expect-error types from hono seems to be not aligned
             setCookie(c, name, value, options)
           }

@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "pnpm -r dev",
+    "dev": "pnpm -F client -r dev",
     "dev:server": " node --disable-warning=ExperimentalWarning --env-file=.env --watch src/server/servers/node.ts",
     "dev:test": "playwright test -c tests/e2e --headed --ui",
     "lint": "eslint src",
@@ -23,11 +23,12 @@
     "defaults",
     "not op_mini all"
   ],
-  "packageManager": "pnpm@10.2.1",
+  "packageManager": "pnpm@10.3.0",
   "devDependencies": {
     "@arianrhodsandlot/eslint-config": "0.17.1",
-    "eslint": "9.20.0",
+    "eslint": "9.20.1",
     "lint-staged": "15.4.3",
-    "simple-git-hooks": "2.11.1"
+    "simple-git-hooks": "2.11.1",
+    "typescript": "5.7.3"
   }
 }

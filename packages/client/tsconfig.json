@@ -1,10 +1,15 @@
 {
-  "extends": "@tsconfig/vite-react",
+  "extends": "@tsconfig/next",
   "compilerOptions": {
-    "composite": true,
-    "noEmit": false,
+    "allowImportingTsExtensions": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
-  }
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "./src",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ]
 }

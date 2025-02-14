@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { camelCase, isEqual, pick, sortBy } from 'es-toolkit'
 import { parse } from 'goodcodes-parser'
 import { Libretrodb } from 'libretrodb'
@@ -60,7 +61,8 @@ async function getDatabase(platform: string) {
   }
 
   const platformFullName = platformFullNameMap[platform]
-  const rdbPath = path.resolve(import.meta.dirname, `../assets/libretro-database/rdb/${platformFullName}.rdb`)
+  const dirname = import.meta.dirname || path.parse(fileURLToPath(import.meta.url.replace('client/packages/', ''))).dir
+  const rdbPath = path.resolve(dirname, `../assets/libretro-database/rdb/${platformFullName}.rdb`)
   const database = await Libretrodb.from(rdbPath, { indexHashes: false })
 
   const index = new Map<string, Entry[]>()

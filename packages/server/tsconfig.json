@@ -2,6 +2,7 @@
   "extends": "@tsconfig/node-lts",
   "compilerOptions": {
     "composite": true,
+    "noEmit": true,
     "allowImportingTsExtensions": true
   }
 }

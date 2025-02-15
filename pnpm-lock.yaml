@@ -67,7 +67,10 @@ importers:
         version: 19.0.0(react@19.0.0)
       supabase:
         specifier: supabase/supabase
-        version: https://codeload.github.com/supabase/supabase/tar.gz/0106c4b319fed026dd867cc6746536c2f31a1743
+        version: https://codeload.github.com/supabase/supabase/tar.gz/16eddf08d64fac1a350f0e7fc2dfabf53126770d
+      swr:
+        specifier: 2.3.2
+        version: 2.3.2(react@19.0.0)
       tailwind-merge:
         specifier: 3.0.1
         version: 3.0.1
@@ -5666,8 +5669,8 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
 
-  supabase@https://codeload.github.com/supabase/supabase/tar.gz/0106c4b319fed026dd867cc6746536c2f31a1743:
-    resolution: {tarball: https://codeload.github.com/supabase/supabase/tar.gz/0106c4b319fed026dd867cc6746536c2f31a1743}
+  supabase@https://codeload.github.com/supabase/supabase/tar.gz/16eddf08d64fac1a350f0e7fc2dfabf53126770d:
+    resolution: {tarball: https://codeload.github.com/supabase/supabase/tar.gz/16eddf08d64fac1a350f0e7fc2dfabf53126770d}
     version: 0.0.0
     engines: {node: '>=20', pnpm: '>=9'}
 
@@ -5678,6 +5681,11 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  swr@2.3.2:
+    resolution: {integrity: sha512-RosxFpiabojs75IwQ316DGoDRmOqtiAj0tg8wCcbEu4CiLZBs/a9QNtHV7TUfDXmmlgqij/NqzKq/eLelyv9xA==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   synckit@0.9.2:
     resolution: {integrity: sha512-vrozgXDQwYO72vHjUb/HnFbQx1exDjoKzqx23aXEg2a9VIg2TSFZ8FmeZpTjUCFMYw7mpX4BE2SFu8wI7asYsw==}
@@ -12969,13 +12977,19 @@ snapshots:
       pirates: 4.0.6
       ts-interface-checker: 0.1.13
 
-  supabase@https://codeload.github.com/supabase/supabase/tar.gz/0106c4b319fed026dd867cc6746536c2f31a1743: {}
+  supabase@https://codeload.github.com/supabase/supabase/tar.gz/16eddf08d64fac1a350f0e7fc2dfabf53126770d: {}
 
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  swr@2.3.2(react@19.0.0):
+    dependencies:
+      dequal: 2.0.3
+      react: 19.0.0
+      use-sync-external-store: 1.4.0(react@19.0.0)
 
   synckit@0.9.2:
     dependencies:
@@ -13268,6 +13282,10 @@ snapshots:
   use-sync-external-store@1.4.0(react@18.3.1):
     dependencies:
       react: 18.3.1
+
+  use-sync-external-store@1.4.0(react@19.0.0):
+    dependencies:
+      react: 19.0.0
 
   usehooks-ts@3.1.1(react@19.0.0):
     dependencies:

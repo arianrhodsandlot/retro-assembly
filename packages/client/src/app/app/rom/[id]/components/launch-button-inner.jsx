@@ -1,27 +1,32 @@
 'use client'
-import { useParams } from 'next/navigation'
 import { Nostalgist } from 'nostalgist'
-import { use } from 'react'
+import useSWR from 'swr/immutable'
+import { platformCoreMap } from '@/constants/platform'
 
 export function LaunchButtonInner({ rom }) {
-  const { id } = useParams()
+  const romUrl = `/api/v1/rom/${rom.id}/content`
 
-  const response = use(Promise.resolve(id))
+  const { data: nostalgist, error, isLoading } = useSWR(romUrl, prepareEmulator)
 
-  async function handleClick() {
-    alert(response)
-    const nostalgist = await Nostalgist.launch({
-      core: 'nestopia',
-      rom: { fileContent: response, fileName: rom.file_name },
-      style: { height: '100px', position: 'static', width: '100px' },
+  async function prepareEmulator(romUrl) {
+    return await Nostalgist.prepare({
+      core: platformCoreMap[rom.platform],
+      rom: romUrl,
+      shader: 'crt/crt-easymode',
     })
-
-    setTimeout(() => {
-      nostalgist.exit()
-    }, 3000)
   }
 
-  return (
+  async function handleClick() {
+    if (error) {
+      console.error(error)
+    }
+
+    await nostalgist?.start()
+  }
+
+  return isLoading ? (
+    <div>loading...</div>
+  ) : (
     <button onClick={handleClick} type='button'>
       Launch
     </button>

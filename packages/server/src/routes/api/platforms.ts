@@ -40,7 +40,7 @@ api.get('platform/:platform/rom/upload/test', (c) => {
   return c.html(`
     <html>
     <body>
-      <form method="post" action="/api/platform/${c.req.param('platform')}/rom/upload" enctype="multipart/form-data">
+      <form method="post" action="/api/v1/platform/${c.req.param('platform')}/rom/upload" enctype="multipart/form-data">
         <input name="file" type="file" multiple />
         <button type="submit">Upload ROM</button>
       </form>
@@ -50,6 +50,7 @@ api.get('platform/:platform/rom/upload/test', (c) => {
 })
 
 api.post('platform/:platform/rom/upload', opendal(), async (c) => {
+  console.log(1111)
   const op = c.get('op')
   const { rootDirectory } = c.get('preference')
   const platform = c.req.param('platform')

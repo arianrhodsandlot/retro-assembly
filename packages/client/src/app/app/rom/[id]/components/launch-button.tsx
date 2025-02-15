@@ -1,10 +1,6 @@
-import { Suspense } from 'react'
+'use client'
 import { LaunchButtonInner } from './launch-button-inner'
 
 export function LaunchButton({ rom }) {
-  return (
-    <Suspense fallback={'loading...'}>
-      <LaunchButtonInner rom={rom} />
-    </Suspense>
-  )
+  return <LaunchButtonInner rom={rom} />
 }

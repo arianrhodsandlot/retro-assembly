@@ -24,7 +24,8 @@ async function validateGoogleToken(credentials: ProviderCredentials) {
           refresh_token: response.credentials.refresh_token,
         }
         return { credentials: newCredentials, valid: true }
-      } catch {
+      } catch (error) {
+        console.info('refresh provider token failed', error)
         return { credentials: null, valid: false }
       }
     }

@@ -13,6 +13,14 @@ export async function GET(request: NextRequest) {
 
   const supabase = await createClient()
   const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+  await supabase.auth.updateUser({
+    data: {
+      provider_credentials: {
+        access_token: data.session?.provider_token,
+        refresh_token: data.session?.provider_refresh_token,
+      },
+    },
+  })
 
   if (error) {
     redirect('/login')

@@ -20,9 +20,13 @@ export class DataService {
     return data
   }
 
-  async getRoms() {
+  async getRoms({ platform }: { platform?: string } = {}) {
     const { romTable } = this
-    const { data } = await romTable.select().eq('user_id', this.user.id)
+    const query = romTable.select().eq('user_id', this.user.id)
+    if (platform) {
+      query.eq('platform', platform)
+    }
+    const { data } = await query
     return data || []
   }
 }

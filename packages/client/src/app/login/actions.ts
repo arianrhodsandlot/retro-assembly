@@ -1,6 +1,6 @@
 'use server'
 import { redirect } from 'next/navigation'
-import { createClient } from 'supabase/examples/user-management/nextjs-user-management/utils/supabase/server.ts'
+import { createClient } from '@/utils/supabase/server.ts'
 import { resolveSiteAbsoluteUrl } from '../../utils/misc'
 
 export async function getLoginUrl(formData: FormData) {

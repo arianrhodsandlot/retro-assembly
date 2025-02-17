@@ -1,5 +1,5 @@
 import { Operator } from 'opendal'
-import { createClient } from 'supabase/examples/user-management/nextjs-user-management/utils/supabase/server.ts'
+import { createClient } from '@/utils/supabase/server.ts'
 import { DataService } from './classes/data-service.ts'
 import { validateProviderToken } from './provider-token.ts'
 

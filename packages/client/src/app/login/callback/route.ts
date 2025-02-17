@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import type { NextRequest } from 'next/server'
-import { createClient } from 'supabase/examples/user-management/nextjs-user-management/utils/supabase/server.ts'
+import { createClient } from '@/utils/supabase/server.ts'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl

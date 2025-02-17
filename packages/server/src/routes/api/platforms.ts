@@ -49,15 +49,12 @@ api.get('platform/:platform/rom/upload/test', (c) => {
   `)
 })
 
-api.post('platform/:platform/rom/upload', opendal(), async (c) => {
-  console.log(1111)
+api.post('/rom/upload', opendal(), async (c) => {
   const op = c.get('op')
   const { rootDirectory } = c.get('preference')
-  const platform = c.req.param('platform')
 
-  const romDirectory = path.join(rootDirectory, platform)
-
-  const body = await c.req.parseBody<{ file: File }>({ all: true })
+  const body = await c.req.parseBody<{ file: File; platform: string }>({ all: true })
+  const romDirectory = path.join(rootDirectory, body.platform)
   const files = Array.isArray(body.file) ? body.file : [body.file]
   await Promise.all(
     files.map(async (file) => {

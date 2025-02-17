@@ -11,6 +11,7 @@
     "@retroassembly/server": "workspace:*",
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.48.1",
+    "browser-fs-access": "0.35.0",
     "clsx": "2.1.1",
     "googleapis": "144.0.0",
     "hono": "4.7.0",
@@ -21,7 +22,6 @@
     "opendal": "0.47.8",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "supabase": "supabase/supabase",
     "swr": "2.3.2",
     "tailwind-merge": "3.0.1",
     "usehooks-ts": "3.1.1"

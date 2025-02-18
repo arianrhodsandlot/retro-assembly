@@ -28,7 +28,7 @@ api.get('library/query', async (c) => {
   return c.var.ok(info)
 })
 
-api.get('library/scan', opendal(), async (c) => {
+api.all('library/scan', opendal(), async (c) => {
   const op = c.get('op')
   const user = c.get('user')
   const supabase = c.get('supabase')

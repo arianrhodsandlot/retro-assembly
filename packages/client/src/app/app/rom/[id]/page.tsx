@@ -1,5 +1,6 @@
-import Link from 'next/link'
+import Image from 'next/image'
 import { getRequestContext } from '@/utils/request-context.ts'
+import { getRomCover, getRomTitle } from '@/utils/rom'
 import { LaunchButton } from './components/launch-button'
 
 export default async function Rom({ params }: NextPageProps) {
@@ -7,14 +8,20 @@ export default async function Rom({ params }: NextPageProps) {
   const requestContext = await getRequestContext()
 
   const rom = await requestContext.service.getRom(id)
+  const cover = getRomCover(rom)
+  const title = getRomTitle(rom)
+
   return (
-    <div className='max-w-7xl mx-auto'>
-      <div>
-        <Link href='/app'>app</Link> /{' '}
-        <div>{rom.fbneo_game_info?.fullName || rom.libretro_rdb?.name || rom.good_code?.rom}</div>
+    <div className='flex gap-4'>
+      <div className='w-56 shrink-0'>
+        <Image alt={title} className='object-contain size-full block' height={224} src={cover} width={224} />
       </div>
-      <div className='py-10 text-neutral-400'>{JSON.stringify(rom)}</div>
-      <LaunchButton rom={rom} />
+      <div className='flex flex-col gap-4'>
+        <h1 className='text-3xl font-semibold'>{title}</h1>
+        <div>
+          <LaunchButton rom={rom} />
+        </div>
+      </div>
     </div>
   )
 }

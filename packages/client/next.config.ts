@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '100mb',
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'cdn.jsdelivr.net',
+        protocol: 'https',
+      },
+    ],
+  },
   serverExternalPackages: ['opendal'],
 }
 

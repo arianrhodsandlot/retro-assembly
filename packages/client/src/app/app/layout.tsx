@@ -44,18 +44,16 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className='flex h-screen'>
-      <aside className='bg-[var(--theme)] text-white flex flex-col w-64'>
-        <div className='bg-rose-100 text-rose-700 py-4 text-center font-bold'>Retroassembly</div>
+      <aside className='bg-[var(--theme)] text-white flex flex-col w-56'>
+        <div className='py-4 text-center font-bold'>Retroassembly</div>
 
-        <div className='mt-2'>
-          <div className='flex flex-col'>
-            {links.map(({ href, icon, text }) => (
-              <SidebarLink href={href} key={text}>
-                <div className='size-6 items-center justify-center flex'>{icon}</div>
-                {text}
-              </SidebarLink>
-            ))}
-          </div>
+        <div className='flex flex-col'>
+          {links.map(({ href, icon, text }) => (
+            <SidebarLink href={href} key={text}>
+              <div className='size-6 items-center justify-center flex'>{icon}</div>
+              {text}
+            </SidebarLink>
+          ))}
         </div>
 
         <div className='mt-10'>

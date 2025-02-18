@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+@plugin "@iconify/tailwind4";
+
+body {
+  --theme: #be123c;
+}

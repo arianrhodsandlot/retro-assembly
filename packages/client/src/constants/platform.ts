@@ -59,7 +59,7 @@ export const platformNamesSorted: PlatformName[] = [
   'arcade',
 ]
 
-export const platformFullNameMap: Record<PlatformName, string> = {
+export const platformLibretroFullNameMap: Record<PlatformName, string> = {
   arcade: 'FBNeo - Arcade Games',
   atari2600: 'Atari - 2600',
   atari5200: 'Atari - 5200',
@@ -78,6 +78,26 @@ export const platformFullNameMap: Record<PlatformName, string> = {
   vb: 'Nintendo - Virtual Boy',
   wonderswan: 'Bandai - WonderSwan',
   wonderswancolor: 'Bandai - WonderSwan Color',
+}
+export const platformFullNameMap: Record<PlatformName, string> = {
+  arcade: 'Arcade',
+  atari2600: 'Atari 2600',
+  atari5200: 'Atari 5200',
+  atari7800: 'Atari 7800',
+  fds: 'Family Computer Disk System',
+  gamegear: 'Game Gear',
+  gb: 'Game Boy',
+  gba: 'Game Boy Advance',
+  gbc: 'Game Boy Color',
+  megadrive: 'Genesis',
+  nes: 'NES',
+  ngp: 'Neo Geo Pocket',
+  ngpc: 'Neo Geo Pocket Color',
+  sms: 'Master System',
+  snes: 'Super Nintendo',
+  vb: 'Virtual Boy',
+  wonderswan: 'WonderSwan',
+  wonderswancolor: 'WonderSwan Color',
 }
 
 export const platformCoreMap: Record<PlatformName, CoreName> = {

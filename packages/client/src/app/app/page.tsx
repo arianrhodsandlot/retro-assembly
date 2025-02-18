@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { getRequestContext } from '@/utils/request-context.ts'
 import { ImportROMsButton } from './components/import-roms-button'
 import { RomEntry } from './components/rom-entry'
@@ -10,23 +9,10 @@ export default async function App({ searchParams }: NextPageProps) {
 
   const roms = await requestContext.service.getRoms({ platform })
 
-  const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
-
   return (
     <div className='flex gap-10'>
-      <div className='flex flex-col'>
-        <Link href='/app' replace>
-          all
-        </Link>
-
-        {defaultPlatformNames.map((platform) => (
-          <Link href={{ pathname: '/app', query: { platform } }} key={platform} replace>
-            {platform}
-          </Link>
-        ))}
-      </div>
       <div>
-        <div className='flex flex-col'>
+        <div className='flex flex-wrap gap-4'>
           {roms.map((rom) => (
             <RomEntry key={rom.id} rom={rom} />
           ))}

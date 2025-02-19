@@ -1,0 +1,23 @@
+{
+  "name": "@retroassembly/vendor",
+  "private": "true",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/client": "6.4.0",
+    "es-toolkit": "1.32.0",
+    "prisma": "6.4.0",
+    "sax": "1.4.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node-lts": "22.0.1",
+    "@types/node": "22.13.1",
+    "@types/sax": "1.2.7"
+  }
+}

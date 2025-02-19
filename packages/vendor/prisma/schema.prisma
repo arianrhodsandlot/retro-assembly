@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../artifacts/launchbox/metadata/metadata.db"
+}
+
+model Game {
+  id Int @id @default(autoincrement())
+  name String?
+  releaseyear Int?
+  overview String?
+  maxplayers Int?
+  releasetype String?
+  cooperative Boolean?
+  videourl String?
+  databaseid Int?
+  communityrating Float?
+  platform String?
+  esrb String?
+  communityratingcount Int?
+  genres String?
+  developer String?
+  publisher String?
+  releasedate String?
+  wikipediaurl String?
+  steamappid String?
+  dos String?
+  startupfile String?
+  startupmd5 String?
+  setupfile String?
+  setupmd5 String?
+  startupparameters String?
+
+  cleanedname String?
+
+  @@index([id, name, platform, databaseid, cleanedname])
+}
+
+model Platform {
+  id Int @id @default(autoincrement())
+  name String?
+  emulated Boolean?
+  releasedate String?
+  developer String?
+  manufacturer String?
+  cpu String?
+  memory String?
+  graphics String?
+  sound String?
+  display String?
+  media String?
+  maxcontrollers String?
+  notes String?
+  category String?
+  usemamefiles Boolean?
+
+  @@index([id, name])
+}
+
+model GameAlternateName {
+  id Int @id @default(autoincrement())
+  alternatename String?
+  databaseid String?
+  region String?
+
+  @@index([id, alternatename, databaseid])
+}

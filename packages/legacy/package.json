@@ -3,13 +3,17 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev:test": "playwright test -c tests/e2e --headed --ui",
     "dev": "vite",
+    "dev:test": "playwright test -c tests/e2e --headed --ui",
     "lint": "eslint src",
     "prepare-test": "node ./scripts/prepare-test.js",
     "preview": "vite build && vite preview",
     "test": "playwright test -c tests/e2e"
   },
+  "browserslist": [
+    "defaults",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@fontsource-variable/fredoka": "5.0.13",
     "@fontsource-variable/outfit": "5.0.13",
@@ -57,6 +61,7 @@
     "@iconify/tailwind": "0.1.4",
     "@playwright/test": "1.43.1",
     "@tailwindcss/typography": "0.5.13",
+    "@tsconfig/vite-react": "3.4.0",
     "@types/emscripten": "1.39.10",
     "@types/gapi": "0.0.47",
     "@types/gapi.client.drive-v3": "0.0.4",
@@ -81,9 +86,5 @@
     "vite": "5.2.10",
     "vite-plugin-pwa": "0.19.8",
     "zx": "8.0.2"
-  },
-  "browserslist": [
-    "defaults",
-    "not op_mini all"
-  ]
+  }
 }

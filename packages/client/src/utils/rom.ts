@@ -1,5 +1,5 @@
 import { capitalize } from 'es-toolkit'
-import { platformLibretroFullNameMap } from '@/constants/platform'
+import { platformMap } from '@/constants/platform'
 
 function encodeRFC3986URIComponent(str: string) {
   return encodeURIComponent(str).replaceAll(/[!'()*]/g, (c) => `%${c.codePointAt(0)?.toString(16).toUpperCase()}`)
@@ -10,7 +10,7 @@ export function getRomCover(rom, type = 'boxart') {
   if (!name || !rom.platform) {
     return ''
   }
-  const platformFullName = platformLibretroFullNameMap[rom.platform]
+  const platformFullName = platformMap[rom.platform].libretroName
   if (!platformFullName) {
     return ''
   }

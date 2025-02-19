@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { platformFullNameMap } from '@/constants/platform'
+import { platformMap } from '@/constants/platform'
 import { SidebarLink } from './components/sidebar-link'
 
 const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
@@ -34,7 +34,7 @@ const platformIconMap = {
 const platformLinks = defaultPlatformNames.map((platform) => ({
   href: { pathname: '/app', query: { platform } },
   icon: platformIconMap[platform],
-  text: platformFullNameMap[platform],
+  text: platformMap[platform].displayName,
 }))
 
 interface AppLayoutProps {

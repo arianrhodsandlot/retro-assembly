@@ -16,6 +16,7 @@
     "sax": "1.4.1"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "2.48.1",
     "@tsconfig/node-lts": "22.0.1",
     "@types/node": "22.13.1",
     "@types/sax": "1.2.7"

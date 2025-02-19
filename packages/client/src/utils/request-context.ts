@@ -18,19 +18,22 @@ export async function getRequestContext() {
     throw new Error('need login')
   }
 
-  const { credentials, valid } = await validateProviderToken(
-    user.app_metadata.provider,
-    user.user_metadata.provider_credentials,
-  )
-  if (valid) {
-    if (credentials) {
-      const { data } = await supabase.auth.updateUser({ data: { provider_credentials: credentials } })
-      if (data.user) {
-        user = data.user
+  // todo remove this condition
+  if (!user) {
+    const { credentials, valid } = await validateProviderToken(
+      user.app_metadata.provider,
+      user.user_metadata.provider_credentials,
+    )
+    if (valid) {
+      if (credentials) {
+        const { data } = await supabase.auth.updateUser({ data: { provider_credentials: credentials } })
+        if (data.user) {
+          user = data.user
+        }
       }
+    } else {
+      throw new Error('need login')
     }
-  } else {
-    throw new Error('need login')
   }
 
   const accessToken = user.user_metadata.provider_credentials.access_token

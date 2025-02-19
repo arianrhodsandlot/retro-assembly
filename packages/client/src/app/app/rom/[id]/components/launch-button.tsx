@@ -1,4 +1,5 @@
 'use client'
+import { clsx } from 'clsx'
 import { Nostalgist } from 'nostalgist'
 import { useEffect } from 'react'
 import useSWRImmutable from 'swr/immutable'
@@ -40,15 +41,18 @@ export function LaunchButton({ rom }) {
     }
   }, [nostalgist])
 
-  return isLoading ? (
-    <div className='bg-rose-700 opacity-40 text-white text-2xl w-36 flex justify-center py-3 rounded'>loading...</div>
-  ) : (
+  return (
     <button
-      className='bg-rose-700 text-white text-2xl px-4 flex justify-center py-3 rounded'
+      className={clsx(
+        'bg-rose-700 w-72 text-white font-bold text-xl inline-flex justify-center h-16 rounded  items-center gap-1.5',
+        { 'opacity-50': isLoading },
+      )}
+      disabled={isLoading}
       onClick={handleClick}
       type='button'
     >
-      Press any key to start!
+      <span className={isLoading ? 'icon-[mdi--loading] animate-spin' : 'icon-[mdi--play]'} />
+      {isLoading ? 'Loading...' : 'Press any key to start'}
     </button>
   )
 }

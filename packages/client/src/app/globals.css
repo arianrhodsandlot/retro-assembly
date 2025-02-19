@@ -1,6 +1,19 @@
 @import 'tailwindcss';
 @plugin "@iconify/tailwind4";
+@plugin "@tailwindcss/typography";
 
 body {
   --theme: #be123c;
+}
+
+button {
+  cursor: pointer;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+}
+
+img {
+  image-rendering: pixelated;
 }

@@ -16,13 +16,11 @@ export function LaunchButton({ rom }) {
       rom: romUrl,
       shader: 'crt/crt-easymode',
       style: {
-        height: '560px',
-        left: '50%',
-        marginLeft: '-280px',
-        marginTop: '-280px',
+        bottom: '0',
+        height: '480px',
         position: 'fixed',
-        top: '50%',
-        width: '560px',
+        right: '0',
+        width: '480px',
       },
     })
   }

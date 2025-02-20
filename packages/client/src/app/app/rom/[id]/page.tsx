@@ -1,6 +1,7 @@
 import { getRequestContext } from '@/utils/request-context.ts'
 import { getRomCover, getRomTitle } from '@/utils/rom'
 import { LaunchButton } from './components/launch-button'
+import { YouTubeEmbed } from './components/youtube-embed'
 
 export default async function Rom({ params }: NextPageProps) {
   const { id } = await params
@@ -97,7 +98,9 @@ export default async function Rom({ params }: NextPageProps) {
             </div>
           </div>
 
-          <div className='px-4'>Video: {launchboxGame.videourl}</div>
+          <div className='px-4'>
+            <YouTubeEmbed url={launchboxGame.videourl} />
+          </div>
         </div>
       </div>
     </div>

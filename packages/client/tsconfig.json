@@ -2,6 +2,7 @@
   "extends": "@tsconfig/next",
   "compilerOptions": {
     "composite": true,
+    "noImplicitAny": false,
     "allowImportingTsExtensions": true,
     "paths": {
       "@/*": ["./src/*"]

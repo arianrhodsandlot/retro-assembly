@@ -1,11 +1,13 @@
 import { capitalize } from 'es-toolkit'
+import { Nostalgist } from 'nostalgist'
 import { platformMap } from '@/constants/platform'
+import { getCDNUrl } from './cdn'
 
-function encodeRFC3986URIComponent(str: string) {
-  return encodeURIComponent(str).replaceAll(/[!'()*]/g, (c) => `%${c.codePointAt(0)?.toString(16).toUpperCase()}`)
-}
+type LibretroThumbnailType = 'boxart' | 'snap' | 'title'
 
-export function getRomCover(rom, type = 'boxart') {
+const { path } = Nostalgist.vendors
+
+export function getRomLibretroThumbnail(rom, type: LibretroThumbnailType = 'boxart') {
   const name = rom.libretro_rdb?.name
   if (!name || !rom.platform) {
     return ''
@@ -15,12 +17,25 @@ export function getRomCover(rom, type = 'boxart') {
     return ''
   }
 
-  const typeUrlPart = `Named_${capitalize(type)}s`
   const normalizedPlatformFullName = platformFullName.replaceAll(' ', '_')
-  const pathPrefix = `gh/libretro-thumbnails/${normalizedPlatformFullName}@master`
-  const normalizedFileName = name.replaceAll(/[&*/:`<>?\\]|\|"/g, '_')
-  const encode = encodeRFC3986URIComponent
-  return `https://cdn.jsdelivr.net/${pathPrefix}/${encode(typeUrlPart)}/${encode(normalizedFileName)}.png`
+  const repo = path.join('libretro-thumbnails', normalizedPlatformFullName)
+
+  const fileDirectory = `Named_${capitalize(type)}s`
+  const normalizedFileName = `${name.replaceAll(/[&*/:`<>?\\]|\|"/g, '_')}.png`
+  const filePath = path.join(fileDirectory, normalizedFileName)
+
+  return getCDNUrl(repo, filePath)
+}
+
+export function getRomPlatformThumbnail(rom, type = 'content', directory = 'xmb/flatui/png') {
+  const platformFullName = platformMap[rom.platform].libretroName
+  if (!platformFullName) {
+    return ''
+  }
+  const repo = 'libretro/retroarch-assets'
+  const fileName = type === 'content' ? `${platformFullName}-content.png` : `${platformFullName}.png`
+  const filePath = path.join(directory, fileName)
+  return getCDNUrl(repo, filePath)
 }
 
 export function getRomTitle(rom) {

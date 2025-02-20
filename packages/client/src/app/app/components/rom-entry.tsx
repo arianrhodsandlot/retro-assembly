@@ -1,25 +1,28 @@
 'use client'
-import ky from 'ky'
+import clsx from 'clsx'
 import Link from 'next/link'
-import useSWRImmutable from 'swr/immutable'
-import { getRomCover, getRomTitle } from '@/utils/rom'
+import { getRomTitle } from '@/utils/rom'
+import { useRomCover } from '../hooks/use-rom-cover'
 
-export function RomEntry({ rom }: { rom: any }) {
+export function RomEntry({ rom }) {
   const name = getRomTitle(rom)
-  const cover = getRomCover(rom)
-
-  const { data, error, isLoading } = useSWRImmutable(cover, ky)
+  const { data: cover, isLoading } = useRomCover(rom)
 
   return (
     <Link className='block w-40 hover:scale-[102%] transition-transform' href={`/app/rom/${rom.id}`}>
       <div className='size-40 flex items-center justify-center'>
-        {isLoading ? <div className='size-36 rounded bg-zinc-100' /> : null}
+        {isLoading ? <div className='size-4/5 rounded bg-zinc-200' /> : null}
 
-        {data ? (
-          <img alt={name} className='max-w-full max-h-full shadow-lg rounded object-contain' src={cover} />
+        {cover ? (
+          <img
+            alt={name}
+            className={clsx('drop-shadow-lg rounded object-contain', {
+              'max-w-4/5 max-h-4/max-w-4/5': cover.type === 'platform',
+              'max-w-full max-h-full': cover.type === 'rom',
+            })}
+            src={cover.src}
+          />
         ) : null}
-
-        {error ? <div className='size-36 rounded  bg-zinc-200' /> : null}
       </div>
 
       <div className='text-center mt-2 text-sm line-clamp-2 font-semibold'>{name}</div>

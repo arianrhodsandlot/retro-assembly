@@ -20,14 +20,14 @@ export class DataService {
   async getRom(id: string) {
     const { romTable } = this
     const { data: rom } = await romTable.select().eq('user_id', this.user.id).eq('id', id).maybeSingle()
-    const { data: launchboxGame } = await this.supabase
+    const { data: launchboxGameInfo } = await this.supabase
       .from(this.launchboxGameTableName)
       .select()
       .eq('name', rom.good_code.rom)
       .eq('platform', platformMap[rom.platform].launchboxName)
       .maybeSingle()
 
-    return { launchboxGame, rom }
+    return { launchboxGameInfo, rom }
   }
 
   async getRoms({ platform }: { platform?: string } = {}) {

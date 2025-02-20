@@ -4,6 +4,7 @@
 
 body {
   --theme: #be123c;
+  font-family: 'Inter Variable', sans-serif;
 }
 
 button {

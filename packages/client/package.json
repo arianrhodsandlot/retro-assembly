@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "dev": "next dev --turbopack",
+    "dev": "next --turbo",
     "start": "next start"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "5.1.1",
+    "@fontsource-variable/roboto-slab": "5.1.1",
     "@retroassembly/server": "workspace:*",
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.48.1",
@@ -32,13 +34,11 @@
     "@iconify/json": "2.2.308",
     "@iconify/tailwind4": "1.0.3",
     "@tailwindcss/postcss": "4.0.7",
-    "@tailwindcss/vite": "4.0.7",
     "@tsconfig/next": "2.0.3",
     "@types/js-cookie": "3.0.6",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "postcss": "8.5.2",
-    "supabase": "2.12.1",
     "tailwindcss": "4.0.7"
   },
   "optionalDependencies": {

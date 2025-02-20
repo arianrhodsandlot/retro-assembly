@@ -4,7 +4,7 @@ export default async function Login({ searchParams }: NextPageProps) {
   const { redirect_to: redirectTo = '/' } = await searchParams
 
   return (
-    <form action={getLoginUrl} className='mt-20 w-5xl mx-auto text-center'>
+    <form action={getLoginUrl} className='w-5xl mx-auto mt-20 text-center'>
       <div className='mt-10'>
         <input name='redirect_to' type='hidden' value={redirectTo} />
         <button className='underline' type='submit'>

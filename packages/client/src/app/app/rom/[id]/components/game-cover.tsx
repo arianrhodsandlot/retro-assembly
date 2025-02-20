@@ -5,12 +5,12 @@ export function GameCover({ rom }) {
   const { data: cover, isLoading } = useRomCover(rom)
 
   if (isLoading) {
-    return <div className='size-64 bg-zinc-200 sticky top-0' />
+    return <div className='sticky top-0 size-64 bg-zinc-200' />
   }
 
   return cover ? (
-    <div className='w-64 sticky top-0'>
-      <img alt={rom.name} className='block w-full h-auto' src={cover.src} />
+    <div className='sticky top-0 w-64'>
+      <img alt={rom.name} className='block h-auto w-full' src={cover.src} />
     </div>
   ) : null
 }

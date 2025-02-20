@@ -24,7 +24,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@arianrhodsandlot/eslint-config": "0.17.1",
+    "@arianrhodsandlot/eslint-config": "0.18.3",
     "eslint": "9.20.1",
     "lint-staged": "15.4.3",
     "simple-git-hooks": "2.11.1",

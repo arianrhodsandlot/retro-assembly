@@ -9,14 +9,14 @@ export function RomEntry({ rom }) {
   const { data: cover, isLoading } = useRomCover(rom)
 
   return (
-    <Link className='block w-40 hover:scale-[102%] transition-transform' href={`/app/rom/${rom.id}`}>
-      <div className='size-40 flex items-center justify-center'>
+    <Link className='block w-40 transition-transform hover:scale-[102%]' href={`/app/rom/${rom.id}`}>
+      <div className='flex size-40 items-center justify-center'>
         {isLoading ? <div className='size-4/5 rounded bg-zinc-200' /> : null}
 
         {cover ? (
           <img
             alt={name}
-            className={clsx('drop-shadow-lg rounded object-contain', {
+            className={clsx('rounded object-contain drop-shadow-lg', {
               'max-w-4/5 max-h-4/max-w-4/5': cover.type === 'platform',
               'max-w-full max-h-full': cover.type === 'rom',
             })}
@@ -25,7 +25,7 @@ export function RomEntry({ rom }) {
         ) : null}
       </div>
 
-      <div className='text-center mt-2 text-sm line-clamp-2 font-semibold'>{name}</div>
+      <div className='mt-2 line-clamp-2 text-center text-sm font-semibold'>{name}</div>
     </Link>
   )
 }

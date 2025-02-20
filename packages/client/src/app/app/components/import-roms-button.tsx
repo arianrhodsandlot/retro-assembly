@@ -23,13 +23,20 @@ export function ImportROMsButton() {
   })
 
   async function handleClickImportRoms() {
-    const files = await fileOpen({ multiple: true })
-    trigger(files)
+    try {
+      const files = await fileOpen({ multiple: true })
+      trigger(files)
+    } catch {}
   }
 
   return (
-    <button disabled={isMutating} onClick={handleClickImportRoms} type='button'>
-      {isMutating ? 'importing...' : 'import ROMs'}
+    <button
+      className='size-18 block rounded-full bg-rose-700 text-white shadow-lg shadow-zinc-400'
+      disabled={isMutating}
+      onClick={handleClickImportRoms}
+      type='button'
+    >
+      <span className='icon-[mdi--upload] size-7' />
     </button>
   )
 }

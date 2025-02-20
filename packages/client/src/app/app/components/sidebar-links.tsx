@@ -6,17 +6,17 @@ const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'a
 const links = [
   {
     href: '/app',
-    icon: <span className='size-5 icon-[mdi--bookshelf]' />,
+    icon: <span className='icon-[mdi--bookshelf] size-5' />,
     text: 'All',
   },
   {
     href: { pathname: '/app', query: { sort: 'added' } },
-    icon: <span className='size-5 icon-[mdi--recent]' />,
+    icon: <span className='icon-[mdi--recent] size-5' />,
     text: 'Recently added',
   },
   {
     href: { pathname: '/app', query: { sort: 'played' } },
-    icon: <span className='size-5 icon-[mdi--controller-square]' />,
+    icon: <span className='icon-[mdi--controller-square] size-5' />,
     text: 'Recently played',
   },
 ]
@@ -42,14 +42,14 @@ export function SidebarLinks() {
       <div className='flex flex-col'>
         {links.map(({ href, icon, text }) => (
           <SidebarLink href={href} key={text}>
-            <div className='size-6 items-center justify-center flex'>{icon}</div>
+            <div className='flex size-6 items-center justify-center'>{icon}</div>
             {text}
           </SidebarLink>
         ))}
       </div>
 
       <div className='mt-10'>
-        <h3 className='text-white/60 px-4'>Platforms</h3>
+        <h3 className='px-4 text-white/60'>Platforms</h3>
 
         <div className='flex flex-col'>
           {platformLinks.map(({ href, icon, text }) => (

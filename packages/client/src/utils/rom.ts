@@ -1,6 +1,6 @@
 import { capitalize } from 'es-toolkit'
 import { Nostalgist } from 'nostalgist'
-import { platformMap } from '@/constants/platform'
+import { platformMap } from '@/constants/platform.ts'
 import { getCDNUrl } from './cdn'
 
 type LibretroThumbnailType = 'boxart' | 'snap' | 'title'

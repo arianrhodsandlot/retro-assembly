@@ -1,9 +1,9 @@
 import { getRequestContext } from '@/utils/request-context.ts'
-import { getRomTitle } from '@/utils/rom'
-import { GameCover } from './components/game-cover'
-import { GameInfo } from './components/game-info'
-import { GameMedias } from './components/game-medias'
-import { LaunchButton } from './components/launch-button'
+import { getRomTitle } from '@/utils/rom.ts'
+import { GameCover } from './components/game-cover.tsx'
+import { GameInfo } from './components/game-info.tsx'
+import { GameMedias } from './components/game-medias.tsx'
+import { LaunchButton } from './components/launch-button.tsx'
 
 export default async function Rom({ params }: NextPageProps) {
   const { id } = await params
@@ -18,8 +18,8 @@ export default async function Rom({ params }: NextPageProps) {
         <GameCover rom={rom} />
       </div>
 
-      <div className='flex flex-col gap-8 flex-1'>
-        <h1 className='text-5xl px-8 pt-4 font-semibold'>{title}</h1>
+      <div className='flex flex-1 flex-col gap-8'>
+        <h1 className='px-8 pt-4 text-6xl font-bold'>{title}</h1>
 
         <GameInfo gameInfo={launchboxGameInfo} rom={rom} />
 
@@ -27,11 +27,11 @@ export default async function Rom({ params }: NextPageProps) {
           <LaunchButton rom={rom} />
         </div>
 
-        <div className='pl-4 flex flex-col gap-4 pr-64'>
+        <div className='flex flex-col gap-4 pl-4 pr-64'>
           <GameMedias rom={rom} video={launchboxGameInfo.videourl} />
 
           {launchboxGameInfo?.overview ? (
-            <div className='prose-neutral max-w-none prose text-justify whitespace-pre-line font-[Roboto_Slab_Variable]'>
+            <div className='prose-neutral prose max-w-none whitespace-pre-line text-justify font-[Roboto_Slab_Variable]'>
               {launchboxGameInfo.overview}
             </div>
           ) : null}

@@ -42,7 +42,7 @@ export function LaunchButton({ rom }) {
   return (
     <button
       className={clsx(
-        'bg-rose-700 w-72 text-white font-bold text-xl inline-flex justify-center h-16 rounded  items-center gap-1.5',
+        'inline-flex h-16 w-72 items-center justify-center gap-1.5 rounded bg-rose-700 text-xl  font-bold text-white',
         { 'opacity-50': isLoading },
       )}
       disabled={isLoading}

@@ -2,10 +2,10 @@ import { platformMap } from '@/constants/platform'
 
 export function GameInfo({ gameInfo, rom }) {
   return (
-    <div className='bg-zinc-200 rounded px-8 py-4'>
+    <div className='rounded bg-zinc-200 px-8 py-4'>
       <div className='flex'>
         <div>
-          <div className='font-semibold flex items-center gap-2'>
+          <div className='flex items-center gap-2 font-semibold'>
             <span className='icon-[mdi--computer-classic]' />
             Platform
           </div>
@@ -13,9 +13,9 @@ export function GameInfo({ gameInfo, rom }) {
         </div>
       </div>
 
-      <div className='flex gap-8 *:min-w-36 mt-4'>
+      <div className='mt-4 flex gap-8 *:min-w-36'>
         <div>
-          <div className='font-semibold flex items-center gap-2'>
+          <div className='flex items-center gap-2 font-semibold'>
             <span className='icon-[mdi--calendar]' />
             Released
           </div>
@@ -23,7 +23,7 @@ export function GameInfo({ gameInfo, rom }) {
         </div>
 
         <div>
-          <div className='font-semibold flex items-center gap-2'>
+          <div className='flex items-center gap-2 font-semibold'>
             <span className='icon-[mdi--chip]' />
             Developer
           </div>
@@ -31,7 +31,7 @@ export function GameInfo({ gameInfo, rom }) {
         </div>
 
         <div>
-          <div className='font-semibold flex items-center gap-2'>
+          <div className='flex items-center gap-2 font-semibold'>
             <span className='icon-[mdi--earth]' />
             Publisher
           </div>
@@ -39,7 +39,7 @@ export function GameInfo({ gameInfo, rom }) {
         </div>
 
         <div>
-          <div className='font-semibold flex items-center gap-2'>
+          <div className='flex items-center gap-2 font-semibold'>
             <span className='icon-[mdi--tag-multiple]' />
             Genres
           </div>
@@ -47,7 +47,7 @@ export function GameInfo({ gameInfo, rom }) {
         </div>
 
         <div>
-          <div className='font-semibold flex items-center gap-2'>
+          <div className='flex items-center gap-2 font-semibold'>
             <span className='icon-[mdi--person-multiple]' />
             Players
           </div>
@@ -56,7 +56,7 @@ export function GameInfo({ gameInfo, rom }) {
       </div>
 
       <div className='mt-4'>
-        <div className='font-semibold flex items-center gap-2'>
+        <div className='flex items-center gap-2 font-semibold'>
           <span className='icon-[mdi--star-rate]' />
           Rating
         </div>

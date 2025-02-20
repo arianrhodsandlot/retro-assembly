@@ -1,4 +1,4 @@
-import { platformMap } from '@/constants/platform'
+import { platformMap } from '@/constants/platform.ts'
 
 export function GameInfo({ gameInfo, rom }) {
   return (

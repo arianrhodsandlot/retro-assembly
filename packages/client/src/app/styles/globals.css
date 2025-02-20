@@ -14,7 +14,3 @@ button {
 button[disabled] {
   cursor: not-allowed;
 }
-
-img {
-  image-rendering: pixelated;
-}

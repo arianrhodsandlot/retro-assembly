@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { ReactNode } from 'react'
 import { SidebarLinks } from './components/sidebar-links.tsx'
 
@@ -9,7 +10,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className='flex h-screen'>
       <aside className='flex h-full w-56 flex-col overflow-auto bg-[var(--theme)] text-white'>
-        <div className='py-4 text-center font-bold'>RetroAssembly</div>
+        <div className='flex items-center justify-center gap-2 py-4 font-bold'>
+          <Image alt='logo' height='32' src='/logo/logo-192x192.png' width='32' />
+          RetroAssembly
+        </div>
 
         <SidebarLinks />
       </aside>

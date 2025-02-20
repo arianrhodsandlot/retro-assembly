@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
-  description: 'Retroassembly',
-  title: 'Retroassembly',
+  description: 'RetroAssembly',
+  title: 'RetroAssembly',
 }
 
 interface RootLayoutProps {

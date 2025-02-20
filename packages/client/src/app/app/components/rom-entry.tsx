@@ -1,8 +1,8 @@
 'use client'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { getRomTitle } from '@/utils/rom'
-import { useRomCover } from '../hooks/use-rom-cover'
+import { getRomTitle } from '@/utils/rom.ts'
+import { useRomCover } from '../hooks/use-rom-cover.ts'
 
 export function RomEntry({ rom }) {
   const name = getRomTitle(rom)

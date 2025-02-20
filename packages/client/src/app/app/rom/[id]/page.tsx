@@ -19,7 +19,7 @@ export default async function Rom({ params }: NextPageProps) {
       </div>
 
       <div className='flex flex-1 flex-col gap-8'>
-        <h1 className='px-8 pt-4 text-6xl font-bold'>{title}</h1>
+        <h1 className='px-8 pt-4 text-5xl font-bold'>{title}</h1>
 
         <GameInfo gameInfo={launchboxGameInfo} rom={rom} />
 
@@ -28,7 +28,7 @@ export default async function Rom({ params }: NextPageProps) {
         </div>
 
         <div className='flex flex-col gap-4 pl-4 pr-64'>
-          <GameMedias rom={rom} video={launchboxGameInfo.videourl} />
+          <GameMedias rom={rom} video={launchboxGameInfo?.videourl} />
 
           {launchboxGameInfo?.overview ? (
             <div className='prose-neutral prose max-w-none whitespace-pre-line text-justify font-[Roboto_Slab_Variable]'>

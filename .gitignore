@@ -1,4 +1,5 @@
 .next
+.wrangler
 certificates
 dev-dist
 dist
@@ -7,7 +8,7 @@ node_modules
 packages/legacy/test-results
 packages/legacy/tests/fixtures/roms
 packages/server/src/assets
-packages/vendor/inputs
 packages/vendor/artifacts
+packages/vendor/inputs
 packages/vendor/prisma/migrations
 pages.gen.ts

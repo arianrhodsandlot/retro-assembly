@@ -1,0 +1,16 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "retroassembly",
+  "main": "packages/vendor/prisma.ts",
+	"compatibility_date": "2025-02-14",
+  "d1_databases": [{
+    "database_name": "retroassembly",
+    "database_id": "e168a68d-c4f4-4cd6-b1d3-667629292674",
+    "preview_database_id": "de33fa50-7be3-4873-8bc0-021758cab19b",
+    "binding": "DB"
+  }]
+}

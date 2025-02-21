@@ -1,49 +1,62 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "sqlite"
-  url      = "file:../artifacts/launchbox/metadata/metadata.db"
+  url = "file:../artifacts/launchbox.db"
 }
 
-model Game {
-  id Int @id @default(autoincrement())
+model Rom {
+  id String @id @default(uuid())
+  created_at DateTime?
+  updated_at DateTime?
+  status Int?
+  user_id String?
+  file_name String?
+  file_id String?
+  platform String?
+  good_code Json?
+  libretro_rdb Json?
+  fbneo_game_info Json?
+
+  @@index([id, platform, user_id])
+}
+
+model LaunchboxGame {
+  database_id Int @id
   name String?
-  releaseyear Int?
+  release_year DateTime?
   overview String?
-  maxplayers Int?
-  releasetype String?
+  max_players Int?
+  release_type String?
   cooperative Boolean?
-  videourl String?
-  databaseid Int?
-  communityrating Float?
+  video_url String?
+  community_rating Decimal?
   platform String?
   esrb String?
-  communityratingcount Int?
+  community_rating_count Int?
   genres String?
   developer String?
   publisher String?
-  releasedate String?
-  wikipediaurl String?
-  steamappid String?
+  release_date String?
+  wikipedia_url String?
+  steam_app_id String?
   dos String?
-  startupfile String?
-  startupmd5 String?
-  setupfile String?
-  setupmd5 String?
-  startupparameters String?
+  startup_file String?
+  startup_md5 String?
+  setup_file String?
+  setup_md5 String?
+  startup_parameters String?
 
-  cleanedname String?
-
-  @@index([id, name, platform, databaseid, cleanedname])
+  @@index([database_id, name, platform])
 }
 
-model Platform {
-  id Int @id @default(autoincrement())
-  name String?
+model LaunchboxPlatform {
+  name String @id
   emulated Boolean?
-  releasedate String?
+  release_date DateTime?
   developer String?
   manufacturer String?
   cpu String?
@@ -52,19 +65,27 @@ model Platform {
   sound String?
   display String?
   media String?
-  maxcontrollers String?
+  max_controllers String?
   notes String?
   category String?
-  usemamefiles Boolean?
+  use_mame_files Boolean?
 
-  @@index([id, name])
+  @@index([name])
 }
 
-model GameAlternateName {
-  id Int @id @default(autoincrement())
-  alternatename String?
-  databaseid String?
+model LaunchboxPlatformAlternateName {
+  id String @id @default(uuid())
+  alternate String
+  name String?
+
+  @@index([id,alternate,name])
+}
+
+model LaunchboxGameAlternateName {
+  id String @id @default(uuid())
+  alternate_name String?
+  database_id Int?
   region String?
 
-  @@index([id, alternatename, databaseid])
+  @@index([id,alternate_name,database_id])
 }

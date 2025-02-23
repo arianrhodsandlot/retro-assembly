@@ -2,9 +2,12 @@
 import { fileOpen } from 'browser-fs-access'
 import ky from 'ky'
 import { useSearchParams } from 'next/navigation'
-import useSWRMutation from 'swr/mutation'
+// import useSWRMutation from 'swr/mutation'
 
 export function ImportROMsButton() {
+  if (1) {
+    return
+  }
   const searchParams = useSearchParams()
   const { isMutating, trigger } = useSWRMutation('/api/user', async (url, { arg: files }: { arg: File[] }) => {
     const formData = new FormData()

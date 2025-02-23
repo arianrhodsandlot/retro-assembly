@@ -1,3 +1,4 @@
+'use client'
 import { delay } from 'es-toolkit'
 import ky from 'ky'
 import useSWRImmutable from 'swr/immutable'

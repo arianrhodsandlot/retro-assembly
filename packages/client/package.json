@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
-    "dev": "next --turbo",
-    "start": "next start"
+    "build": "waku build",
+    "dev": "waku dev",
+    "start": "waku start"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.1.1",
@@ -21,25 +21,28 @@
     "hono": "4.7.2",
     "jotai": "2.12.1",
     "ky": "1.7.5",
-    "next": "15.1.7",
     "nostalgist": "0.12.1",
     "opendal": "0.47.8",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "swr": "2.3.2",
     "tailwind-merge": "3.0.1",
-    "usehooks-ts": "3.1.1"
+    "usehooks-ts": "3.1.1",
+    "waku": "0.21.20"
   },
   "devDependencies": {
     "@iconify/json": "2.2.308",
     "@iconify/tailwind4": "1.0.3",
     "@tailwindcss/postcss": "4.0.7",
+    "@tailwindcss/vite": "4.0.8",
     "@tsconfig/next": "2.0.3",
     "@types/js-cookie": "3.0.6",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "postcss": "8.5.3",
-    "tailwindcss": "4.0.7"
+    "react-server-dom-webpack": "19.0.0",
+    "tailwindcss": "4.0.7",
+    "vite-tsconfig-paths": "5.1.4"
   },
   "optionalDependencies": {
     "@opendal/lib-darwin-arm64": "0.47.7",

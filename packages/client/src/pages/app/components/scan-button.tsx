@@ -4,6 +4,9 @@ import { useRouter } from 'next/navigation'
 import useSWRMutation from 'swr/mutation'
 
 export function ScanButton() {
+  if (1) {
+    return
+  }
   const { isMutating, trigger } = useSWRMutation('/api/v1/library/scan', (url) => ky.post(url))
   const router = useRouter()
 

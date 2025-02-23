@@ -1,6 +1,6 @@
 'use client'
 import clsx from 'clsx'
-import Link from 'next/link'
+import { Link } from 'waku/router/client'
 import { getRomTitle } from '@/utils/rom.ts'
 import { useRomCover } from '../hooks/use-rom-cover.ts'
 
@@ -9,7 +9,7 @@ export function RomEntry({ rom }) {
   const { data: cover, isLoading } = useRomCover(rom)
 
   return (
-    <Link className='block w-40 transition-transform hover:scale-[102%]' href={`/app/rom/${rom.id}`}>
+    <Link className='block w-40 transition-transform hover:scale-[102%]' to={`/app/rom/${rom.id}`}>
       <div className='flex size-40 items-center justify-center'>
         {isLoading ? <div className='size-4/5 rounded bg-zinc-200' /> : null}
 

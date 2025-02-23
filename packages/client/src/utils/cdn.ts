@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 const repositoryVersions: Record<string, string> = {
   'libretro-thumbnails/Atari_-_2600': 'a6a54d',
   'libretro-thumbnails/FBNeo_-_Arcade_Games': '5209042',
@@ -22,7 +20,7 @@ export function getCDNUrl(repo: string, filePpath: string) {
   const url = new URL('', 'https://cdn.jsdelivr.net')
   const encode = encodeRFC3986URIComponent
   const urlPathSecments = ['gh', encode(ghUser), `${encode(ghRepoName)}@${encode(version)}`, filePpath]
-  const urlPath = path.join(...urlPathSecments)
+  const urlPath = urlPathSecments.join('/')
   url.pathname = urlPath
   return url.href
 }

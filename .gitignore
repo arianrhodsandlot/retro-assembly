@@ -10,3 +10,4 @@ packages/server/src/assets
 packages/vendor/inputs
 packages/vendor/artifacts
 packages/vendor/prisma/migrations
+pages.gen.ts

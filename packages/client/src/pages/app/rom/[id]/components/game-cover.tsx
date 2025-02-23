@@ -1,5 +1,5 @@
 'use client'
-import { useRomCover } from '@/app/app/hooks/use-rom-cover'
+import { useRomCover } from '@/pages/app/hooks/use-rom-cover.ts'
 
 export function GameCover({ rom }) {
   const { data: cover, isLoading } = useRomCover(rom)

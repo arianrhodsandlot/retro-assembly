@@ -1,5 +1,5 @@
-import { platformMap } from '@/constants/platform'
-import { SidebarLink } from './sidebar-link'
+import { platformMap } from '@/constants/platform.ts'
+import { SidebarLink } from './sidebar-link.tsx'
 
 const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
 
@@ -31,7 +31,7 @@ const platformIconMap: Record<string, string> = {
 }
 
 const platformLinks = defaultPlatformNames.map((platform) => ({
-  href: { pathname: '/app', query: { platform } },
+  href: `/app/platform/${encodeURIComponent(platform)}`,
   icon: platformIconMap[platform],
   text: platformMap[platform].displayName,
 }))

@@ -1,15 +1,14 @@
-import { getRequestContext } from '@/utils/request-context.ts'
 import { getRomTitle } from '@/utils/rom.ts'
 import { GameCover } from './components/game-cover.tsx'
 import { GameInfo } from './components/game-info.tsx'
 import { GameMedias } from './components/game-medias.tsx'
-import { LaunchButton } from './components/launch-button.tsx'
+// import { LaunchButton } from './components/launch-button.tsx'
 
 export default async function Rom({ params }: NextPageProps) {
   const { id } = await params
-  const requestContext = await getRequestContext()
 
-  const { launchboxGameInfo, rom } = await requestContext.service.getRom(id)
+  const getRom = () => ({})
+  const { launchboxGameInfo, rom } = await getRom(id)
   const title = getRomTitle(rom)
 
   return (
@@ -24,7 +23,7 @@ export default async function Rom({ params }: NextPageProps) {
         <GameInfo gameInfo={launchboxGameInfo} rom={rom} />
 
         <div className='px-4'>
-          <LaunchButton rom={rom} />
+          {/* <LaunchButton rom={rom} /> */}
         </div>
 
         <div className='flex flex-col gap-4 pl-4 pr-64'>

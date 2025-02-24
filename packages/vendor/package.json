@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@prisma/adapter-d1": "6.4.1",
-    "@supabase/supabase-js": "2.48.1",
+    "@supabase/supabase-js": "2.49.1",
     "@tsconfig/node-lts": "22.0.1",
     "@types/node": "22.13.5",
     "@types/sax": "1.2.7",

@@ -10,9 +10,9 @@ export default defineConfig({
             cloudflareDevServer({
               // Optional config settings for the Cloudflare dev server (wrangler proxy)
               // https://developers.cloudflare.com/workers/wrangler/api/#parameters-1
-              persist: {
-                path: '.wrangler/state/v3',
-              },
+              // persist: {
+              //   path: '.wrangler/state/v3',
+              // },
             }),
           )
           return (appToCreate: Hono) => {

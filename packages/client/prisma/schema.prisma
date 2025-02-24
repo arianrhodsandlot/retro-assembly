@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+model Rom {
+  id String @id @default(uuid())
+  created_at DateTime?
+  updated_at DateTime?
+  status Int?
+  user_id String?
+  file_name String?
+  file_id String?
+  platform String?
+  good_code Json?
+  libretro_rdb Json?
+  fbneo_game_info Json?
+
+  @@index([id, platform, user_id])
+}
+
+model LaunchboxGame {
+  database_id Int @id
+  name String?
+  release_year String?
+  overview String?
+  max_players Int?
+  release_type String?
+  cooperative Boolean?
+  video_url String?
+  community_rating Decimal?
+  platform String?
+  esrb String?
+  community_rating_count Int?
+  genres String?
+  developer String?
+  publisher String?
+  release_date String?
+  wikipedia_url String?
+  steam_app_id String?
+  dos String?
+  startup_file String?
+  startup_md5 String?
+  setup_file String?
+  setup_md5 String?
+  startup_parameters String?
+
+  @@index([database_id, name, platform])
+}
+
+model LaunchboxPlatform {
+  name String @id
+  emulated Boolean?
+  release_date DateTime?
+  developer String?
+  manufacturer String?
+  cpu String?
+  memory String?
+  graphics String?
+  sound String?
+  display String?
+  media String?
+  max_controllers String?
+  notes String?
+  category String?
+  use_mame_files Boolean?
+
+  @@index([name])
+}
+
+model LaunchboxPlatformAlternateName {
+  id String @id @default(uuid())
+  alternate String
+  name String?
+
+  @@index([id,alternate,name])
+}
+
+model LaunchboxGameAlternateName {
+  id String @id @default(uuid())
+  alternate_name String?
+  database_id Int?
+  region String?
+
+  @@index([id,alternate_name,database_id])
+}

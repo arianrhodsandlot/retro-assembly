@@ -10,9 +10,11 @@
   "dependencies": {
     "@fontsource-variable/inter": "5.1.1",
     "@fontsource-variable/roboto-slab": "5.1.1",
+    "@prisma/adapter-d1": "6.4.1",
+    "@prisma/client": "6.4.1",
     "@retroassembly/server": "workspace:*",
     "@supabase/ssr": "0.5.2",
-    "@supabase/supabase-js": "2.48.1",
+    "@supabase/supabase-js": "2.49.1",
     "@tailwindcss/typography": "0.5.16",
     "browser-fs-access": "0.35.0",
     "clsx": "2.1.1",
@@ -28,10 +30,10 @@
     "swr": "2.3.2",
     "tailwind-merge": "3.0.2",
     "usehooks-ts": "3.1.1",
-    "waku": "0.21.20"
+    "waku": "0.21.21"
   },
   "devDependencies": {
-    "@iconify/json": "2.2.309",
+    "@iconify/json": "2.2.310",
     "@iconify/tailwind4": "1.0.3",
     "@tailwindcss/postcss": "4.0.8",
     "@tailwindcss/vite": "4.0.8",
@@ -41,6 +43,7 @@
     "@types/react-dom": "19.0.4",
     "miniflare": "3.20250214.0",
     "postcss": "8.5.3",
+    "prisma": "6.4.1",
     "react-server-dom-webpack": "19.0.0",
     "tailwindcss": "4.0.7",
     "vite-tsconfig-paths": "5.1.4",

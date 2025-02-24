@@ -11,7 +11,7 @@
   "dependencies": {
     "@hono/node-server": "1.13.8",
     "@supabase/ssr": "0.5.2",
-    "@supabase/supabase-js": "2.48.1",
+    "@supabase/supabase-js": "2.49.1",
     "es-toolkit": "1.32.0",
     "goodcodes-parser": "2.5.0",
     "googleapis": "144.0.0",

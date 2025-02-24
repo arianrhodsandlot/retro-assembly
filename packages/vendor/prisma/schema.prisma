@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url = "file:../artifacts/launchbox.db"
+  url = "file:../artifacts/launchbox.sqlite3"
 }
 
 model Rom {
@@ -27,7 +27,7 @@ model Rom {
 model LaunchboxGame {
   database_id Int @id
   name String?
-  release_year DateTime?
+  release_year String?
   overview String?
   max_players Int?
   release_type String?

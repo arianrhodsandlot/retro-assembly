@@ -18,6 +18,7 @@
     "@tailwindcss/typography": "0.5.16",
     "browser-fs-access": "0.35.0",
     "clsx": "2.1.1",
+    "drizzle-orm": "0.39.3",
     "es-toolkit": "1.32.0",
     "googleapis": "144.0.0",
     "hono": "4.7.2",

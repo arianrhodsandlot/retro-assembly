@@ -37,9 +37,11 @@
       "@prisma/client",
       "@prisma/engines",
       "@swc/core",
+      "esbuild",
       "prisma",
       "sharp",
-      "supabase"
+      "supabase",
+      "workerd"
     ]
   }
 }

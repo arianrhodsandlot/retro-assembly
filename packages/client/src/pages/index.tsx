@@ -1,6 +1,9 @@
 import { Link } from 'waku'
+import { getRoms } from '@/controllers/get-roms'
 
-export default function HomePage() {
+export default async function HomePage() {
+  console.log(await getRoms())
+
   return (
     <div>
       <div className='text-center'>

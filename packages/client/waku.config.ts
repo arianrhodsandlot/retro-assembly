@@ -8,7 +8,6 @@ export default defineConfig({
         unstable_honoEnhancer: ((createApp: (app: Hono) => Hono) => {
           const handlerPromise = import('./src/middlewares/cloudflare-dev-server.ts').then(({ cloudflareDevServer }) =>
             cloudflareDevServer({
-              // Optional config settings for the Cloudflare dev server (wrangler proxy)
               // https://developers.cloudflare.com/workers/wrangler/api/#parameters-1
               // persist: {
               //   path: '.wrangler/state/v3',

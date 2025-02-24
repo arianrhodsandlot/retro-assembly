@@ -1,13 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Middleware } from 'waku/config'
-import { createPrisma } from '../utils/prisma.ts'
+import { createDrizzle } from '../utils/drizzle.ts'
 import { createSupabase } from '../utils/supabase.ts'
 import { shouldApplyMiddlware } from './utils.ts'
 
 declare module 'waku/middleware/context' {
   export function getContextData(): {
     currentUser: { id: string }
-    prisma: ReturnType<typeof createPrisma>
+    drizzle: ReturnType<typeof createDrizzle>
     redirect: (location: string, status?: number) => void
     supabase?: SupabaseClient
   }
@@ -29,8 +29,7 @@ export default (function globalsMiddleware() {
       }
     }
 
-    const prisma = createPrisma()
-    ctx.data.prisma = prisma
+    ctx.data.drizzle = createDrizzle()
 
     function redirect(location: string, status = 302) {
       ctx.res.status = status

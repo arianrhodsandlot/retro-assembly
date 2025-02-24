@@ -6,11 +6,15 @@ export default defineConfig({
   middleware() {
     return [
       import('waku/middleware/context'),
-      import('./src/middlewares/controllers.ts'),
+
+      import('./src/middlewares/globals.ts'),
+      import('./src/middlewares/auth.ts'),
+
       import('waku/middleware/dev-server'),
       import('waku/middleware/handler'),
     ]
   },
+
   unstable_viteConfigs: {
     common() {
       return {

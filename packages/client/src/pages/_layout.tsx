@@ -1,4 +1,4 @@
-import './styles/index.ts'
+import '@/styles/index.ts'
 import type { ReactNode } from 'react'
 
 interface RootLayoutProps {

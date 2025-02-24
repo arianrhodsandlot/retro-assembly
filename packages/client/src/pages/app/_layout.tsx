@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { SidebarLinks } from './components/sidebar-links.tsx'
+import { SidebarLinks } from '../../components/app/sidebar-links.tsx'
 
 interface AppLayoutProps {
   children: ReactNode

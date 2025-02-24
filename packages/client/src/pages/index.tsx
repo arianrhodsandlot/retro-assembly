@@ -1,13 +1,6 @@
 import { Link } from 'waku'
-import { getContextData } from 'waku/middleware/context'
 
-export default async function HomePage() {
-  const {
-    controller: { getRoms },
-  } = getContextData()
-
-  const roms = await getRoms()
-
+export default function HomePage() {
   return (
     <div>
       <div className='text-center'>

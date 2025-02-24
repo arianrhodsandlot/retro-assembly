@@ -26,14 +26,14 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "swr": "2.3.2",
-    "tailwind-merge": "3.0.1",
+    "tailwind-merge": "3.0.2",
     "usehooks-ts": "3.1.1",
     "waku": "0.21.20"
   },
   "devDependencies": {
-    "@iconify/json": "2.2.308",
+    "@iconify/json": "2.2.309",
     "@iconify/tailwind4": "1.0.3",
-    "@tailwindcss/postcss": "4.0.7",
+    "@tailwindcss/postcss": "4.0.8",
     "@tailwindcss/vite": "4.0.8",
     "@tsconfig/next": "2.0.3",
     "@types/js-cookie": "3.0.6",

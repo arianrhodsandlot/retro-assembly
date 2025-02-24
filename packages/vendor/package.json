@@ -10,17 +10,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@prisma/client": "6.4.0",
+    "@prisma/client": "6.4.1",
     "es-toolkit": "1.32.0",
     "fast-xml-parser": "5.0.6",
-    "prisma": "6.4.0",
+    "prisma": "6.4.1",
     "sax": "1.4.1"
   },
   "devDependencies": {
     "@prisma/adapter-d1": "6.4.1",
     "@supabase/supabase-js": "2.48.1",
     "@tsconfig/node-lts": "22.0.1",
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.5",
     "@types/sax": "1.2.7",
     "zx": "8.3.2"
   }

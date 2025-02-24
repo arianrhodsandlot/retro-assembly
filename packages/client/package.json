@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "waku build",
+    "build": "waku build --with-cloudflare",
     "dev": "waku dev",
-    "start": "waku start"
+    "start": "wrangler dev"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.1.1",
@@ -39,10 +39,12 @@
     "@types/js-cookie": "3.0.6",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
+    "miniflare": "3.20250214.0",
     "postcss": "8.5.3",
     "react-server-dom-webpack": "19.0.0",
     "tailwindcss": "4.0.7",
-    "vite-tsconfig-paths": "5.1.4"
+    "vite-tsconfig-paths": "5.1.4",
+    "wrangler": "3.109.3"
   },
   "optionalDependencies": {
     "@opendal/lib-darwin-arm64": "0.47.7",

@@ -171,7 +171,7 @@ async function writeLaunchboxGame(records: Records) {
       recordsChunk.map((record) => ({
         ...record,
         community_rating: castDecimal(record.community_rating),
-        community_rating_count: castInteger(record.community_rating),
+        community_rating_count: castInteger(record.community_rating_count),
         cooperative: castBoolean(record.cooperative),
         database_id: castInteger(record.database_id) as number,
         max_players: castInteger(record.max_players),

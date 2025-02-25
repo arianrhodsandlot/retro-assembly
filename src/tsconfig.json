@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/vite-react",
+  "compilerOptions": {
+    "composite": true,
+    "noImplicitAny": false,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}

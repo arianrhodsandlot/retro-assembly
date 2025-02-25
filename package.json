@@ -4,13 +4,13 @@
   "scripts": {
     "build": "waku build --with-cloudflare",
     "dev": "waku dev",
-    "start": "wrangler dev",
-    "drizzle": "drizzle-kit --config=src/database/drizzle.config.ts",
     "dev:test": "playwright test -c tests/e2e --headed --ui",
+    "drizzle": "drizzle-kit --config=src/database/drizzle.config.ts",
     "lint": "eslint src",
     "prepare": "simple-git-hooks",
     "prepare-test": "node ./scripts/prepare-test.js",
     "preview": "vite build && vite preview",
+    "start": "wrangler dev",
     "test": "playwright test -c tests/e2e"
   },
   "simple-git-hooks": {
@@ -71,19 +71,15 @@
     "tailwindcss": "4.0.7",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "3.109.3",
+    "wrangler": "3.103.2",
     "zx": "8.3.2"
   },
   "packageManager": "pnpm@10.4.1",
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
       "@swc/core",
       "better-sqlite3",
       "esbuild",
-      "prisma",
-      "sharp",
       "supabase",
       "workerd"
     ]

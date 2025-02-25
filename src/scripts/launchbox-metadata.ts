@@ -11,11 +11,40 @@ import {
   launchboxPlatformAlternateName,
 } from '../database/schema.ts'
 
-const xmlPath = path.resolve(import.meta.dirname, './inputs/launchbox/Metadata/Metadata.xml')
+const xmlPath = path.resolve(import.meta.dirname, './inputs/launchbox/metadata/Metadata.xml')
 
 const db = drizzle({ connection: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata.db') })
 
 type Records = Record<string, string>[]
+
+const modernPlatforms = new Set([
+  'Android',
+  'Apple iOS',
+  'Apple Mac OS',
+  'Microsoft Xbox',
+  'Microsoft Xbox 360',
+  'Microsoft Xbox One',
+  'Microsoft Xbox Series X/S',
+  'Nintendo 3DS',
+  'Nintendo GameCube',
+  'Nintendo Switch',
+  'Nintendo Wii',
+  'Nintendo Wii U',
+  'Ouya',
+  'Sega Dreamcast',
+  'Sega Saturn',
+  'Sony Playstation 2',
+  'Sony Playstation 3',
+  'Sony Playstation 4',
+  'Sony Playstation 5',
+  'Sony Playstation Vita',
+  'Sony PSP',
+  'Sony PSP Minis',
+  'Windows',
+])
+function isRetroPlatform(platform: string) {
+  return !modernPlatforms.has(platform)
+}
 
 function parseMetadata(filePath: string) {
   const { promise, resolve } = Promise.withResolvers<Record<string, Records>>()
@@ -50,7 +79,13 @@ function parseMetadata(filePath: string) {
 
       if (openingTags.length === 1) {
         if (openingTag && openingTag in recordsMap) {
-          recordsMap[openingTag].push(record)
+          if (openingTag === 'Game') {
+            if (isRetroPlatform(record.platform)) {
+              recordsMap[openingTag].push(record)
+            }
+          } else {
+            recordsMap[openingTag].push(record)
+          }
         }
         record = {}
         field = ''
@@ -146,28 +181,39 @@ async function writeLaunchboxGame(records: Records) {
   }
 }
 
-const loadMetadataFromCache = false
+const loadMetadataFromCache = true
 const cachePathMap = {
-  GameAlternateName: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata-game-alternate-names.json'),
-  Platform: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata-platforms.json'),
+  Game: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-game.json'),
+  GameAlternateName: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-game-alternate-names.json'),
+  Platform: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-platforms.json'),
   PlatformAlternateName: path.resolve(
     import.meta.dirname,
-    '../artifacts/launchbox-metadata-platform-alternate-names.json',
+    './artifacts/launchbox-metadata-platform-alternate-names.json',
   ),
 }
+
 async function getMetadata() {
   if (loadMetadataFromCache) {
     const metadata: Record<string, Records> = {}
+    metadata.Game = JSON.parse(await readFile(cachePathMap.Game, 'utf8'))
     metadata.Platform = JSON.parse(await readFile(cachePathMap.Platform, 'utf8'))
     metadata.PlatformAlternateName = JSON.parse(await readFile(cachePathMap.PlatformAlternateName, 'utf8'))
     metadata.GameAlternateName = JSON.parse(await readFile(cachePathMap.GameAlternateName, 'utf8'))
     return metadata
   }
   const metadata = await parseMetadata(xmlPath)
+
+  const gameIdMap = new Map<string, boolean>()
+  for (const game of metadata.Game) {
+    gameIdMap.set(game.database_id, true)
+  }
+  metadata.GameAlternateName = metadata.GameAlternateName.filter((alternate) => gameIdMap.has(alternate.database_id))
+
   await Promise.all([
-    writeFile(path.resolve(cachePathMap.Platform), JSON.stringify(metadata.Platform)),
-    writeFile(path.resolve(cachePathMap.PlatformAlternateName), JSON.stringify(metadata.PlatformAlternateName)),
-    writeFile(path.resolve(cachePathMap.GameAlternateName), JSON.stringify(metadata.GameAlternateName)),
+    writeFile(path.resolve(cachePathMap.Game), JSON.stringify(metadata.Game), 'utf8'),
+    writeFile(path.resolve(cachePathMap.Platform), JSON.stringify(metadata.Platform), 'utf8'),
+    writeFile(path.resolve(cachePathMap.PlatformAlternateName), JSON.stringify(metadata.PlatformAlternateName), 'utf8'),
+    writeFile(path.resolve(cachePathMap.GameAlternateName), JSON.stringify(metadata.GameAlternateName), 'utf8'),
   ])
   return metadata
 }

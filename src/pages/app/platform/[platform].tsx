@@ -1,6 +1,6 @@
+import { DeviceInfo } from '@/components/app/device-info.tsx'
+import { RomEntry } from '@/components/app/rom-entry.tsx'
 import { getRoms } from '@/controllers/get-roms.ts'
-import { DeviceInfo } from '../../../components/app/device-info.tsx'
-import { RomEntry } from '../../../components/app/rom-entry.tsx'
 
 export default async function App({ platform }) {
   const roms = await getRoms({ platform })

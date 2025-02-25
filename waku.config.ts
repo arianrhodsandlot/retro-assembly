@@ -1,6 +1,6 @@
+import path from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import type { Hono } from 'hono'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import { type Config, defineConfig } from 'waku/config'
 
 export default defineConfig({
@@ -44,7 +44,12 @@ export default defineConfig({
   unstable_viteConfigs: {
     common() {
       return {
-        plugins: [tailwindcss(), tsconfigPaths()],
+        plugins: [tailwindcss()],
+        resolve: {
+          alias: {
+            '@': path.join(import.meta.dirname, 'src'),
+          },
+        },
       }
     },
   },

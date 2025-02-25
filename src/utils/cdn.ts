@@ -8,6 +8,7 @@ const repositoryVersions: Record<string, string> = {
   'libretro-thumbnails/Nintendo_-_Super_Nintendo_Entertainment_System': '59a8381',
   'libretro-thumbnails/Sega_-_Mega_Drive_-_Genesis': 'fa29730',
   'libretro/retroarch-assets': '9afd2b8',
+  'Mattersons/es-theme-neutral': 'c9b38e7',
 }
 
 function encodeRFC3986URIComponent(str: string) {

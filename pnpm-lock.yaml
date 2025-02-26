@@ -126,6 +126,9 @@ importers:
       eslint:
         specifier: 9.21.0
         version: 9.21.0(jiti@2.4.2)
+      libretrodb:
+        specifier: 1.0.0
+        version: 1.0.0
       lint-staged:
         specifier: 15.4.3
         version: 15.4.3

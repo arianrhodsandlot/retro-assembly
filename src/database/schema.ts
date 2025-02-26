@@ -127,3 +127,29 @@ export const launchboxGameAlternateName = sqliteTable(
   },
   (table) => [index('idx_launchbox_game_alternate_names').on(table.id, table.alternate_name, table.database_id)],
 )
+
+export const libretroGame = sqliteTable(
+  'libretro_games',
+  {
+    compact_name: text().notNull(),
+    crc: text(),
+    description: text(),
+    developer: text(),
+    esrb_rating: text(),
+    franchise: text(),
+    genre: text(),
+    id: text().primaryKey().notNull().$defaultFn(nanoid),
+    md5: text(),
+    name: text(),
+    origin: text(),
+    platform: text(),
+    publisher: text(),
+    releasemonth: integer(),
+    releaseyear: integer(),
+    rom_name: text(),
+    sha1: text(),
+    size: integer(),
+    users: integer(),
+  },
+  (table) => [index('idx_libretro_game').on(table.id, table.name, table.rom_name)],
+)

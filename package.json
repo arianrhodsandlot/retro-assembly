@@ -67,6 +67,7 @@
     "better-sqlite3": "11.8.1",
     "drizzle-kit": "0.30.5",
     "eslint": "9.21.0",
+    "libretrodb": "1.0.0",
     "lint-staged": "15.4.3",
     "miniflare": "3.20250214.1",
     "nanoid": "5.1.2",

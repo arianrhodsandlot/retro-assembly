@@ -7,7 +7,7 @@ import { shouldApplyMiddlware } from './utils.ts'
 declare module 'waku/middleware/context' {
   export function getContextData(): {
     currentUser: { id: string }
-    drizzle: ReturnType<typeof createDrizzle>
+    db: ReturnType<typeof createDrizzle>
     redirect: (location: string, status?: number) => void
     supabase?: SupabaseClient
   }
@@ -29,7 +29,7 @@ export default (function globalsMiddleware() {
       }
     }
 
-    ctx.data.drizzle = createDrizzle()
+    ctx.data.db = createDrizzle()
 
     function redirect(location: string, status = 302) {
       ctx.res.status = status

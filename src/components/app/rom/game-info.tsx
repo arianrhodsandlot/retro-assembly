@@ -19,7 +19,9 @@ export function GameInfo({ gameInfo, rom }) {
             <span className='icon-[mdi--calendar]' />
             Released
           </div>
-          <div className='pl-6'>{gameInfo?.releasedate || <span className='opacity-40'>Unknown</span>}</div>
+          <div className='pl-6'>
+            {gameInfo?.release_date?.toLocaleDateString() || <span className='opacity-40'>Unknown</span>}
+          </div>
         </div>
 
         <div>
@@ -51,7 +53,7 @@ export function GameInfo({ gameInfo, rom }) {
             <span className='icon-[mdi--person-multiple]' />
             Players
           </div>
-          <div className='pl-6'>{gameInfo?.maxplayers || <span className='opacity-40'>Unknown</span>}</div>
+          <div className='pl-6'>{gameInfo?.max_players || <span className='opacity-40'>Unknown</span>}</div>
         </div>
       </div>
 
@@ -61,7 +63,7 @@ export function GameInfo({ gameInfo, rom }) {
           Rating
         </div>
         <div className='pl-6'>
-          {gameInfo?.communityrating ? gameInfo.communityrating.toFixed(1) : <span className='opacity-40'>N/A</span>}
+          {gameInfo?.community_rating ? gameInfo.community_rating.toFixed(1) : <span className='opacity-40'>N/A</span>}
         </div>
       </div>
     </div>

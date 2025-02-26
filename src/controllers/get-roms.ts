@@ -1,10 +1,7 @@
 import { getContextData } from 'waku/middleware/context'
-import { launchboxPlatform } from '@/database/schema.ts'
 
 export async function getRoms({ platform }: { platform?: string } = {}) {
-  const { currentUser, drizzle, supabase } = getContextData()
-
-  const platforms = await drizzle?.select().from(launchboxPlatform).limit(10)
+  const { currentUser, supabase } = getContextData()
 
   if (supabase) {
     const romTable = supabase.from('retroassembly_rom')

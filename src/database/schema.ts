@@ -20,6 +20,7 @@ export const rom = sqliteTable(
     fbneo_game_info: text({ mode: 'json' }),
     file_name: text().notNull(),
     good_code: text({ mode: 'json' }),
+    launchbox_game_id: integer(),
     libretro_rdb: text({ mode: 'json' }),
     platform: text().notNull(),
     ...fileSchema,

@@ -17,22 +17,28 @@ const db = drizzle({ connection: path.resolve(import.meta.dirname, './artifacts/
 
 type Records = Record<string, string>[]
 
-const modernPlatforms = new Set([
+const nonSupportedPlatforms = new Set([
   'Android',
+  'Apple II',
   'Apple iOS',
   'Apple Mac OS',
+  'Commodore 64',
+  'Commodore Amiga',
   'Microsoft Xbox',
   'Microsoft Xbox 360',
   'Microsoft Xbox One',
   'Microsoft Xbox Series X/S',
+  'MS-DOS',
   'Nintendo 3DS',
   'Nintendo GameCube',
   'Nintendo Switch',
   'Nintendo Wii',
   'Nintendo Wii U',
   'Ouya',
+  'Pinball',
   'Sega Dreamcast',
   'Sega Saturn',
+  'Sinclair ZX Spectrum',
   'Sony Playstation 2',
   'Sony Playstation 3',
   'Sony Playstation 4',
@@ -40,10 +46,12 @@ const modernPlatforms = new Set([
   'Sony Playstation Vita',
   'Sony PSP',
   'Sony PSP Minis',
+  'Web Browser',
   'Windows',
+  'Windows 3.X',
 ])
-function isRetroPlatform(platform: string) {
-  return !modernPlatforms.has(platform)
+function isSupportedPlatform(platform: string) {
+  return !nonSupportedPlatforms.has(platform)
 }
 
 function parseMetadata(filePath: string) {
@@ -80,7 +88,7 @@ function parseMetadata(filePath: string) {
       if (openingTags.length === 1) {
         if (openingTag && openingTag in recordsMap) {
           if (openingTag === 'Game') {
-            if (isRetroPlatform(record.platform)) {
+            if (isSupportedPlatform(record.platform)) {
               recordsMap[openingTag].push(record)
             }
           } else {
@@ -181,7 +189,7 @@ async function writeLaunchboxGame(records: Records) {
   }
 }
 
-const loadMetadataFromCache = true
+const loadMetadataFromCache = false
 const cachePathMap = {
   Game: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-game.json'),
   GameAlternateName: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-game-alternate-names.json'),

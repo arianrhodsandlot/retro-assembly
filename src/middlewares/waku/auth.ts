@@ -1,7 +1,7 @@
 import type { Middleware } from 'waku/config'
 import { shouldApplyMiddlware } from './utils.ts'
 
-export default (function globalsMiddleware() {
+export default (function authMiddleware() {
   return async (ctx, next) => {
     if (!shouldApplyMiddlware(ctx.req.url.pathname)) {
       return await next()

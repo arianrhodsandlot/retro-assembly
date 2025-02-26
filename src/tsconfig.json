@@ -4,6 +4,7 @@
     "composite": true,
     "noImplicitAny": false,
     "allowImportingTsExtensions": true,
+    "types": ["../.wrangler/types/runtime.d.ts"],
     "paths": {
       "@/*": ["./*"]
     }

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Middleware } from 'waku/config'
 import { createDrizzle } from '../../utils/drizzle.ts'
+import { createStorage } from '../../utils/storage.ts'
 import { createSupabase } from '../../utils/supabase.ts'
 import { shouldApplyMiddlware } from './utils.ts'
 
@@ -30,6 +31,7 @@ export default (function globalsMiddleware() {
     }
 
     ctx.data.db = createDrizzle()
+    ctx.data.storage = createStorage()
 
     function redirect(location: string, status = 302) {
       ctx.res.status = status

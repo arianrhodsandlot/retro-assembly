@@ -4,8 +4,7 @@ import { env } from 'hono/adapter'
 import { setCookie } from 'hono/cookie'
 import { getHonoContext } from 'waku/unstable_hono'
 
-export const createSupabase = memoize(function createSupabase() {
-  const c = getHonoContext()
+export const createSupabase = memoize(function createSupabase(c = getHonoContext()) {
   const { SUPABASE_ANON_KEY, SUPABASE_URL } = env<{ SUPABASE_ANON_KEY: string; SUPABASE_URL: string }>(c)
 
   if (!SUPABASE_ANON_KEY || !SUPABASE_URL) {
@@ -18,6 +17,7 @@ export const createSupabase = memoize(function createSupabase() {
       getAll() {
         return parseCookieHeader(c.req.header('Cookie') ?? '')
       },
+
       setAll(cookiesToSet) {
         for (const { name, options, value } of cookiesToSet) {
           // @ts-expect-error hono's cookie options parameter is not fully compatible with supabase's

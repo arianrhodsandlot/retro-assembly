@@ -1,0 +1,26 @@
+{
+  "name": "waku-project",
+  "compatibility_date": "2025-02-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./dist/worker/serve-cloudflare.js",
+  "assets": {
+    "directory": "./dist/assets",
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "d1_databases": [
+    {
+      "database_name": "retroassembly",
+      "database_id": "de33fa50-7be3-4873-8bc0-021758cab19b",
+      "preview_database_id": "local-test-db",
+      "binding": "DB",
+      "migrations_dir": "src/database/migrations"
+    }
+  ],
+  "r2_buckets": [{
+    "binding": "BUCKET",
+    "bucket_name": "retroassembly",
+    "preview_bucket_name": "local-test-bucket"
+  }]
+}

@@ -1,7 +1,7 @@
 import { createReadStream } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { drizzle } from 'drizzle-orm/better-sqlite3'
+import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
 import { chunk, noop, snakeCase } from 'es-toolkit'
 import sax from 'sax'
 import {
@@ -9,11 +9,9 @@ import {
   launchboxGameAlternateName,
   launchboxPlatform,
   launchboxPlatformAlternateName,
-} from '../database/schema.ts'
+} from '../../database/schema.ts'
 
-const xmlPath = path.resolve(import.meta.dirname, './inputs/launchbox/metadata/Metadata.xml')
-
-const db = drizzle({ connection: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata.db') })
+const xmlPath = path.resolve(import.meta.dirname, '../inputs/launchbox/metadata/Metadata.xml')
 
 type Records = Record<string, string>[]
 
@@ -138,7 +136,14 @@ function castDate(value) {
   } catch {}
 }
 
-async function writeLaunchboxPlatform(records: Records) {
+function compactName(name: string) {
+  return name
+    .replaceAll(/[^a-z0-9 ]/gi, '')
+    .toLowerCase()
+    .replaceAll(/\s+/g, '')
+}
+
+async function writeLaunchboxPlatform(records: Records, db: BetterSQLite3Database) {
   await db
     .insert(launchboxPlatform)
     .values(
@@ -153,7 +158,7 @@ async function writeLaunchboxPlatform(records: Records) {
     .onConflictDoNothing()
 }
 
-async function writeLaunchboxPlatformAlternateName(records: Records) {
+async function writeLaunchboxPlatformAlternateName(records: Records, db: BetterSQLite3Database) {
   await db.insert(launchboxPlatformAlternateName).values(
     records.map((record) => ({
       ...record,
@@ -162,7 +167,7 @@ async function writeLaunchboxPlatformAlternateName(records: Records) {
   )
 }
 
-async function writeLaunchboxGameAlternateName(records: Records) {
+async function writeLaunchboxGameAlternateName(records: Records, db: BetterSQLite3Database) {
   for (const recordsChunk of chunk(records, 1000)) {
     await db.insert(launchboxGameAlternateName).values(
       recordsChunk.map((record) => ({
@@ -173,16 +178,18 @@ async function writeLaunchboxGameAlternateName(records: Records) {
   }
 }
 
-async function writeLaunchboxGame(records: Records) {
+async function writeLaunchboxGame(records: Records, db: BetterSQLite3Database) {
   for (const recordsChunk of chunk(records, 1000)) {
     await db.insert(launchboxGame).values(
       recordsChunk.map((record) => ({
         ...record,
         community_rating: castDecimal(record.community_rating),
         community_rating_count: castInteger(record.community_rating_count),
+        compact_name: compactName(record.name),
         cooperative: castBoolean(record.cooperative),
         database_id: castInteger(record.database_id) as number,
         max_players: castInteger(record.max_players),
+        name: record.name,
         release_date: castDate(record.release_date),
       })),
     )
@@ -191,12 +198,12 @@ async function writeLaunchboxGame(records: Records) {
 
 const loadMetadataFromCache = false
 const cachePathMap = {
-  Game: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-game.json'),
-  GameAlternateName: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-game-alternate-names.json'),
-  Platform: path.resolve(import.meta.dirname, './artifacts/launchbox-metadata-platforms.json'),
+  Game: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata-game.json'),
+  GameAlternateName: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata-game-alternate-names.json'),
+  Platform: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata-platforms.json'),
   PlatformAlternateName: path.resolve(
     import.meta.dirname,
-    './artifacts/launchbox-metadata-platform-alternate-names.json',
+    '../artifacts/launchbox-metadata-platform-alternate-names.json',
   ),
 }
 
@@ -226,20 +233,22 @@ async function getMetadata() {
   return metadata
 }
 
-async function main() {
+async function extractLaunchboxMetadata() {
   const metadata = await getMetadata()
 
+  const db = drizzle({ connection: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata.db') })
+
   console.info('writing metadata.Platform...')
-  await writeLaunchboxPlatform(metadata.Platform)
+  await writeLaunchboxPlatform(metadata.Platform, db)
 
   console.info('writing metadata.PlatformAlternateName...')
-  await writeLaunchboxPlatformAlternateName(metadata.PlatformAlternateName)
+  await writeLaunchboxPlatformAlternateName(metadata.PlatformAlternateName, db)
 
   console.info('writing metadata.GameAlternateName...')
-  await writeLaunchboxGameAlternateName(metadata.GameAlternateName)
+  await writeLaunchboxGameAlternateName(metadata.GameAlternateName, db)
 
   console.info('writing metadata.Game...')
-  await writeLaunchboxGame(metadata.Game)
+  await writeLaunchboxGame(metadata.Game, db)
 }
 
-await main()
+await extractLaunchboxMetadata()

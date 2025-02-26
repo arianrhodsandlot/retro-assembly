@@ -1,9 +1,12 @@
-import { randomUUID } from 'node:crypto'
 import { index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { customAlphabet } from 'nanoid'
+import nanoidDictionary from 'nanoid-dictionary'
+
+const nanoid = customAlphabet(nanoidDictionary.nolookalikes, 7)
 
 const baseSchema = {
   created_at: integer({ mode: 'timestamp_ms' }).notNull(),
-  id: text('id').primaryKey().notNull().$defaultFn(randomUUID),
+  id: text('id').primaryKey().notNull().$defaultFn(nanoid),
   status: integer().notNull(),
   updated_at: integer({ mode: 'timestamp_ms' }).notNull(),
 }
@@ -55,6 +58,7 @@ export const launchboxGame = sqliteTable(
   {
     community_rating: real(),
     community_rating_count: integer(),
+    compact_name: text().notNull(),
     cooperative: integer({ mode: 'boolean' }),
     database_id: integer().primaryKey().notNull(),
     developer: text(),
@@ -62,7 +66,7 @@ export const launchboxGame = sqliteTable(
     esrb: text(),
     genres: text(),
     max_players: integer(),
-    name: text(),
+    name: text().notNull(),
     overview: text(),
     platform: text(),
     publisher: text(),
@@ -78,7 +82,7 @@ export const launchboxGame = sqliteTable(
     video_url: text(),
     wikipedia_url: text(),
   },
-  (table) => [index('idx_launchbox_games').on(table.database_id, table.name, table.platform)],
+  (table) => [index('idx_launchbox_games').on(table.database_id, table.compact_name, table.name, table.platform)],
 )
 
 export const launchboxPlatform = sqliteTable(
@@ -107,7 +111,7 @@ export const launchboxPlatformAlternateName = sqliteTable(
   'launchbox_platform_alternate_names',
   {
     alternate: text().notNull(),
-    id: text('id').primaryKey().notNull().$defaultFn(randomUUID),
+    id: text('id').primaryKey().notNull().$defaultFn(nanoid),
     name: text(),
   },
   (table) => [index('idx_launchbox_platform_alternate_names').on(table.id, table.alternate, table.name)],
@@ -118,7 +122,7 @@ export const launchboxGameAlternateName = sqliteTable(
   {
     alternate_name: text(),
     database_id: integer(),
-    id: text().primaryKey().notNull().$defaultFn(randomUUID),
+    id: text().primaryKey().notNull().$defaultFn(nanoid),
     region: text(),
   },
   (table) => [index('idx_launchbox_game_alternate_names').on(table.id, table.alternate_name, table.database_id)],

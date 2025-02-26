@@ -1,11 +1,6 @@
-import { sql } from 'drizzle-orm'
-import type { AnySQLiteColumn } from 'drizzle-orm/sqlite-core'
 import { getContextData } from 'waku/middleware/context'
 import { platformMap } from '@/constants/platform.ts'
-
-function lower(email: AnySQLiteColumn) {
-  return sql`lower(${email})`
-}
+import { getCompactName } from '@/utils/rom.ts'
 
 export async function getRom(id: string) {
   const { currentUser, db, supabase } = getContextData()
@@ -22,8 +17,11 @@ export async function getRom(id: string) {
     .maybeSingle()
 
   const launchboxGameInfo = await db.query.launchboxGame.findFirst({
-    where: ({ name, platform }, { and, eq }) =>
-      and(eq(lower(name), rom.good_code.rom.toLowerCase()), eq(platform, platformMap[rom.platform].launchboxName)),
+    where: ({ compact_name: compactName, platform }, { and, eq }) =>
+      and(
+        eq(compactName, getCompactName(rom.fbneo_game_info.fullName || rom.good_code.rom)),
+        eq(platform, platformMap[rom.platform].launchboxName),
+      ),
   })
 
   return { launchboxGameInfo, rom }

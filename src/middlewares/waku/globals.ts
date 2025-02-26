@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Middleware } from 'waku/config'
-import { createDrizzle } from '../utils/drizzle.ts'
-import { createSupabase } from '../utils/supabase.ts'
+import { createDrizzle } from '../../utils/drizzle.ts'
+import { createSupabase } from '../../utils/supabase.ts'
 import { shouldApplyMiddlware } from './utils.ts'
 
 declare module 'waku/middleware/context' {

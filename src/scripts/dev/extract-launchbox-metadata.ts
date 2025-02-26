@@ -136,7 +136,7 @@ function castDate(value) {
   } catch {}
 }
 
-function compactName(name: string) {
+function getCompactName(name: string) {
   return name
     .replaceAll(/[^a-z0-9 ]/gi, '')
     .toLowerCase()
@@ -185,7 +185,7 @@ async function writeLaunchboxGame(records: Records, db: BetterSQLite3Database) {
         ...record,
         community_rating: castDecimal(record.community_rating),
         community_rating_count: castInteger(record.community_rating_count),
-        compact_name: compactName(record.name),
+        compact_name: getCompactName(record.name),
         cooperative: castBoolean(record.cooperative),
         database_id: castInteger(record.database_id) as number,
         max_players: castInteger(record.max_players),

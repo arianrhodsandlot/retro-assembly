@@ -42,7 +42,7 @@ export function getRomTitle(rom) {
   return rom.fbneo_game_info?.fullName || rom.good_code?.rom || rom.libretro_rdb?.name
 }
 
-export function compactName(name: string) {
+export function getCompactName(name: string) {
   return name
     .replaceAll(/[^a-z0-9 ]/gi, '')
     .toLowerCase()

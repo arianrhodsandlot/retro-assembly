@@ -39,7 +39,7 @@ export function getRomPlatformThumbnail(rom, type = 'content', directory = 'xmb/
 }
 
 export function getRomTitle(rom) {
-  return rom.launchboxGame.name
+  return rom.launchboxGame?.name || rom.file_name
 }
 
 export function getCompactName(name: string) {

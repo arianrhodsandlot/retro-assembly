@@ -2,7 +2,7 @@
 import { delay } from 'es-toolkit'
 import ky from 'ky'
 import useSWRImmutable from 'swr/immutable'
-import { getRomLibretroThumbnail, getRomPlatformThumbnail } from '@/utils/rom.ts'
+import { getRomLibretroThumbnail, getRomPlatformThumbnail } from '../utils/rom.ts'
 
 export function useRomCover(rom) {
   const romCover = getRomLibretroThumbnail(rom)

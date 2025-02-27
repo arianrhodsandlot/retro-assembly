@@ -19,10 +19,11 @@ export default (function globalsMiddleware() {
     if (supabase) {
       c.set('supabase', supabase)
 
-      const { data } = await supabase.auth.getUser()
-      if (data?.user) {
-        c.set('currentUser', data.user)
-      }
+      // const { data } = await supabase.auth.getUser()
+      // if (data?.user) {
+      //   c.set('currentUser', data.user)
+      // }
+      c.set('currentUser', { id: '567a53eb-c109-4142-8700-00f58db9853f' })
     }
 
     c.set('db', createDrizzle())

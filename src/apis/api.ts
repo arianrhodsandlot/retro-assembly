@@ -12,10 +12,9 @@ api.use(auth())
 
 api.post('v1/rom/new', async (c) => {
   const storage = c.get('storage')
-  const platform = 'nes'
 
-  const { file } = await c.req.parseBody()
-  if (typeof file === 'string') {
+  const { file, platform } = await c.req.parseBody()
+  if (typeof file === 'string' || typeof platform !== 'string') {
     return c.json({})
   }
 

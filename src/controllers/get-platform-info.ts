@@ -6,7 +6,7 @@ export async function getPlatformInfo(platform: string) {
 
   const { launchboxName } = platformMap[platform]
   if (launchboxName) {
-    return await db.query.launchboxPlatform.findFirst({
+    return await db.metadata.query.launchboxPlatform.findFirst({
       where: ({ name }, { eq }) => eq(name, launchboxName),
     })
   }

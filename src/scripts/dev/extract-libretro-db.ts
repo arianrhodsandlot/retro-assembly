@@ -3,7 +3,7 @@ import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
 import { chunk } from 'es-toolkit'
 import { Libretrodb } from 'libretrodb'
 import { globby } from 'zx'
-import { libretroGame } from '../../database/schema.ts'
+import { libretroGame } from '../../databases/metadata/schema.ts'
 
 const nonSupportedPlatforms = new Set([
   'Commodore - Amiga',
@@ -51,8 +51,6 @@ async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
         })),
     )
   }
-  // const db = drizzle({ connection: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata.db') })
-  // db.insert(libretroGame)
 }
 
 async function extractLibretroDbs() {

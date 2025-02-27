@@ -14,7 +14,14 @@
       "database_name": "retroassembly",
       "database_id": "de33fa50-7be3-4873-8bc0-021758cab19b",
       "preview_database_id": "local-test-db",
-      "binding": "DB",
+      "binding": "DB_LIBRARY",
+      "migrations_dir": "src/database/migrations"
+    },
+    {
+      "database_name": "retroassembly",
+      "database_id": "de33fa50-7be3-4873-8bc0-021758cab19b",
+      "preview_database_id": "local-test-db",
+      "binding": "DB_METADATA",
       "migrations_dir": "src/database/migrations"
     }
   ],

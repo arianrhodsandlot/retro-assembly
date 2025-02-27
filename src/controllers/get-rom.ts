@@ -16,7 +16,7 @@ export async function getRom(id: string) {
     .eq('id', id)
     .maybeSingle()
 
-  const launchboxGameInfo = await db.query.launchboxGame.findFirst({
+  const launchboxGameInfo = await db.metadata.query.launchboxGame.findFirst({
     where: ({ compact_name: compactName, platform }, { and, eq }) =>
       and(
         eq(compactName, getCompactName(rom.fbneo_game_info.fullName || rom.good_code.rom)),

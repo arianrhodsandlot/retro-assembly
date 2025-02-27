@@ -5,6 +5,10 @@ export async function getLoginUrl(formData: FormData) {
   const { req } = getContext()
   const { supabase } = getContextData()
 
+  if (!supabase) {
+    return
+  }
+
   const oauthRedirectToURL = new URL('/login', req.url.origin)
   const redirectTo = formData.get('redirect_to')
   if (redirectTo) {

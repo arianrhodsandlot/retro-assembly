@@ -9,7 +9,7 @@ import {
   launchboxGameAlternateName,
   launchboxPlatform,
   launchboxPlatformAlternateName,
-} from '../../database/schema.ts'
+} from '../../databases/metadata/schema.ts'
 
 const xmlPath = path.resolve(import.meta.dirname, '../inputs/launchbox/metadata/Metadata.xml')
 

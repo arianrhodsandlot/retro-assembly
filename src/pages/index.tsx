@@ -10,7 +10,7 @@ export default function HomePage() {
     const formData = new FormData()
     formData.append('file', fileHandle)
 
-    await ky.post('/api/v1/rom/add', {
+    await ky.post('/api/v1/rom/new', {
       body: formData,
     })
   }

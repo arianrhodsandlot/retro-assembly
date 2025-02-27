@@ -236,7 +236,7 @@ async function getMetadata() {
 async function extractLaunchboxMetadata() {
   const metadata = await getMetadata()
 
-  const db = drizzle({ connection: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata.db') })
+  const db = drizzle({ connection: path.resolve(import.meta.dirname, '../artifacts/metadata.db') })
 
   console.info('writing metadata.Platform...')
   await writeLaunchboxPlatform(metadata.Platform, db)

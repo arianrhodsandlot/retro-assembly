@@ -6,7 +6,6 @@
     "dev": "waku dev",
     "dev:setup-d1": "node src/scripts/dev/setup-d1.ts",
     "dev:test": "playwright test -c tests/e2e --headed --ui",
-    "drizzle": "drizzle-kit --config=src/database/drizzle.config.ts",
     "lint": "eslint src",
     "prepare": "simple-git-hooks",
     "prepare-test": "node ./scripts/prepare-test.js",
@@ -35,6 +34,7 @@
     "clsx": "2.1.1",
     "drizzle-orm": "0.40.0",
     "es-toolkit": "1.32.0",
+    "goodcodes-parser": "2.5.0",
     "googleapis": "144.0.0",
     "hono": "4.7.2",
     "jotai": "2.12.1",
@@ -54,7 +54,7 @@
   "devDependencies": {
     "@arianrhodsandlot/eslint-config": "0.18.3",
     "@eslint/config-inspector": "1.0.0",
-    "@iconify/json": "2.2.310",
+    "@iconify/json": "2.2.311",
     "@iconify/tailwind4": "1.0.3",
     "@tailwindcss/postcss": "4.0.9",
     "@tailwindcss/vite": "4.0.8",
@@ -78,10 +78,10 @@
     "tailwindcss": "4.0.7",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "3.110.0",
+    "wrangler": "3.111.0",
     "zx": "8.3.2"
   },
-  "packageManager": "pnpm@10.5.0",
+  "packageManager": "pnpm@10.5.2",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",

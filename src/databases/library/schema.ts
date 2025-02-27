@@ -1,11 +1,18 @@
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { nanoid } from '../../utils/misc.ts'
+import { customAlphabet } from 'nanoid'
+import nanoidDictionary from 'nanoid-dictionary'
+
+const nanoid = customAlphabet(nanoidDictionary.nolookalikes, 10)
 
 const baseSchema = {
-  created_at: integer({ mode: 'timestamp_ms' }).notNull(),
+  created_at: integer({ mode: 'timestamp_ms' })
+    .notNull()
+    .$defaultFn(() => new Date()),
   id: text('id').primaryKey().notNull().$defaultFn(nanoid),
-  status: integer().notNull(),
-  updated_at: integer({ mode: 'timestamp_ms' }).notNull(),
+  status: integer().notNull().default(1),
+  updated_at: integer({ mode: 'timestamp_ms' })
+    .notNull()
+    .$onUpdateFn(() => new Date()),
 }
 
 const fileSchema = {
@@ -17,11 +24,9 @@ const fileSchema = {
 export const rom = sqliteTable(
   'roms',
   {
-    fbneo_game_info: text({ mode: 'json' }),
     file_name: text().notNull(),
-    good_code: text({ mode: 'json' }),
     launchbox_game_id: integer(),
-    libretro_rdb: text({ mode: 'json' }),
+    libretro_game_id: text(),
     platform: text().notNull(),
     ...fileSchema,
   },

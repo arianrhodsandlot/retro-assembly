@@ -1,10 +1,10 @@
 import type { Hono } from 'hono'
-import { logger } from 'hono/logger'
+import { contextStorage } from 'hono/context-storage'
 import { requestId } from 'hono/request-id'
-import pino from 'pino'
 import type { Config } from 'waku/config'
 import { api } from '../../apis/api.ts'
 import { cloudflareDevServer } from './cloudflare-dev-server.ts'
+import globals from './globals.ts'
 
 const cloudflareDevServerHandler = cloudflareDevServer({
   // https://developers.cloudflare.com/workers/wrangler/api/#parameters-1
@@ -13,22 +13,11 @@ const cloudflareDevServerHandler = cloudflareDevServer({
   },
 })
 
-const pinoLogger = pino({
-  transport: {
-    target: 'pino-pretty',
-  },
-})
-
-function log(message: string, ...rest: string[]) {
-  pinoLogger.info(message, ...rest)
-}
-
 type Enhancer = NonNullable<Config['unstable_honoEnhancer']>
 
 export const enhance = function enhance(createApp: (app: Hono) => Hono) {
   return (baseApp: Hono) => {
-    // baseApp.use(requestId(), logger(log))
-    baseApp.use(requestId())
+    baseApp.use(requestId(), contextStorage(), globals())
     baseApp.route('/api', api)
     const app = createApp(baseApp)
 

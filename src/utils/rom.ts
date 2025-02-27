@@ -1,6 +1,6 @@
 import { capitalize } from 'es-toolkit'
 import { Nostalgist } from 'nostalgist'
-import { platformMap } from '@/constants/platform.ts'
+import { platformMap } from '../constants/platform.ts'
 import { getCDNUrl } from './cdn.ts'
 
 type LibretroThumbnailType = 'boxart' | 'snap' | 'title'
@@ -8,7 +8,7 @@ type LibretroThumbnailType = 'boxart' | 'snap' | 'title'
 const { path } = Nostalgist.vendors
 
 export function getRomLibretroThumbnail(rom, type: LibretroThumbnailType = 'boxart') {
-  const name = rom.libretro_rdb?.name
+  const name = rom.libretroGame?.name
   if (!name || !rom.platform) {
     return ''
   }
@@ -39,7 +39,7 @@ export function getRomPlatformThumbnail(rom, type = 'content', directory = 'xmb/
 }
 
 export function getRomTitle(rom) {
-  return rom.fbneo_game_info?.fullName || rom.good_code?.rom || rom.libretro_rdb?.name
+  return rom.launchboxGame.name
 }
 
 export function getCompactName(name: string) {

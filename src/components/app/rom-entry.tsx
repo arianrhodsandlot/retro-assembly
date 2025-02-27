@@ -1,8 +1,8 @@
 'use client'
 import clsx from 'clsx'
 import { Link } from 'waku/router/client'
-import { getRomTitle } from '@/utils/rom.ts'
 import { useRomCover } from '../../hooks/use-rom-cover.ts'
+import { getRomTitle } from '../../utils/rom.ts'
 
 export function RomEntry({ rom }) {
   const name = getRomTitle(rom)

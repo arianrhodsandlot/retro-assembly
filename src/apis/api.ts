@@ -1,37 +1,53 @@
+import { and, eq } from 'drizzle-orm'
 import { Hono } from 'hono'
-import { env } from 'hono/adapter'
-import { customAlphabet } from 'nanoid'
-import nanoidDictionary from 'nanoid-dictionary'
+import { createRom } from '../controllers/create-rom.ts'
+import { guessGameInfo } from '../controllers/guess-game-info.ts'
+import { rom } from '../databases/library/schema.ts'
 import auth from '../middlewares/hono/auth.ts'
-import globals from '../middlewares/hono/globals.ts'
+import { nanoid } from '../utils/misc.ts'
 
-const nanoid = customAlphabet(nanoidDictionary.nolookalikes, 7)
 const api = new Hono()
 
-api.use(globals(), auth())
+api.use(auth())
 
 api.post('v1/rom/new', async (c) => {
-  const db = c.get('db')
   const storage = c.get('storage')
+  const platform = 'nes'
 
   const { file } = await c.req.parseBody()
-  const fileId = nanoid()
+  if (typeof file === 'string') {
+    return c.json({})
+  }
 
-  const object = await storage.put(fileId, file)
-  return c.json({ object })
+  const { launchbox, libretro } = await guessGameInfo(file.name, platform)
+  const fileId = nanoid()
+  await storage.put(fileId, file)
+  const rom = await createRom({
+    fileId,
+    fileName: file.name,
+    launchboxGameId: launchbox?.database_id,
+    libretroGameId: libretro?.id,
+    platform,
+  })
+
+  return c.json(rom)
 })
 
 api.get('v1/rom/:id/content', async (c) => {
   const db = c.get('db')
   const storage = c.get('storage')
+  const currentUser = c.get('currentUser')
 
-  const rom = await db.query.rom.findFirst({ where: ({ id }, { eq }) => eq(id, c.req.param('id')) })
-  if (!rom) {
+  const [result] = await db.library
+    .select()
+    .from(rom)
+    .where(and(eq(rom.id, c.req.param('id')), eq(rom.user_id, currentUser.id)))
+    .limit(1)
+  if (!result) {
     return c.body('rom not found', 404)
   }
 
-  const fileId = rom.file_id
-  const object = await storage.get(fileId)
+  const object = await storage.get(result.file_id)
   if (!object) {
     return c.body('file not found', 404)
   }

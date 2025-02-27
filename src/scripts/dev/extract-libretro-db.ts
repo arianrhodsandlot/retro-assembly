@@ -54,7 +54,7 @@ async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
 }
 
 async function extractLibretroDbs() {
-  const db = drizzle({ connection: path.resolve(import.meta.dirname, '../artifacts/launchbox-metadata.db') })
+  const db = drizzle({ connection: path.resolve(import.meta.dirname, '../artifacts/metadata.db') })
   const libretroDbDirectory = path.resolve(import.meta.dirname, '../inputs/libretro/database-rdb/')
   const rdbPaths = await globby(libretroDbDirectory)
   for (const rdbPath of rdbPaths) {

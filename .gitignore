@@ -4,7 +4,7 @@ dist
 node_modules
 pages.gen.ts
 worker-configuration.d.ts
-src/database/migrations
+migrations
 src/legacy/test-results
 src/legacy/tests/fixtures/roms
 artifacts

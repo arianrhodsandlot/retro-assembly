@@ -1,5 +1,5 @@
-import { getRoms } from '@/controllers/get-roms.ts'
 import { RomEntry } from '../../components/app/rom-entry.tsx'
+import { getRoms } from '../../controllers/get-roms.ts'
 
 export default async function App() {
   const roms = await getRoms()

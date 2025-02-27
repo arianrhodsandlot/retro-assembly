@@ -15,7 +15,7 @@ declare module 'hono' {
 
 export default (function globalsMiddleware() {
   return createMiddleware(async (c, next) => {
-    const supabase = createSupabase(c)
+    const supabase = createSupabase()
     if (supabase) {
       c.set('supabase', supabase)
 
@@ -25,8 +25,8 @@ export default (function globalsMiddleware() {
       }
     }
 
-    c.set('db', createDrizzle(c))
-    c.set('storage', createStorage(c))
+    c.set('db', createDrizzle())
+    c.set('storage', createStorage())
 
     await next()
   })

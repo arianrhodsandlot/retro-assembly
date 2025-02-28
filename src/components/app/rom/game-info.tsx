@@ -2,7 +2,7 @@ import { platformMap } from '@/constants/platform.ts'
 
 export function GameInfo({ gameInfo, rom }) {
   return (
-    <div className='rounded bg-zinc-200 px-8 py-4'>
+    <div className='rounded bg-zinc-600/10 px-8 py-4'>
       <div className='flex'>
         <div>
           <div className='flex items-center gap-2 font-semibold'>

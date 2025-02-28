@@ -2,7 +2,7 @@ import { platformMap } from '@/constants/platform.ts'
 import { getPlatformIcon } from '@/utils/rom.ts'
 import { SidebarLink } from './sidebar-link.tsx'
 
-const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
+const defaultPlatformNames = ['gba', 'gbc', 'gb', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
 
 const links = [
   {

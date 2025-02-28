@@ -1,4 +1,5 @@
 import AppLayout from '@/components/app/app-layout.tsx'
+import { GameBackground } from '@/components/app/rom/game-background.tsx'
 import { GameCover } from '@/components/app/rom/game-cover.tsx'
 import { GameInfo } from '@/components/app/rom/game-info.tsx'
 import { GameMedias } from '@/components/app/rom/game-medias.tsx'
@@ -17,8 +18,8 @@ export default async function Rom({ id }) {
   const { launchboxGame } = rom
 
   return (
-    <AppLayout sidebar={<SidebarLinks platform={rom.platform} />}>
-      <div className='flex gap-4'>
+    <AppLayout append={<GameBackground rom={rom} />} sidebar={<SidebarLinks platform={rom.platform} />}>
+      <div className='z-1 relative flex gap-4'>
         <title>{`${title} - RetroAssembly`}</title>
 
         <div>
@@ -26,7 +27,7 @@ export default async function Rom({ id }) {
         </div>
 
         <div className='flex flex-1 flex-col gap-8'>
-          <h1 className='px-8 pt-4 text-5xl font-bold'>{title}</h1>
+          <h1 className='px-8 pt-4 text-3xl font-bold'>{title}</h1>
 
           <GameInfo gameInfo={launchboxGame} rom={rom} />
 

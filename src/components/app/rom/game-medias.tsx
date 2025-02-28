@@ -20,7 +20,7 @@ export async function GameMedias({ rom, video }) {
   }
 
   return (
-    <div className='flex w-full gap-4 overflow-auto rounded bg-zinc-200 p-4'>
+    <div className='flex w-full gap-4 overflow-auto rounded bg-zinc-600/10 p-4'>
       {video ? <YouTubeEmbed className='h-48' url={video} /> : null}
       {hasTitle ? <img alt={title} className='h-48 w-auto' src={title} /> : null}
       {hasSnap ? <img alt={snap} className='h-48 w-auto' src={snap} /> : null}

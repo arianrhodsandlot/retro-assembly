@@ -3,12 +3,13 @@ import { getC } from '@/utils/misc.ts'
 import { SidebarLinks } from './sidebar-links.tsx'
 
 interface AppLayoutProps {
+  append?: ReactNode
   children: ReactNode
   sidebar?: ReactNode
 }
 
 const defaultSidebar = <SidebarLinks />
-export default function AppLayout({ children, sidebar = defaultSidebar }: AppLayoutProps) {
+export default function AppLayout({ append, children, sidebar = defaultSidebar }: AppLayoutProps) {
   const c = getC()
 
   return (
@@ -23,13 +24,12 @@ export default function AppLayout({ children, sidebar = defaultSidebar }: AppLay
       </aside>
 
       <div className='flex h-full flex-1'>
-        <main
-          className='my-4 mr-4 flex-1 overflow-auto rounded-lg'
-          key={c.req.path}
-          style={{ boxShadow: '0 0 16px rgba(0,0,0,.5)' }}
-        >
-          <div className='min-h-full bg-zinc-50 p-4'>{children}</div>
-        </main>
+        <div className='relative m-4 flex flex-1 overflow-hidden rounded shadow-[0_0_12px] shadow-black/10'>
+          <main className='flex-1 overflow-auto' key={c.req.path}>
+            <div className='min-h-full bg-zinc-50 p-4'>{children}</div>
+          </main>
+          {append}
+        </div>
       </div>
     </div>
   )

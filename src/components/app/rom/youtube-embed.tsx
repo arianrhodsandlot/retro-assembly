@@ -52,8 +52,9 @@ export function YouTubeEmbed({ className, url }: YouTubeEmbedProps) {
     <iframe
       allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
       allowFullScreen
-      className={twMerge('aspect-video border-none', className)}
+      className={twMerge('aspect-video border-none bg-black', className)}
       referrerPolicy='strict-origin-when-cross-origin'
+      sandbox='allow-same-origin allow-scripts allow-forms' // eslint-disable-line @eslint-react/dom/no-unsafe-iframe-sandbox
       src={src}
       title='YouTube video player'
     />

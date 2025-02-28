@@ -1,4 +1,5 @@
 import { platformMap } from '@/constants/platform.ts'
+import { getPlatformIcon } from '@/utils/rom.ts'
 import { SidebarLink } from './sidebar-link.tsx'
 
 const defaultPlatformNames = ['gba', 'nes', 'snes', 'megadrive', 'atari2600', 'arcade']
@@ -9,52 +10,34 @@ const links = [
     icon: <span className='icon-[mdi--bookshelf] size-5' />,
     text: 'All',
   },
-  {
-    href: { pathname: '/app', query: { sort: 'added' } },
-    icon: <span className='icon-[mdi--recent] size-5' />,
-    text: 'Recently added',
-  },
-  {
-    href: { pathname: '/app', query: { sort: 'played' } },
-    icon: <span className='icon-[mdi--controller-square] size-5' />,
-    text: 'Recently played',
-  },
 ]
-
-const platformIconMap: Record<string, string> = {
-  arcade: 'https://cdn.jsdelivr.net/gh/KyleBing/retro-game-console-icons@main/132w%401x/arcade%40132w.png',
-  atari2600: 'https://cdn.jsdelivr.net/gh/KyleBing/retro-game-console-icons@main/132w%401x/atari%40132w.png',
-  gba: 'https://cdn.jsdelivr.net/gh/KyleBing/retro-game-console-icons@main/132w%401x/gba%40132w.png',
-  megadrive: 'https://cdn.jsdelivr.net/gh/KyleBing/retro-game-console-icons@main/132w%401x/md%40132w.png',
-  nes: 'https://cdn.jsdelivr.net/gh/KyleBing/retro-game-console-icons@main/132w%401x/fc%40132w.png',
-  snes: 'https://cdn.jsdelivr.net/gh/KyleBing/retro-game-console-icons@main/132w%401x/sfc%40132w.png',
-}
 
 const platformLinks = defaultPlatformNames.map((platform) => ({
   href: `/app/platform/${encodeURIComponent(platform)}`,
-  icon: platformIconMap[platform],
+  icon: getPlatformIcon(platform, ''),
+  name: platform,
   text: platformMap[platform].displayName,
 }))
 
-export function SidebarLinks() {
+export function SidebarLinks({ platform }: { platform?: string }) {
   return (
     <>
       <div className='flex flex-col'>
         {links.map(({ href, icon, text }) => (
-          <SidebarLink href={href} key={text}>
-            <div className='flex size-6 items-center justify-center'>{icon}</div>
+          <SidebarLink active={!platform} href={href} key={text}>
+            <div className='flex size-5 items-center justify-center'>{icon}</div>
             {text}
           </SidebarLink>
         ))}
       </div>
 
-      <div className='mt-10'>
+      <div className='mt-4'>
         <h3 className='px-4 text-white/60'>Platforms</h3>
 
-        <div className='flex flex-col'>
-          {platformLinks.map(({ href, icon, text }) => (
-            <SidebarLink href={href} key={text}>
-              {icon ? <img alt='icon' className='relative top-0.5' height='24' src={icon} width='24' /> : null}
+        <div className='mt-2 flex flex-col gap-y-1'>
+          {platformLinks.map(({ href, icon, name, text }) => (
+            <SidebarLink active={platform === name} href={href} key={text}>
+              {icon ? <img alt='icon' height='20' src={icon} width='20' /> : null}
               {text}
             </SidebarLink>
           ))}

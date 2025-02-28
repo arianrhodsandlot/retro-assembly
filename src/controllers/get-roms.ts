@@ -17,7 +17,7 @@ export async function getRoms({ id, platform }: { id?: string; platform?: string
     conditions.push(eq(rom.platform, platform))
   }
   const where = and(...conditions)
-  const romResults = await library.select().from(rom).where(where)
+  const romResults = await library.select().from(rom).orderBy(rom.file_name).where(where)
 
   const launchboxGameIds = compact(romResults.map((romResult) => romResult.launchbox_game_id))
   const launchboxResults = await metadata

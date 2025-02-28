@@ -6,10 +6,5 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <>
-      <title>RetroAssembly</title>
-      <body className='antialiased'>{children}</body>
-    </>
-  )
+  return <body className='antialiased'>{children}</body>
 }

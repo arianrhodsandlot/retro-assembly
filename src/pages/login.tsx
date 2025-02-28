@@ -1,6 +1,6 @@
 import { getContextData } from 'waku/middleware/context'
-import { LoginForm } from '../components/login/login-form.tsx'
-import { getC } from '../utils/misc.ts'
+import { LoginForm } from '@/components/login/login-form.tsx'
+import { getC } from '@/utils/misc.ts'
 
 export default async function Login({ query }) {
   const searchParams = new URLSearchParams(query)

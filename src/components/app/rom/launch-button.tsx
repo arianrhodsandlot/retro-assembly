@@ -14,8 +14,7 @@ export function LaunchButton({ rom }) {
     return await Nostalgist.prepare({
       core: platformCoreMap[rom.platform],
       rom: romUrl,
-      shader: 'crt/crt-easymode',
-      style: { bottom: '0', height: '480px', left: 'auto', position: 'fixed', right: '0', top: 'auto', width: '480px' },
+      // shader: 'crt/crt-nes-mini',
     })
   }
 

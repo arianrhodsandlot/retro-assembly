@@ -10,7 +10,7 @@ export async function DeviceInfo({ platform }: { platform: string }) {
   return (
     <div className='flex'>
       <div className='flex flex-col gap-8 px-4'>
-        <h1 className='px-8 pt-4 text-5xl font-bold'>{platformInfo.name}</h1>
+        <h1 className='px-8 pt-4 text-3xl font-extrabold'>{platformInfo.name}</h1>
         <div className='rounded bg-zinc-200 px-8 py-4'>
           <div className='flex gap-8 *:min-w-36'>
             <div>
@@ -38,7 +38,7 @@ export async function DeviceInfo({ platform }: { platform: string }) {
             </div>
           </div>
         </div>
-        <div className='prose-neutral prose max-w-none whitespace-pre-line px-8 text-justify font-[Roboto_Slab_Variable]'>
+        <div className='prose-neutral prose line-clamp-4 max-w-none whitespace-pre-line px-8 text-justify text-sm font-[Roboto_Slab_Variable] leading-relaxed'>
           {platformInfo.notes}
         </div>
       </div>

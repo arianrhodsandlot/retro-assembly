@@ -4,7 +4,10 @@
     "composite": true,
     "noImplicitAny": false,
     "allowImportingTsExtensions": true,
-    "types": ["../.wrangler/types/runtime.d.ts"]
+    "types": ["../../.wrangler/types/runtime.d.ts"],
+    "paths": {
+      "@/*": ["../*"]
+    }
   },
-  "exclude": ["./components", "./pages"]
+  "include": [".."]
 }

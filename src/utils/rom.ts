@@ -27,8 +27,8 @@ export function getRomLibretroThumbnail(rom, type: LibretroThumbnailType = 'boxa
   return getCDNUrl(repo, filePath)
 }
 
-export function getRomPlatformThumbnail(rom, type = 'content', directory = 'xmb/flatui/png') {
-  const platformFullName = platformMap[rom.platform].libretroName
+export function getPlatformIcon(platform: string, type = 'content', directory = 'xmb/flatui/png') {
+  const platformFullName = platformMap[platform].libretroName
   if (!platformFullName) {
     return ''
   }
@@ -39,7 +39,7 @@ export function getRomPlatformThumbnail(rom, type = 'content', directory = 'xmb/
 }
 
 export function getRomTitle(rom) {
-  return rom.launchboxGame?.name || rom.file_name
+  return rom.launchboxGame?.name || rom.libretroGame?.name || path.parse(rom.file_name).name
 }
 
 export function getCompactName(name: string) {

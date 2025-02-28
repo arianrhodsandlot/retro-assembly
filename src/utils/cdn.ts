@@ -1,5 +1,6 @@
 const repositoryVersions: Record<string, string> = {
-  'libretro-thumbnails/Atari_-_2600': 'a6a54d',
+  'KyleBing/retro-game-console-icons': 'b0f42b0',
+  'libretro-thumbnails/Atari_-_2600': 'a6a54d3',
   'libretro-thumbnails/FBNeo_-_Arcade_Games': '5209042',
   'libretro-thumbnails/Nintendo_-_Game_Boy': '9db9910',
   'libretro-thumbnails/Nintendo_-_Game_Boy_Advance': '8eb37c7',

@@ -1,5 +1,7 @@
 import { and, eq } from 'drizzle-orm'
+import { isString } from 'es-toolkit'
 import { Hono } from 'hono'
+import { platformMap } from '../constants/platform.ts'
 import { createRom } from '../controllers/create-rom.ts'
 import { guessGameInfo } from '../controllers/guess-game-info.ts'
 import { rom } from '../databases/library/schema.ts'
@@ -10,26 +12,41 @@ const api = new Hono()
 
 api.use(auth())
 
-api.post('v1/rom/new', async (c) => {
-  const storage = c.get('storage')
+function isBlobs(value: unknown): value is File[] {
+  return Array.isArray(value) && value.every((item) => item instanceof File)
+}
 
-  const { file, platform } = await c.req.parseBody()
-  if (typeof file === 'string' || typeof platform !== 'string') {
-    return c.json({})
+api.post('v1/rom/new', async (c) => {
+  // validations
+  const body = await c.req.parseBody({ all: true })
+  const { platform } = body
+  if (!isString(platform) || !(platform in platformMap)) {
+    return c.json({ message: 'invalid platform' })
+  }
+  const files = Array.isArray(body.files) ? body.files : [body.files]
+  if (!isBlobs(files)) {
+    return c.json({ message: 'invalid files' })
   }
 
-  const { launchbox, libretro } = await guessGameInfo(file.name, platform)
-  const fileId = nanoid()
-  await storage.put(fileId, file)
-  const rom = await createRom({
-    fileId,
-    fileName: file.name,
-    launchboxGameId: launchbox?.database_id,
-    libretroGameId: libretro?.id,
-    platform,
-  })
+  const storage = c.get('storage')
 
-  return c.json(rom)
+  const roms = await Promise.all(
+    files.map(async (file) => {
+      const { launchbox, libretro } = await guessGameInfo(file.name, platform)
+      const fileId = nanoid()
+      await storage.put(fileId, file)
+      const rom = await createRom({
+        fileId,
+        fileName: file.name,
+        launchboxGameId: launchbox?.database_id,
+        libretroGameId: libretro?.id,
+        platform,
+      })
+      return rom
+    }),
+  )
+
+  return c.json(roms)
 })
 
 api.get('v1/rom/:id/content', async (c) => {

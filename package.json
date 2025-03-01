@@ -56,7 +56,7 @@
     "@arianrhodsandlot/eslint-config": "0.18.4",
     "@eslint/config-inspector": "1.0.1",
     "@iconify/json": "2.2.311",
-    "@iconify/tailwind4": "1.0.4",
+    "@iconify/tailwind4": "1.0.6",
     "@tailwindcss/postcss": "4.0.9",
     "@tailwindcss/vite": "4.0.9",
     "@tsconfig/vite-react": "3.4.0",
@@ -77,7 +77,7 @@
     "sax": "1.4.1",
     "simple-git-hooks": "2.11.1",
     "tailwindcss": "4.0.9",
-    "typescript": "5.7.3",
+    "typescript": "5.8.2",
     "vite-tsconfig-paths": "5.1.4",
     "wrangler": "3.111.0",
     "zx": "8.3.2"
@@ -85,9 +85,11 @@
   "packageManager": "pnpm@10.5.2",
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@prisma/client",
       "@swc/core",
       "better-sqlite3",
       "esbuild",
+      "prisma",
       "sharp",
       "supabase",
       "workerd"

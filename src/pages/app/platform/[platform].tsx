@@ -1,6 +1,7 @@
 import AppLayout from '@/components/app/app-layout.tsx'
 import { DeviceInfo } from '@/components/app/device-info.tsx'
 import { GameList } from '@/components/app/game-list.tsx'
+import { PlatformBackground } from '@/components/app/platform/platform-background.tsx'
 import { UploadButton } from '@/components/app/platform/upload-button.tsx'
 import { SidebarLinks } from '@/components/app/sidebar-links.tsx'
 import { platformMap } from '@/constants/platform.ts'
@@ -14,7 +15,7 @@ export default async function App({ platform }) {
   const roms = await getRoms({ platform })
 
   return (
-    <AppLayout sidebar={<SidebarLinks platform={platform} />}>
+    <AppLayout append={<PlatformBackground platform={platform} />} sidebar={<SidebarLinks platform={platform} />}>
       <title>{`${platformMap[platform].displayName} - RetroAssembly`}</title>
 
       <div className='flex flex-col gap-8'>

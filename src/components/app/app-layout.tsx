@@ -24,9 +24,9 @@ export default function AppLayout({ append, children, sidebar = defaultSidebar }
       </aside>
 
       <div className='flex h-full flex-1'>
-        <div className='relative m-4 flex flex-1 overflow-hidden rounded shadow-[0_0_12px] shadow-black/10'>
-          <main className='flex-1 overflow-auto' key={c.req.path}>
-            <div className='min-h-full bg-zinc-50 p-4'>{children}</div>
+        <div className='relative m-4 flex flex-1 overflow-hidden rounded bg-zinc-50 shadow-[0_0_12px] shadow-black/10'>
+          <main className='z-1 relative flex-1 overflow-auto' key={c.req.path}>
+            <div className='min-h-full p-4'>{children}</div>
           </main>
           {append}
         </div>

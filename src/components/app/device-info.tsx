@@ -9,8 +9,8 @@ export async function DeviceInfo({ platform }: { platform: string }) {
 
   const logo =
     platform === 'arcade'
-      ? getCDNUrl('RetroPie/es-theme-carbon', `/${platform}/art/system.svg`)
-      : getCDNUrl('batocera-linux/batocera-themes', `/themes/batocera/${platform}/_data/svg/logo.svg`)
+      ? getCDNUrl('RetroPie/es-theme-carbon', `${platform}/art/system.svg`)
+      : getCDNUrl('batocera-linux/batocera-themes', `themes/batocera/${platform}/_data/svg/logo.svg`)
 
   return (
     <div className='flex'>

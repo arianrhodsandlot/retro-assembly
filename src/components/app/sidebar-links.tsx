@@ -8,7 +8,7 @@ const links = [
   {
     href: '/app',
     icon: <span className='icon-[mdi--bookshelf] size-5' />,
-    text: 'All',
+    text: 'Library',
   },
 ]
 

@@ -11,9 +11,15 @@ importers:
       '@fontsource-variable/inter':
         specifier: 5.1.1
         version: 5.1.1
+      '@fontsource-variable/oswald':
+        specifier: 5.2.5
+        version: 5.2.5
       '@fontsource-variable/roboto-slab':
         specifier: 5.1.1
         version: 5.1.1
+      '@fontsource/dseg7-modern':
+        specifier: 5.2.5
+        version: 5.2.5
       '@react-hookz/web':
         specifier: 25.0.1
         version: 25.0.1(js-cookie@3.0.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2044,11 +2050,17 @@ packages:
   '@fontsource-variable/inter@5.1.1':
     resolution: {integrity: sha512-OpXFTmiH6tHkYijMvQTycFKBLK4X+SRV6tet1m4YOUH7SzIIlMqDja+ocDtiCA72UthBH/vF+3ZtlMr2rN/wIw==}
 
+  '@fontsource-variable/oswald@5.2.5':
+    resolution: {integrity: sha512-ONcE+mSnElfIzA6siZwdWsMMWpEQamhtYvPVuBrP7PEs55OeGL1djDKWIuVksPDZeowHo+6c1vo8ZWTrL1dsVw==}
+
   '@fontsource-variable/outfit@5.1.1':
     resolution: {integrity: sha512-XuzmITw6zWt3nUINJVAk99f0TgXJ9ZCt3qERAr0t89Em6RbqQ4x6skmxsIgjzkLHVzmoqf3AzCbxvpk/kNnu5A==}
 
   '@fontsource-variable/roboto-slab@5.1.1':
     resolution: {integrity: sha512-+Uhj6ZG56JQdwp3LzQqIwEKCHzfuJFyl/JmuyOAtTahpjVh2dYP1m+v0aCURN+k0cfLKoIJ0ToMmWyUylrUQ0g==}
+
+  '@fontsource/dseg7-modern@5.2.5':
+    resolution: {integrity: sha512-SUFfN3/MwTEhrNajSN0RE9amJTTUIrw3x0pfsrOJ4z6/O8oekKmPKa2WwR9ABRD5w1ZUmEYqS/Xzw2gNkPnyRw==}
 
   '@fontsource/noto-mono@5.1.0':
     resolution: {integrity: sha512-oobAnMOVSTOLZB0v3yy48ucink9HKsY9Ll1kChX8uNWeCodf21PcAc/VEB2mBsX7+5HWFqVV7+ec+mPbomDwBw==}
@@ -9733,9 +9745,13 @@ snapshots:
 
   '@fontsource-variable/inter@5.1.1': {}
 
+  '@fontsource-variable/oswald@5.2.5': {}
+
   '@fontsource-variable/outfit@5.1.1': {}
 
   '@fontsource-variable/roboto-slab@5.1.1': {}
+
+  '@fontsource/dseg7-modern@5.2.5': {}
 
   '@fontsource/noto-mono@5.1.0': {}
 

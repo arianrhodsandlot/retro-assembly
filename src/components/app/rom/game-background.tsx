@@ -9,5 +9,5 @@ export function GameBackground({ rom }) {
     return
   }
 
-  return cover ? <MainBackground alt={rom.name} src={cover.src} /> : null
+  return cover?.type === 'rom' ? <MainBackground alt={rom.name} src={cover.src} /> : null
 }

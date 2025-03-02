@@ -56,16 +56,6 @@ export function GameInfo({ gameInfo, rom }) {
           <div className='pl-6'>{gameInfo?.max_players || <span className='opacity-40'>Unknown</span>}</div>
         </div>
       </div>
-
-      <div className='mt-4'>
-        <div className='flex items-center gap-2 font-semibold'>
-          <span className='icon-[mdi--star-rate]' />
-          Rating
-        </div>
-        <div className='pl-6'>
-          {gameInfo?.community_rating ? gameInfo.community_rating.toFixed(1) : <span className='opacity-40'>N/A</span>}
-        </div>
-      </div>
     </div>
   )
 }

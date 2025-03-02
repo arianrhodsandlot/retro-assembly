@@ -3,7 +3,7 @@
 @plugin "@tailwindcss/typography";
 
 body {
-  --theme: #be123c;
+  --theme: var(--color-rose-700);
   font-family: 'Inter Variable', sans-serif;
 }
 

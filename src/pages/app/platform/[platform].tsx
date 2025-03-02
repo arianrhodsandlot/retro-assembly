@@ -18,8 +18,9 @@ export default async function App({ platform }) {
     <AppLayout append={<PlatformBackground platform={platform} />} sidebar={<SidebarLinks platform={platform} />}>
       <title>{`${platformMap[platform].displayName} - RetroAssembly`}</title>
 
-      <div className='flex flex-col gap-8'>
+      <div className='flex flex-col gap-5'>
         <DeviceInfo platform={platform} />
+        <hr className='border-t-1 border-t-black/20' />
         <GameList roms={roms} />
         <UploadButton platform={platform} />
       </div>

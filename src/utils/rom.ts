@@ -38,6 +38,15 @@ export function getPlatformIcon(platform: string, type = 'content', directory = 
   return getCDNUrl(repo, filePath)
 }
 
+export function getPlatformGameIcon(platform: string, type = 'game') {
+  const platformFullName = platformMap[platform].libretroName
+  if (!platformFullName) {
+    return ''
+  }
+  const repo = 'batocera-linux/batocera-themes'
+  return getCDNUrl(repo, `themes/batocera/${platform}/_data/svg/${type}.svg`)
+}
+
 export function getRomTitle(rom) {
   return rom.launchboxGame?.name || rom.libretroGame?.name || path.parse(rom.file_name).name
 }

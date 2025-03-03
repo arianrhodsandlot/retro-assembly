@@ -2,6 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import { rom, state } from '../databases/library/schema.ts'
 import { nanoid } from '../utils/misc.ts'
 import { app } from './app.ts'
+import { getFileResponse } from './utils/storage.ts'
 
 app.get('states', async (c) => {
   const romId = c.req.query('rom_id')
@@ -69,4 +70,9 @@ app.post('state/new', async (c) => {
     })
     .returning()
   return c.json(result)
+})
+
+app.get('file/:id/content', (c) => {
+  const id = c.req.param('id')
+  return getFileResponse(id)
 })

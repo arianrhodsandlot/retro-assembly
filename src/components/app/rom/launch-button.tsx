@@ -5,24 +5,29 @@ import { Nostalgist } from 'nostalgist'
 import { useEffect } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { platformCoreMap } from '@/constants/platform.ts'
+import { GameOverlay } from './game-overlay.tsx'
 
 const directionKeys = new Set(['ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'])
 export function LaunchButton({ rom }) {
   const romUrl = `/api/v1/rom/${rom.id}/content`
 
   const { data: nostalgist, isMutating, trigger } = useSWRMutation(romUrl, prepareEmulator)
-  const [started, toggleStarted] = useToggle()
+
+  const [launched, togglelaunched] = useToggle()
+  const [paused, togglePaused] = useToggle()
+
+  const showOverlay = nostalgist && paused
 
   function exit() {
-    toggleStarted(false)
+    togglelaunched(false)
     nostalgist?.exit()
     trigger()
   }
 
   useKeyboardEvent(true, (event) => {
-    if (started) {
+    if (launched) {
       if (event.key === 'Escape') {
-        exit()
+        togglePaused()
       }
     } else {
       const isSpecialKey = event.ctrlKey || event.metaKey || event.altKey || event.shiftKey
@@ -47,28 +52,31 @@ export function LaunchButton({ rom }) {
 
   async function start() {
     await nostalgist?.start()
-    toggleStarted(true)
+    togglelaunched(true)
   }
 
   useEffect(() => {
     return () => {
-      toggleStarted(false)
+      togglelaunched(false)
       nostalgist?.exit()
     }
-  }, [nostalgist, toggleStarted])
+  }, [nostalgist, togglelaunched])
 
   return (
-    <button
-      className={clsx(
-        'inline-flex h-16 w-72 items-center justify-center gap-1.5 rounded bg-rose-700 text-xl  font-bold text-white',
-        { 'opacity-50': isMutating },
-      )}
-      disabled={isMutating}
-      onClick={start}
-      type='button'
-    >
-      <span className={isMutating ? 'icon-[mdi--loading] animate-spin' : 'icon-[mdi--play]'} />
-      {isMutating ? 'Loading...' : 'Press any key to start'}
-    </button>
+    <>
+      <button
+        className={clsx(
+          'inline-flex h-16 w-72 items-center justify-center gap-1.5 rounded bg-rose-700 text-xl  font-bold text-white',
+          { 'opacity-50': isMutating },
+        )}
+        disabled={isMutating}
+        onClick={start}
+        type='button'
+      >
+        <span className={isMutating ? 'icon-[mdi--loading] animate-spin' : 'icon-[mdi--play]'} />
+        {isMutating ? 'Loading...' : 'Press any key to start'}
+      </button>
+      {showOverlay ? <GameOverlay nostalgist={nostalgist} rom={rom} /> : null}
+    </>
   )
 }

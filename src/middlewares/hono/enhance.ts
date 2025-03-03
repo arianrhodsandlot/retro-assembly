@@ -2,7 +2,7 @@ import type { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { requestId } from 'hono/request-id'
 import type { Config } from 'waku/config'
-import { api } from '../../apis/api.ts'
+import { app as api } from '../../api/index.ts'
 import { cloudflareDevServer } from './cloudflare-dev-server.ts'
 import globals from './globals.ts'
 

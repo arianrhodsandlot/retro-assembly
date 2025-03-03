@@ -1,22 +1,17 @@
 import { and, eq } from 'drizzle-orm'
 import { isString } from 'es-toolkit'
-import { Hono } from 'hono'
 import { platformMap } from '../constants/platform.ts'
 import { createRom } from '../controllers/create-rom.ts'
 import { guessGameInfo } from '../controllers/guess-game-info.ts'
 import { rom } from '../databases/library/schema.ts'
-import auth from '../middlewares/hono/auth.ts'
 import { nanoid } from '../utils/misc.ts'
-
-const api = new Hono()
-
-api.use(auth())
+import { app } from './app.ts'
 
 function isBlobs(value: unknown): value is File[] {
   return Array.isArray(value) && value.every((item) => item instanceof File)
 }
 
-api.post('v1/rom/new', async (c) => {
+app.post('rom/new', async (c) => {
   // validations
   const body = await c.req.parseBody({ all: true })
   const { platform } = body
@@ -49,7 +44,7 @@ api.post('v1/rom/new', async (c) => {
   return c.json(roms)
 })
 
-api.get('v1/rom/:id/content', async (c) => {
+app.get('rom/:id/content', async (c) => {
   const db = c.get('db')
   const storage = c.get('storage')
   const currentUser = c.get('currentUser')
@@ -84,5 +79,3 @@ api.get('v1/rom/:id/content', async (c) => {
   }
   return new Response(object.body, { headers, status })
 })
-
-export { api }

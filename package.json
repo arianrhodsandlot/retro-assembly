@@ -4,6 +4,7 @@
   "scripts": {
     "build": "waku build --with-cloudflare",
     "dev": "node src/scripts/dev/dev.ts",
+    "dev:migrate": "node src/scripts/dev/migrate.ts",
     "dev:setup-d1": "node src/scripts/dev/setup-d1.ts",
     "dev:test": "playwright test -c tests/e2e --headed --ui",
     "lint": "eslint src",

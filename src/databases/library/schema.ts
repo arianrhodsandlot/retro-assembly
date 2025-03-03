@@ -36,9 +36,11 @@ export const rom = sqliteTable(
 export const state = sqliteTable(
   'states',
   {
+    core: text().notNull(),
     platform: text().notNull(),
     rom_id: text().notNull(),
     thumbnail_file_id: text().notNull(),
+    type: text({ enum: ['auto', 'manual'] }).notNull(),
     ...fileSchema,
   },
   (table) => [index('idx_states').on(table.id, table.platform, table.user_id)],
@@ -47,6 +49,7 @@ export const state = sqliteTable(
 export const launchRecord = sqliteTable(
   'launch_records',
   {
+    core: text().notNull(),
     platform: text().notNull(),
     rom_id: text().notNull(),
     user_id: text().notNull(),

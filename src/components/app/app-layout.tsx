@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { getC } from '@/utils/misc.ts'
+import { ScrollContainer } from './scroll-container.tsx'
 import { SidebarLinks } from './sidebar-links.tsx'
 
 interface AppLayoutProps {
@@ -14,20 +15,19 @@ export default function AppLayout({ append, children, sidebar = defaultSidebar }
 
   return (
     <div className='flex h-screen bg-[var(--theme)]'>
-      <aside className='flex h-full w-64 flex-col overflow-auto py-4 text-white'>
-        <div className='flex items-center justify-center gap-2 pb-4 pt-2 font-bold'>
+      <aside className='flex flex-col'>
+        <div className='flex items-center justify-center gap-2 pb-4 pt-2 font-bold text-white'>
           <img alt='logo' height='32' src='/assets/logo/logo-192x192.png' width='32' />
           RetroAssembly
         </div>
-
-        {sidebar}
+        <ScrollContainer className='flex-1'>{sidebar}</ScrollContainer>
       </aside>
 
       <div className='flex h-full flex-1'>
         <div className='relative my-4 mr-4 flex flex-1 overflow-hidden rounded bg-zinc-50 shadow-[0_0_12px] shadow-black/10'>
-          <main className='z-1 relative flex-1 overflow-auto' key={c.req.path}>
-            <div className='min-h-full p-4'>{children}</div>
-          </main>
+          <ScrollContainer className='z-1 relative flex-1' key={c.req.path}>
+            <main className='min-h-full p-4'>{children}</main>
+          </ScrollContainer>
           {append}
         </div>
       </div>

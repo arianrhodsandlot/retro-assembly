@@ -6,5 +6,5 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  return <body className='antialiased'>{children}</body>
+  return <body>{children}</body>
 }

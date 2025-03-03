@@ -9,11 +9,7 @@ export function GameEntry({ rom, width }) {
   const { data: cover, isLoading } = useRomCover(rom)
 
   return (
-    <Link
-      className='block transition-transform hover:scale-[102%]'
-      style={{ width: width || 'auto' }}
-      to={`/app/rom/${rom.id}`}
-    >
+    <Link className='block transition-transform' style={{ width: width || 'auto' }} to={`/app/rom/${rom.id}`}>
       <div className='flex aspect-square size-full items-center justify-center'>
         {isLoading ? <div className='size-4/5 rounded bg-zinc-200' /> : null}
 

@@ -4,7 +4,10 @@
 
 body {
   --theme: var(--color-rose-700);
-  font-family: 'Inter Variable', sans-serif;
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Inter Variable', -apple-system, system-ui, BlinkMacSystemFont, sans-serif;
 }
 
 button {

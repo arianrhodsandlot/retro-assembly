@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import path from 'node:path'
 import { type BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3'
 import { chunk } from 'es-toolkit'
@@ -47,6 +48,7 @@ async function extractLibretroDb(rdbPath: string, db: BetterSQLite3Database) {
         .map((record) => ({
           ...record,
           compact_name: getCompactName(`${record.name}`),
+          id: crypto.hash('sha1', JSON.stringify(record)),
           platform,
         })),
     )

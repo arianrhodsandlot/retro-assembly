@@ -89,7 +89,7 @@ export const libretroGame = sqliteTable(
     esrb_rating: text(),
     franchise: text(),
     genre: text(),
-    id: text().primaryKey().notNull().$defaultFn(nanoid),
+    id: text().primaryKey().notNull(),
     md5: text(),
     name: text(),
     origin: text(),

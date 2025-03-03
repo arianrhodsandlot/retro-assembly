@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@fontsource-variable/inter':
-        specifier: 5.1.1
-        version: 5.1.1
+        specifier: 5.2.5
+        version: 5.2.5
       '@fontsource-variable/oswald':
         specifier: 5.2.5
         version: 5.2.5
       '@fontsource-variable/roboto-slab':
-        specifier: 5.1.1
-        version: 5.1.1
+        specifier: 5.2.5
+        version: 5.2.5
       '@fontsource/dseg7-modern':
         specifier: 5.2.5
         version: 5.2.5
@@ -100,8 +100,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1(eslint@9.21.0(jiti@2.4.2))
       '@iconify/json':
-        specifier: 2.2.311
-        version: 2.2.311
+        specifier: 2.2.312
+        version: 2.2.312
       '@iconify/tailwind4':
         specifier: 1.0.6
         version: 1.0.6(tailwindcss@4.0.9)
@@ -2050,6 +2050,9 @@ packages:
   '@fontsource-variable/inter@5.1.1':
     resolution: {integrity: sha512-OpXFTmiH6tHkYijMvQTycFKBLK4X+SRV6tet1m4YOUH7SzIIlMqDja+ocDtiCA72UthBH/vF+3ZtlMr2rN/wIw==}
 
+  '@fontsource-variable/inter@5.2.5':
+    resolution: {integrity: sha512-TrWffUAFOnT8zroE9YmGybagoOgM/HjRqMQ8k9R0vVgXlnUh/vnpbGPAS/Caz1KIlOPnPGh6fvJbb7DHbFCncA==}
+
   '@fontsource-variable/oswald@5.2.5':
     resolution: {integrity: sha512-ONcE+mSnElfIzA6siZwdWsMMWpEQamhtYvPVuBrP7PEs55OeGL1djDKWIuVksPDZeowHo+6c1vo8ZWTrL1dsVw==}
 
@@ -2058,6 +2061,9 @@ packages:
 
   '@fontsource-variable/roboto-slab@5.1.1':
     resolution: {integrity: sha512-+Uhj6ZG56JQdwp3LzQqIwEKCHzfuJFyl/JmuyOAtTahpjVh2dYP1m+v0aCURN+k0cfLKoIJ0ToMmWyUylrUQ0g==}
+
+  '@fontsource-variable/roboto-slab@5.2.5':
+    resolution: {integrity: sha512-q8dTQbL6/OMoMpWv2HCPfVZCkl6qWWS0z78k7HaJgNfL3ywwCg6np8Le50Nad2eWQO20t6zWkRZ/KJuJ2FaDAA==}
 
   '@fontsource/dseg7-modern@5.2.5':
     resolution: {integrity: sha512-SUFfN3/MwTEhrNajSN0RE9amJTTUIrw3x0pfsrOJ4z6/O8oekKmPKa2WwR9ABRD5w1ZUmEYqS/Xzw2gNkPnyRw==}
@@ -2107,8 +2113,8 @@ packages:
   '@iconify/json@2.2.310':
     resolution: {integrity: sha512-CPmueT0VYi5uqQpro1HabpgLr9lcft4h1qJZu9591shJS6nKLx1TO22IMdK+NhVn1npXV3sEeqAb2t/EXSLvcg==}
 
-  '@iconify/json@2.2.311':
-    resolution: {integrity: sha512-Qt9Q9MuyEfKpd+3027fzbCMhEkhNpUTc9mnUQImbVYr5BiyFxgAxwGcTl+oD6WEblzdnGU3KIXqH/Laekud35w==}
+  '@iconify/json@2.2.312':
+    resolution: {integrity: sha512-sujKsprCACPMVZHeNaxvc7HyONW916tUVw4zfEK+GmT7PkH73PdplmW1w2UWC07IC6oUYPZ2EE0pfdWHhWHjpQ==}
 
   '@iconify/tailwind4@1.0.3':
     resolution: {integrity: sha512-qhgEBFwbhoWWGo3X27KInvNQOjt7UwmZTuLpjYQlYMTkcXzwPnomqmxzsBUC2L0ySA105BFDppYBv4CuWBQKwA==}
@@ -4395,8 +4401,8 @@ packages:
     resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
     engines: {node: '>=12'}
 
-  ansis@3.16.0:
-    resolution: {integrity: sha512-sU7d/tfZiYrsIAXbdL/CNZld5bCkruzwT5KmqmadCJYxuLxHAOBjidxD5+iLmN/6xEfjcQq1l7OpsiCBlc4LzA==}
+  ansis@3.17.0:
+    resolution: {integrity: sha512-0qWUglt9JEqLFr3w1I1pbrChn1grhaiAR2ocX1PP/flRmxgtwTzPFFFnfIlD6aMOLQZgSuCRlidD70lvx8yhzg==}
     engines: {node: '>=14'}
 
   any-promise@1.3.0:
@@ -4741,6 +4747,9 @@ packages:
 
   core-js-compat@3.40.0:
     resolution: {integrity: sha512-0XEDpr5y5mijvw8Lbc6E5AkjrHfp7eEoPlu36SWeAbcL8fn1G1ANe8DBlo2XoNN89oVpxWwOjYIPVzR4ZvsKCQ==}
+
+  core-js-compat@3.41.0:
+    resolution: {integrity: sha512-RFsU9LySVue9RTwdDVX/T0e2Y6jRYWXERKElIjpuEOEnxaXffI0X7RUwVzfYLfzuLXSNJDYoRYUAmRUcyln20A==}
 
   cosmiconfig@9.0.0:
     resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
@@ -5313,8 +5322,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-n@17.15.1:
-    resolution: {integrity: sha512-KFw7x02hZZkBdbZEFQduRGH4VkIH4MW97ClsbAM4Y4E6KguBJWGfWG1P4HEIpZk2bkoWf0bojpnjNAhYQP8beA==}
+  eslint-plugin-n@17.16.1:
+    resolution: {integrity: sha512-/7FVAwjUrix9P5lycnsYRIQRwFo/DZROD+ZXWLpE+/EZWLyuLvyFaRdAPYJSz+nlAdZIZp+LAzlBerQSVYUNFg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
@@ -6792,8 +6801,8 @@ packages:
     resolution: {integrity: sha512-gXah6aZrcUxjWg2zR2MwouP2eHlCBzdV4pygudehaKXSGW4v2AsRQUK+lwwXhii6KFZcunEnmSUoYp5CXibxtA==}
     engines: {node: '>= 0.4'}
 
-  ohash@1.1.4:
-    resolution: {integrity: sha512-FlDryZAahJmEF3VR3w1KogSEdWX3WhA5GPakFx4J81kEAiHyLMpdLLElS8n8dfNadMgAne/MywcvmogzscVt4g==}
+  ohash@1.1.5:
+    resolution: {integrity: sha512-AtXrG/lMFjPBWj3uhWYFwYVZQqutPYRsv6nnPLTipnC+gJuMFc+WFzf/jx+94Ebray1vxfQfEFDtpIpppOe4xQ==}
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -6857,8 +6866,8 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
-  package-manager-detector@0.2.10:
-    resolution: {integrity: sha512-1wlNZK7HW+UE3eGCcMv3hDaYokhspuIeH6enXSnCL1eEZSVDsy/dYwo/4CczhUsrKLA1SSXB+qce8Glw5DEVtw==}
+  package-manager-detector@0.2.11:
+    resolution: {integrity: sha512-BEnLolu+yuz22S56CU1SUKq3XC3PkwD5wv4ikR4MfGvnRVcmzXR9DwSlW2fEamyTPyXHomBJRzgapeuBvRNzJQ==}
 
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
@@ -7094,8 +7103,8 @@ packages:
     resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
 
-  quansync@0.2.6:
-    resolution: {integrity: sha512-u3TuxVTuJtkTxKGk5oZ7K2/o+l0/cC6J8SOyaaSnrnroqvcVy7xBxtvBUyd+Xa8cGoCr87XmQj4NR6W+zbqH8w==}
+  quansync@0.2.7:
+    resolution: {integrity: sha512-KZDFlN9/Si3CgKHZsIfLBsrjWKFjqu9KA0zDGJEQoQzPm5HWNDEFc2mkLeYUBBOwEJtxNBSMaNLE/GlvArIEfQ==}
 
   query-string@9.1.1:
     resolution: {integrity: sha512-MWkCOVIcJP9QSKU52Ngow6bsAWAPlPK2MludXvcrS2bGZSl+T1qX9MZvRIkqUIkGLJquMJHWfsT6eRqUpp4aWg==}
@@ -8386,7 +8395,7 @@ snapshots:
 
   '@antfu/install-pkg@1.0.0':
     dependencies:
-      package-manager-detector: 0.2.10
+      package-manager-detector: 0.2.11
       tinyexec: 0.3.2
 
   '@antfu/utils@8.1.1': {}
@@ -8421,7 +8430,7 @@ snapshots:
       eslint-plugin-import-x: 4.6.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2)
       eslint-plugin-jsdoc: 50.6.3(eslint@9.21.0(jiti@2.4.2))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.21.0(jiti@2.4.2))
-      eslint-plugin-n: 17.15.1(eslint@9.21.0(jiti@2.4.2))
+      eslint-plugin-n: 17.16.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2)
       eslint-plugin-perfectionist: 4.9.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2)
       eslint-plugin-prettier: 5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.0.2(eslint@9.21.0(jiti@2.4.2)))(eslint@9.21.0(jiti@2.4.2))(prettier@3.4.2)
       eslint-plugin-promise: 7.2.1(eslint@9.21.0(jiti@2.4.2))
@@ -9643,7 +9652,7 @@ snapshots:
   '@eslint/config-inspector@1.0.1(eslint@9.21.0(jiti@2.4.2))':
     dependencies:
       '@nodelib/fs.walk': 3.0.1
-      ansis: 3.16.0
+      ansis: 3.17.0
       bundle-require: 5.1.0(esbuild@0.25.0)
       cac: 6.7.14
       chokidar: 4.0.3
@@ -9745,11 +9754,15 @@ snapshots:
 
   '@fontsource-variable/inter@5.1.1': {}
 
+  '@fontsource-variable/inter@5.2.5': {}
+
   '@fontsource-variable/oswald@5.2.5': {}
 
   '@fontsource-variable/outfit@5.1.1': {}
 
   '@fontsource-variable/roboto-slab@5.1.1': {}
+
+  '@fontsource-variable/roboto-slab@5.2.5': {}
 
   '@fontsource/dseg7-modern@5.2.5': {}
 
@@ -9788,7 +9801,7 @@ snapshots:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
 
-  '@iconify/json@2.2.311':
+  '@iconify/json@2.2.312':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -12058,7 +12071,7 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  ansis@3.16.0: {}
+  ansis@3.17.0: {}
 
   any-promise@1.3.0: {}
 
@@ -12386,6 +12399,10 @@ snapshots:
       toggle-selection: 1.0.6
 
   core-js-compat@3.40.0:
+    dependencies:
+      browserslist: 4.24.4
+
+  core-js-compat@3.41.0:
     dependencies:
       browserslist: 4.24.4
 
@@ -12981,9 +12998,10 @@ snapshots:
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-n@17.15.1(eslint@9.21.0(jiti@2.4.2)):
+  eslint-plugin-n@17.16.1(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.21.0(jiti@2.4.2))
+      '@typescript-eslint/utils': 8.25.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2)
       enhanced-resolve: 5.18.1
       eslint: 9.21.0(jiti@2.4.2)
       eslint-plugin-es-x: 7.8.0(eslint@9.21.0(jiti@2.4.2))
@@ -12992,6 +13010,10 @@ snapshots:
       ignore: 5.3.2
       minimatch: 9.0.5
       semver: 7.7.1
+      ts-declaration-location: 1.0.5(typescript@5.8.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   eslint-plugin-perfectionist@4.9.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2):
     dependencies:
@@ -13193,7 +13215,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.21.0(jiti@2.4.2))
       ci-info: 4.1.0
       clean-regexp: 1.0.0
-      core-js-compat: 3.40.0
+      core-js-compat: 3.41.0
       eslint: 9.21.0(jiti@2.4.2)
       esquery: 1.6.0
       globals: 15.15.0
@@ -14190,7 +14212,7 @@ snapshots:
     dependencies:
       mlly: 1.7.4
       pkg-types: 1.3.1
-      quansync: 0.2.6
+      quansync: 0.2.7
 
   locate-path@6.0.0:
     dependencies:
@@ -14757,7 +14779,7 @@ snapshots:
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
 
-  ohash@1.1.4: {}
+  ohash@1.1.5: {}
 
   on-exit-leak-free@2.1.2: {}
 
@@ -14838,9 +14860,9 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
-  package-manager-detector@0.2.10:
+  package-manager-detector@0.2.11:
     dependencies:
-      quansync: 0.2.6
+      quansync: 0.2.7
 
   parent-module@1.0.1:
     dependencies:
@@ -15091,7 +15113,7 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
-  quansync@0.2.6: {}
+  quansync@0.2.7: {}
 
   query-string@9.1.1:
     dependencies:
@@ -16165,7 +16187,7 @@ snapshots:
     dependencies:
       defu: 6.1.4
       mlly: 1.7.4
-      ohash: 1.1.4
+      ohash: 1.1.5
       pathe: 1.1.2
       ufo: 1.5.4
 

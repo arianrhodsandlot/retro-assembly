@@ -25,9 +25,9 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@fontsource-variable/inter": "5.1.1",
+    "@fontsource-variable/inter": "5.2.5",
     "@fontsource-variable/oswald": "5.2.5",
-    "@fontsource-variable/roboto-slab": "5.1.1",
+    "@fontsource-variable/roboto-slab": "5.2.5",
     "@fontsource/dseg7-modern": "5.2.5",
     "@react-hookz/web": "25.0.1",
     "@supabase/ssr": "0.5.2",
@@ -57,7 +57,7 @@
   "devDependencies": {
     "@arianrhodsandlot/eslint-config": "0.18.4",
     "@eslint/config-inspector": "1.0.1",
-    "@iconify/json": "2.2.311",
+    "@iconify/json": "2.2.312",
     "@iconify/tailwind4": "1.0.6",
     "@tailwindcss/postcss": "4.0.9",
     "@tailwindcss/vite": "4.0.9",

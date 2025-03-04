@@ -3,7 +3,7 @@ import { shouldApplyMiddlware } from './utils.ts'
 
 declare module 'waku/middleware/context' {
   export function getContextData(): {
-    redirect: (location: string, status?: number) => void
+    redirect: (location: string, status?: number) => undefined
   }
 }
 

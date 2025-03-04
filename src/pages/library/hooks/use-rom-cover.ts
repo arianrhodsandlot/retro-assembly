@@ -1,7 +1,7 @@
 'use client'
 import ky from 'ky'
 import useSWRImmutable from 'swr/immutable'
-import { getPlatformGameIcon, getRomLibretroThumbnail } from '../utils/rom.ts'
+import { getPlatformGameIcon, getRomLibretroThumbnail } from '@/utils/rom.ts'
 
 export function useRomCover(rom) {
   const romCover = getRomLibretroThumbnail(rom)

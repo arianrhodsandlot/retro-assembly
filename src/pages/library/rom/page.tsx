@@ -1,14 +1,14 @@
-import AppLayout from '@/components/app/app-layout.tsx'
-import { GameBackground } from '@/components/app/rom/game-background.tsx'
-import { GameCover } from '@/components/app/rom/game-cover.tsx'
-import { GameInfo } from '@/components/app/rom/game-info.tsx'
-import { GameMedias } from '@/components/app/rom/game-medias.tsx'
-import { LaunchButton } from '@/components/app/rom/launch-button.tsx'
-import { SidebarLinks } from '@/components/app/sidebar-links.tsx'
 import { getRom } from '@/controllers/get-rom.ts'
 import { getRomTitle } from '@/utils/rom.ts'
+import AppLayout from '../components/app-layout.tsx'
+import { SidebarLinks } from '../components/sidebar-links.tsx'
+import { GameBackground } from './components/game-background.tsx'
+import { GameCover } from './components/game-cover.tsx'
+import { GameInfo } from './components/game-info.tsx'
+import { GameMedias } from './components/game-medias.tsx'
+import { LaunchButton } from './components/launch-button.tsx'
 
-export default async function Rom({ id }) {
+export async function RomPage({ id }) {
   const rom = await getRom(id)
   if (!rom) {
     return '404'

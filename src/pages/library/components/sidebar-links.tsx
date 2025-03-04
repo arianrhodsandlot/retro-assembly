@@ -6,14 +6,14 @@ const defaultPlatformNames = ['gba', 'gbc', 'gb', 'nes', 'snes', 'megadrive', 'a
 
 const links = [
   {
-    href: '/app',
+    href: '/library',
     icon: <span className='icon-[mdi--bookshelf] size-5' />,
     text: 'Library',
   },
 ]
 
 const platformLinks = defaultPlatformNames.map((platform) => ({
-  href: `/app/platform/${encodeURIComponent(platform)}`,
+  href: `/library/platform/${encodeURIComponent(platform)}`,
   icon: getPlatformIcon(platform, ''),
   name: platform,
   text: platformMap[platform].displayName,

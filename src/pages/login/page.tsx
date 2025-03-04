@@ -1,8 +1,8 @@
 import { getContextData } from 'waku/middleware/context'
-import { LoginForm } from '@/components/login/login-form.tsx'
 import { getC } from '@/utils/misc.ts'
+import { LoginForm } from './components/login-form.tsx'
 
-export default async function Login({ query }) {
+export async function LoginPage({ query }) {
   const searchParams = new URLSearchParams(query)
   const redirectTo = searchParams.get('redirect_to') ?? '/app'
   const code = searchParams.get('code')

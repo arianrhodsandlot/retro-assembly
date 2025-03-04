@@ -1,13 +1,13 @@
-import AppLayout from '@/components/app/app-layout.tsx'
-import { GameList } from '@/components/app/game-list.tsx'
 import { getRoms } from '@/controllers/get-roms.ts'
+import AppLayout from './components/app-layout.tsx'
+import { GameList } from './components/game-list.tsx'
 
-export default async function App() {
+export async function LibraryPage() {
   const roms = await getRoms()
 
   return (
     <AppLayout>
-      <title>All - RetroAssembly</title>
+      <title>Library - RetroAssembly</title>
       <div className='flex flex-col gap-5'>
         <div className='relative flex justify-between px-4 pt-4'>
           <h1 className='text-5xl font-[Oswald_Variable] font-semibold'>Library</h1>

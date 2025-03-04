@@ -1,13 +1,13 @@
-import AppLayout from '@/components/app/app-layout.tsx'
-import { DeviceInfo } from '@/components/app/device-info.tsx'
-import { GameList } from '@/components/app/game-list.tsx'
-import { PlatformBackground } from '@/components/app/platform/platform-background.tsx'
-import { UploadButton } from '@/components/app/platform/upload-button.tsx'
-import { SidebarLinks } from '@/components/app/sidebar-links.tsx'
 import { platformMap } from '@/constants/platform.ts'
 import { getRoms } from '@/controllers/get-roms.ts'
+import AppLayout from '../components/app-layout.tsx'
+import { DeviceInfo } from '../components/device-info.tsx'
+import { GameList } from '../components/game-list.tsx'
+import { SidebarLinks } from '../components/sidebar-links.tsx'
+import { PlatformBackground } from './components/platform-background.tsx'
+import { UploadButton } from './components/upload-button.tsx'
 
-export default async function App({ platform }) {
+export async function PlatformPage({ platform }) {
   if (!platformMap[platform]) {
     return '404 not found'
   }

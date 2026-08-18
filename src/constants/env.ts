@@ -32,7 +32,7 @@ export function getRunTimeEnv() {
       RETROASSEMBLY_RUN_TIME_OIDC_ISSUER: '',
       RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI: '',
       RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE: '',
-      RETROASSEMBLY_RUN_TIME_OIDC_SCOPES: 'openid profile email groups',
+      RETROASSEMBLY_RUN_TIME_OIDC_SCOPES: 'openid profile email',
       RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE: '28800000',
       RETROASSEMBLY_RUN_TIME_SKIP_HOME:
         { node: `${runTimeEnv.NODE_ENV !== 'development'}`, workerd: 'false' }[runtimeKey] || 'false',

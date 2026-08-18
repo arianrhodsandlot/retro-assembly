@@ -30,7 +30,6 @@ await describe('authentication helpers', async () => {
           RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID: 'retroassembly',
           RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET: 'secret',
           RETROASSEMBLY_RUN_TIME_OIDC_ISSUER: 'https://id.example',
-          RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE: 'retroassembly',
         },
         'node',
       ),
@@ -43,7 +42,6 @@ await describe('authentication helpers', async () => {
       RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID: 'retroassembly',
       RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET: 'secret',
       RETROASSEMBLY_RUN_TIME_OIDC_ISSUER: 'https://id.example',
-      RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE: 'retroassembly',
     }
     assert.throws(() => resolveAuthMode({ RETROASSEMBLY_RUN_TIME_OIDC_ISSUER: 'https://id.example' }, 'node'))
     assert.throws(() => resolveAuthMode(oidc, 'workerd'))
@@ -73,9 +71,16 @@ await describe('authentication helpers', async () => {
     })
   })
 
+  await it('allows a missing roles claim when role gating is disabled', () => {
+    assert.deepEqual(getOidcUsernameAndRoles({ preferred_username: 'arcade' }), {
+      roles: [],
+      username: 'arcade',
+    })
+  })
+
   await it('rejects missing identity claims', () => {
     assert.throws(() => getOidcUsernameAndRoles({ roles: ['retroassembly'] }))
-    assert.throws(() => getOidcUsernameAndRoles({ preferred_username: 'arcade' }))
-    assert.throws(() => getOidcUsernameAndRoles({ preferred_username: 'arcade', roles: [1] }))
+    assert.throws(() => getOidcUsernameAndRoles({ preferred_username: 'arcade' }, true))
+    assert.throws(() => getOidcUsernameAndRoles({ preferred_username: 'arcade', roles: [1] }, true))
   })
 })

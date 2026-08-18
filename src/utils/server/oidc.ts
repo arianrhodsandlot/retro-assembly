@@ -12,7 +12,7 @@ export function getOidcSettings() {
     clientSecret: env.RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET,
     issuer: env.RETROASSEMBLY_RUN_TIME_OIDC_ISSUER,
     redirectUri: env.RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI,
-    requiredRole: env.RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE,
+    requiredRole: env.RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE.trim(),
     scopes: env.RETROASSEMBLY_RUN_TIME_OIDC_SCOPES,
     sessionMaxAge: configuredMaxAge > 0 ? configuredMaxAge : 8 * 60 * 60 * 1000,
   }
@@ -31,7 +31,7 @@ export function getOidcConfiguration() {
   return configurationPromise
 }
 
-export function getOidcUsernameAndRoles(claims: Record<string, unknown>) {
+export function getOidcUsernameAndRoles(claims: Record<string, unknown>, requireRoles = false) {
   const username = claims.preferred_username
   const rawRoles = claims.roles
   const roles = typeof rawRoles === 'string' ? [rawRoles] : rawRoles
@@ -39,9 +39,9 @@ export function getOidcUsernameAndRoles(claims: Record<string, unknown>) {
   if (typeof username !== 'string' || !username.trim()) {
     throw new Error('The OIDC response does not contain a valid preferred_username claim')
   }
-  if (!Array.isArray(roles) || roles.some((role) => typeof role !== 'string')) {
+  if (requireRoles && (!Array.isArray(roles) || roles.some((role) => typeof role !== 'string'))) {
     throw new Error('The OIDC response does not contain a valid roles claim')
   }
 
-  return { roles, username: username.trim() }
+  return { roles: Array.isArray(roles) ? roles : [], username: username.trim() }
 }

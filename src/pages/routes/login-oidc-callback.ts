@@ -54,9 +54,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       throw new Error('The OIDC response does not contain an ID token')
     }
 
-    const { roles, username } = getOidcUsernameAndRoles(claims)
     const settings = getOidcSettings()
-    if (!roles.includes(settings.requiredRole)) {
+    const { roles, username } = getOidcUsernameAndRoles(claims, Boolean(settings.requiredRole))
+    if (settings.requiredRole && !roles.includes(settings.requiredRole)) {
       throw new HTTPException(403, { message: 'The OIDC identity does not have the required role' })
     }
 

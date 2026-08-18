@@ -77,24 +77,26 @@ Node.js and Docker deployments can replace password login with a single OpenID C
 RETROASSEMBLY_RUN_TIME_OIDC_ISSUER=https://id.example.com
 RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID=retroassembly
 RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET=replace-with-client-secret
-RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE=retroassembly
 ```
 
-Register `https://retroassembly.example.com/login/oidc/callback` as the callback URL. RetroAssembly requests `openid profile email groups` by default. The provider must return the user's username in `preferred_username` and roles in `roles`; only users whose roles contain `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE` can log in.
+Register `https://retroassembly.example.com/login/oidc/callback` as the callback URL. RetroAssembly requests `openid profile email` by default. The provider must return the user's username in `preferred_username`.
 
-For Pocket ID, create an OIDC client, add the callback URL, allow the intended user groups, and attach a custom `roles` claim containing the configured role to those groups. Existing RetroAssembly accounts are linked only when Pocket ID's `preferred_username` exactly matches the local username.
+For Pocket ID, create an OIDC client, add the callback URL, and allow the intended user groups. Existing RetroAssembly accounts are linked only when Pocket ID's `preferred_username` exactly matches the local username.
+
+To add an application-side role gate, set `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE`, include `groups` in `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`, and attach a custom `roles` claim containing that role to the permitted Pocket ID groups. When no required role is configured, any identity accepted by the OIDC provider can log in.
 
 The following settings are optional:
 
-| Variable                                      | Default                       | Description                                         |
-| --------------------------------------------- | ----------------------------- | --------------------------------------------------- |
-| `RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI`    | Inferred callback URL         | Explicit callback URL for reverse-proxy deployments |
-| `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`          | `openid profile email groups` | Space-separated scopes                              |
-| `RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE` | `28800000`                    | OIDC session lifetime in milliseconds               |
+| Variable                                      | Default                | Description                                         |
+| --------------------------------------------- | ---------------------- | --------------------------------------------------- |
+| `RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI`    | Inferred callback URL  | Explicit callback URL for reverse-proxy deployments |
+| `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE`   | Unset                  | Optional value required in the `roles` claim        |
+| `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`          | `openid profile email` | Space-separated scopes                              |
+| `RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE` | `28800000`             | OIDC session lifetime in milliseconds               |
 
 OIDC and Supabase authentication cannot be enabled together. OIDC is not available in the Cloudflare Workers build. Before enabling OIDC on an existing instance, confirm that the first local user's username matches the intended Pocket ID administrator; the oldest active local user remains RetroAssembly's super user.
 
-The official hosted Google login continues to use Supabase Auth and is unaffected by these settings. A direct Google OIDC client does not normally provide the required custom `roles` claim and therefore needs an identity broker or claim mapping that adds it.
+The official hosted Google login continues to use Supabase Auth and is unaffected by these settings. Direct Google OIDC needs an identity broker or claim mapping that adds `preferred_username`; role-gated deployments must also add a `roles` claim.
 
 ## Supported Platforms
 

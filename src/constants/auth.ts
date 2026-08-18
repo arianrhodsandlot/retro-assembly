@@ -15,13 +15,12 @@ export function resolveAuthMode(env: Record<string, unknown>, runtimeKey: string
     env.RETROASSEMBLY_RUN_TIME_OIDC_ISSUER,
     env.RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID,
     env.RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET,
-    env.RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE,
   ]
   const hasOidcConfiguration = oidcValues.some(Boolean)
 
   if (hasOidcConfiguration) {
     assert.ok(runtimeKey === 'node', 'OIDC authentication is only supported by the Node.js runtime')
-    assert.ok(oidcValues.every(Boolean), 'OIDC issuer, client ID, client secret, and required role must all be set')
+    assert.ok(oidcValues.every(Boolean), 'OIDC issuer, client ID, and client secret must all be set')
     assert.ok(
       !env.RETROASSEMBLY_RUN_TIME_SUPABASE_ANON_KEY && !env.RETROASSEMBLY_RUN_TIME_SUPABASE_URL,
       'OIDC and Supabase authentication cannot be enabled together',

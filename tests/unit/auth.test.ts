@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
-import { getSafeRedirectTo, resolveAuthMode } from '#@/constants/auth.ts'
+import { getSafeRedirectTo, resolveAuthMode } from '#@/utils/server/auth.ts'
 import { getOidcUsernameAndRoles } from '#@/utils/server/oidc.ts'
 
 await describe('authentication helpers', async () => {
@@ -57,14 +57,14 @@ await describe('authentication helpers', async () => {
     )
   })
 
-  await it('reads Pocket ID usernames and role arrays', () => {
+  await it('reads OIDC usernames and role arrays', () => {
     assert.deepEqual(getOidcUsernameAndRoles({ preferred_username: ' arcade ', roles: ['retroassembly', 'other'] }), {
       roles: ['retroassembly', 'other'],
       username: 'arcade',
     })
   })
 
-  await it('normalizes a single Pocket ID role', () => {
+  await it('normalizes a single OIDC role', () => {
     assert.deepEqual(getOidcUsernameAndRoles({ preferred_username: 'arcade', roles: 'retroassembly' }), {
       roles: ['retroassembly'],
       username: 'arcade',

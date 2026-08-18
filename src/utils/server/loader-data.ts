@@ -1,11 +1,11 @@
 import { getRuntimeKey } from 'hono/adapter'
 import { getContext } from 'hono/context-storage'
 import { getCookie } from 'hono/cookie'
-import { getAuthMode } from '#@/constants/auth.ts'
 import { getRunTimeEnv } from '#@/constants/env.ts'
 import { metadata } from '#@/constants/metadata.ts'
 import { cookieConsentStatusKey } from '#@/constants/misc.ts'
 import { getLaunchRecords } from '#@/controllers/launch-records/get-launch-records.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 
 const { host: officialHost } = new URL(metadata.link)
 

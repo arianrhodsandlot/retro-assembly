@@ -1,8 +1,8 @@
 import { and, eq, gt } from 'drizzle-orm'
 import { getContext } from 'hono/context-storage'
 import { DateTime } from 'luxon'
-import { getAuthMode } from '#@/constants/auth.ts'
 import { authenticationMethodEnum, libraryModeEnum, sessionTable, statusEnum, userTable } from '#@/databases/schema.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 
 export async function getCurrentUser() {
   const c = getContext()

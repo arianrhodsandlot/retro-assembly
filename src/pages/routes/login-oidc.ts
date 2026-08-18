@@ -7,7 +7,7 @@ import {
   randomPKCECodeVerifier,
   randomState,
 } from 'openid-client'
-import { getAuthMode, getSafeRedirectTo } from '#@/constants/auth.ts'
+import { getAuthMode, getSafeRedirectTo } from '#@/utils/server/auth.ts'
 import { getOidcCallbackUrl, getOidcConfiguration, getOidcSettings } from '#@/utils/server/oidc.ts'
 import { isSecureRequest } from '#@/utils/server/session.ts'
 import type { Route } from './+types/login-oidc.ts'

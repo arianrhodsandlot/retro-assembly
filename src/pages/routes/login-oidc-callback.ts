@@ -3,10 +3,10 @@ import { deleteCookie, getCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import { DateTime } from 'luxon'
 import { authorizationCodeGrant } from 'openid-client'
-import { getAuthMode, getSafeRedirectTo } from '#@/constants/auth.ts'
 import { createSessionForUser } from '#@/controllers/sessions/create-session.ts'
 import { getOrCreateOidcUser } from '#@/controllers/users/get-or-create-oidc-user.ts'
 import { authenticationMethodEnum } from '#@/databases/schema.ts'
+import { getAuthMode, getSafeRedirectTo } from '#@/utils/server/auth.ts'
 import {
   getOidcCallbackUrl,
   getOidcConfiguration,

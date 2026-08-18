@@ -1,6 +1,6 @@
 import { getContext } from 'hono/context-storage'
-import { getAuthMode, getSafeRedirectTo } from '#@/constants/auth.ts'
 import { countUsers } from '#@/controllers/users/count-users.ts'
+import { getAuthMode, getSafeRedirectTo } from '#@/utils/server/auth.ts'
 import { LoginPage } from '../login/page.tsx'
 import type { Route } from './+types/login.ts'
 

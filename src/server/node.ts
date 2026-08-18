@@ -3,7 +3,7 @@ import '../utils/server/migration/raw-metadata.ts'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
 import { RouterContextProvider, createRequestHandler } from 'react-router'
-import { getAuthMode } from '#@/constants/auth.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore we can not guarantee that this file exists
 import * as build from '../../dist/server/index.js'

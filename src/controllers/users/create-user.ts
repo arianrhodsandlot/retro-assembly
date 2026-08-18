@@ -1,9 +1,9 @@
 import { and, asc, eq } from 'drizzle-orm'
 import { getContext } from 'hono/context-storage'
 import { HTTPException } from 'hono/http-exception'
-import { getAuthMode } from '#@/constants/auth.ts'
 import { statusEnum, userTable } from '#@/databases/schema.ts'
 import { hash } from '#@/utils/server/argon2.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 import { getConnInfo } from '#@/utils/server/misc.ts'
 
 export async function createUser({

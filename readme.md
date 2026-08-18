@@ -81,9 +81,11 @@ RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET=replace-with-client-secret
 
 Register `https://retroassembly.example.com/login/oidc/callback` as the callback URL. RetroAssembly requests `openid profile email` by default. The provider must return the user's username in `preferred_username`.
 
-For Pocket ID, create an OIDC client, add the callback URL, and allow the intended user groups. Existing RetroAssembly accounts are linked only when Pocket ID's `preferred_username` exactly matches the local username.
+Create a client with your OIDC provider, register the callback URL, and grant access to the intended users or groups.
 
-To add an application-side role gate, set `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE`, include `groups` in `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`, and attach a custom `roles` claim containing that role to the permitted Pocket ID groups. When no required role is configured, any identity accepted by the OIDC provider can log in.
+On the first login, an existing RetroAssembly account is linked when the OIDC `preferred_username` exactly matches its local username. Otherwise, RetroAssembly creates a new account. The link is stored using the stable OIDC issuer and subject claims, so later logins do not depend on the username. An identity cannot claim a username that is already linked to a different OIDC identity.
+
+To add an application-side role gate, set `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE`, configure `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES` with any scope your provider requires to expose roles, and configure the provider to include the required value in a `roles` claim. When no required role is configured, any identity accepted by the OIDC provider can log in.
 
 The following settings are optional:
 
@@ -94,9 +96,7 @@ The following settings are optional:
 | `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`          | `openid profile email` | Space-separated scopes                              |
 | `RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE` | `28800000`             | OIDC session lifetime in milliseconds               |
 
-OIDC and Supabase authentication cannot be enabled together. OIDC is not available in the Cloudflare Workers build. Before enabling OIDC on an existing instance, confirm that the first local user's username matches the intended Pocket ID administrator; the oldest active local user remains RetroAssembly's super user.
-
-The official hosted Google login continues to use Supabase Auth and is unaffected by these settings. Direct Google OIDC needs an identity broker or claim mapping that adds `preferred_username`; role-gated deployments must also add a `roles` claim.
+OIDC and Supabase authentication cannot be enabled together. OIDC is not available in the Cloudflare Workers build. Before enabling OIDC on an existing instance, confirm that the first local user's username matches the intended OIDC administrator; the oldest active local user remains RetroAssembly's super user.
 
 ## Supported Platforms
 

@@ -2,10 +2,10 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod'
-import { getAuthMode } from '#@/constants/auth.ts'
 import { createSession } from '#@/controllers/sessions/create-session.ts'
 import { createUser } from '#@/controllers/users/create-user.ts'
 import { updatePassword } from '#@/controllers/users/update-password.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 import { setSessionCookie } from '#@/utils/server/session.ts'
 
 export const app = new Hono()

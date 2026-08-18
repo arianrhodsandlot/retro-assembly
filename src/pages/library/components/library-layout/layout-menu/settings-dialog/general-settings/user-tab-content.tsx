@@ -22,7 +22,7 @@ interface UserTabContentProps {
 export function UserTabContent({ canDelete, onDelete, user }: Readonly<UserTabContentProps>) {
   const { t } = useTranslation()
   const { mutate } = useSWRConfig()
-  const { currentUser } = useGlobalLoaderData()
+  const { authMode, currentUser } = useGlobalLoaderData()
   const [passwordError, setPasswordError] = useState<null | string>(null)
   const [passwordSuccess, setPasswordSuccess] = useState(false)
   const [libraryModeUpdating, setLibraryModeUpdating] = useState(false)
@@ -121,7 +121,7 @@ export function UserTabContent({ canDelete, onDelete, user }: Readonly<UserTabCo
       ) : null}
 
       {/* Password change section - only for current user */}
-      {isCurrentUser ? (
+      {isCurrentUser && authMode === 'local' ? (
         <>
           <Flex align='center' className='pt-4' gap='2'>
             <span className='icon-[mdi--lock-reset]' />

@@ -27,6 +27,13 @@ export function getRunTimeEnv() {
       RETROASSEMBLY_RUN_TIME_MAX_UPLOAD_AT_ONCE: { node: '1000', workerd: '100' }[runtimeKey] || '100',
       RETROASSEMBLY_RUN_TIME_MSLEUTH_FALLBACK_HOST: 'https://msleuth.fly.dev/',
       RETROASSEMBLY_RUN_TIME_MSLEUTH_HOST: 'https://msleuth.arianrhodsandlot.workers.dev/',
+      RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID: '',
+      RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET: '',
+      RETROASSEMBLY_RUN_TIME_OIDC_ISSUER: '',
+      RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI: '',
+      RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE: '',
+      RETROASSEMBLY_RUN_TIME_OIDC_SCOPES: 'openid profile email groups',
+      RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE: '28800000',
       RETROASSEMBLY_RUN_TIME_SKIP_HOME:
         { node: `${runTimeEnv.NODE_ENV !== 'development'}`, workerd: 'false' }[runtimeKey] || 'false',
       RETROASSEMBLY_RUN_TIME_SKIP_HOME_IF_LOGGED_IN: { node: 'true', workerd: 'false' }[runtimeKey] || 'false',

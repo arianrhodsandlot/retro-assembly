@@ -1,12 +1,17 @@
 import { and, eq, gt } from 'drizzle-orm'
 import { getContext } from 'hono/context-storage'
 import { DateTime } from 'luxon'
-import { libraryModeEnum, sessionTable, statusEnum, userTable } from '#@/databases/schema.ts'
-import { createSupabase } from '#@/utils/server/supabase.ts'
+import { getAuthMode } from '#@/constants/auth.ts'
+import { authenticationMethodEnum, libraryModeEnum, sessionTable, statusEnum, userTable } from '#@/databases/schema.ts'
 
 export async function getCurrentUser() {
-  const supabase = createSupabase()
-  if (supabase) {
+  const c = getContext()
+  const authMode = getAuthMode()
+  if (authMode === 'supabase') {
+    const { supabase } = c.var
+    if (!supabase) {
+      return
+    }
     try {
       const { data } = await supabase.auth.getUser()
       if (data?.user) {
@@ -17,7 +22,6 @@ export async function getCurrentUser() {
     }
   }
 
-  const c = getContext()
   const { db, token } = c.var
 
   if (!token) {
@@ -33,6 +37,10 @@ export async function getCurrentUser() {
         eq(sessionTable.token, token),
         eq(sessionTable.status, statusEnum.normal),
         eq(userTable.status, statusEnum.normal),
+        eq(
+          sessionTable.authenticationMethod,
+          authMode === 'oidc' ? authenticationMethodEnum.oidc : authenticationMethodEnum.password,
+        ),
         gt(sessionTable.expiresAt, new Date()),
       ),
     )
@@ -40,6 +48,22 @@ export async function getCurrentUser() {
 
   if (!result) {
     return
+  }
+
+  if (result.sessions.authenticationMethod === authenticationMethodEnum.oidc) {
+    const now = DateTime.now()
+    const lastActivity = DateTime.fromJSDate(new Date(result.sessions.lastActivityAt))
+    if (now.diff(lastActivity, 'minutes').minutes >= 5) {
+      await db.library
+        .update(sessionTable)
+        .set({ lastActivityAt: now.toJSDate() })
+        .where(eq(sessionTable.id, result.sessions.id))
+    }
+    return {
+      id: result.users.id,
+      libraryMode: result.users.libraryMode,
+      username: result.users.username,
+    }
   }
 
   // Auto-renewal logic with Luxon

@@ -30,7 +30,7 @@ export function PageContainer({ children, description, title }: Readonly<PageCon
 
           <div className='mt-4 border-t border-t-(--gray-6) py-8'>{children}</div>
 
-          {formType === 'oauth' ? (
+          {formType === 'oauth' || formType === 'oidc' ? (
             <div className='text-center text-xs text-(--color-text)/40'>
               {t('auth.agreeToTermsPrefix')}{' '}
               <a className='underline' href='/privacy-policy.md' rel='noopener noreferrer' target='_blank'>

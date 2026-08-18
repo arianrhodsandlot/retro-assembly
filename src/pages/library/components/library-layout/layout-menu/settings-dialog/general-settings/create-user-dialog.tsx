@@ -5,6 +5,7 @@ import useSWRMutation from 'swr/mutation'
 import { client, parseResponse } from '#@/api/client.ts'
 import { libraryModeEnum } from '#@/databases/schema.ts'
 import { AccountFormField } from '#@/pages/components/account-form-field.tsx'
+import { useGlobalLoaderData } from '#@/pages/hooks/use-global-loader-data.ts'
 
 interface CreateUserDialogProps {
   onOpenChange: (open: boolean) => void
@@ -14,11 +15,12 @@ interface CreateUserDialogProps {
 
 export function CreateUserDialog({ onOpenChange, onSuccess, open }: Readonly<CreateUserDialogProps>) {
   const { t } = useTranslation()
+  const { authMode } = useGlobalLoaderData()
   const [error, setError] = useState<null | string>(null)
 
   const { isMutating, trigger } = useSWRMutation(
     { endpoint: 'users', method: 'post' },
-    async (_key, { arg }: { arg: { libraryMode: string; password: string; username: string } }) => {
+    async (_key, { arg }: { arg: { libraryMode: string; password?: string; username: string } }) => {
       setError(null)
       return await parseResponse(
         client.users.$post({
@@ -41,11 +43,11 @@ export function CreateUserDialog({ onOpenChange, onSuccess, open }: Readonly<Cre
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const username = formData.get('username')?.toString() || ''
-    const password = formData.get('password')?.toString() || ''
+    const password = formData.get('password')?.toString()
     const libraryMode =
       formData.get('libraryMode') === 'on' ? String(libraryModeEnum.shared) : String(libraryModeEnum.isolated)
 
-    if (formData.get('password') !== formData.get('repeat_password')) {
+    if (authMode === 'local' && formData.get('password') !== formData.get('repeat_password')) {
       setError(t('auth.passwordsDoNotMatch'))
       return
     }
@@ -77,23 +79,27 @@ export function CreateUserDialog({ onOpenChange, onSuccess, open }: Readonly<Cre
               name='username'
               required
             />
-            <AccountFormField
-              autocomplete='new-password'
-              description={t('auth.passwordRecommendation')}
-              iconClass='icon-[mdi--password]'
-              label={t('auth.password')}
-              name='password'
-              required
-              type='password'
-            />
-            <AccountFormField
-              autocomplete='new-password'
-              iconClass='icon-[mdi--password-check]'
-              label={t('auth.repeatPassword')}
-              name='repeat_password'
-              required
-              type='password'
-            />
+            {authMode === 'local' ? (
+              <>
+                <AccountFormField
+                  autocomplete='new-password'
+                  description={t('auth.passwordRecommendation')}
+                  iconClass='icon-[mdi--password]'
+                  label={t('auth.password')}
+                  name='password'
+                  required
+                  type='password'
+                />
+                <AccountFormField
+                  autocomplete='new-password'
+                  iconClass='icon-[mdi--password-check]'
+                  label={t('auth.repeatPassword')}
+                  name='repeat_password'
+                  required
+                  type='password'
+                />
+              </>
+            ) : null}
             <div className='mt-2'>
               <label className='flex cursor-pointer items-start gap-2'>
                 <Checkbox defaultChecked name='libraryMode' />

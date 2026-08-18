@@ -69,6 +69,33 @@ You have two options to get started with RetroAssembly:
 
 See [RetroAssembly's homepage on Docker Hub](https://hub.docker.com/r/arianrhodsandlot/retroassembly#quick-start).
 
+### OIDC Authentication for Self-Hosted Instances
+
+Node.js and Docker deployments can replace password login with a single OpenID Connect provider. Configure all of the following variables to enable OIDC:
+
+```properties
+RETROASSEMBLY_RUN_TIME_OIDC_ISSUER=https://id.example.com
+RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID=retroassembly
+RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET=replace-with-client-secret
+RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE=retroassembly
+```
+
+Register `https://retroassembly.example.com/login/oidc/callback` as the callback URL. RetroAssembly requests `openid profile email groups` by default. The provider must return the user's username in `preferred_username` and roles in `roles`; only users whose roles contain `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE` can log in.
+
+For Pocket ID, create an OIDC client, add the callback URL, allow the intended user groups, and attach a custom `roles` claim containing the configured role to those groups. Existing RetroAssembly accounts are linked only when Pocket ID's `preferred_username` exactly matches the local username.
+
+The following settings are optional:
+
+| Variable                                      | Default                       | Description                                         |
+| --------------------------------------------- | ----------------------------- | --------------------------------------------------- |
+| `RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI`    | Inferred callback URL         | Explicit callback URL for reverse-proxy deployments |
+| `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`          | `openid profile email groups` | Space-separated scopes                              |
+| `RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE` | `28800000`                    | OIDC session lifetime in milliseconds               |
+
+OIDC and Supabase authentication cannot be enabled together. OIDC is not available in the Cloudflare Workers build. Before enabling OIDC on an existing instance, confirm that the first local user's username matches the intended Pocket ID administrator; the oldest active local user remains RetroAssembly's super user.
+
+The official hosted Google login continues to use Supabase Auth and is unaffected by these settings. A direct Google OIDC client does not normally provide the required custom `roles` claim and therefore needs an identity broker or claim mapping that adds it.
+
 ## Supported Platforms
 
 RetroAssembly aims to support a wide range of vintage gaming systems. Emulation is powered by [Nostalgist.js](https://nostalgist.js.org/).

@@ -1,6 +1,7 @@
 import { getRuntimeKey } from 'hono/adapter'
 import { getContext } from 'hono/context-storage'
 import { getCookie } from 'hono/cookie'
+import { getAuthMode } from '#@/constants/auth.ts'
 import { getRunTimeEnv } from '#@/constants/env.ts'
 import { metadata } from '#@/constants/metadata.ts'
 import { cookieConsentStatusKey } from '#@/constants/misc.ts'
@@ -26,6 +27,7 @@ export function getCommonLoaderData<T>(data: T = {} as T) {
   const isOfficialHost = host === officialHost || host.endsWith('-retroassembly.arianrhodsandlot.workers.dev')
 
   return {
+    authMode: getAuthMode(),
     cookieConsentStatus,
     currentUser,
     detectedLanguage,

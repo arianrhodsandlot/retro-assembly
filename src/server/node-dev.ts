@@ -1,6 +1,9 @@
 import { Hono } from 'hono'
 import { RouterContextProvider, createRequestHandler } from 'react-router'
+import { getAuthMode } from '#@/constants/auth.ts'
 import app from './app.ts'
+
+getAuthMode()
 
 const pages = new Hono()
 

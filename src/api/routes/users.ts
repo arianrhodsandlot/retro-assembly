@@ -25,13 +25,13 @@ export const users = new Hono()
       'form',
       z.object({
         libraryMode: z.coerce.number().optional().default(0),
-        password: z.string(),
+        password: z.string().optional(),
         username: z.string(),
       }),
     ),
     async (c) => {
       const form = c.req.valid('form')
-      const user = await createUser(form)
+      const user = await createUser({ ...form, requireSuperUser: true })
       return c.json(user)
     },
   )

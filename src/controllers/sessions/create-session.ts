@@ -2,7 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import { getContext } from 'hono/context-storage'
 import { HTTPException } from 'hono/http-exception'
 import { DateTime } from 'luxon'
-import { sessionTable, statusEnum, userTable } from '#@/databases/schema.ts'
+import { authenticationMethodEnum, sessionTable, statusEnum, userTable } from '#@/databases/schema.ts'
 import { verify } from '#@/utils/server/argon2.ts'
 import { getConnInfo } from '#@/utils/server/misc.ts'
 import { nanoid } from '#@/utils/server/nanoid.ts'
@@ -23,21 +23,48 @@ export async function createSession({ password, username }: { password: string; 
     throw invalidException
   }
 
-  const isValidPassword = await verify(user.passwordHash, password)
+  const isValidPassword = user.passwordHash ? await verify(user.passwordHash, password) : false
   if (!isValidPassword) {
     throw invalidException
   }
 
+  const session = await createSessionForUser({
+    authenticationMethod: authenticationMethodEnum.password,
+    expiresAt: DateTime.now().plus({ days: 30 }).toJSDate(),
+    userId: user.id,
+  })
+
+  return {
+    session,
+    user: {
+      id: user.id,
+      libraryMode: user.libraryMode,
+      username: user.username,
+    },
+  }
+}
+
+export async function createSessionForUser({
+  authenticationMethod,
+  expiresAt,
+  userId,
+}: {
+  authenticationMethod: (typeof authenticationMethodEnum)[keyof typeof authenticationMethodEnum]
+  expiresAt: Date
+  userId: string
+}) {
+  const c = getContext()
+  const { db } = c.var
   const [session] = await db.library
     .insert(sessionTable)
     .values({
-      expiresAt: DateTime.now().plus({ days: 30 }).toJSDate(),
+      authenticationMethod,
+      expiresAt,
       ip: getConnInfo()?.remote.address,
       token: nanoid(),
       userAgent: c.req.header('User-Agent'),
-      userId: user.id,
+      userId,
     })
     .returning()
-
-  return { session, user }
+  return session
 }

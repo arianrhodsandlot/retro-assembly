@@ -13,6 +13,11 @@ export const libraryModeEnum = {
   shared: 1,
 }
 
+export const authenticationMethodEnum = {
+  oidc: 'oidc',
+  password: 'password',
+} as const
+
 const baseSchema = {
   createdAt: integer({ mode: 'timestamp_ms' })
     .notNull()
@@ -34,7 +39,7 @@ export const userTable = sqliteTable(
   'users',
   {
     libraryMode: integer().notNull().default(libraryModeEnum.isolated),
-    passwordHash: text().notNull(),
+    passwordHash: text(),
     registrationIp: text(),
     registrationUserAgent: text(),
     username: text().notNull(),
@@ -46,6 +51,9 @@ export const userTable = sqliteTable(
 export const sessionTable = sqliteTable(
   'sessions',
   {
+    authenticationMethod: text({ enum: [authenticationMethodEnum.password, authenticationMethodEnum.oidc] })
+      .notNull()
+      .default(authenticationMethodEnum.password),
     expiresAt: integer({ mode: 'timestamp_ms' }).notNull(),
     ip: text(),
     lastActivityAt: integer({ mode: 'timestamp_ms' })
@@ -57,6 +65,20 @@ export const sessionTable = sqliteTable(
     ...baseSchema,
   },
   (table) => [index('idx_sessions_user').on(table.userId, table.status)],
+)
+
+export const oidcIdentityTable = sqliteTable(
+  'oidc_identities',
+  {
+    issuer: text().notNull(),
+    subject: text().notNull(),
+    userId: text().notNull(),
+    ...baseSchema,
+  },
+  (table) => [
+    uniqueIndex('idx_oidc_identities_issuer_subject').on(table.issuer, table.subject),
+    uniqueIndex('idx_oidc_identities_user').on(table.userId),
+  ],
 )
 export const romTable = sqliteTable(
   'roms',

@@ -20,6 +20,9 @@ importers:
       hono:
         specifier: 4.12.31
         version: 4.12.31
+      openid-client:
+        specifier: 6.8.5
+        version: 6.8.5
     devDependencies:
       '@arianrhodsandlot/vite-plus-config':
         specifier: 1.3.0
@@ -4062,6 +4065,9 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
+  jose@6.2.9:
+    resolution: {integrity: sha512-XrchZOFZUl/T3vTwRe8XK+cJrGtMF4th1ARnDfwbBXFKThGhlsxEE4Zu03AD/bjJSt/9jT/mxrOCkJWOg77aPA==}
+
   jotai-ssr@0.2.0:
     resolution: {integrity: sha512-WZAisk8i4K2ITykAkyOR2EP3j2W4QGaeJrez+udcg5uELLzTEtGvqzo5/rgd7CFUCM4ONaqBJrmLuLWBiseI8g==}
     peerDependencies:
@@ -4257,7 +4263,7 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
   msleuth@https://codeload.github.com/arianrhodsandlot/msleuth/tar.gz/37b98e8b48687f3a68487c6bbb1b58d4dd9078e9:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/arianrhodsandlot/msleuth/tar.gz/37b98e8b48687f3a68487c6bbb1b58d4dd9078e9}
+    resolution: {gitHosted: true, integrity: sha512-hmKMH10Ya0g6+xxhp0fcLFA0WroroX3xw1YsgIClI2y4qPY9TWz2sJhA+bN+va10Qvog3xJO0/xWM/E0F9SN8g==, tarball: https://codeload.github.com/arianrhodsandlot/msleuth/tar.gz/37b98e8b48687f3a68487c6bbb1b58d4dd9078e9}
     version: 1.0.0
     engines: {bun: '>=1.3.10'}
 
@@ -4314,6 +4320,9 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
+  oauth4webapi@3.8.7:
+    resolution: {integrity: sha512-4RxcKxXjuItDFZ20RRPf4YTw3kpeXJyCgJFxVzJ068A7PNJ18st2Dg90tlC1LkSDS0GecroagCLHYEIVUhCAkw==}
+
   obug@2.1.4:
     resolution: {integrity: sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA==}
     engines: {node: '>=12.20.0'}
@@ -4323,6 +4332,9 @@ packages:
 
   openapi3-ts@4.6.0:
     resolution: {integrity: sha512-a4sfn6L2sIShhtzJqmjGrARvxAW/3F2BJDdyRVvNF9VhAsZSh5hSyI3a9TNvmzBxXmq66nY5LNT5bQcBxYAZZg==}
+
+  openid-client@6.8.5:
+    resolution: {integrity: sha512-jNGC/5wnTYwCcEUe2ss0IRUmVRQcgxM0A1nLb3eX/9llqNbMWOQd2xd+qDAgfVCpA5Qh96Y1cdnkfbva6+bSdA==}
 
   option-resolver.js@1.1.0:
     resolution: {integrity: sha512-gckuegIqAloPysPLK/mN3S88IcKfvPbSZntfpyqThbCKoPDmcC5kVM/2qpXglhrpab7GdWdd63XrttzTSMHUiw==}
@@ -8010,6 +8022,8 @@ snapshots:
 
   jiti@2.7.0: {}
 
+  jose@6.2.9: {}
+
   jotai-ssr@0.2.0(jotai@2.20.2(@babel/core@7.29.7(supports-color@10.2.2))(@babel/template@7.29.7)(@types/react@19.2.17)(react@19.2.7))(react@19.2.7):
     dependencies:
       jotai: 2.20.2(@babel/core@7.29.7(supports-color@10.2.2))(@babel/template@7.29.7)(@types/react@19.2.17)(react@19.2.7)
@@ -8231,6 +8245,8 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
+  oauth4webapi@3.8.7: {}
+
   obug@2.1.4: {}
 
   once@1.4.0:
@@ -8240,6 +8256,11 @@ snapshots:
   openapi3-ts@4.6.0:
     dependencies:
       yaml: 2.9.0
+
+  openid-client@6.8.5:
+    dependencies:
+      jose: 6.2.9
+      oauth4webapi: 3.8.7
 
   option-resolver.js@1.1.0: {}
 

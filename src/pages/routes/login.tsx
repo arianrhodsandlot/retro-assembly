@@ -1,5 +1,5 @@
 import { getContext } from 'hono/context-storage'
-import { defaultRedirectTo } from '#@/constants/auth.ts'
+import { getAuthMode, getSafeRedirectTo } from '#@/constants/auth.ts'
 import { countUsers } from '#@/controllers/users/count-users.ts'
 import { LoginPage } from '../login/page.tsx'
 import type { Route } from './+types/login.ts'
@@ -8,13 +8,20 @@ export async function loader({ request }: Route.LoaderArgs) {
   const c = getContext()
   const { currentUser, supabase, t } = c.var
   const { searchParams } = new URL(request.url)
-  const redirectTo = searchParams.get('redirect_to') ?? defaultRedirectTo
+  const redirectTo = getSafeRedirectTo(searchParams.get('redirect_to'))
 
   if (currentUser) {
     throw c.redirect(redirectTo)
   }
 
-  if (supabase) {
+  const authMode = getAuthMode()
+  if (authMode === 'oidc') {
+    const errorCode = searchParams.get('error')
+    const error = errorCode ? { message: t(`auth.${errorCode}`) } : undefined
+    return { error, formType: 'oidc' as const, redirectTo, title: t('auth.login') }
+  }
+
+  if (authMode === 'supabase' && supabase) {
     const formType = 'oauth'
     const code = searchParams.get('code')
     if (code) {

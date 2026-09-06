@@ -3,7 +3,7 @@ ARG PROD_IMAGE=node:26.5.0-alpine
 
 FROM ${BUILD_IMAGE} AS base
 WORKDIR /app
-RUN npm i -g pnpm
+RUN npm i -g pnpm@11
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -21,7 +21,7 @@ RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
 RUN node --run=build
 
 FROM ${PROD_IMAGE} AS deps-production
-RUN npm i -g pnpm
+RUN npm i -g pnpm@11
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY patches patches

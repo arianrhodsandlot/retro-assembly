@@ -13,6 +13,7 @@ export async function getRomsWithStates({ page = 1, pageSize = 20 } = {}) {
       createdAt: romTable.createdAt,
       fileId: romTable.fileId,
       fileName: romTable.fileName,
+      gameBoxartFileIds: romTable.gameBoxartFileIds,
       gameName: romTable.gameName,
       id: romTable.id,
       isFavorite: favoriteTable.id,

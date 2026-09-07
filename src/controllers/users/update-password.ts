@@ -3,8 +3,12 @@ import { getContext } from 'hono/context-storage'
 import { HTTPException } from 'hono/http-exception'
 import { sessionTable, statusEnum, userTable } from '#@/databases/schema.ts'
 import { hash, verify } from '#@/utils/server/argon2.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 
 export async function updatePassword(currentPassword: string, newPassword: string) {
+  if (getAuthMode() !== 'local') {
+    throw new HTTPException(403, { message: 'Password changes are unavailable with external authentication' })
+  }
   const c = getContext()
   const { currentUser, db, token } = c.var
   const userId = currentUser?.id
@@ -14,7 +18,7 @@ export async function updatePassword(currentPassword: string, newPassword: strin
     throw new HTTPException(404, { message: 'User not found' })
   }
 
-  const isValid = await verify(user.passwordHash, currentPassword)
+  const isValid = user.passwordHash ? await verify(user.passwordHash, currentPassword) : false
   if (!isValid) {
     throw new HTTPException(401, { message: 'Invalid current password' })
   }

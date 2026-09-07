@@ -5,6 +5,7 @@ import { getRunTimeEnv } from '#@/constants/env.ts'
 import { metadata } from '#@/constants/metadata.ts'
 import { cookieConsentStatusKey } from '#@/constants/misc.ts'
 import { getLaunchRecords } from '#@/controllers/launch-records/get-launch-records.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
 
 const { host: officialHost } = new URL(metadata.link)
 
@@ -26,6 +27,7 @@ export function getCommonLoaderData<T>(data: T = {} as T) {
   const isOfficialHost = host === officialHost || host.endsWith('-retroassembly.arianrhodsandlot.workers.dev')
 
   return {
+    authMode: getAuthMode(),
     cookieConsentStatus,
     currentUser,
     detectedLanguage,

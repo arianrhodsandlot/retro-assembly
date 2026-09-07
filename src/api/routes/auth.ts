@@ -1,10 +1,12 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
-import { setCookie } from 'hono/cookie'
+import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod'
 import { createSession } from '#@/controllers/sessions/create-session.ts'
 import { createUser } from '#@/controllers/users/create-user.ts'
 import { updatePassword } from '#@/controllers/users/update-password.ts'
+import { getAuthMode } from '#@/utils/server/auth.ts'
+import { setSessionCookie } from '#@/utils/server/session.ts'
 
 export const app = new Hono()
 
@@ -20,16 +22,12 @@ export const app = new Hono()
     ),
 
     async (c) => {
+      if (getAuthMode() !== 'local') {
+        throw new HTTPException(403, { message: 'Password login is disabled' })
+      }
       const form = c.req.valid('form')
       const { session, user } = await createSession(form)
-      const cookie = {
-        expires: session.expiresAt,
-        httpOnly: true,
-        path: '/',
-        sameSite: 'Strict',
-        secure: false,
-      } as const
-      setCookie(c, 'token', session.token, cookie)
+      setSessionCookie(session.token, session.expiresAt)
       return c.json({ session, user })
     },
   )
@@ -46,17 +44,13 @@ export const app = new Hono()
     ),
 
     async (c) => {
+      if (getAuthMode() !== 'local') {
+        throw new HTTPException(403, { message: 'Password registration is disabled' })
+      }
       const form = c.req.valid('form')
       await createUser(form)
       const { session, user } = await createSession(form)
-      const cookie = {
-        expires: session.expiresAt,
-        httpOnly: true,
-        path: '/',
-        sameSite: 'Strict',
-        secure: false,
-      } as const
-      setCookie(c, 'token', session.token, cookie)
+      setSessionCookie(session.token, session.expiresAt)
       return c.json({ session, user })
     },
   )

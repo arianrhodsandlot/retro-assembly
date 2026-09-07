@@ -13,6 +13,8 @@ export const routes = {
   libraryRoms: '/library/roms',
   login: '/login',
   loginGoogle: '/login/google',
+  loginOidc: '/login/oidc',
+  loginOidcCallback: '/login/oidc/callback',
   logout: '/logout',
 } as const
 
@@ -29,5 +31,7 @@ export default [
   route(routes.libraryPlatformRom, 'routes/library-platform-rom.tsx'),
   route(routes.login, 'routes/login.tsx'),
   route(routes.loginGoogle, 'routes/login-google.ts'),
+  route(routes.loginOidc, 'routes/login-oidc.ts'),
+  route(routes.loginOidcCallback, 'routes/login-oidc-callback.ts'),
   route(routes.logout, 'routes/logout.ts'),
 ] satisfies RouteConfig

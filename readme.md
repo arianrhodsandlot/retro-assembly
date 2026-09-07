@@ -69,6 +69,35 @@ You have two options to get started with RetroAssembly:
 
 See [RetroAssembly's homepage on Docker Hub](https://hub.docker.com/r/arianrhodsandlot/retroassembly#quick-start).
 
+### OIDC Authentication for Self-Hosted Instances
+
+Node.js and Docker deployments can replace password login with a single OpenID Connect provider. Configure all of the following variables to enable OIDC:
+
+```properties
+RETROASSEMBLY_RUN_TIME_OIDC_ISSUER=https://id.example.com
+RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_ID=retroassembly
+RETROASSEMBLY_RUN_TIME_OIDC_CLIENT_SECRET=replace-with-client-secret
+```
+
+Register `https://retroassembly.example.com/login/oidc/callback` as the callback URL. RetroAssembly requests `openid profile email` by default. The provider must return the user's username in `preferred_username`.
+
+Create a client with your OIDC provider, register the callback URL, and grant access to the intended users or groups.
+
+On the first login, an existing RetroAssembly account is linked when the OIDC `preferred_username` exactly matches its local username. Otherwise, RetroAssembly creates a new account. The link is stored using the stable OIDC issuer and subject claims, so later logins do not depend on the username. An identity cannot claim a username that is already linked to a different OIDC identity.
+
+To add an application-side role gate, set `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE`, configure `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES` with any scope your provider requires to expose roles, and configure the provider to include the required value in a `roles` claim. When no required role is configured, any identity accepted by the OIDC provider can log in.
+
+The following settings are optional:
+
+| Variable                                      | Default                | Description                                         |
+| --------------------------------------------- | ---------------------- | --------------------------------------------------- |
+| `RETROASSEMBLY_RUN_TIME_OIDC_REDIRECT_URI`    | Inferred callback URL  | Explicit callback URL for reverse-proxy deployments |
+| `RETROASSEMBLY_RUN_TIME_OIDC_REQUIRED_ROLE`   | Unset                  | Optional value required in the `roles` claim        |
+| `RETROASSEMBLY_RUN_TIME_OIDC_SCOPES`          | `openid profile email` | Space-separated scopes                              |
+| `RETROASSEMBLY_RUN_TIME_OIDC_SESSION_MAX_AGE` | `28800000`             | OIDC session lifetime in milliseconds               |
+
+OIDC and Supabase authentication cannot be enabled together. OIDC is not available in the Cloudflare Workers build. Before enabling OIDC on an existing instance, confirm that the first local user's username matches the intended OIDC administrator; the oldest active local user remains RetroAssembly's super user.
+
 ## Supported Platforms
 
 RetroAssembly aims to support a wide range of vintage gaming systems. Emulation is powered by [Nostalgist.js](https://nostalgist.js.org/).
